@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "static",
+      "runtimeExecutable": "py",
+      "runtimeArgs": ["-m", "http.server", "8765"],
+      "port": 8765
+    },
+    {
+      "name": "biochem",
+      "runtimeExecutable": "py",
+      "runtimeArgs": ["-m", "http.server", "8766", "-d", "D:/大學/大二/生化/3D"],
+      "port": 8766
+    }
+  ]
+}

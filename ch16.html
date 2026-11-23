@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch16 呼吸生理 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  canvas.anim{width:100%;height:var(--ph,230px);display:block;border-radius:14px;background:#060b17;border:1px solid var(--line)}
+  .pp{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;text-align:center}
+  .pp div{border-radius:14px;padding:10px 6px;border:1px solid var(--line);background:linear-gradient(160deg,#17223d,#0b1222);box-shadow:0 6px 0 #050913}
+  .pp b{display:block;font-size:18px}.pp small{color:var(--mut);font-size:11px}
+  @media (max-width:700px){.pp{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body style="--acc:#38bdf8;--acc2:#f472b6">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 16 · Respiratory Physiology</div>
+  <h1 class="title3d">呼吸生理</h1>
+  <p class="sub">3D 氣管樹與肺泡、會呼吸的 3D 胸腔（同步壓力曲線、氣胸）、肺量計、Laplace 定律與表面活性劑、分壓與高度計算、化學受器調控、3D 血紅素與可移動的氧解離曲線（Bohr 效應、2,3-DPG）、氯離子轉移、酸鹼計算。</p>
+  <div class="chips"><a class="chip" href="#str">構造 3D</a><a class="chip" href="#mech">呼吸力學</a><a class="chip" href="#spiro">肺容積</a><a class="chip" href="#lap">表面張力</a><a class="chip" href="#gas">氣體交換</a><a class="chip" href="#ctrl">呼吸調控</a><a class="chip" href="#hb">血紅素</a><a class="chip" href="#co2">CO₂ 運輸</a><a class="chip" href="#ab">酸鹼</a><a class="chip" href="#ex">運動高海拔</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="str" data-nav="構造 3D">
+  <h2><span class="num">01</span>呼吸系統構造：傳導區與呼吸區</h2>
+  <p class="lead">約 <b>3 億個</b>肺泡（直徑約 100 μm）提供巨大的氣體交換面積。<span class="blue">藍</span>＝傳導區（氣管、支氣管、細支氣管、終末細支氣管），<span style="color:#f472b6">粉</span>＝呼吸區（呼吸性細支氣管、肺泡管、肺泡）。</p>
+  <div class="grid2">
+    <div class="stage" id="st-tree"><canvas aria-label="3D 氣管樹與肺泡"></canvas><div class="hud" id="tr-hud"></div><div class="hud2" id="tr-cap"></div>
+      <div class="sbar"><div class="seg" id="trmode"><button class="btn sm" data-v="tree" type="button">肺與氣管樹</button><button class="btn sm" data-v="alv" type="button">肺泡（放大）</button></div></div></div>
+    <div class="card info"><div id="info-tree"><div class="tt">點選構造</div></div><div class="picker" id="pk-tree"></div></div>
+  </div>
+</section>
+
+<section class="sec" id="mech" data-nav="呼吸力學">
+  <h2><span class="num">02</span>呼吸力學（3D 胸腔 + 壓力）</h2>
+  <p class="lead"><b>波以耳定律</b>：氣體壓力與體積成反比。吸氣時橫膈與外肋間肌收縮 → 胸腔變大 → 肺內壓低於大氣（−1 cmH₂O）→ 空氣流入；平靜呼氣是<b>被動</b>的彈性回縮。肋膜內壓永遠低於肺內壓。</p>
+  <div class="grid2">
+    <div class="stage" id="st-thx"><canvas aria-label="3D 胸腔呼吸"></canvas><div class="hud" id="thx-hud"></div><div class="hud2" id="thx-cap"></div>
+      <div class="sbar"><div class="seg" id="thmode"><button class="btn sm" data-v="quiet" type="button">平靜呼吸</button><button class="btn sm" data-v="forced" type="button">用力呼吸</button><button class="btn sm" data-v="ptx" type="button">右側氣胸</button></div></div></div>
+    <div class="card"><canvas class="plot" id="pr-plot" style="--ph:300px"></canvas><div class="tbwrap mt"><table class="tb" style="min-width:0"><tr><th>（cmH₂O，相對大氣）</th><th>吸氣</th><th>呼氣</th></tr><tr><td>肺內壓</td><td>−1</td><td>+1</td></tr><tr><td>肋膜內壓</td><td>−8</td><td>−5</td></tr><tr><td>跨肺壓</td><td>+7</td><td>+6</td></tr></table></div></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>肺的物理性質</h3><ul class="small"><li><b>順應性</b>：每單位跨肺壓變化的容積變化（易擴張）；肺纖維化 → 降低</li><li><b>彈性</b>：被拉長後回縮的傾向（彈性蛋白）</li><li><b>表面張力</b>：肺泡液膜產生向內的力，抵抗擴張</li></ul></div>
+    <div class="card tilt"><h3>呼吸肌</h3><ul class="small"><li>平靜吸氣：<b>橫膈</b>（膈神經 C3–C5）+ 外肋間肌</li><li>用力吸氣：加上胸鎖乳突肌、斜角肌、胸小肌</li><li>用力呼氣：內肋間肌、腹肌</li></ul></div>
+    <div class="card tilt"><h3>氣胸</h3><p class="small">空氣進入肋膜腔 → 肋膜內壓升高到大氣壓 → 跨肺壓消失 → 該側肺因彈性回縮而<b>塌陷</b>。左右肋膜腔分開，所以只影響一側。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="spiro" data-nav="肺容積">
+  <h2><span class="num">03</span>肺量計：肺容積與肺容量</h2>
+  <div class="grid2">
+    <div class="card"><canvas class="anim" id="sp-cv" style="--ph:280px"></canvas><div class="btns"><button class="btn sm" id="sp-max" type="button">深吸 → 用力吐到底</button><button class="btn sm" id="sp-n" type="button">正常</button><button class="btn sm" id="sp-obs" type="button">阻塞性（氣喘）</button><button class="btn sm" id="sp-res" type="button">限制性（纖維化）</button></div></div>
+    <div class="card"><div class="tbwrap"><table class="tb" style="min-width:0"><tr><th>名稱</th><th>意義</th><th>典型值</th></tr>
+      <tr><td><b>潮氣容積 TV</b></td><td>平靜呼吸每次</td><td>約 500 ml</td></tr><tr><td>吸氣儲備容積 IRV</td><td>TV 之外最多再吸</td><td>約 3,000 ml</td></tr><tr><td>呼氣儲備容積 ERV</td><td>TV 之外最多再吐</td><td>約 1,200 ml</td></tr><tr><td><b>殘氣容積 RV</b></td><td>用力呼氣後仍留在肺中</td><td>約 1,200 ml</td></tr>
+      <tr><td><b>肺活量 VC</b></td><td>= TV + IRV + ERV</td><td>約 4,700 ml</td></tr><tr><td>全肺容量 TLC</td><td>= VC + RV</td><td>約 5,900 ml</td></tr><tr><td>功能殘氣量 FRC</td><td>= ERV + RV</td><td>約 2,400 ml</td></tr></table></div>
+      <p class="small mt">每分鐘總通氣量 = TV × 呼吸頻率 ≈ 6 L/min。解剖死腔約 150 ml，深呼吸時新鮮空氣比例較高。<b>限制性</b>疾病 VC 下降；<b>阻塞性</b>疾病（氣喘、支氣管炎）<b>FEV₁</b>（一秒用力呼氣量，正常 ≈ 80% VC）下降。</p><p class="small muted" id="sp-t"></p></div>
+  </div>
+</section>
+
+<section class="sec" id="lap" data-nav="表面張力">
+  <h2><span class="num">04</span>表面張力、Laplace 定律與表面活性劑</h2>
+  <div class="grid2">
+    <div class="stage short" id="st-lap"><canvas aria-label="3D Laplace 定律"></canvas><div class="hud">兩個相通的肺泡：P = 2T / r</div><div class="hud2" id="lap-cap"></div>
+      <div class="sbar"><div class="seg" id="lpmode"><button class="btn sm" data-v="no" type="button">沒有表面活性劑</button><button class="btn sm" data-v="yes" type="button">有表面活性劑</button></div></div></div>
+    <div class="card"><div class="formula">P = 2T / r</div><ul class="small"><li>若表面張力 T 相同，<b>小肺泡壓力較大</b> → 空氣流向大肺泡 → 小肺泡塌陷</li><li><b>第二型肺泡細胞</b>分泌<b>表面活性劑</b>（磷脂 + 蛋白）降低表面張力；肺泡變小時降得更多 → 防止塌陷</li><li>早產兒（妊娠 &lt; 28 週約 60%）缺乏 → <b>呼吸窘迫症候群</b>（玻璃膜病）</li><li>成人可因敗血症、肺炎造成 ARDS</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="gas" data-nav="氣體交換">
+  <h2><span class="num">05</span>肺的氣體交換：分壓</h2>
+  <p class="lead"><b>道耳頓定律</b>：總壓 = 各氣體分壓之和；PO₂ = 總壓 × 21%。肺泡內飽和水蒸氣（47 mmHg）。<b>亨利定律</b>：溶於液體的氣體量與分壓成正比。拉動海拔看 PO₂ 如何下降。</p>
+  <div class="card"><div class="ctrl"><label for="alt">海拔</label><input type="range" id="alt" min="0" max="8848" step="10" value="0"><output id="alt-v">0 m</output></div>
+    <div class="pp"><div><small>大氣壓</small><b id="g-atm"></b></div><div><small>吸入乾空氣 PO₂</small><b id="g-dry"></b></div><div><small>濕化後 PO₂</small><b id="g-wet"></b></div><div><small>肺泡 PO₂（約）</small><b id="g-alv" style="color:#fb7185"></b></div><div><small>Hb 飽和度（約）</small><b id="g-sat" style="color:#fbbf24"></b></div></div></div>
+  <div class="chain mt"><div class="nd">大氣<small>PO₂ 159 / PCO₂ 0.3</small></div><span class="ar">→</span><div class="nd on">肺泡<small>PO₂ 105 / PCO₂ 40</small></div><span class="ar">→</span><div class="nd on">動脈血<small>PO₂ 100 / PCO₂ 40</small></div><span class="ar">→</span><div class="nd">組織<small>PO₂ 低 / PCO₂ 高</small></div><span class="ar">→</span><div class="nd">靜脈血<small>PO₂ 40 / PCO₂ 46</small></div></div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>血中的 O₂</h3><p class="small">動脈血 PO₂ 100 mmHg 時，血漿只溶 0.3 ml O₂/100 ml；紅血球內的 Hb 攜帶約 19.7 ml。PO₂ 電極只測得<b>溶解</b>的 O₂。</p></div>
+    <div class="card tilt"><h3>通氣–灌流配合</h3><p class="small">肺泡 PO₂ 低時，該處肺小動脈<b>收縮</b>（與體循環相反），把血流導向通氣好的區域。站立時肺尖通氣/灌流比較高。</p></div>
+    <div class="card tilt"><h3>高壓氣體的疾病</h3><p class="small">氧中毒、氮麻醉（潛水「深度狂喜」）、<b>減壓病</b>（快速上升時溶解的 N₂ 形成氣泡）。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="ctrl" data-nav="呼吸調控">
+  <h2><span class="num">06</span>呼吸的調控</h2>
+  <div class="grid2">
+    <div class="card"><h3>化學受器：拉動看通氣量</h3><canvas class="plot" id="ve-plot" style="--ph:230px"></canvas>
+      <div class="ctrl"><label for="pco2">動脈 PCO₂</label><input type="range" id="pco2" min="30" max="60" value="40"><output id="pco2-v">40</output></div>
+      <div class="ctrl"><label for="po2">動脈 PO₂</label><input type="range" id="po2" min="30" max="110" value="100"><output id="po2-v">100</output></div>
+      <p class="small" id="ve-t"></p></div>
+    <div class="card"><ul class="small"><li><b>延腦節律中樞</b>：吸氣、呼氣神經元交替活動（腹外側延腦，含前 Bötzinger 複合體）→ 自動呼吸</li><li><b>橋腦</b>：長吸中樞、呼吸調節中樞修飾節律</li><li>隨意呼吸：大腦皮質經皮質脊髓徑</li><li><b>中樞化學受器</b>（延腦）：感受腦脊髓液 <b>pH</b>（由 PCO₂ 造成）→ 最重要</li><li><b>周邊化學受器</b>（頸動脈體、主動脈體）：感受血液 pH/PCO₂；PO₂ <b>&lt; 50 mmHg</b> 才直接刺激呼吸</li><li><b>Hering–Breuer 反射</b>：潮氣容積 ≥ 1 L 時肺牽張受器抑制吸氣</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="hb" data-nav="血紅素">
+  <h2><span class="num">07</span>血紅素與氧解離曲線</h2>
+  <p class="lead">血紅素 = 2α + 2β + 4 個 heme（Fe²⁺）。拉 PO₂ 看 O₂ 一個個結合（協同結合 → S 形曲線）；調整 pH、溫度、2,3-DPG 看曲線<b>右移</b>（親和力↓、卸載↑）。</p>
+  <div class="grid2">
+    <div class="stage short" id="st-hb"><canvas aria-label="3D 血紅素"></canvas><div class="hud">紅＝α 鏈　橘＝β 鏈　◉＝heme</div><div class="hud2" id="hb-cap"></div></div>
+    <div class="card"><canvas class="plot" id="odc-plot" style="--ph:250px"></canvas>
+      <div class="ctrl"><label for="hpo2">PO₂</label><input type="range" id="hpo2" min="0" max="110" value="100"><output id="hpo2-v">100</output></div>
+      <div class="ctrl"><label for="hph">pH</label><input type="range" id="hph" min="7.2" max="7.6" step="0.01" value="7.4"><output id="hph-v">7.40</output></div>
+      <div class="ctrl"><label for="htp">溫度</label><input type="range" id="htp" min="34" max="42" step="0.5" value="37"><output id="htp-v">37 °C</output></div>
+      <div class="ctrl"><label for="hdpg">2,3-DPG</label><input type="range" id="hdpg" min="0.5" max="2" step="0.05" value="1"><output id="hdpg-v">1.0×</output></div>
+      <div class="btns"><button class="btn sm" id="hb-rest" type="button">休息（靜脈 40）</button><button class="btn sm" id="hb-ex" type="button">運動（靜脈 20、酸、熱）</button><button class="btn sm" id="hb-fet" type="button">胎兒血紅素</button></div>
+      <div class="kv"><div><small>動脈飽和度</small><b id="hb-a"></b></div><div><small>靜脈飽和度</small><b id="hb-v"></b></div><div><small>卸載給組織</small><b id="hb-u" style="color:#fbbf24"></b></div></div></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>血紅素的型式</h3><ul class="small"><li><b>氧合血紅素</b>／<b>去氧血紅素</b>（還原血紅素）</li><li><b>碳氧血紅素</b>：CO 與 Fe 結合（一氧化碳中毒）</li><li><b>變性血紅素</b>：Fe³⁺，無法攜帶氣體</li><li>動脈血每克 Hb 可攜 1.34 ml O₂ → 約 20 ml O₂/100 ml</li></ul></div>
+    <div class="card tilt"><h3>右移的因素</h3><ul class="small"><li><b>pH↓（Bohr 效應）</b>、溫度↑、<b>2,3-DPG↑</b> → 親和力↓、組織卸載↑</li><li>貧血、高海拔使 2,3-DPG 增加（氧合血紅素抑制 DPG 生成）</li><li><b>胎兒血紅素</b>（γ 鏈）不結合 DPG → 親和力較高 → 從母體取得 O₂</li></ul></div>
+    <div class="card tilt"><h3>遺傳缺陷與肌紅素</h3><ul class="small"><li><b>鐮刀型貧血</b>：β 鏈一個胺基酸置換（HbS）</li><li><b>地中海型貧血</b>：α 或 β 鏈合成不足</li><li><b>肌紅素</b>：骨骼肌與心肌中，在低 PO₂ 才釋放 O₂ 給粒線體</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="co2" data-nav="CO₂ 運輸">
+  <h2><span class="num">08</span>二氧化碳運輸與氯離子轉移</h2>
+  <div class="grid2">
+    <div class="stage short" id="st-rbc"><canvas aria-label="3D 氯離子轉移"></canvas><div class="hud" id="rbc-hud"></div><div class="hud2" id="rbc-cap"></div>
+      <div class="sbar"><div class="seg" id="rbmode"><button class="btn sm" data-v="tis" type="button">組織微血管</button><button class="btn sm" data-v="lung" type="button">肺微血管（反向）</button></div></div></div>
+    <div class="card"><div class="formula">CO₂ + H₂O ⇄ H₂CO₃ ⇄ H⁺ + HCO₃⁻</div><ul class="small"><li>紅血球內的<b>碳酸酐酶</b>催化 → 組織中（PCO₂ 高）向右</li><li>H⁺ 大部分被<b>血紅素緩衝</b>；HCO₃⁻ 擴散出紅血球</li><li>為維持電中性，<b>Cl⁻ 進入</b>紅血球 → <b>氯離子轉移</b></li><li>肺中 PCO₂ 低 → <b>反向氯離子轉移</b>，CO₂ 被呼出</li><li>CO₂ 運輸形式：多數為 HCO₃⁻，部分與 Hb 結合（胺基甲醯血紅素）與溶解</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="ab" data-nav="酸鹼">
+  <h2><span class="num">09</span>血液的酸鹼平衡</h2>
+  <div class="grid2">
+    <div class="card"><h3>試算（Henderson–Hasselbalch，補充）</h3><div class="formula">pH = 6.1 + log( [HCO₃⁻] / (0.03 × PCO₂) )</div>
+      <div class="ctrl"><label for="abc">PCO₂</label><input type="range" id="abc" min="20" max="80" value="40"><output id="abc-v">40</output></div>
+      <div class="ctrl"><label for="abh">HCO₃⁻</label><input type="range" id="abh" min="10" max="40" value="24"><output id="abh-v">24</output></div>
+      <div class="kv"><div><small>pH</small><b id="ab-ph"></b></div><div><small>判斷</small><b id="ab-st" style="font-size:15px"></b></div></div>
+      <div class="btns"><button class="btn sm" data-ab="40,24" type="button">正常</button><button class="btn sm" data-ab="60,26" type="button">換氣不足</button><button class="btn sm" data-ab="25,22" type="button">過度換氣</button><button class="btn sm" data-ab="28,14" type="button">糖尿病酮酸中毒（代償）</button><button class="btn sm" data-ab="44,34" type="button">嘔吐</button></div></div>
+    <div class="card"><ul class="small"><li>動脈血 pH <b>7.40</b>（7.35–7.45）</li><li><b>揮發性酸</b>：碳酸（可由呼吸排出 CO₂）；<b>非揮發性酸</b>：乳酸、酮體等，被 HCO₃⁻ 緩衝</li><li><b>肺</b>調節 CO₂（呼吸性成分）；<b>腎</b>調節 HCO₃⁻（代謝性成分）</li><li>換氣不足 → PCO₂↑ → <b>呼吸性酸中毒</b>；過度換氣 → <b>呼吸性鹼中毒</b></li><li>代謝性酸中毒刺激過度換氣 → 部分代償（呼吸性鹼中毒）</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="ex" data-nav="運動高海拔">
+  <h2><span class="num">10</span>運動與高海拔</h2>
+  <div class="grid2 even">
+    <div class="card"><h3>運動</h3><ul class="small"><li>通氣增加（<b>呼吸過強 hyperpnea</b>）與代謝率相配合 → 動脈 PCO₂ 維持正常</li><li>原因：本體感受器輸入、大腦輸入、PCO₂/pH 變化</li><li>重度運動達<b>無氧閾值</b>（最大攝氧量的 50–70%）→ 肌肉釋放乳酸</li><li>耐力訓練使肌肉更有效利用 O₂，延後無氧閾值</li></ul></div>
+    <div class="card"><h3>高海拔適應</h3><ul class="small"><li>低 PO₂ → <b>過度換氣</b></li><li>紅血球產生更多 <b>2,3-DPG</b> → 曲線右移、卸載↑</li><li>腎分泌<b>紅血球生成素 EPO</b> → 骨髓增加紅血球 → 攜氧量↑</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">11</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">12</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 16 章整理，僅供個人複習。3D 與曲線為示意；Henderson–Hasselbalch 為補充。 · <a href="index.html">回總覽</a> · <a href="ch15.html">← 第 15 章 免疫</a> · <a href="ch17.html">第 17 章 腎臟 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+
+/* ================= 01 氣管樹與肺泡 ================= */
+(function () {
+  const S = K.stage('st-tree', { radius: 62, yaw: 0.3, pitch: 0.1, autoRotate: 0.05, target: [0, 6, 0] });
+  const T = { gs: 'tree' }, A = { gs: 'alv' };
+  K.ellipsoid(S, [-17, 0, 0], [15, 26, 11], '#f9a8d4', 18, 10, Object.assign({ id: 'lung', al: 0.12 }, T)); K.ellipsoid(S, [17, 0, 0], [15, 26, 11], '#f9a8d4', 18, 10, Object.assign({ id: 'lung', al: 0.12 }, T));
+  let n = 0;
+  function branch(p, dir, len, r, gen) {
+    const q = V.add(p, V.mul(dir, len)), resp = gen >= 5;
+    S.tube(p, q, r, resp ? '#f472b6' : gen === 0 ? '#7dd3fc' : '#38bdf8', Object.assign({ id: gen === 0 ? 'trachea' : gen === 1 ? 'bronchus' : resp ? 'rbronch' : gen === 4 ? 'tbronch' : 'bronchiole' }, T));
+    if (gen === 6) { for (let k = 0; k < 3; k++) S.sphere(V.add(q, [(k - 1) * 1.2, -0.8, (k % 2 ? 1 : -1)]), 1.3, '#fb7185', Object.assign({ id: 'alvT' }, T)); n++; return; }
+    const ax = gen % 2 ? [1, 0, 0] : [0, 0, 1];
+    [-1, 1].forEach(s => { let d = V.norm(V.add(V.mul(dir, Math.cos(0.55)), V.mul(V.norm(V.cross(dir, ax)), s * Math.sin(0.55)))); if (gen === 0) d = V.norm([s * 0.75, -0.66, 0]); branch(q, d, len * (gen === 0 ? 0.55 : 0.78), r * 0.7, gen + 1); });
+  }
+  branch([0, 34, 0], [0, -1, 0], 18, 3, 0);
+  K.lab(S, [0, 30, 0], '氣管', 'trachea', '#7dd3fc', -30, -10, T); K.lab(S, [-6, 12, 0], '主支氣管', 'bronchus', '#7dd3fc', -40, 0, T); K.lab(S, [-26, -18, 0], '呼吸區（肺泡）', 'alvT', '#fb7185', -20, 20, T); K.lab(S, [22, 18, 0], '肺（肋膜包覆）', 'lung', '#f9a8d4', 30, -10, T);
+  // 肺泡放大
+  const C = [[0, 0, 0], [12, 4, 0], [-12, 3, 2], [4, 12, -6], [-4, 11, 8], [6, -10, 6], [-7, -10, -6]];
+  C.forEach((c, i) => K.ellipsoid(S, c, [7, 7, 7], '#fbcfe8', 14, 8, Object.assign({ id: 'alv', al: 0.25 }, A)));
+  K.sweep(S, [[0, 34, 0], [0, 22, 0], [0, 10, 0]], 2.6, '#f472b6', 10, 10, Object.assign({ id: 'duct', al: 0.5 }, A));
+  const caps = [];
+  for (let i = 0; i < 6; i++) { const a = i * 1.05, pts = []; for (let k = 0; k <= 16; k++) { const t = k / 16, th = a + t * 3.2; pts.push([Math.cos(th) * (14 + 2 * Math.sin(t * 9)), -16 + t * 32, Math.sin(th) * 14]); } const P = new Mini3D.Path(pts, 3); P.pts.slice(0, -1).forEach((p, k) => S.tube(p, P.pts[k + 1], 1.1, '#ef4444', Object.assign({ id: 'cap', al: 0.75 }, A))); caps.push(P); }
+  const rbcs = []; caps.forEach((P, i) => { for (let k = 0; k < 3; k++) rbcs.push({ P, u: k / 3 + i * 0.05, o: S.sphere([0, 0, 0], 1.3, '#3b82f6', Object.assign({ id: 'rbc' }, A)) }); });
+  [[6, 6, 5], [-8, 8, 4], [3, -6, 8]].forEach(p => K.box(S, p, [2.4, 2.4, 2.4], '#a78bfa', Object.assign({ id: 'type2' }, A)));
+  S.sphere([-3, -2, 5], 2.6, '#fbbf24', Object.assign({ id: 'mac' }, A));
+  const o2 = []; for (let i = 0; i < 12; i++) o2.push({ o: S.sphere([0, 0, 0], 0.7, i % 2 ? '#93c5fd' : '#fef08a', Object.assign({ id: i % 2 ? 'co2' : 'o2' }, A)), k: i, u: Math.random() });
+  K.lab(S, [12, 4, 0], '肺泡', 'alv', '#fbcfe8', 40, -16, A); K.lab(S, [0, 24, 0], '肺泡管', 'duct', '#f9a8d4', -30, -10, A); K.lab(S, caps[0].at(0.6), '肺微血管', 'cap', '#fca5a5', 30, 10, A); K.lab(S, [6, 6, 5], '第二型肺泡細胞', 'type2', '#c4b5fd', 40, 0, A); K.lab(S, [-3, -2, 5], '肺泡巨噬細胞', 'mac', '#fde047', -40, 16, A);
+  S.tick(dt => {
+    rbcs.forEach(r => { r.u = (r.u + dt * 0.12) % 1; mv(r.o.p, r.P.at(r.u)); r.o.c = r.u < 0.35 ? '#3b82f6' : r.u < 0.55 ? '#a855f7' : '#ef4444'; });
+    o2.forEach(g => { g.u = (g.u + dt * 0.5) % 1; const c = C[g.k % 7], dir = V.norm(V.add(c, [0.1, 0.1, 0.1])); const a = V.add(c, V.mul(dir, 2)), b = V.add(c, V.mul(dir, 9)); mv(g.o.p, g.k % 2 ? V.lerp(b, a, g.u) : V.lerp(a, b, g.u)); });
+  });
+  K.info(S, 'info-tree', {
+    trachea: ['氣管', ['傳導區起點；軟骨環支撐', '黏液與纖毛把顆粒往上推（黏液纖毛電梯）']], bronchus: ['主支氣管', ['傳導區']], bronchiole: ['細支氣管', ['平滑肌多；氣喘時收縮']], tbronch: ['終末細支氣管', ['最細且<b>沒有肺泡</b>的氣道 → 傳導區終點']], rbronch: ['呼吸性細支氣管', ['壁上開始出現肺泡 → <b>呼吸區</b>']],
+    alvT: ['肺泡', ['氣體交換處']], lung: ['肺與肋膜', ['臟層肋膜緊貼壁層肋膜；之間為肋膜腔（潛在空間）']],
+    alv: ['肺泡', ['約 3 億個，多面體，像蜂巢；肺泡間有孔相通', '<b>第一型肺泡細胞</b>佔表面積 95–97%，極薄 → 氣體交換']], duct: ['肺泡管', ['呼吸區的一部分']], cap: ['肺微血管', ['包圍肺泡；空氣–血液屏障極薄']],
+    type2: ['第二型肺泡細胞', ['分泌<b>表面活性劑</b>']], mac: ['肺泡巨噬細胞', ['吞噬進入肺泡的顆粒']], rbc: ['紅血球', ['流經肺泡時由藍（缺氧）變紅（充氧）']], o2: ['O₂', ['由肺泡擴散進血液']], co2: ['CO₂', ['由血液擴散進肺泡']]
+  }, { picker: 'pk-tree' });
+  K.seg('#trmode', m => { S.each(o => { if (o.gs) o.hidden = o.gs !== m; }); $('tr-hud').textContent = m === 'tree' ? '支氣管約分支 23 代（此為示意 6 代）' : '肺泡團 + 微血管網'; $('tr-cap').textContent = m === 'tree' ? '藍＝傳導區、粉＝呼吸區' : 'O₂（黃）入血、CO₂（藍）出血；紅血球由藍變紅'; S.resetView(); if (m === 'alv') S.target = [0, 0, 0]; }, 'tree');
+})();
+
+/* ================= 02 呼吸力學 ================= */
+(function () {
+  const S = K.stage('st-thx', { radius: 58, yaw: 3.55, pitch: 0.12, autoRotate: 0 });
+  K.sweep(S, [[0, 34, -14], [0, -26, -14]], 2.4, '#e2e8f0', 10, 8, { id: 'spine' });
+  K.sweep(S, [[0, 26, 13], [0, -2, 15]], 1.6, '#e2e8f0', 6, 8, { id: 'sternum' });
+  const ribs = []; for (let i = 0; i < 9; i++) { const y = 26 - i * 4; [-1, 1].forEach(s => { const pts = []; for (let k = 0; k <= 10; k++) { const a = -Math.PI / 2 + (k / 10) * Math.PI; pts.push([0, 0, 0]); } const tubes = []; for (let k = 0; k < 10; k++) tubes.push(S.tube(pts[k], pts[k + 1], 0.9, '#cbd5e1', { id: 'rib' })); ribs.push({ y, s, pts, i }); }); }
+  const lungL = K.mover(K.ellipsoid(S, [0, 0, 0], [11, 18, 9], '#f9a8d4', 16, 10, { id: 'lungL', al: 0.5 })), lungR = K.mover(K.ellipsoid(S, [0, 0, 0], [11, 18, 9], '#f9a8d4', 16, 10, { id: 'lungR', al: 0.5 }));
+  const pleuR = K.mover(K.ellipsoid(S, [0, 0, 0], [12.5, 20, 10.5], '#7dd3fc', 14, 8, { id: 'pleura', al: 0.12 }));
+  const NU = 20, NV = 8; const dia = K.surf(S, (u, v) => [0, 0, 0], NU, NV, '#fb7185', { id: 'dia', al: 0.8 });
+  const acc = [-1, 1].map(s => S.tube([s * 6, 40, 0], [s * 12, 22, 4], 1.6, '#f97316', { id: 'acc', hidden: true }));
+  const air = []; for (let i = 0; i < 10; i++) air.push(S.sphere([0, 0, 0], 1, '#7dd3fc', { id: 'air', u: i / 10 }));
+  K.sweep(S, [[0, 46, 0], [0, 30, 0]], 2.2, '#7dd3fc', 6, 8, { id: 'trach', al: 0.6 });
+  const lL = K.lab(S, [-14, 4, 0], '肺', 'lungL', '#f9a8d4', -30, 0), lD = K.lab(S, [0, -16, 0], '橫膈', 'dia', '#fda4af', 40, 20), lR = K.lab(S, [16, 22, 8], '肋骨', 'rib', '#e2e8f0', 30, -16), lP = K.lab(S, [14, -2, 0], '肋膜腔', 'pleura', '#7dd3fc', 40, 10);
+  let mode = 'quiet', ph = 0, hist = [];
+  const cv = $('pr-plot');
+  S.tick(dt => {
+    const rate = mode === 'forced' ? 0.5 : 0.25; ph = (ph + dt * rate) % 1;
+    const insp = ph < 0.4, x = insp ? sm(0, 0.4, ph) : 1 - sm(0.4, 1, ph);
+    const amp = mode === 'forced' ? 2.2 : 1;
+    const vol = x * amp;
+    const pip = insp ? -Math.sin(ph / 0.4 * Math.PI) * amp : Math.sin((ph - 0.4) / 0.6 * Math.PI) * amp;
+    const ppl = -5 - 3 * x * amp;
+    ribs.forEach(r => { const lift = vol * 0.9 * (1 - r.i / 12), wid = 15 + (r.i < 5 ? r.i * 0.8 : 4 - (r.i - 5) * 0.4) + vol * 1.2; for (let k = 0; k <= 10; k++) { const a = -Math.PI / 2 + (k / 10) * Math.PI; mv(r.pts[k], [r.s * Math.cos(a) * wid, r.y + lift + Math.sin(a) * 2.5 - (1 - Math.abs(Math.sin(a))) * 2, Math.sin(a) * 13.5]); } });
+    const domeH = 12 - vol * 3.4, base = -12 - vol * 2.2;
+    dia.grid.forEach((row, i) => row.forEach((p, j) => { const th = (i / NU) * 6.2832, r = j / NV; mv(p, [Math.cos(th) * r * 17, base + domeH * (1 - r * r), Math.sin(th) * r * 13]); }));
+    const sc = 1 + vol * 0.1, ptx = mode === 'ptx';
+    lungL.set([-9.5, 4 - vol * 1.2, 0], [sc, sc + vol * 0.04, sc]);
+    lungR.set([9.5, ptx ? 4 : 4 - vol * 1.2, 0], ptx ? 0.5 : [sc, sc + vol * 0.04, sc]); pleuR.set([9.5, 3, 0], 1, ptx ? 0.45 : 0.12);
+    acc.forEach(a => { a.hidden = mode !== 'forced'; a.glow = insp ? 0.8 : 0; });
+    air.forEach(a => { a.u = (a.u + dt * 0.8) % 1; const y = 46 - a.u * 20; mv(a.p, insp ? [0, y, 0] : [0, 26 + a.u * 20, 0]); a.al = Math.abs(pip) / amp; });
+    $('thx-cap').innerHTML = insp ? '吸氣：橫膈下降、肋骨上抬外展 → 胸腔↑ → 肺內壓 <b>' + pip.toFixed(1) + '</b> cmH₂O' : '呼氣：' + (mode === 'forced' ? '內肋間肌、腹肌主動收縮' : '肌肉放鬆，彈性回縮') + ' → 肺內壓 <b>+' + pip.toFixed(1) + '</b>';
+    hist.push([ph, pip, ppl, vol]); if (hist.length > 400) hist.shift();
+    const N = 120, ser = (f) => Array.from({ length: N + 1 }, (_, i) => { const t = i / N, ins = t < 0.4, xx = ins ? sm(0, 0.4, t) : 1 - sm(0.4, 1, t); return [t, f(t, ins, xx)]; });
+    K.plot(cv, { x: [0, 1], y: [-12, 4], xt: [0, 0.4, 1], yt: [-10, -8, -5, 0, 2], fx: v => v === 0.4 ? '吸|呼' : '', xl: '一個呼吸週期', yl: 'cmH₂O', series: [{ pts: ser((t, ins) => (ins ? -Math.sin(t / 0.4 * Math.PI) : Math.sin((t - 0.4) / 0.6 * Math.PI)) * amp), c: '#38bdf8', w: 2.4, label: '肺內壓' }, { pts: ser((t, ins, xx) => ptx ? 0 : -5 - 3 * xx * amp), c: '#f472b6', w: 2.4, label: ptx ? '右肋膜內壓（=大氣）' : '肋膜內壓' }, { pts: ser((t, ins, xx) => xx * amp * 1.6 - 11), c: '#fbbf24', w: 1.6, dash: [4, 4], label: '肺容積（示意）' }], vl: [{ x: ph, c: '#fff' }], hl: [{ y: 0, c: '#64748b', t: '大氣壓' }] });
+  });
+  K.seg('#thmode', m => { mode = m; $('thx-hud').textContent = { quiet: '平靜呼吸：橫膈 + 外肋間肌', forced: '用力呼吸：加上輔助呼吸肌', ptx: '右側氣胸：右肺塌陷' }[m]; }, 'quiet');
+  S.onPick = o => { if (!o) return; const t = { lungL: '左肺', lungR: '右肺', dia: '橫膈：主要呼吸肌，收縮時下降變平', rib: '肋骨：外肋間肌使其上抬', pleura: '肋膜腔（肋膜內壓 < 肺內壓）', acc: '輔助吸氣肌（胸鎖乳突肌、斜角肌）', spine: '脊柱', sternum: '胸骨', air: '空氣流動', trach: '氣管' }[o.id]; if (t) $('thx-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 03 肺量計 ================= */
+(function () {
+  const cv = $('sp-cv'); let t = 0, mode = 'n', maneuver = -1; const tr = [];
+  const P = { n: { tv: 500, irv: 3000, erv: 1200, rv: 1200, fev: 0.8 }, obs: { tv: 500, irv: 2600, erv: 1000, rv: 2000, fev: 0.45 }, res: { tv: 450, irv: 1700, erv: 700, rv: 900, fev: 0.9 } };
+  const set = m => { mode = m; tr.length = 0; maneuver = -1; ['sp-n', 'sp-obs', 'sp-res'].forEach(id => $(id).classList.toggle('on', id === 'sp-' + m)); const p = P[m], vc = p.tv + p.irv + p.erv; $('sp-t').textContent = (m === 'n' ? '正常' : m === 'obs' ? '阻塞性：呼氣阻力↑，殘氣量↑' : '限制性：肺擴張受限') + ' — VC ≈ ' + vc + ' ml，FEV₁/VC ≈ ' + Math.round(p.fev * 100) + '%'; };
+  $('sp-n').onclick = () => set('n'); $('sp-obs').onclick = () => set('obs'); $('sp-res').onclick = () => set('res'); $('sp-max').onclick = () => { maneuver = 0; };
+  set('n');
+  K.loop(dt => {
+    const p = P[mode], frc = p.erv + p.rv; t += dt;
+    let v;
+    if (maneuver >= 0) { maneuver += dt; const m = maneuver; if (m < 1.5) v = frc + p.tv * 0.5 + (p.irv + p.tv * 0.5) * sm(0, 1.5, m); else if (m < 1.9) v = frc + p.tv + p.irv; else { const k = m - 1.9, fe = 1 - Math.exp(-k * (p.fev > 0.7 ? 3 : 1.1)); v = frc + p.tv + p.irv - (p.irv + p.tv + p.erv) * Math.min(1, fe * 1.02); if (k > 4) maneuver = -1; } }
+    else v = frc + p.tv * 0.5 * (1 - Math.cos(t * 2.4));
+    tr.push(v); if (tr.length > 520) tr.shift();
+    const [c, w, h] = K.fit(cv); c.clearRect(0, 0, w, h);
+    const Y = ml => h - 20 - (ml / 6200) * (h - 34), L = 54;
+    c.font = '11px ' + Mini3D.FONT; c.fillStyle = '#94a3b8'; [0, 2000, 4000, 6000].forEach(ml => { c.fillText(ml, 6, Y(ml) + 4); c.strokeStyle = 'rgba(255,255,255,.06)'; c.beginPath(); c.moveTo(L, Y(ml)); c.lineTo(w, Y(ml)); c.stroke(); });
+    c.strokeStyle = '#38bdf8'; c.lineWidth = 2.2; c.beginPath(); tr.forEach((val, i) => { const x = L + (i / 520) * (w - L - 130); if (i) c.lineTo(x, Y(val)); else c.moveTo(x, Y(val)); }); c.stroke();
+    const bx = w - 118, bars = [['RV', p.rv, '#64748b'], ['ERV', p.erv, '#a78bfa'], ['TV', p.tv, '#38bdf8'], ['IRV', p.irv, '#34d399']]; let acc = 0;
+    bars.forEach(([n, ml, col]) => { c.fillStyle = col + 'aa'; c.fillRect(bx, Y(acc + ml), 30, Y(acc) - Y(acc + ml)); c.fillStyle = '#e2e8f0'; c.fillText(n + ' ' + ml, bx + 36, (Y(acc) + Y(acc + ml)) / 2 + 4); acc += ml; });
+    c.strokeStyle = '#fbbf24'; c.beginPath(); c.moveTo(bx - 6, Y(p.rv)); c.lineTo(bx - 6, Y(acc)); c.stroke(); c.save(); c.translate(bx - 12, (Y(p.rv) + Y(acc)) / 2); c.rotate(-Math.PI / 2); c.fillStyle = '#fbbf24'; c.textAlign = 'center'; c.fillText('VC', 0, 0); c.restore();
+  }, cv);
+})();
+
+/* ================= 04 Laplace ================= */
+(function () {
+  const S = K.stage('st-lap', { radius: 40, yaw: 0, pitch: 0.2, autoRotate: 0 });
+  const a1 = K.mover(K.ellipsoid(S, [0, 0, 0], [1, 1, 1], '#f9a8d4', 18, 10, { id: 'small', al: 0.55 })), a2 = K.mover(K.ellipsoid(S, [0, 0, 0], [1, 1, 1], '#f472b6', 18, 10, { id: 'large', al: 0.55 }));
+  const duct = [S.tube([-14, -14, 0], [0, -22, 0], 2, '#fbcfe8', { id: 'duct' }), S.tube([0, -22, 0], [16, -14, 0], 2, '#fbcfe8', { id: 'duct' })];
+  const sur = []; for (let i = 0; i < 40; i++) sur.push({ o: S.dot([0, 0, 0], 1, '#fde047', { id: 'surf' }), u: Mini3D.fib(40)[i], w: i % 2 });
+  const air = []; for (let i = 0; i < 8; i++) air.push({ o: S.sphere([0, 0, 0], 0.9, '#7dd3fc', { id: 'air' }), u: i / 8 });
+  const l1 = K.lab(S, [-14, 0, 0], '', 'small', '#f9a8d4', 0, -40), l2 = K.lab(S, [16, 0, 0], '', 'large', '#f472b6', 0, -50);
+  let surf = false, r1 = 6, r2 = 10;
+  S.tick(dt => {
+    if (!surf) { r1 = Math.max(1.4, r1 - dt * 1.2); r2 = Math.min(12.3, Math.cbrt(6 ** 3 + 10 ** 3 - r1 ** 3)); } else { r1 += (6 - r1) * dt * 1.5; r2 += (10 - r2) * dt * 1.5; }
+    a1.set([-14, 0, 0], r1); a2.set([16, 0, 0], r2);
+    sur.forEach(s => { s.o.hidden = !surf; const c = s.w ? [-14, 0, 0] : [16, 0, 0], r = s.w ? r1 : r2; mv(s.o.p, V.add(c, V.mul(s.u, r + 0.2))); });
+    air.forEach(a => { a.u = (a.u + dt * 0.6) % 1; a.o.hidden = surf || r1 < 1.6; mv(a.o.p, a.u < 0.5 ? V.lerp([-14, -r1, 0], [0, -22, 0], a.u * 2) : V.lerp([0, -22, 0], [16, -r2, 0], (a.u - 0.5) * 2)); });
+    const T1 = surf ? 25 * (r1 / 10) : 50, T2 = surf ? 25 * (r2 / 10) : 50;
+    l1.text = '小肺泡 P = 2T/r ≈ ' + (2 * T1 / r1).toFixed(1); l2.text = '大肺泡 P ≈ ' + (2 * T2 / r2).toFixed(1); l1.p = [-14, r1, 0]; l2.p = [16, r2, 0];
+    $('lap-cap').textContent = surf ? '表面活性劑使小肺泡的表面張力降得更多 → 兩者壓力相近 → 都保持開放' : '表面張力相同時小肺泡壓力較大 → 空氣流向大肺泡 → 小肺泡塌陷';
+  });
+  K.seg('#lpmode', v => { surf = v === 'yes'; if (!surf) { r1 = 6; r2 = 10; } }, 'no');
+})();
+
+/* ================= 05 分壓 ================= */
+(function () {
+  const sat = (p, p50) => { const n = 2.7, x = Math.pow(Math.max(p, 0) / (p50 || 26.8), n); return x / (1 + x); };
+  K.range('alt', h => {
+    const atm = 760 * Math.exp(-h / 8400), dry = atm * 0.21, wet = (atm - 47) * 0.21, alv = Math.max(20, wet - 40 / 0.8 + (h > 2000 ? (h - 2000) / 1000 * 3 : 0));
+    $('g-atm').textContent = atm.toFixed(0); $('g-dry').textContent = dry.toFixed(0); $('g-wet').textContent = wet.toFixed(0); $('g-alv').textContent = alv.toFixed(0); $('g-sat').textContent = (sat(alv - 5) * 100).toFixed(0) + '%';
+  }, v => v + ' m' + (v === 8848 ? '（聖母峰）' : ''));
+})();
+
+/* ================= 06 化學受器 ================= */
+(function () {
+  let pc = 40, po = 100;
+  const ve = (c, o) => { const hyp = o < 50 ? (50 - o) * 0.6 : 0, gain = 1 + (o < 80 ? (80 - o) / 40 : 0); return Math.max(2, 6 + (c - 40) * 2.2 * gain + hyp); };
+  function draw() {
+    K.plot($('ve-plot'), { x: [30, 60], y: [0, 70], xt: [30, 35, 40, 45, 50, 55, 60], yt: [0, 20, 40, 60], xl: '動脈 PCO₂ (mmHg)', yl: '通氣量 L/min', series: [{ f: c => ve(c, 100), c: '#38bdf8', w: 2.4, label: 'PO₂ 100' }, { f: c => ve(c, 45), c: '#fb7185', w: 2.4, label: 'PO₂ 45' }, { f: c => ve(c, po), c: '#fbbf24', w: 1.6, dash: [4, 4], label: '目前 PO₂ ' + po }], dots: [{ x: pc, y: ve(pc, po), c: '#fbbf24', t: ve(pc, po).toFixed(0) + ' L/min' }], vl: [{ x: 40, c: '#34d399', t: '正常 40' }] });
+    $('ve-t').innerHTML = pc > 42 ? 'PCO₂↑ → 腦脊髓液 pH↓ → <b>中樞化學受器</b>強烈刺激通氣。' : pc < 38 ? 'PCO₂↓（過度換氣）→ 呼吸驅動減弱。' : '通氣量調整以維持 PCO₂ 約 40 mmHg。';
+    if (po < 50) $('ve-t').innerHTML += ' PO₂ &lt; 50 → <b>周邊化學受器</b>直接刺激呼吸。'; else if (po < 80) $('ve-t').innerHTML += ' 低 PO₂ 使化學受器對 PCO₂ 更敏感。';
+  }
+  K.range('pco2', v => { pc = v; draw(); }); K.range('po2', v => { po = v; draw(); }); addEventListener('resize', draw);
+})();
+
+/* ================= 07 血紅素 + ODC ================= */
+(function () {
+  const S = K.stage('st-hb', { radius: 34, yaw: 0.4, pitch: 0.3, autoRotate: 0.15 });
+  const SU = [[[-8, 7, 5], '#f87171', 'a'], [[8, 7, -5], '#f87171', 'a'], [[-8, -7, -5], '#fb923c', 'b'], [[8, -7, 5], '#fb923c', 'b']];
+  const hemes = SU.map(([c, col, k], i) => { const m = K.mover(K.ellipsoid(S, [0, 0, 0], [8, 7.5, 7], col, 14, 8, { id: k === 'a' ? 'alpha' : 'beta', al: 0.55 }), [0, 0, 0]); m.set(c, 1); const hc = V.add(c, V.mul(V.norm(c), 2)); const f = S.face(K.ring(hc, 3.2, 6, 0), '#7f1d1d', { id: 'heme' }); const fe = S.sphere(hc, 1.2, '#fb923c', { id: 'fe', glow: 0.4 }); const o2 = [S.sphere(V.add(hc, V.mul(V.norm(c), 2.4)), 1.3, '#ef4444', { id: 'o2' }), S.sphere(V.add(hc, V.add(V.mul(V.norm(c), 3.6), [1.2, 0, 0])), 1.3, '#ef4444', { id: 'o2' })]; return { m, c, o2, sat: 0 }; });
+  K.lab(S, [-8, 14, 5], 'α 鏈', 'alpha', '#fca5a5', -20, -10); K.lab(S, [8, -14, 5], 'β 鏈', 'beta', '#fdba74', 20, 10); K.lab(S, V.add(SU[0][0], V.mul(V.norm(SU[0][0]), 2)), 'heme + Fe²⁺', 'heme', '#fb923c', -50, 20);
+  let po2 = 100, pH = 7.4, tmp = 37, dpg = 1, fetal = false, ven = 40;
+  const p50 = () => fetal ? 19 : 26.8 * Math.pow(10, -0.48 * (pH - 7.4)) * Math.exp(0.024 * (tmp - 37)) * (1 + 0.28 * (dpg - 1));
+  const sat = (p, q) => { const x = Math.pow(Math.max(p, 0.01) / q, 2.7); return x / (1 + x); };
+  S.tick(dt => {
+    const s = sat(po2, p50()) * 4;
+    hemes.forEach((h, i) => { const order = [0, 3, 1, 2][i], f = K.clamp(s - order, 0, 1); h.sat += (f - h.sat) * Math.min(1, dt * 4); h.o2.forEach(o => { o.al = h.sat; o.hidden = h.sat < 0.05; }); h.m.F.forEach(fc => { fc.c = h.sat > 0.5 ? (i < 2 ? '#ef4444' : '#f97316') : (i < 2 ? '#a855f7' : '#c084fc'); }); });
+    $('hb-cap').textContent = '結合 ' + s.toFixed(1) + ' / 4 個 O₂（飽和度 ' + (s * 25).toFixed(0) + '%）' + (s > 3.6 ? '：氧合血紅素' : s < 1 ? '：去氧血紅素' : '');
+  });
+  function draw() {
+    const q = p50(), qn = 26.8, sa = sat(100, q), sv = sat(ven, q);
+    K.plot($('odc-plot'), { x: [0, 110], y: [0, 105], xt: [0, 20, 40, 60, 80, 100], yt: [0, 25, 50, 75, 100], xl: 'PO₂ (mmHg)', yl: '% 飽和', series: [{ f: p => sat(p, qn) * 100, c: '#64748b', w: 1.4, dash: [4, 4], label: '正常' }, { f: p => sat(p, q) * 100, c: fetal ? '#a78bfa' : '#ef4444', w: 2.8, label: fetal ? '胎兒 Hb' : '目前' }], vl: [{ x: po2, c: '#fff' }, { x: ven, c: '#60a5fa', t: '靜脈', dy: 14 }, { x: 100, c: '#f87171', t: '動脈' }], dots: [{ x: 100, y: sa * 100, c: '#f87171' }, { x: ven, y: sv * 100, c: '#60a5fa' }, { x: q, y: 50, c: '#fbbf24', t: 'P₅₀ ' + q.toFixed(0) }] });
+    $('hb-a').textContent = (sa * 100).toFixed(0) + '%'; $('hb-v').textContent = (sv * 100).toFixed(0) + '%'; $('hb-u').textContent = ((sa - sv) * 100).toFixed(0) + '%';
+  }
+  K.range('hpo2', v => { po2 = v; draw(); }); K.range('hph', v => { pH = v; draw(); }, v => v.toFixed(2)); K.range('htp', v => { tmp = v; draw(); }, v => v + ' °C'); K.range('hdpg', v => { dpg = v; draw(); }, v => v.toFixed(2) + '×');
+  const setR = (id, v) => { const i = $(id); i.value = v; i.dispatchEvent(new Event('input')); };
+  $('hb-rest').onclick = () => { fetal = false; ven = 40; setR('hph', 7.4); setR('htp', 37); setR('hdpg', 1); };
+  $('hb-ex').onclick = () => { fetal = false; ven = 20; setR('hph', 7.3); setR('htp', 39); };
+  $('hb-fet').onclick = () => { fetal = !fetal; $('hb-fet').classList.toggle('on', fetal); draw(); };
+  addEventListener('resize', draw);
+})();
+
+/* ================= 08 氯離子轉移 ================= */
+(function () {
+  const S = K.stage('st-rbc', { radius: 34, yaw: 0, pitch: 0.5, autoRotate: 0 });
+  K.ellipsoid(S, [0, 0, 0], [20, 9, 20], '#ef4444', 22, 10, { id: 'rbc', al: 0.25 }, { noise: (th, ph) => 1 - 0.25 * Math.exp(-((ph - Math.PI / 2) ** 2) * 0) });
+  const ca = S.sphere([-4, 0, 0], 3, '#22d3ee', { id: 'ca', glow: 0.5 }); const hb = S.sphere([6, -2, 4], 3.6, '#a855f7', { id: 'hb' }); const b3 = S.tube([18, -3, 0], [18, 3, 0], 1.8, '#fbbf24', { id: 'band3' });
+  K.lab(S, ca.p, '碳酸酐酶', 'ca', '#67e8f9', -20, -20); K.lab(S, hb.p, '血紅素（緩衝 H⁺）', 'hb', '#d8b4fe', 20, 20); K.lab(S, [18, 3, 0], 'HCO₃⁻/Cl⁻ 交換蛋白', 'band3', '#fde047', 30, -20); K.lab(S, [-36, 0, 0], '組織 / 肺泡側', 'side', '#cbd5e1', 0, -30);
+  const N = 6, co2 = [], hco3 = [], cl = [], hp = [];
+  for (let i = 0; i < N; i++) { co2.push(S.sphere([0, 0, 0], 1.4, '#94a3b8', { id: 'co2' })); hco3.push(S.sphere([0, 0, 0], 1.3, '#38bdf8', { id: 'hco3' })); cl.push(S.sphere([0, 0, 0], 1.4, '#4ade80', { id: 'cl' })); hp.push(S.sphere([0, 0, 0], 1, '#fb7185', { id: 'h' })); }
+  const lb = { c: K.lab(S, co2[0].p, 'CO₂', 'co2', '#cbd5e1', 0, -12, { size: 11 }), b: K.lab(S, hco3[0].p, 'HCO₃⁻', 'hco3', '#7dd3fc', 0, -12, { size: 11 }), l: K.lab(S, cl[0].p, 'Cl⁻', 'cl', '#86efac', 0, 12, { size: 11 }), h: K.lab(S, hp[0].p, 'H⁺', 'h', '#fda4af', 0, -12, { size: 11 }) };
+  let mode = 'tis', T = 0;
+  S.tick(dt => {
+    T += dt * 0.28;
+    for (let i = 0; i < N; i++) {
+      let t = (T + i / N) % 1; const dir = mode === 'tis';
+      if (!dir) t = 1 - t;
+      const out = [-34, (i - 2.5) * 3, (i % 2 ? 6 : -6)], cen = [-4, (i - 2.5) * 1.2, 0], hbP = V.add(hb.p, [(i % 3 - 1) * 2, 2, (i % 2 ? 2 : -2)]), exit = [32, (i - 2.5) * 3, (i % 2 ? 5 : -5)], gate = [18, (i - 2.5) * 0.8, 0];
+      mv(co2[i].p, V.lerp(out, cen, sm(0, 0.35, t))); co2[i].hidden = t > 0.4;
+      hp[i].hidden = t < 0.38; mv(hp[i].p, V.lerp(cen, hbP, sm(0.38, 0.6, t)));
+      hco3[i].hidden = t < 0.38; mv(hco3[i].p, t < 0.7 ? V.lerp(cen, gate, sm(0.38, 0.7, t)) : V.lerp(gate, exit, sm(0.7, 1, t)));
+      mv(cl[i].p, t < 0.7 ? V.add(exit, [0, 4, 0]) : V.lerp(V.add(exit, [0, 4, 0]), V.add(gate, [-6, 4, i]), sm(0.7, 1, t)));
+    }
+    ca.glow = 0.5 + 0.5 * Math.sin(T * 20);
+    lb.c.p = co2[0].p; lb.b.p = hco3[0].p; lb.l.p = cl[0].p; lb.h.p = hp[0].p;
+  });
+  K.seg('#rbmode', m => { mode = m; $('rbc-hud').textContent = m === 'tis' ? '組織：CO₂ 進入 → HCO₃⁻ 出、Cl⁻ 進' : '肺：HCO₃⁻ 進、Cl⁻ 出 → CO₂ 呼出'; $('rbc-cap').innerHTML = m === 'tis' ? 'PCO₂ 高 → 碳酸酐酶生成 H₂CO₃ → H⁺ 被 Hb 緩衝，HCO₃⁻ 出去、<b>Cl⁻ 進來</b>（氯離子轉移）' : 'PCO₂ 低 → 反應逆轉：HCO₃⁻ 進入、Cl⁻ 出去，H⁺ 離開 Hb → CO₂ 擴散到肺泡（反向氯離子轉移）'; }, 'tis');
+  S.onPick = o => { if (!o) return; const t = { rbc: '紅血球', ca: '碳酸酐酶', hb: '血紅素', band3: '陰離子交換蛋白', co2: 'CO₂', hco3: '碳酸氫根', cl: '氯離子', h: 'H⁺' }[o.id]; if (t) $('rbc-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 09 酸鹼 ================= */
+(function () {
+  let pc = 40, hc = 24;
+  function upd() {
+    const pH = 6.1 + Math.log10(hc / (0.03 * pc)); $('ab-ph').textContent = pH.toFixed(2);
+    let s = '正常', col = '#34d399';
+    if (pH < 7.35) { s = pc > 45 ? '呼吸性酸中毒' : hc < 22 ? '代謝性酸中毒' : '酸中毒'; col = '#fb7185'; }
+    else if (pH > 7.45) { s = pc < 35 ? '呼吸性鹼中毒' : hc > 26 ? '代謝性鹼中毒' : '鹼中毒'; col = '#60a5fa'; }
+    else if (pc < 35 && hc < 22) s = '代謝性酸中毒（呼吸代償）';
+    else if (pc > 45 && hc > 26) s = '代謝性鹼中毒（呼吸代償）或呼吸性酸中毒（腎代償）';
+    $('ab-st').textContent = s; $('ab-st').style.color = col;
+  }
+  const rc = K.range('abc', v => { pc = v; upd(); }), rh = K.range('abh', v => { hc = v; upd(); });
+  UI.$$('[data-ab]').forEach(b => b.onclick = () => { const [a, c] = b.dataset.ab.split(',').map(Number); rc.set(a); rh.set(c); });
+})();
+
+/* ================= 快閃卡 / 測驗 ================= */
+UI.flashcards($('fc'), [
+  { f: '傳導區 vs 呼吸區', b: '傳導區：氣管→終末細支氣管（無肺泡）；呼吸區：呼吸性細支氣管、肺泡管、肺泡（氣體交換）。' },
+  { f: '第一型 vs 第二型肺泡細胞', b: '第一型：佔 95–97% 表面積，氣體交換；第二型：分泌表面活性劑。' },
+  { f: '吸氣時的壓力變化', b: '胸腔擴大 → 肺內壓降到約 −1 cmH₂O；肋膜內壓 −5 → −8。' },
+  { f: '平靜呼氣是主動或被動？', b: '<b>被動</b>：肌肉放鬆，肺與胸廓彈性回縮。' },
+  { f: '順應性的定義', b: '每單位跨肺壓變化所引起的肺容積變化；纖維化使其下降。' },
+  { f: 'Laplace 定律與表面活性劑', b: 'P = 2T/r：表面張力相同時小肺泡壓力大易塌陷；表面活性劑降低 T（肺泡愈小降愈多）。' },
+  { f: '肺活量的組成', b: 'VC = TV + IRV + ERV；TLC = VC + RV。' },
+  { f: '阻塞性 vs 限制性肺病', b: '阻塞性（氣喘、支氣管炎）：FEV₁ 下降；限制性（纖維化）：VC 下降。' },
+  { f: '海平面吸入 PO₂ 與肺泡 PO₂', b: '乾空氣 760×0.21 ≈ 159；濕化 (760−47)×0.21 ≈ 150；肺泡約 105 mmHg。' },
+  { f: '動脈血與靜脈血 PO₂/PCO₂', b: '動脈 100/40；靜脈（休息）40/46。' },
+  { f: '呼吸調控最重要的刺激', b: '<b>PCO₂（經 pH）</b>；PO₂ 要 &lt; 50 mmHg 才直接刺激。' },
+  { f: '中樞 vs 周邊化學受器', b: '中樞（延腦）：腦脊髓液 pH；周邊（頸動脈體、主動脈體）：血液 pH、PCO₂、低 PO₂。' },
+  { f: 'Hering–Breuer 反射', b: '潮氣容積 ≥ 1 L 時，肺牽張受器抑制吸氣。' },
+  { f: '休息時組織卸載多少 O₂？', b: '動脈 97% → 靜脈 75%，約卸載 22%；運動時更多。' },
+  { f: '使氧解離曲線右移的因素', b: 'pH↓（Bohr 效應）、溫度↑、2,3-DPG↑ → 親和力↓、卸載↑。' },
+  { f: '胎兒血紅素為何親和力高？', b: '不結合 2,3-DPG → 曲線左移，可從母血取得 O₂。' },
+  { f: '氯離子轉移', b: '組織中 HCO₃⁻ 出紅血球、Cl⁻ 進入；肺中反向。' },
+  { f: '換氣不足與過度換氣的酸鹼影響', b: '換氣不足 → PCO₂↑ → 呼吸性酸中毒；過度換氣 → 呼吸性鹼中毒。' },
+  { f: '高海拔適應三機制', b: '過度換氣、2,3-DPG↑、EPO↑ → 紅血球↑。' }
+], 'ch16');
+UI.quiz($('qz'), [
+  { q: '最細且沒有肺泡的氣道是？', o: ['主支氣管', '終末細支氣管', '呼吸性細支氣管', '肺泡管'], a: 1, e: '終末細支氣管是傳導區終點。' },
+  { q: '平靜吸氣時肺內壓約為？', o: ['+1 cmH₂O', '0', '−1 cmH₂O', '−8 cmH₂O'], a: 2, e: '−8 是吸氣時的肋膜內壓。' },
+  { q: '氣胸時，該側肺塌陷的直接原因是？', o: ['表面活性劑消失', '肋膜內壓升至大氣壓、跨肺壓消失', '支氣管收縮', '橫膈麻痺'], a: 1, e: '跨肺壓消失，肺彈性回縮塌陷。' },
+  { q: '早產兒呼吸窘迫症候群的原因是缺乏？', o: ['彈性蛋白', '表面活性劑', '第一型肺泡細胞', '肺泡巨噬細胞'], a: 1, e: '第二型肺泡細胞尚未成熟。' },
+  { q: '肺活量等於？', o: ['TV + RV', 'TV + IRV + ERV', 'IRV + ERV + RV', 'TLC + RV'], a: 1, e: 'VC 不含殘氣量。' },
+  { q: '氣喘患者的肺功能檢查最典型的變化是？', o: ['VC 大幅下降、FEV₁/VC 正常', 'FEV₁ 下降', 'RV 減少', 'TLC 減少'], a: 1, e: '阻塞性：呼氣阻力增加。' },
+  { q: '正常情況下呼吸調控最主要的化學刺激是？', o: ['動脈 PO₂', '動脈 PCO₂（與 pH）', '血糖', '血壓'], a: 1, e: 'PO₂ 要低於 50 才直接刺激。' },
+  { q: '下列何者使氧解離曲線左移？', o: ['pH 下降', '溫度上升', '2,3-DPG 增加', '胎兒血紅素'], a: 3, e: '胎兒 Hb 親和力較高 → 左移。' },
+  { q: '紅血球中催化 CO₂ + H₂O ⇄ H₂CO₃ 的酵素是？', o: ['碳酸酐酶', '磷酸二酯酶', '乳酸脫氫酶', '肺表面活性劑'], a: 0, e: '碳酸酐酶。' },
+  { q: '組織微血管中，HCO₃⁻ 離開紅血球時交換進入的是？', o: ['Na⁺', 'K⁺', 'Cl⁻', 'H⁺'], a: 2, e: '氯離子轉移。' },
+  { q: '過度換氣會造成？', o: ['呼吸性酸中毒', '呼吸性鹼中毒', '代謝性酸中毒', '代謝性鹼中毒'], a: 1, e: 'PCO₂ 降低 → pH 升高。' },
+  { q: '高海拔適應中，腎臟分泌何者？', o: ['ADH', '腎素', '紅血球生成素', '醛固酮'], a: 2, e: 'EPO 刺激紅血球生成。' }
+]);
+</script>
+</body>
+</html>

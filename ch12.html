@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch12 肌肉 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body style="--acc:#fb7185;--acc2:#fbbf24">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 12 · Muscle</div>
+  <h1 class="title3d">肌肉：構造與收縮機制</h1>
+  <p class="sub">骨骼肌的層級構造、肌節與肌絲滑動（拉桿收縮）、橫橋循環與 Ca²⁺ 開關、運動單元與神經肌肉接合、刺激–收縮耦合（T 小管與肌質網）、肌梭與膝跳反射、三種肌肉的比較。</p>
+  <div class="chips"><a class="chip" href="#s1">① 層級構造</a><a class="chip" href="#s2">② 肌節滑動</a><a class="chip" href="#s3">③ 橫橋循環</a><a class="chip" href="#s4">④ 運動單元與 NMJ</a><a class="chip" href="#s5">⑤ 刺激–收縮耦合</a><a class="chip" href="#s6">⑥ 肌梭與反射</a><a class="chip" href="#s7">⑦ 三種肌肉</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="s1" data-nav="層級構造">
+  <h2><span class="num">01</span>骨骼肌的層級構造：肌肉 → 肌束 → 肌纖維 → 肌原纖維</h2>
+  <div class="grid2">
+    <div class="stage" id="st-lev"><canvas aria-label="3D 骨骼肌層級"></canvas><div class="hud" id="lev-hud"></div><div class="hud2" id="lev-cap">點選部位</div>
+      <div class="sbar"><div class="seg" id="levmode"><button class="btn sm" data-v="m" type="button">整塊肌肉</button><button class="btn sm" data-v="f" type="button">肌束</button><button class="btn sm" data-v="fi" type="button">肌纖維</button><button class="btn sm" data-v="mf" type="button">肌原纖維</button></div></div></div>
+    <div class="card info"><div id="info-lev"><div class="tt">點選部位</div></div><div class="picker" id="pk-lev"></div></div>
+  </div>
+  <div class="card mt"> <p class="small">骨骼肌兩端以<b>肌腱</b>附著於骨（肌腱纖維與<b>骨外膜</b>相連）。由外而內，結締組織一層層包裹：</p> <div class="tbwrap mt"><table class="tb"> <tr><td><b>肌外膜</b><br>epimysium</td><td>由肌腱的緻密結締組織延伸，包住整塊肌肉</td></tr> <tr><td><b>肌束膜</b><br>perimysium</td><td>伸入肌肉內，把肌纖維分成一束束<b>肌束</b>（fascicle）</td></tr> <tr><td><b>肌內膜</b><br>endomysium</td><td>包住每一條肌纖維的薄層結締組織</td></tr> </table></div> <p class="small"><b>肌纖維</b>＝肌細胞：由許多胚胎<b>肌母細胞</b>（myoblast）融合而成，因此<b>多核</b>，細胞核位於周邊、緊貼<b>肌膜</b>（sarcolemma）下方；細胞質稱<b>肌質</b>（sarcoplasm）。</p> <p class="small">每條肌纖維內塞滿直徑約 <b>1 µm</b> 的<b>肌原纖維</b>（myofibril），貫穿全長；肌原纖維由<b>粗肌絲</b>（肌凝蛋白）與<b>細肌絲</b>（肌動蛋白）組成。各肌原纖維的明暗帶<b>對齊排列</b>，所以整條纖維看起來有<b>橫紋</b>：暗帶 A、明帶 I。</p> <p class="small muted">由左至右放大四個層級；虛線表示放大的來源。</p></div>
+</section>
+
+<section class="sec" id="s2" data-nav="肌節滑動">
+  <h2><span class="num">02</span>肌節與肌絲滑動學說（sliding filament theory）</h2>
+  <div class="grid2">
+    <div class="stage" id="st-sar"><canvas aria-label="3D 肌節"></canvas><div class="hud">紅＝細肌絲　藍＝粗肌絲　黃＝橫橋</div><div class="hud2" id="sar-cap"></div>
+      <div class="sbar"><div class="seg" id="sarmode"><button class="btn sm" data-v="l" type="button">縱切</button><button class="btn sm" data-v="x" type="button">橫切（六角排列）</button></div><button class="btn sm" id="sar-play" type="button">▶ 收縮–舒張</button></div></div>
+    <div class="card"><div class="ctrl"><label for="slen">肌節長度</label><input type="range" id="slen" min="160" max="260" value="225"><output id="slen-v">2.25 µm</output></div>
+      <div class="kv"><div><small>A 帶</small><b id="sa-a"></b></div><div><small>I 帶</small><b id="sa-i"></b></div><div><small>H 帶</small><b id="sa-h"></b></div></div>
+      <div class="info mt" id="info-sar"></div><div class="picker" id="pk-sar"></div></div>
+  </div>
+  <div class="card mt"> <p class="small"><b>肌節</b>（sarcomere）＝兩條 Z 盤之間的重複單位。</p> <div class="tbwrap mt"><table class="tb"> <tr><td><b>A 帶</b></td><td>粗肌絲（肌凝蛋白）全長</td></tr> <tr><td><b>I 帶</b></td><td>只有細肌絲（肌動蛋白），中央有 Z 盤</td></tr> <tr><td><b>H 帶</b></td><td>A 帶中央只有粗肌絲的部分</td></tr> <tr><td><b>M 線</b></td><td>A 帶中央連結粗肌絲的蛋白</td></tr> <tr><td><b>肌聯蛋白</b><br>titin</td><td>巨大彈性蛋白，自 M 線穿過粗肌絲到 Z 盤；穩定粗肌絲位置，並提供肌肉被拉長後的<b>彈性回縮</b></td></tr> </table></div> <p class="small"><b>收縮時</b>（Table 12.2）：肌絲本身<b>長度不變</b>，而是細肌絲在粗肌絲之間<b>滑向肌節中央</b>：</p> <ul class="small"><li>Z 盤靠近 → 肌節變短</li><li><b>A 帶長度不變</b>，相鄰 A 帶彼此靠近</li><li><b>I 帶變短</b></li><li><b>H 帶變短</b>（甚至消失）</li></ul> <p class="small"><b>長度-張力關係</b>（Fig 12.21）：肌節長 <b>2.0–2.25 µm</b>（＝肌肉正常的靜止長度）時重疊最適當、可形成最多橫橋，張力最大；拉得太長重疊少、張力下降，完全不重疊就無法產生張力；太短時細肌絲互相重疊、粗肌絲頂到 Z 盤，張力也下降。</p> <p class="small muted">右側滑桿可改變肌節長度；肌絲長度（粗 1.6 µm、細 1.0 µm）為示意值，使張力高原落在課本的 2.0–2.25 µm。橫向間距已放大以便觀察。</p></div>
+</section>
+
+<section class="sec" id="s3" data-nav="橫橋循環">
+  <h2><span class="num">03</span>橫橋循環與 Ca²⁺ 的開關作用</h2>
+  <div class="grid2">
+    <div class="stage" id="st-brg"><canvas aria-label="3D 橫橋循環"></canvas><div class="hud">上：細肌絲　下：粗肌絲與肌凝蛋白頭部</div><div class="hud2" id="brg-cap"></div>
+      <div class="sbar"><div class="seg" id="camode"><button class="btn sm" data-v="1" type="button">Ca²⁺ 高（收縮）</button><button class="btn sm" data-v="0" type="button">Ca²⁺ 低（放鬆）</button></div></div></div>
+    <div class="card"><div id="brg-steps"></div><div class="info mt" id="info-brg"></div><div class="picker" id="pk-brg"></div></div>
+  </div>
+  <div class="card mt"> <p class="small"><b>細肌絲</b>（F-actin）：300–400 個球狀 <b>G-actin</b> 排成雙列、扭成螺旋。<b>肌旋蛋白</b>（tropomyosin）躺在雙列之間的溝中，每條約跨 7 個肌動蛋白；<b>肌鈣蛋白</b>（troponin）附著於肌旋蛋白上（不直接接在肌動蛋白），由三個次單元組成：</p> <div class="tbwrap mt"><table class="tb"> <tr><td><b>TnI</b></td><td>抑制橫橋與肌動蛋白結合</td></tr> <tr><td><b>TnT</b></td><td>與肌旋蛋白結合</td></tr> <tr><td><b>TnC</b></td><td>與 Ca²⁺ 結合</td></tr> </table></div> <p class="small"><b>Ca²⁺ 開關</b>：放鬆時肌質 Ca²⁺ 很低，肌旋蛋白蓋住肌動蛋白上的結合位；肌質 Ca²⁺ 升高（&gt; 10⁻⁶ M）時 Ca²⁺ 結合 TnC，肌鈣蛋白-肌旋蛋白複合體移位、露出結合位，橫橋才能結合。</p> <p class="small"><b>ATP 的雙重角色</b>：ATP 水解才能「扳起」頭部；新的 ATP 結合才能讓頭部<b>離開</b>肌動蛋白。沒有 ATP 時頭部卡在結合狀態＝<b>僵直複合體</b>（rigor complex），死後的<b>屍僵</b>即此原因。</p> <p class="small">各橫橋的動力衝程<b>不同步</b>（像拔河而非划船），所以總有一些橫橋抓住細肌絲。</p> <p class="small muted">此處只動畫一個肌凝蛋白分子（兩個頭部）；紅點＝肌動蛋白上的肌凝蛋白結合位。</p></div>
+</section>
+
+<section class="sec" id="s4" data-nav="運動單元與 NMJ">
+  <h2><span class="num">04</span>運動單元（motor unit）與神經肌肉接合（NMJ）</h2>
+  <div class="grid2">
+    <div class="stage" id="st-nmj"><canvas aria-label="3D 運動單元"></canvas><div class="hud">左：脊髓與兩個運動單元　右：NMJ 放大</div><div class="hud2" id="nmj-cap"></div>
+      <div class="sbar"><button class="btn sm" id="mu-a" type="button">⚡ 運動單元 A</button><button class="btn sm" id="mu-b" type="button">⚡ 運動單元 B</button><button class="btn sm" id="mu-ab" type="button">⚡ 增補 A + B</button></div></div>
+    <div class="card info"><div id="info-nmj"><div class="tt">點選部位</div></div><div class="picker" id="pk-nmj"></div></div>
+  </div>
+  <div class="card mt"> <p class="small"><b>體運動神經元</b>的細胞本體位於脊髓灰質<b>前角</b>，軸突經<b>前根</b>離開脊髓，到肌肉中分支，每條肌纖維只接受<b>一個</b>終端小球（terminal bouton）。</p> <p class="small"><b>運動單元</b>＝一個運動神經元＋它支配的所有肌纖維。神經元興奮時，其所有肌纖維一起收縮（全有或全無）。</p> <p class="small"><b>支配比</b>（innervation ratio，神經元：肌纖維）：眼外肌平均約 <b>1:23</b>，控制精細；腓腸肌 <b>1:100 – 1:2000</b>。小運動單元的神經元較小、較易興奮，先被徵召。</p> <p class="small"><b>增補作用</b>（recruitment）：要更大力時，腦部徵召更多、更大的運動單元，加上提高放電頻率，使收縮平滑且強度分級。</p> <p class="small"><b>NMJ 傳遞</b>：動作電位到達終端 → 突觸小泡胞吐釋出 <b>ACh</b> → ACh 結合運動終板上的<b>菸鹼型 ACh 受體</b>（配體閘控通道）→ Na⁺ 內流為主 → <b>終板電位</b> → 引發肌膜動作電位。ACh 隨即被<b>乙醯膽鹼酯酶</b>（AChE）分解。</p> <p class="small muted">臨床：肉毒桿菌毒素切斷 SNARE 蛋白（SNAP-25），使 ACh 無法釋放 → 肌肉麻痺（Botox 除皺的原理）。</p></div>
+</section>
+
+<section class="sec" id="s5" data-nav="刺激收縮耦合">
+  <h2><span class="num">05</span>刺激-收縮耦合（excitation-contraction coupling）</h2>
+  <div class="grid2">
+    <div class="stage" id="st-ecc"><canvas aria-label="3D 刺激收縮耦合"></canvas><div class="hud">左：肌纖維內部　右：三聯體分子放大</div><div class="hud2" id="ecc-cap"></div></div>
+    <div class="card"><div id="ecc-steps"></div><div class="info mt" id="info-ecc"></div><div class="picker" id="pk-ecc"></div></div>
+  </div>
+  <div class="card mt"> <p class="small"><b>肌質網</b>（sarcoplasmic reticulum, SR）＝特化的平滑內質網，像網一樣包住每條肌原纖維，<b>儲存 Ca²⁺</b>；大部分 Ca²⁺ 存在膨大的<b>終池</b>（terminal cisternae）。</p> <p class="small"><b>橫小管</b>（transverse tubules, T 小管）＝肌膜向內凹陷形成的細管，開口於細胞表面，能把動作電位<b>傳到纖維深處</b>。每條 T 小管兩側各夾一個終池，合稱<b>三聯體</b>（triad）。</p> <p class="small"><b>電機械性釋放</b>（electromechanical release）：骨骼肌中，T 小管上的電壓閘控 Ca²⁺ 通道（<b>DHP 受體</b>）與 SR 上的 <b>Ca²⁺ 釋放通道</b>（<b>ryanodine 受體</b>）<b>直接機械相連</b>；去極化使前者改變構形，直接拉開後者。SR 上另有對肌質 Ca²⁺ 升高起反應的釋放通道（Ca²⁺ 誘發 Ca²⁺ 釋放），可放大訊號。</p> <p class="small">肌質 Ca²⁺ 超過約 10⁻⁶ M 即啟動收縮；動作電位持續、釋放通道就保持開啟。</p> <p class="small"><b>心肌不同</b>：T 小管的 Ca²⁺ 通道與 SR 釋放通道<b>不直接接觸</b>，靠流入的 Ca²⁺ 去打開 SR 通道（<b>Ca²⁺ 誘發 Ca²⁺ 釋放</b>），所以耦合比骨骼肌慢。</p> <p class="small muted">左：一段肌纖維內部（3 條肌原纖維，三聯體位於 A 帶與 I 帶交界）；右：三聯體分子放大。</p></div>
+</section>
+
+<section class="sec" id="s6" data-nav="肌梭與反射">
+  <h2><span class="num">06</span>肌梭、高基氏肌腱器與牽張反射（膝跳反射）</h2>
+  <div class="grid2">
+    <div class="stage" id="st-spi"><canvas aria-label="3D 膝跳反射"></canvas><div class="hud">藍＝Ia 感覺　紅＝α 運動　綠＝γ 運動</div><div class="hud2" id="spi-cap"></div>
+      <div class="sbar"><button class="btn sm" id="tap" type="button">🔨 敲擊髕韌帶</button><div class="seg" id="spimode"><button class="btn sm" data-v="r" type="button">反射路徑</button><button class="btn sm" data-v="z" type="button">肌梭放大</button></div></div></div>
+    <div class="card info"><div id="info-spi"><div class="tt">點選部位</div></div><div class="picker" id="pk-spi"></div></div>
+  </div>
+  <div class="card mt"> <p class="small">控制骨骼肌需要持續的感覺回饋：<b>肌梭</b>（muscle spindle apparatus）偵測肌肉<b>長度</b>，<b>高基氏肌腱器</b>（Golgi tendon organ）偵測<b>張力</b>。</p> <p class="small"><b>肌梭</b>：結締組織囊內有幾條特化的細肌細胞＝<b>梭內纖維</b>（intrafusal fibers），與一般的<b>梭外纖維</b>（extrafusal）<b>並聯</b>，兩端同樣接到肌腱。梭內纖維中央沒有收縮構造、只有細胞核：</p> <div class="tbwrap mt"><table class="tb"> <tr><td><b>核袋纖維</b></td><td>核聚集成一團（袋狀）</td></tr> <tr><td><b>核鏈纖維</b></td><td>核排成一列</td></tr> <tr><td><b>初級（環螺旋）末梢</b></td><td>纏繞兩種纖維中央；對<b>拉長的開始</b>（速度）反應最強</td></tr> <tr><td><b>次級（花枝狀）末梢</b></td><td>一般位於核鏈纖維的收縮端（人類也分布到核袋纖維）；對<b>持續拉長</b>反應</td></tr> </table></div> <p class="small"><b>α 運動神經元</b>（傳導快）支配梭外纖維 → 肌肉收縮；<b>γ 運動神經元</b>（較慢）支配梭內纖維兩端，使其收縮「收緊」肌梭，提高對被動拉長的敏感度。上運動神經元通常同時刺激兩者＝<b>α-γ 共同活化</b>；γ 活動維持正常<b>肌張力</b>。</p> <p class="small"><b>單突觸牽張反射</b>：敲<b>髕韌帶</b> → 股四頭肌與肌梭被拉長 → 環螺旋感覺神經元興奮 → 在脊髓直接與 α 運動神經元形成突觸（只有 1 個突觸）→ 梭外纖維收縮 → <b>膝跳反射</b>。</p> <p class="small"><b>高基氏肌腱器反射</b>：肌腱張力過大 → 感覺軸突與<b>抑制性中間神經元</b>形成突觸 → 抑制運動神經元（<b>雙突觸</b>反射）→ 防止過度收縮或被動過度拉長。</p></div>
+</section>
+
+<section class="sec" id="s7" data-nav="三種肌肉">
+  <h2><span class="num">07</span>骨骼肌、心肌與平滑肌</h2>
+  <div class="grid2">
+    <div class="stage" id="st-typ"><canvas aria-label="3D 三種肌肉"></canvas><div class="hud">左：骨骼肌　中：心肌　右：平滑肌（後方：平滑肌細胞放大）</div><div class="hud2" id="typ-cap"></div></div>
+    <div class="card info"><div id="info-typ"><div class="tt">點選部位</div></div><div class="picker" id="pk-typ"></div></div>
+  </div>
+  <div class="card mt"> <div class="tbwrap mt"><table class="tb"> <tr><th></th><th>骨骼肌</th><th>心肌</th><th>平滑肌</th></tr> <tr><td>橫紋</td><td>有</td><td>有</td><td><b>無</b>（無肌節）</td></tr> <tr><td>細胞</td><td>長圓柱、<b>多核</b>（周邊）</td><td>短、<b>分支</b>，核居中</td><td><b>紡錘形</b>，單核居中</td></tr> <tr><td>連結</td><td>彼此分開</td><td><b>間盤</b>（含隙型連結）</td><td>單一單位型有隙型連結</td></tr> <tr><td>控制</td><td>隨意（體運動神經）</td><td>不隨意，<b>節律點</b>自發</td><td>不隨意（自主神經、激素）</td></tr> <tr><td>Ca²⁺ 開關</td><td>肌鈣蛋白</td><td>肌鈣蛋白</td><td><b>攜鈣素</b>＋MLCK</td></tr> </table></div> <p class="small"><b>心肌</b>：心肌細胞以<b>間盤</b>（intercalated discs）相接，其中的<b>隙型連結</b>讓動作電位在細胞間傳遞，使整個心肌層像<b>一個功能單位</b>收縮。</p> <p class="small"><b>平滑肌</b>：細肌絲:粗肌絲約 <b>16:1</b>（橫紋肌約 2:1）；細肌絲很長，固定於細胞膜或胞質中的<b>緻密體</b>（dense bodies，相當於 Z 盤）。Ca²⁺ 主要由細胞膜的電壓閘控通道進入 → 與<b>攜鈣素</b>（calmodulin）結合 → 活化<b>肌凝蛋白輕鏈激酶</b>（MLCK）→ 肌凝蛋白磷酸化後才能形成橫橋。Ca²⁺ 下降時肌凝蛋白磷酸酶去磷酸化 → 舒張。可進入<b>門閂狀態</b>（latch state），以很少能量維持張力。</p> <p class="small"><b>單一單位型</b>平滑肌（如腸道）：自發活動（肌原性），有節律細胞，以隙型連結傳播電活動；<b>多單位型</b>需自主神經刺激，神經沿途的<b>曲張體</b>（varicosities）釋放傳遞物質＝途中突觸（synapses en passant）。</p> <details><summary>骨骼肌纖維類型</summary><div class="tbwrap mt"><table class="tb"> <tr><td><b>第 I 型</b>（慢肌）<br>slow oxidative</td><td>紅色：肌紅素多、微血管與粒線體多，有氧代謝、不易疲勞；運動單元小（例：比目魚肌）</td></tr> <tr><td><b>第 IIA 型</b><br>fast oxidative-glycolytic</td><td>快縮、氧化能力高（課本歸為<b>紅</b>肌），介於 I 與 IIX 之間</td></tr> <tr><td><b>第 IIX 型</b><br>fast glycolytic</td><td>白色：肝醣多、粒線體與肌紅素少，無氧代謝、易疲勞；運動單元大</td></tr> </table></div></details></div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">08</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">09</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 12 章與原「骨骼肌 3D」內容整理，僅供個人複習。3D 為示意。 · <a href="index.html">回總覽</a> · <a href="ch11.html">← 第 11 章 內分泌</a> · <a href="bone.html">補充：骨骼與關節 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+const lab = (S, p, t, id, c, dx, dy, x) => K.lab(S, p, t, id, c, dx, dy, Object.assign({ size: 11 }, x));
+const cyl = (S, a, b, r, col, x, sides) => K.sweep(S, [a, b], r, col, 1, sides || 10, x, { smooth: 1 });
+
+/* ========== ① 層級構造 ========== */
+(function () {
+  const INFO = {"骨（含骨外膜）": {"t": "骨（含骨外膜）", "en": "Bone with periosteum　〔整塊肌肉〕", "p": "肌腱的膠原纖維與包覆骨的<b>骨外膜</b>（periosteum）相連，把肌肉收縮的拉力傳到骨骼。"}, "肌腱": {"t": "肌腱", "en": "Tendon　〔整塊肌肉〕", "p": "由<b>緻密規則結締組織</b>（膠原纖維）構成，把肌肉連到骨。肌腱的結締組織往肌肉方向延伸，形成肌外膜。"}, "肌外膜": {"t": "肌外膜", "en": "Epimysium　〔整塊肌肉〕", "p": "包住整塊肌肉的結締組織鞘，由肌腱延伸而來。"}, "筋膜": {"t": "筋膜", "en": "Fascia　〔整塊肌肉〕", "p": "包在肌外膜之外的結締組織層，把肌肉與周圍構造隔開（此處只畫後半圈）。"}, "肌束": {"t": "肌束", "en": "Muscle fascicle　〔整塊肌肉〕", "p": "一束肌纖維；由<b>肌束膜</b>包覆。肉眼可見的肌肉「紋理」就是肌束。"}, "肌束膜": {"t": "肌束膜", "en": "Perimysium　〔整塊肌肉〕", "p": "肌外膜伸入肌肉內部的結締組織，把肌肉分隔成肌束。"}, "肌纖維（肌細胞）": {"t": "肌纖維（肌細胞）", "en": "Muscle fiber　〔肌束〕", "p": "肌束由許多肌纖維組成；每一條肌纖維就是一個<b>多核</b>的肌細胞，可長達數公分。"}, "肌內膜": {"t": "肌內膜", "en": "Endomysium　〔肌束〕", "p": "包住每一條肌纖維的薄層結締組織。"}, "肌束膜（放大）": {"t": "肌束膜（放大）", "en": "Perimysium　〔肌束〕", "p": "包住整個肌束的結締組織鞘。"}, "微血管": {"t": "微血管", "en": "Capillaries　〔肌束〕", "p": "走在肌內膜中、肌纖維之間，供應氧氣與養分。"}, "肌膜": {"t": "肌膜", "en": "Sarcolemma　〔肌纖維〕", "p": "肌纖維的細胞膜。可傳導動作電位，並向內凹陷形成<b>橫小管</b>（見⑤）。正下方有 dystrophin 蛋白支撐（杜顯氏肌肉萎縮症即此基因突變）。"}, "肌原纖維": {"t": "肌原纖維", "en": "Myofibrils　〔肌纖維〕", "p": "直徑約 1 µm、貫穿肌纖維全長的收縮單位。相鄰肌原纖維的 A 帶與 I 帶<b>對齊</b>，形成整條纖維的橫紋。"}, "細胞核（多核、周邊）": {"t": "細胞核（多核、周邊）", "en": "Nuclei　〔肌纖維〕", "p": "肌纖維由許多肌母細胞融合而成，所以是<b>多核</b>細胞；細胞核被肌原纖維擠到周邊，位於肌膜正下方。"}, "粒線體": {"t": "粒線體", "en": "Mitochondria　〔肌纖維〕", "p": "位於肌原纖維之間，以有氧呼吸供應收縮所需 ATP。"}, "肌質": {"t": "肌質", "en": "Sarcoplasm　〔肌纖維〕", "p": "肌纖維的細胞質；含肝醣顆粒、肌紅素等，肌原纖維與胞器懸浮其中。"}, "肌原纖維（放大）": {"t": "肌原纖維（放大）", "en": "Myofibril　〔肌原纖維〕", "p": "由一個接一個的<b>肌節</b>串成。末端可看到其中的肌絲。"}, "肌節": {"t": "肌節", "en": "Sarcomere　〔肌原纖維〕", "p": "兩條 Z 線之間的重複單位，是骨骼肌<b>收縮的基本單位</b>。收縮時 Z 線彼此靠近。"}, "粗肌絲（肌凝蛋白）": {"t": "粗肌絲（肌凝蛋白）", "en": "Thick filament (myosin)　〔肌原纖維〕", "p": "位於 A 帶；主要由肌凝蛋白構成，表面伸出肌凝蛋白頭部（橫橋）。"}, "細肌絲（肌動蛋白）": {"t": "細肌絲（肌動蛋白）", "en": "Thin filament (actin)　〔肌原纖維〕", "p": "從 Z 盤伸向肌節中央；主要由肌動蛋白構成。橫切面上每條粗肌絲被 6 條細肌絲圍繞。"}};
+  const S = K.stage('st-lev', { radius: 50, yaw: 0.5, pitch: 0.25, autoRotate: 0 });
+  const M = { gs: 'm' }, F = { gs: 'f' }, FI = { gs: 'fi' }, MF = { gs: 'mf' };
+  cyl(S, [-50, 0, 0], [-40, 0, 0], 5, '#e2e8f0', Object.assign({ id: '骨（含骨外膜）' }, M), 14);
+  K.sweep(S, [[-40, 0, 0], [-32, 0, 0]], t => 2 + t * 2, '#f8fafc', 4, 12, Object.assign({ id: '肌腱' }, M));
+  K.sweep(S, [[-32, 0, 0], [0, 0, 0], [32, 0, 0]], t => 4 + 10 * Math.sin(t * Math.PI), '#dc2626', 24, 18, Object.assign({ id: '肌外膜', al: 0.3 }, M), { a0: 0.25, a1: 1 });
+  K.sweep(S, [[-34, 0, 0], [0, 0, 0], [34, 0, 0]], t => 5 + 10.5 * Math.sin(t * Math.PI), '#94a3b8', 24, 12, Object.assign({ id: '筋膜', al: 0.12 }, M), { a0: 0.5, a1: 1 });
+  K.circle([0, 0, 0], 7, [1, 0, 0], 7).concat([[0, 0, 0]]).forEach(c => { K.sweep(S, [[-28, c[1] * 0.4, c[2] * 0.4], [0, c[1], c[2]], [28, c[1] * 0.4, c[2] * 0.4]], t => 1 + 2.4 * Math.sin(t * Math.PI), '#ef4444', 14, 8, Object.assign({ id: '肌束' }, M)); });
+  K.circle([0, 0, 0], 7, [1, 0, 0], 7).forEach(c => K.sweep(S, [[-28, c[1] * 0.4, c[2] * 0.4], [0, c[1], c[2]], [28, c[1] * 0.4, c[2] * 0.4]], t => 1.3 + 2.6 * Math.sin(t * Math.PI), '#fca5a5', 14, 8, Object.assign({ id: '肌束膜', al: 0.25 }, M)));
+  [['骨（含骨外膜）', [-46, 5, 0], '骨'], ['肌腱', [-36, 3, 0], '肌腱'], ['肌外膜', [0, 14, 0], '肌外膜'], ['筋膜', [8, 15, -6], '筋膜'], ['肌束', [6, 6, 4], '肌束'], ['肌束膜', [0, 3, 8], '肌束膜']].forEach(([id, p, t], i) => lab(S, p, t, id, '#e2e8f0', [-20, 0, 0, 40, 40, 30][i], [-20, -26, -30, -16, 10, 26][i], M));
+  // 肌束
+  for (let i = 0; i < 10; i++) { const a = i * 0.628, r = i < 9 ? 7 : 0, y = Math.cos(a) * r, z = Math.sin(a) * r; cyl(S, [-24, y, z], [24, y, z], 2.6, '#ef4444', Object.assign({ id: '肌纖維（肌細胞）' }, F)); cyl(S, [-22, y, z], [22, y, z], 2.9, '#fecaca', Object.assign({ id: '肌內膜', al: 0.2 }, F)); }
+  cyl(S, [-24, 0, 0], [24, 0, 0], 11, '#fca5a5', Object.assign({ id: '肌束膜（放大）', al: 0.12 }, F), 18);
+  [[4, 4], [-5, 3], [2, -5]].forEach(([y, z]) => S.tube([-24, y, z], [24, y + 1, z], 0.5, '#dc2626', Object.assign({ id: '微血管' }, F)));
+  [['肌纖維（肌細胞）', [24, 7, 0], '肌纖維'], ['肌內膜', [10, -7, 3], '肌內膜'], ['肌束膜（放大）', [0, 11, 0], '肌束膜'], ['微血管', [-10, 4, 4], '微血管']].forEach(([id, p, t], i) => lab(S, p, t, id, '#e2e8f0', [30, 30, 0, -30][i], [-10, 20, -24, -20][i], F));
+  // 肌纖維
+  cyl(S, [-26, 0, 0], [26, 0, 0], 12, '#f9a8d4', Object.assign({ id: '肌膜', al: 0.18 }, FI), 20);
+  K.circle([0, 0, 0], 6, [1, 0, 0], 6).concat([[0, 0, 0]]).forEach(c => K.sweep(S, [[-28, c[1], c[2]], [28, c[1], c[2]]], 2.3, (u) => Math.floor(u * 18) % 2 ? '#991b1b' : '#fca5a5', 18, 8, Object.assign({ id: '肌原纖維' }, FI)));
+  for (let i = 0; i < 6; i++) { const a = i * 1.05 + 0.5; K.ellipsoid(S, [-18 + i * 7, Math.cos(a) * 11, Math.sin(a) * 11], [2.6, 1, 1], '#7c3aed', 8, 5, Object.assign({ id: '細胞核（多核、周邊）' }, FI)); }
+  for (let i = 0; i < 8; i++) { const a = i * 0.8; K.ellipsoid(S, [-20 + i * 6, Math.cos(a) * 4, Math.sin(a) * 4], [1.6, 0.8, 0.8], '#fb923c', 6, 4, Object.assign({ id: '粒線體' }, FI)); }
+  S.sphere([20, -9, 2], 1.2, '#fde68a', Object.assign({ id: '肌質', al: 0.6 }, FI));
+  [['肌膜', [0, 12, 0], '肌膜'], ['肌原纖維', [28, 6, 0], '肌原纖維'], ['細胞核（多核、周邊）', [-18, 5, 9], '細胞核（周邊）'], ['粒線體', [-14, 4, 0], '粒線體'], ['肌質', [20, -9, 2], '肌質']].forEach(([id, p, t], i) => lab(S, p, t, id, '#e2e8f0', [0, 30, -30, -30, 30][i], [-24, -10, -16, 20, 20][i], FI));
+  // 肌原纖維
+  for (let s = 0; s < 3; s++) { const x0 = -30 + s * 20; S.face(K.circle([x0, 0, 0], 6, [1, 0, 0], 16), '#e2e8f0', Object.assign({ id: '肌節', al: 0.5 }, MF)); for (let k = 0; k < 6; k++) { const a = k * 1.05; S.tube([x0, Math.cos(a) * 3.5, Math.sin(a) * 3.5], [x0 + 8, Math.cos(a) * 3.5, Math.sin(a) * 3.5], 0.5, '#ef4444', Object.assign({ id: '細肌絲（肌動蛋白）' }, MF)); S.tube([x0 + 20, Math.cos(a) * 3.5, Math.sin(a) * 3.5], [x0 + 12, Math.cos(a) * 3.5, Math.sin(a) * 3.5], 0.5, '#ef4444', Object.assign({ id: '細肌絲（肌動蛋白）' }, MF)); } [[0, 0], [0, 2], [1.7, -1], [-1.7, -1]].forEach(([y, z]) => S.tube([x0 + 5, y, z], [x0 + 15, y, z], 0.9, '#3b82f6', Object.assign({ id: '粗肌絲（肌凝蛋白）' }, MF))); }
+  S.face(K.circle([30, 0, 0], 6, [1, 0, 0], 16), '#e2e8f0', Object.assign({ id: '肌節', al: 0.5 }, MF));
+  cyl(S, [-30, 0, 0], [30, 0, 0], 6.5, '#fca5a5', Object.assign({ id: '肌原纖維（放大）', al: 0.1 }, MF), 16);
+  [['肌節', [-20, 7, 0], '肌節（Z 到 Z）'], ['粗肌絲（肌凝蛋白）', [-15, 0, 0], '粗肌絲'], ['細肌絲（肌動蛋白）', [-28, 3.5, 0], '細肌絲'], ['肌原纖維（放大）', [20, 6.5, 0], '肌原纖維']].forEach(([id, p, t], i) => lab(S, p, t, id, '#e2e8f0', [0, -20, -30, 30][i], [-26, 30, -20, -16][i], MF));
+  K.seg('#levmode', m => { S.each(o => { if (o.gs) o.hidden = o.gs !== m; }); $('lev-hud').textContent = { m: '肌肉 → 以肌腱附著於骨', f: '肌束：一束肌纖維', fi: '肌纖維：多核的肌細胞', mf: '肌原纖維：一串肌節' }[m]; S.resetView(); }, 'm');
+  K.info(S, 'info-lev', INFO, { picker: 'pk-lev', hl: false, on: id => { $('lev-cap').textContent = '👉 ' + id; } });
+})();
+
+/* ========== ② 肌節 ========== */
+(function () {
+  const INFO = {"細肌絲（肌動蛋白）": {"t": "細肌絲（肌動蛋白）", "en": "Thin filament (actin)　〔肌絲〕", "p": "一端固定在 Z 盤、伸向肌節中央；由肌動蛋白、肌旋蛋白、肌鈣蛋白組成（見③）。收縮時被橫橋拉向中央，<b>本身長度不變</b>。"}, "Z 盤": {"t": "Z 盤", "en": "Z disc　〔肌絲〕", "p": "I 帶中央、細肌絲的錨定處；縱切面看是 Z 線，橫切面看是盤狀。兩個 Z 盤之間即一個肌節。"}, "粗肌絲（肌凝蛋白）": {"t": "粗肌絲（肌凝蛋白）", "en": "Thick filament (myosin)　〔肌絲〕", "p": "構成 A 帶；由許多肌凝蛋白分子的尾部束成。兩半的肌凝蛋白方向相反，所以兩側的橫橋都把細肌絲<b>往中央拉</b>。"}, "肌凝蛋白頭部（橫橋）": {"t": "肌凝蛋白頭部（橫橋）", "en": "Myosin heads (cross bridges)　〔肌絲〕", "p": "自粗肌絲伸出、可與肌動蛋白結合的球狀頭部；每個頭部有 ATP 結合位（ATPase）。中央一小段（無頭區）沒有頭部。"}, "M 線": {"t": "M 線", "en": "M line　〔肌絲〕", "p": "位於粗肌絲（A 帶）正中央，把粗肌絲互相連結固定。"}, "肌聯蛋白（titin）": {"t": "肌聯蛋白（titin）", "en": "Titin　〔肌絲〕", "p": "體積極大的<b>彈性蛋白</b>，從 M 線穿過粗肌絲延伸到 Z 盤（I 帶中的部分像彈簧）。穩定粗肌絲位置，肌肉被拉長後幫助<b>彈性回縮</b>。（此處只畫一條代表）"}, "A 帶（暗帶）": {"t": "A 帶（暗帶）", "en": "A band　〔明暗帶〕", "p": "= 粗肌絲的長度。收縮時<b>長度不變</b>，只是相鄰的 A 帶互相靠近。"}, "I 帶（明帶）": {"t": "I 帶（明帶）", "en": "I band　〔明暗帶〕", "p": "相鄰兩疊粗肌絲之間、只有細肌絲的區域。收縮時<b>變短</b>。"}, "H 帶": {"t": "H 帶", "en": "H band　〔明暗帶〕", "p": "A 帶中央、細肌絲尚未伸入的區域。收縮時<b>變短</b>，肌節夠短時消失。"}, "肌節": {"t": "肌節", "en": "Sarcomere　〔明暗帶〕", "p": "Z 盤到 Z 盤；骨骼肌收縮的基本單位。肌肉在正常靜止長度時，肌節約 2.0–2.25 µm。"}};
+  const S = K.stage('st-sar', { radius: 24, yaw: 0.25, pitch: 0.25, autoRotate: 0 });
+  const L = { gs: 'l' }, X = { gs: 'x' };
+  const ZL = [0, 0, 0], ZR = [0, 0, 0];
+  const zL = K.mover(K.ellipsoid(S, [0, 0, 0], [0.6, 9, 9], '#e2e8f0', 12, 6, Object.assign({ id: 'Z 盤' }, L))), zR = K.mover(K.ellipsoid(S, [0, 0, 0], [0.6, 9, 9], '#e2e8f0', 12, 6, Object.assign({ id: 'Z 盤' }, L)));
+  K.ellipsoid(S, [0, 0, 0], [0.5, 6.5, 6.5], '#a78bfa', 10, 5, Object.assign({ id: 'M 線' }, L));
+  const TH = [[0, 0], [0, 4], [3.5, -2], [-3.5, -2], [3.5, 2], [-3.5, 2], [0, -4]], thick = [], thin = [];
+  TH.forEach(([y, z]) => { S.tube([-8, y, z], [8, y, z], 0.9, '#3b82f6', Object.assign({ id: '粗肌絲（肌凝蛋白）' }, L)); for (let k = -7; k <= 7; k++) if (Math.abs(k) > 1) S.tube([k, y, z], [k + Math.sign(k) * -0.6, y + 1.1, z], 0.35, '#fde047', Object.assign({ id: '肌凝蛋白頭部（橫橋）' }, L)); });
+  const TN = []; TH.forEach(([y, z]) => [[1.8, 0], [-1.8, 0], [0, 2], [0, -2]].forEach(([a, b]) => TN.push([y + a, z + b])));
+  TN.forEach(([y, z]) => { const l = { a: [0, y, z], b: [0, y, z] }, r = { a: [0, y, z], b: [0, y, z] }; l.t = S.tube(l.a, l.b, 0.35, '#ef4444', Object.assign({ id: '細肌絲（肌動蛋白）' }, L)); r.t = S.tube(r.a, r.b, 0.35, '#ef4444', Object.assign({ id: '細肌絲（肌動蛋白）' }, L)); thin.push({ l, r }); });
+  const tL = { a: [0, 0, 0], b: [0, 0, 0] }, tR = { a: [0, 0, 0], b: [0, 0, 0] }; S.tube(tL.a, tL.b, 0.25, '#34d399', Object.assign({ id: '肌聯蛋白（titin）', flat: 1 }, L)); S.tube(tR.a, tR.b, 0.25, '#34d399', Object.assign({ id: '肌聯蛋白（titin）', flat: 1 }, L));
+  const band = (id, c) => S.tube([0, -11, 0], [0, -11, 0], 1.2, c, Object.assign({ id, flat: 1 }, L));
+  const bA = band('A 帶（暗帶）', '#3b82f6'), bIL = band('I 帶（明帶）', '#f87171'), bIR = band('I 帶（明帶）', '#f87171'), bH = band('H 帶', '#a78bfa');
+  const lA = lab(S, [0, -11, 0], 'A 帶', 'A 帶（暗帶）', '#93c5fd', 0, 18, L), lI = lab(S, [0, -11, 0], 'I 帶', 'I 帶（明帶）', '#fca5a5', 0, 18, L), lH = lab(S, [0, -11, 0], 'H 帶', 'H 帶', '#c4b5fd', 0, -16, L);
+  lab(S, [0, 7, 0], 'M 線', 'M 線', '#c4b5fd', 0, -20, L); const lZ = lab(S, [0, 9, 0], 'Z 盤', 'Z 盤', '#e2e8f0', 0, -16, L); lab(S, [4, 4, 0], '粗肌絲', '粗肌絲（肌凝蛋白）', '#93c5fd', 20, -30, L); const lT = lab(S, [0, 1.8, 0], '細肌絲', '細肌絲（肌動蛋白）', '#fca5a5', -30, -24, L);
+  // 橫切
+  TH.forEach(([y, z]) => S.sphere([0, y * 1.6, z * 1.6], 1.6, '#3b82f6', Object.assign({ id: '粗肌絲（肌凝蛋白）' }, X)));
+  TN.forEach(([y, z]) => S.sphere([0, y * 1.6, z * 1.6], 0.8, '#ef4444', Object.assign({ id: '細肌絲（肌動蛋白）' }, X)));
+  lab(S, [0, 0, 0], '每條粗肌絲被 6 條細肌絲圍繞', '細肌絲（肌動蛋白）', '#e2e8f0', 0, -60, X);
+  let len = 22.5, play = false, T = 0;
+  function place() {
+    const h = len / 2, thinL = 10, thickH = 8;
+    zL.set([-h, 0, 0], 1); zR.set([h, 0, 0], 1);
+    thin.forEach(f => { mv(f.l.a, [-h, f.l.a[1], f.l.a[2]]); mv(f.l.b, [-h + thinL, f.l.b[1], f.l.b[2]]); mv(f.r.a, [h, f.r.a[1], f.r.a[2]]); mv(f.r.b, [h - thinL, f.r.b[1], f.r.b[2]]); });
+    mv(tL.a, [-h, 5.5, 0]); mv(tL.b, [0, 5.5, 0]); mv(tR.a, [h, 5.5, 0]); mv(tR.b, [0, 5.5, 0]);
+    const H = Math.max(0, 2 * (h - thinL)), Iw = Math.max(0, h - thickH);
+    mv(bA.a, [-thickH, -11, 0]); mv(bA.b, [thickH, -11, 0]); mv(bIL.a, [-h, -12.5, 0]); mv(bIL.b, [-thickH, -12.5, 0]); mv(bIR.a, [thickH, -12.5, 0]); mv(bIR.b, [h, -12.5, 0]); mv(bH.a, [-H / 2, -9.5, 0]); mv(bH.b, [H / 2, -9.5, 0]); bH.hidden = H < 0.2; lH.hidden = H < 0.2 || bH.gs !== 'l' ? lH.hidden : false;
+    lI.p = [h - Iw / 2, -12.5, 0]; lH.p = [0, -9.5, 0]; lZ.p = [h, 9, 0];
+    $('sa-a').textContent = '1.6 µm'; $('sa-i').textContent = (2 * Iw / 10).toFixed(2) + ' µm'; $('sa-h').textContent = (H / 10).toFixed(2) + ' µm';
+    $('sar-cap').innerHTML = len < 20 ? '收縮：細肌絲滑向中央 → <b>I 帶、H 帶變短</b>，A 帶長度不變' : '靜止長度約 2.0–2.25 µm';
+  }
+  const r = K.range('slen', v => { len = v / 10; place(); }, v => (v / 100).toFixed(2) + ' µm');
+  $('sar-play').onclick = e => { play = !play; e.currentTarget.classList.toggle('on', play); };
+  S.tick(dt => { if (play) { T += dt; r.set(Math.round(205 + 45 * Math.cos(T * 1.5))); } });
+  K.seg('#sarmode', m => { S.each(o => { if (o.gs) o.hidden = o.gs !== m; }); if (m === 'x') { S.yaw = 1.57; S.pitch = 0; } else S.resetView(); place(); }, 'l');
+  K.info(S, 'info-sar', INFO, { picker: 'pk-sar', hl: false });
+})();
+
+/* ========== ③ 橫橋循環 ========== */
+(function () {
+  const INFO = {"G-肌動蛋白": {"t": "G-肌動蛋白", "en": "G-actin　〔細肌絲〕", "p": "球狀肌動蛋白單體；300–400 個排成雙列並扭成螺旋，構成 F-actin（細肌絲的主幹）。"}, "肌凝蛋白結合位": {"t": "肌凝蛋白結合位", "en": "Myosin-binding sites　〔細肌絲〕", "p": "肌動蛋白上供肌凝蛋白頭部結合的位置。放鬆時被肌旋蛋白遮住。"}, "肌旋蛋白": {"t": "肌旋蛋白", "en": "Tropomyosin　〔細肌絲〕", "p": "位於兩列 G-actin 之間溝槽中的細長蛋白，每條約跨 7 個肌動蛋白（每條細肌絲 40–60 條）。放鬆時<b>擋住結合位</b>。"}, "肌鈣蛋白 T（TnT）": {"t": "肌鈣蛋白 T（TnT）", "en": "Troponin T　〔肌鈣蛋白〕", "p": "與<b>肌旋蛋白</b>結合，把肌鈣蛋白複合體固定在肌旋蛋白上。"}, "肌鈣蛋白 I（TnI）": {"t": "肌鈣蛋白 I（TnI）", "en": "Troponin I　〔肌鈣蛋白〕", "p": "<b>抑制</b>橫橋與肌動蛋白結合。"}, "肌鈣蛋白 C（TnC）": {"t": "肌鈣蛋白 C（TnC）", "en": "Troponin C　〔肌鈣蛋白〕", "p": "與 <b>Ca²⁺</b> 結合的次單元；結合 Ca²⁺ 後引起複合體構形改變，使肌旋蛋白移開。"}, "Ca²⁺": {"t": "Ca²⁺", "en": "Calcium ions　〔肌鈣蛋白〕", "p": "動作電位使肌質網釋出 Ca²⁺；肌質 Ca²⁺ 濃度超過約 10⁻⁶ M 時，Ca²⁺ 與 TnC 結合而啟動收縮。"}, "粗肌絲（肌凝蛋白尾部）": {"t": "粗肌絲（肌凝蛋白尾部）", "en": "Thick filament (myosin tails)　〔粗肌絲〕", "p": "許多肌凝蛋白的纖維狀尾部束成粗肌絲；頭部經鉸鏈段伸向細肌絲。"}, "其他肌凝蛋白頭部": {"t": "其他肌凝蛋白頭部", "en": "Other myosin heads　〔粗肌絲〕", "p": "每個頭部各自循環、<b>不同步</b>：任一時刻只有部分橫橋結合，因此細肌絲不會滑回去。"}, "肌凝蛋白頭部": {"t": "肌凝蛋白頭部", "en": "Myosin head　〔肌凝蛋白〕", "p": "每個肌凝蛋白分子有<b>兩個球狀頭部</b>；頭部有<b>肌動蛋白結合位</b>與 <b>ATP 結合位</b>（本身就是 ATPase，可水解 ATP）。"}, "鉸鏈段": {"t": "鉸鏈段", "en": "Hinge segment　〔肌凝蛋白〕", "p": "連接頭部與尾部、可彎曲的部分；動力衝程時頭部以此為支點擺動。"}};
+  const S = K.stage('st-brg', { radius: 34, yaw: 0.3, pitch: 0.2, autoRotate: 0 });
+  const act = []; for (let i = 0; i < 26; i++) { const x = -26 + i * 2, a = i * 0.45; [0, 1].forEach(s => act.push(S.sphere([x + s, 8 + Math.cos(a + s * 3.14) * 1.4, Math.sin(a + s * 3.14) * 1.4], 1.2, '#f87171', { id: 'G-肌動蛋白' }))); }
+  const sites = []; for (let i = 2; i < 26; i += 4) sites.push(S.sphere([-26 + i * 2, 6.4, 0.8], 0.6, '#fde047', { id: '肌凝蛋白結合位', glow: 0.5 }));
+  const tm = [0, 1].map(s => { const pts = []; for (let i = 0; i <= 26; i++) pts.push([-26 + i * 2, 0, 0]); const ts = pts.slice(0, -1).map((p, k) => S.tube(p, pts[k + 1], 0.4, '#38bdf8', { id: '肌旋蛋白' })); return { pts, s }; });
+  const tn = [-14, 2, 18].map(x => ({ t: S.sphere([x, 0, 0], 1.1, '#a78bfa', { id: '肌鈣蛋白 T（TnT）' }), i: S.sphere([x, 0, 0], 1.1, '#f472b6', { id: '肌鈣蛋白 I（TnI）' }), c: S.sphere([x, 0, 0], 1.1, '#34d399', { id: '肌鈣蛋白 C（TnC）' }), ca: [0, 1].map(() => S.sphere([0, 0, 0], 0.6, '#f8fafc', { id: 'Ca²⁺', glow: 0.6 })), x }));
+  S.tube([-26, -8, 0], [26, -8, 0], 2.2, '#3b82f6', { id: '粗肌絲（肌凝蛋白尾部）' });
+  const others = []; for (let x = -22; x <= 22; x += 6) if (Math.abs(x - 2) > 3) { const b = [x, -6, 0], h = [x + 1.5, -2, 0.6]; others.push({ b, h, t: S.tube(b, h, 0.45, '#60a5fa', { id: '其他肌凝蛋白頭部' }), s: S.sphere(h, 1.3, '#93c5fd', { id: '其他肌凝蛋白頭部' }), ph: Math.random() * 6 }); }
+  const hinge = [2, -6, 0], head = [0, 0, 0];
+  const neck = S.tube(hinge, head, 0.6, '#fde047', { id: '鉸鏈段' }); const hd = S.sphere(head, 2, '#fbbf24', { id: '肌凝蛋白頭部' });
+  const atp = S.sphere([0, 0, 0], 0.9, '#22d3ee', { id: '肌凝蛋白頭部', glow: 0.6 }), pi = S.sphere([0, 0, 0], 0.7, '#f59e0b', { id: '肌凝蛋白頭部' });
+  const lAtp = lab(S, atp.p, 'ATP', '肌凝蛋白頭部', '#67e8f9', 16, 10), lPi = lab(S, pi.p, 'ADP+Pi', '肌凝蛋白頭部', '#fdba74', 20, -6);
+  lab(S, [-24, 8, 1.5], 'G-肌動蛋白', 'G-肌動蛋白', '#fca5a5', -10, -18); lab(S, [-20, 7, 1.5], '肌旋蛋白', '肌旋蛋白', '#7dd3fc', -30, 16); lab(S, [-14, 9, 2], 'TnT·TnI·TnC', '肌鈣蛋白 C（TnC）', '#86efac', 0, -20); lab(S, [-24, -8, 0], '粗肌絲', '粗肌絲（肌凝蛋白尾部）', '#93c5fd', -20, 14); lab(S, hinge, '鉸鏈段', '鉸鏈段', '#fde68a', 30, 14); const lHd = lab(S, head, '肌凝蛋白頭部', '肌凝蛋白頭部', '#fde047', -40, 6);
+  let ca = 1, step = 0, tw = 0, T = 0, slide = 0;
+  const STEPS = [
+    { t: '1 扳起', d: '靜止：肌凝蛋白頭部已被 ATP 水解「扳起」（帶 ADP＋Pi），但尚未與肌動蛋白結合' },
+    { t: '2 形成橫橋', d: '頭部與肌動蛋白結合，形成<b>橫橋</b>' },
+    { t: '3 Pi 釋出', d: '<b>Pi 釋出</b>，引起肌凝蛋白構形改變' },
+    { t: '4 動力衝程', d: '<b>動力衝程</b>：頭部擺動，把細肌絲拉向 M 線（約 6 nm）；接著 ADP 釋出' },
+    { t: '5 ATP 結合 → 分離', d: '新的 <b>ATP 結合</b>頭部 → 頭部與肌動蛋白分離' },
+    { t: '6 再扳起', d: 'ATP 被水解，Pi 結合使頭部重新「扳起」回原方向，準備下一次循環' }
+  ];
+  S.tick(dt => {
+    T += dt; tw = Math.min(1, tw + dt / 1.6); const e = sm(0, 1, tw);
+    const tmz = ca ? 1.6 : 0.4, tmy = ca ? 9.8 : 6.8;
+    tm.forEach(t => t.pts.forEach((p, i) => mv(p, [-26 + i * 2 - slide, tmy + (t.s ? 0.6 : 0), (t.s ? -1 : 1) * tmz + Math.sin(i * 0.45) * 0.4])));
+    tn.forEach(n => { const x = n.x - slide; mv(n.t.p, [x, tmy + 1.4, tmz]); mv(n.i.p, [x + 1.6, tmy + 2, tmz]); mv(n.c.p, [x - 1.6, tmy + 2, tmz]); n.ca.forEach((c, k) => { c.hidden = !ca; mv(c.p, [x - 1.6 + (k ? 0.8 : -0.8), tmy + 3.4, tmz]); }); });
+    sites.forEach(s => { s.glow = ca ? 0.9 : 0; s.al = ca ? 1 : 0.3; });
+    act.forEach((a, k) => { a.p[0] = -26 + Math.floor(k / 2) * 2 + (k % 2) - slide; });
+    sites.forEach((s, k) => { s.p[0] = -26 + (2 + k * 4) * 2 - slide; });
+    const bound = ca && (step >= 1 && step <= 3);
+    let ang;
+    if (step === 0) ang = 0.9; else if (step === 1) ang = 0.9; else if (step === 2) ang = 0.9; else if (step === 3) ang = 0.9 - 1.3 * e; else if (step === 4) ang = -0.4; else ang = -0.4 + 1.3 * e;
+    if (!ca && step > 0) ang = 0.9;
+    const len = bound || step === 3 ? 7.4 : 6.2;
+    mv(head, V.add(hinge, [Math.sin(-ang) * len * -1, Math.cos(ang) * len, 0.6]));
+    if (ca && step === 3) slide = (slide + dt * 1.2) % 8;
+    hd.glow = bound ? 0.8 : 0; hd.c = bound ? '#f97316' : '#fbbf24';
+    atp.hidden = !(step === 4 || step === 5 || step === 0); mv(atp.p, V.add(head, [1.4, 1.2, 1]));
+    pi.hidden = !(step === 0 || step === 1 || step === 2 || step === 5); mv(pi.p, step === 2 ? V.add(head, [2 + e * 4, -1 - e * 4, 1]) : V.add(head, [-1.4, 1.2, 1]));
+    lAtp.p = atp.p; lAtp.hidden = atp.hidden; lPi.p = pi.p; lPi.hidden = pi.hidden; lHd.p = head;
+    others.forEach(o => { o.ph += dt * (ca ? 3 : 0); const a = ca ? Math.sin(o.ph) * 0.6 : 0.5; mv(o.h, V.add(o.b, [Math.sin(a) * 4.5, 4.5 * Math.cos(a), 0.6])); });
+    if (!ca) $('brg-cap').innerHTML = 'Ca²⁺ 低：肌旋蛋白<b>蓋住</b>肌動蛋白上的結合位 → 頭部無法結合 → 放鬆';
+  });
+  UI.stepper($('brg-steps'), STEPS, i => { step = i; tw = 0; if (ca) $('brg-cap').innerHTML = STEPS[i].t + '：' + STEPS[i].d; }, { dur: 2600 });
+  K.seg('#camode', v => { ca = +v; if (ca) $('brg-cap').innerHTML = 'Ca²⁺ 結合 TnC → 肌旋蛋白移開、露出結合位 → 橫橋循環'; }, '1');
+  K.info(S, 'info-brg', INFO, { picker: 'pk-brg', hl: false });
+})();
+
+/* ========== ④ 運動單元與 NMJ ========== */
+(function () {
+  const INFO = {"脊髓白質": {"t": "脊髓白質", "en": "Spinal cord white matter　〔脊髓〕", "p": "由有髓鞘軸突組成的傳導束。"}, "灰質（前角）": {"t": "灰質（前角）", "en": "Gray matter – ventral horn　〔脊髓〕", "p": "灰質的腹側部分；<b>下運動神經元</b>（體運動神經元）的細胞本體位於此，是運動指令的「最後共同路徑」。"}, "運動單元 A 的肌纖維": {"t": "運動單元 A 的肌纖維", "en": "Motor unit A – muscle fibers　〔運動單元〕", "p": "小運動單元：4 條肌纖維（支配比 1:4，示意）。同一運動單元的纖維<b>分散</b>在肌肉中，並不聚在一起。"}, "運動單元 B 的肌纖維": {"t": "運動單元 B 的肌纖維", "en": "Motor unit B – muscle fibers　〔運動單元〕", "p": "較大的運動單元：8 條肌纖維（示意）。較大的運動神經元較晚被徵召，產生較大力量。"}, "運動神經元 A": {"t": "運動神經元 A", "en": "Somatic motor neuron A　〔運動單元〕", "p": "細胞本體在脊髓前角，軸突經前根到肌肉並分支，支配運動單元 A 的所有肌纖維。"}, "運動神經元 B": {"t": "運動神經元 B", "en": "Somatic motor neuron B　〔運動單元〕", "p": "較大的運動神經元，支配較多肌纖維（運動單元 B）。"}, "運動終板（每條纖維一個）": {"t": "運動終板（每條纖維一個）", "en": "Motor end plates　〔運動單元〕", "p": "每條肌纖維只有一個神經肌肉接合處；右側為其放大。"}, "運動終板（接合摺）": {"t": "運動終板（接合摺）", "en": "Motor end plate (junctional folds)　〔NMJ〕", "p": "肌膜在終端小球下方特化的部分，摺成許多<b>接合摺</b>以增加表面積；頂部密布菸鹼型 ACh 受體；摺的凹處富含<b>電壓閘控 Na⁺ 通道</b>，終板電位擴散到此即引發動作電位。"}, "體運動神經元軸突": {"t": "體運動神經元軸突", "en": "Somatic motor axon　〔NMJ〕", "p": "傳導動作電位到軸突終端。"}, "髓鞘": {"t": "髓鞘", "en": "Myelin sheath　〔NMJ〕", "p": "包住軸突以加速傳導；在接近終端處終止。"}, "軸突終端（終端小球）": {"t": "軸突終端（終端小球）", "en": "Terminal bouton　〔NMJ〕", "p": "軸突末端膨大處，內含大量含 ACh 的突觸小泡與粒線體。"}, "突觸小泡": {"t": "突觸小泡", "en": "Synaptic vesicles　〔NMJ〕", "p": "內含神經傳遞物質 <b>乙醯膽鹼（ACh）</b>；動作電位使 Ca²⁺ 進入終端，觸發小泡與細胞膜融合（胞吐）。"}, "粒線體": {"t": "粒線體", "en": "Mitochondria　〔NMJ〕", "p": "供應 ACh 合成與小泡循環所需能量。"}, "菸鹼型 ACh 受體": {"t": "菸鹼型 ACh 受體", "en": "Nicotinic ACh receptors　〔NMJ〕", "p": "位於接合摺頂部的<b>配體閘控</b>離子通道；ACh 結合後打開，Na⁺ 內流（同時少量 K⁺ 外流），產生<b>終板電位</b>。"}, "乙醯膽鹼酯酶（AChE）": {"t": "乙醯膽鹼酯酶（AChE）", "en": "Acetylcholinesterase　〔NMJ〕", "p": "位於突觸間隙（基底膜上）的酵素，迅速分解 ACh，使訊號短暫、精準。"}, "突觸間隙": {"t": "突觸間隙", "en": "Synaptic cleft　〔NMJ〕", "p": "終端小球與運動終板之間狹窄的間隙；ACh 擴散通過此處。"}};
+  const S = K.stage('st-nmj', { radius: 62, yaw: 0.2, pitch: 0.25, autoRotate: 0 });
+  const SC = [-38, 10, 0];
+  K.ellipsoid(S, SC, [12, 9, 6], '#e2e8f0', 16, 8, { id: '脊髓白質', al: 0.3 });
+  K.ellipsoid(S, V.add(SC, [0, -3, 0]), [6, 4, 4], '#a8a29e', 12, 6, { id: '灰質（前角）', al: 0.7 });
+  const NA = V.add(SC, [-2, -5, 1]), NB = V.add(SC, [3, -5, -1]);
+  S.sphere(NA, 1.6, '#60a5fa', { id: '運動神經元 A' }); S.sphere(NB, 2.4, '#f472b6', { id: '運動神經元 B' });
+  const fibY = [], FY = 12; for (let i = 0; i < FY; i++) fibY.push(-22 + i * 3.4);
+  const unitA = [1, 4, 7, 10], unitB = [0, 2, 3, 5, 6, 8, 9, 11];
+  const fibers = fibY.map((y, i) => { const isA = unitA.includes(i); return { m: K.sweep(S, [[-12, y, (i % 3 - 1) * 3], [22, y, (i % 3 - 1) * 3]], 1.4, isA ? '#93c5fd' : '#f9a8d4', 1, 8, { id: isA ? '運動單元 A 的肌纖維' : '運動單元 B 的肌纖維' }, { smooth: 1 }), y, z: (i % 3 - 1) * 3, isA }; });
+  const branch = (from, list, col, id) => list.map(i => { const f = fibers[i], end = [4, f.y + 1.5, f.z]; const P = new Mini3D.Path([from, [-24, from[1] - 12, 0], [-10, f.y + 4, f.z], end], 5); P.pts.slice(0, -1).forEach((p, k) => S.tube(p, P.pts[k + 1], 0.35, col, { id })); S.sphere(end, 0.9, '#fde047', { id: '運動終板（每條纖維一個）' }); return P; });
+  const PA = branch(NA, unitA, '#60a5fa', '運動神經元 A'), PB = branch(NB, unitB, '#f472b6', '運動神經元 B');
+  const pulses = []; [PA, PB].forEach((arr, k) => arr.forEach(P => pulses.push({ P, k, o: S.sphere([0, 0, 0], 0.9, '#fef9c3', { glow: 1.3, nopick: true, hidden: true }), u: 2 })));
+  // NMJ 放大
+  const C = [40, 0, 0];
+  K.sweep(S, [V.add(C, [0, 26, 0]), V.add(C, [0, 12, 0])], 1.2, '#fde68a', 6, 8, { id: '體運動神經元軸突' });
+  K.sweep(S, [V.add(C, [0, 26, 0]), V.add(C, [0, 16, 0])], 2, '#e2e8f0', 4, 10, { id: '髓鞘', al: 0.5 });
+  K.ellipsoid(S, V.add(C, [0, 8, 0]), [8, 4.4, 6], '#fbbf24', 14, 8, { id: '軸突終端（終端小球）', al: 0.4 });
+  const ves = []; for (let i = 0; i < 12; i++) ves.push({ o: S.sphere(V.add(C, [(i % 4 - 1.5) * 3, 7 + (i >> 2) * 1.6, (i % 2) - 0.5]), 1, '#a78bfa', { id: '突觸小泡' }), i });
+  [[-4, 10, 2], [4, 10, -2]].forEach(p => K.ellipsoid(S, V.add(C, p), [1.8, 0.9, 0.9], '#fb923c', 6, 4, { id: '粒線體' }));
+  K.sheet(S, V.add(C, [-12, 2, -8]), [24, 0, 0], [0, 0, 16], 16, 4, '#f472b6', { id: '運動終板（接合摺）', al: 0.75 }, (u, v) => [0, -Math.abs(Math.sin(u * Math.PI * 6)) * 3, 0]);
+  for (let i = 0; i < 7; i++) S.sphere(V.add(C, [-9 + i * 3, 2.4, (i % 2) * 2 - 1]), 0.7, '#22d3ee', { id: '菸鹼型 ACh 受體' });
+  for (let i = 0; i < 4; i++) S.sphere(V.add(C, [-7 + i * 4.5, 3.6, 3]), 0.6, '#ef4444', { id: '乙醯膽鹼酯酶（AChE）' });
+  S.sphere(V.add(C, [9, 3.4, -4]), 0.5, '#94a3b8', { id: '突觸間隙', al: 0.4 });
+  const ach = []; for (let i = 0; i < 14; i++) ach.push({ o: S.sphere([0, 0, 0], 0.4, '#4ade80', { nopick: true }), x: (i % 7 - 3) * 2.6, z: (i % 3) - 1 });
+  [['脊髓白質', SC, '脊髓', -20, -26], ['灰質（前角）', V.add(SC, [0, -6, 0]), '前角', -30, 16], ['運動神經元 A', NA, '神經元 A', -30, 20], ['運動神經元 B', NB, '神經元 B', 20, 26], ['運動終板（每條纖維一個）', [4, fibY[11] + 1.5, 0], '運動終板', 0, -16], ['軸突終端（終端小球）', V.add(C, [0, 12, 0]), '終端小球', 30, -16], ['突觸小泡', V.add(C, [-4, 8, 0]), '突觸小泡', -40, -10], ['菸鹼型 ACh 受體', V.add(C, [-9, 2.4, 0]), 'ACh 受體', -40, 16], ['運動終板（接合摺）', V.add(C, [6, -1, 6]), '接合摺', 30, 20], ['乙醯膽鹼酯酶（AChE）', V.add(C, [6.5, 3.6, 3]), 'AChE', 30, 0], ['髓鞘', V.add(C, [0, 22, 0]), '髓鞘', 20, -6]].forEach(([id, p, t, dx, dy]) => lab(S, p, t, id, '#e2e8f0', dx, dy));
+  let T = 0, fire = 9;
+  const fireU = w => { pulses.forEach(p => { if (w === 'ab' || (w === 'a') === (p.k === 0)) p.u = 0; }); fire = 0; $('nmj-cap').innerHTML = w === 'a' ? '運動單元 A（小）：4 條纖維一起收縮' : w === 'b' ? '運動單元 B（大）：8 條纖維一起收縮' : '<b>增補</b>：徵召更多運動單元 → 更大力量'; };
+  $('mu-a').onclick = () => fireU('a'); $('mu-b').onclick = () => fireU('b'); $('mu-ab').onclick = () => fireU('ab');
+  S.tick(dt => {
+    T += dt; fire += dt;
+    pulses.forEach(p => { if (p.u < 1) { p.u = Math.min(1, p.u + dt * 0.8); p.o.hidden = false; mv(p.o.p, p.P.at(p.u)); } else p.o.hidden = true; });
+    fibers.forEach((f, i) => { const act = pulses.some(p => p.u > 0.98 && p.u <= 1 && fire < 2.2 && ((p.k === 0) === f.isA)); f.m.forEach(fc => { fc.glow = act && fire > 1.2 ? 0.7 : 0; }); });
+    const u = (T * 0.4) % 1;
+    ves.forEach(v => { v.o.p[1] = C[1] + 7 + (v.i >> 2) * 1.6 - (v.i < 4 ? 2 * sm(0, 0.3, u) : 0); v.o.hidden = v.i < 4 && u > 0.3 && u < 0.9; });
+    ach.forEach(a => { a.o.hidden = u < 0.3 || u > 0.85; mv(a.o.p, V.add(C, [a.x, 5 - (u - 0.3) * 5, a.z])); });
+  });
+  K.info(S, 'info-nmj', INFO, { picker: 'pk-nmj', hl: false });
+})();
+
+/* ========== ⑤ 刺激–收縮耦合 ========== */
+(function () {
+  const INFO = {"肌原纖維": {"t": "肌原纖維", "en": "Myofibrils　〔肌纖維內部〕", "p": "收縮單位；Ca²⁺ 結合其細肌絲上的肌鈣蛋白後開始收縮。"}, "肌膜": {"t": "肌膜", "en": "Sarcolemma　〔肌纖維內部〕", "p": "肌纖維的細胞膜；可興奮，能傳導動作電位。在各三聯體處向內凹陷形成 T 小管。"}, "橫小管（T 小管）": {"t": "橫小管（T 小管）", "en": "Transverse tubules　〔肌纖維內部〕", "p": "由肌膜向內延伸、與肌膜連續的管道，開口通到細胞外。把動作電位迅速傳到每條肌原纖維旁；位於 A 帶與 I 帶交界處，環繞肌原纖維。"}, "終池": {"t": "終池", "en": "Terminal cisternae　〔肌纖維內部〕", "p": "肌質網靠近 T 小管的膨大部分，<b>儲存大部分 Ca²⁺</b>。兩個終池夾一條 T 小管＝三聯體。"}, "肌質網（縱走部分）": {"t": "肌質網（縱走部分）", "en": "Sarcoplasmic reticulum　〔肌纖維內部〕", "p": "像網一樣包住每條肌原纖維的特化內質網；膜上有 <b>Ca²⁺-ATPase 幫浦</b>，不斷把 Ca²⁺ 送回 SR，使肌質 Ca²⁺ 保持很低。"}, "粒線體": {"t": "粒線體", "en": "Mitochondria　〔肌纖維內部〕", "p": "供應 ATP：收縮（橫橋循環）與舒張（Ca²⁺ 幫浦）都需要 ATP。"}, "運動神經元終端": {"t": "運動神經元終端", "en": "Motor nerve terminal　〔肌纖維內部〕", "p": "釋放 ACh 引發肌膜去極化（見④）。"}, "Ca²⁺": {"t": "Ca²⁺", "en": "Calcium ions　〔肌纖維內部〕", "p": "安靜時集中在肌質網（尤其終池）內；受刺激時釋入肌質，結合肌鈣蛋白。"}, "T 小管膜": {"t": "T 小管膜", "en": "T-tubule membrane　〔三聯體放大〕", "p": "橫小管的膜（與肌膜連續），管腔內為細胞外液。"}, "終池（SR）": {"t": "終池（SR）", "en": "Terminal cisterna　〔三聯體放大〕", "p": "T 小管兩側的肌質網膨大部分，內含高濃度 Ca²⁺。"}, "DHP 受體（電壓閘控 Ca²⁺ 通道）": {"t": "DHP 受體（電壓閘控 Ca²⁺ 通道）", "en": "Dihydropyridine receptor　〔三聯體放大〕", "p": "T 小管膜上的<b>電壓閘控 Ca²⁺ 通道</b>（因可被 dihydropyridine 類藥物阻斷而得名）。T 小管去極化時改變構形；在骨骼肌中它主要作為<b>電壓感測器</b>。"}, "Ca²⁺ 釋放通道（ryanodine 受體）": {"t": "Ca²⁺ 釋放通道（ryanodine 受體）", "en": "Ca²⁺ release channel (ryanodine receptor)　〔三聯體放大〕", "p": "終池膜上的大型通道，與 DHP 受體<b>機械性相連</b>；被拉開後 Ca²⁺ 順濃度梯度自 SR 擴散入肌質。（心肌中則靠 Ca²⁺ 誘發開啟）"}, "縱走肌質網": {"t": "縱走肌質網", "en": "Longitudinal SR　〔三聯體放大〕", "p": "終池延伸出的肌質網小管。"}, "Ca²⁺-ATPase 幫浦（SERCA）": {"t": "Ca²⁺-ATPase 幫浦（SERCA）", "en": "Ca²⁺-ATPase pump　〔三聯體放大〕", "p": "肌質網膜上的<b>主動運輸</b>幫浦，消耗 ATP 把 Ca²⁺ 送回 SR 內 → 肌質 Ca²⁺ 下降 → 舒張。"}};
+  const S = K.stage('st-ecc', { radius: 54, yaw: 0.35, pitch: 0.25, autoRotate: 0 });
+  const mf = [[0, 0], [0, 8], [7, -4], [-7, -4]];
+  mf.forEach(([y, z]) => K.sweep(S, [[-36, y, z], [10, y, z]], 3.2, (u) => Math.floor(u * 14) % 2 ? '#991b1b' : '#fca5a5', 14, 10, { id: '肌原纖維' }));
+  K.sweep(S, [[-38, 2, 2], [12, 2, 2]], 15, '#f9a8d4', 1, 20, { id: '肌膜', al: 0.12 }, { a0: 0.25, a1: 1, smooth: 1 });
+  const TT = [-30, -14, 2], tubes = [];
+  TT.forEach(x => { const ring = K.circle([x, 2, 2], 14.6, [1, 0, 0], 20); ring.forEach((p, i) => tubes.push(S.tube(p, ring[(i + 1) % 20], 0.7, '#22d3ee', { id: '橫小管（T 小管）' }))); mf.forEach(([y, z]) => { [-2.2, 2.2].forEach(d => K.ellipsoid(S, [x + d, y, z], [1.2, 4.4, 4.4], '#a3e635', 10, 6, { id: '終池', al: 0.6 })); }); });
+  mf.forEach(([y, z]) => { for (let s = 0; s < 2; s++) { const x0 = TT[s] + 3, x1 = TT[s + 1] - 3; for (let k = 0; k < 4; k++) { const a = k * 1.57; S.tube([x0, y + Math.cos(a) * 3.8, z + Math.sin(a) * 3.8], [x1, y + Math.cos(a) * 3.8, z + Math.sin(a) * 3.8], 0.35, '#bef264', { id: '肌質網（縱走部分）', flat: 1 }); } } });
+  [[-22, 4, 4], [-6, -4, 6]].forEach(p => K.ellipsoid(S, p, [2.6, 1.2, 1.2], '#fb923c', 8, 5, { id: '粒線體' }));
+  S.sphere([-34, 17, 2], 2, '#fde68a', { id: '運動神經元終端' });
+  const ca = []; for (let i = 0; i < 30; i++) { const x = TT[i % 3], m = mf[i % 4]; ca.push({ o: S.sphere([0, 0, 0], 0.5, '#f8fafc', { id: 'Ca²⁺', glow: 0.4 }), home: [x + (i % 2 ? 2.2 : -2.2), m[0] + ((i % 5) - 2), m[1] + ((i % 3) - 1)], out: [x + (i % 2 ? 6 : -6), m[0] + ((i % 5) - 2) * 1.4, m[1] + 3.6 + (i % 2)] }); }
+  const ap = []; for (let i = 0; i < 20; i++) ap.push(S.sphere([0, 0, 0], 0.8, '#fde047', { glow: 1.2, nopick: true, hidden: true }));
+  // 三聯體放大
+  const Z = [30, 0, 0];
+  K.sweep(S, [V.add(Z, [0, 16, 0]), V.add(Z, [0, -16, 0])], 3.2, '#22d3ee', 6, 12, { id: 'T 小管膜', al: 0.4 });
+  [-1, 1].forEach(s => K.ellipsoid(S, V.add(Z, [s * 8.5, 0, 0]), [4.6, 15, 6], '#a3e635', 14, 8, { id: '終池（SR）', al: 0.35 }));
+  [-1, 1].forEach(s => S.tube(V.add(Z, [s * 12, 12, 0]), V.add(Z, [s * 18, 18, 0]), 1.4, '#bef264', { id: '縱走肌質網' }));
+  const dhp = [], ryr = []; for (let i = 0; i < 4; i++) [-1, 1].forEach(s => { const y = -9 + i * 6; dhp.push(S.sphere(V.add(Z, [s * 3.4, y, 0]), 1.1, '#f472b6', { id: 'DHP 受體（電壓閘控 Ca²⁺ 通道）' })); const r = S.sphere(V.add(Z, [s * 5.6, y, 0]), 1.3, '#facc15', { id: 'Ca²⁺ 釋放通道（ryanodine 受體）' }); ryr.push(r); S.tube(V.add(Z, [s * 3.4, y, 0]), V.add(Z, [s * 5.6, y, 0]), 0.35, '#e2e8f0', { id: 'DHP 受體（電壓閘控 Ca²⁺ 通道）' }); });
+  [-1, 1].forEach(s => { for (let i = 0; i < 3; i++) S.sphere(V.add(Z, [s * 12.6, -10 + i * 9, 3]), 1.1, '#38bdf8', { id: 'Ca²⁺-ATPase 幫浦（SERCA）' }); });
+  const zc = []; for (let i = 0; i < 16; i++) zc.push({ o: S.sphere([0, 0, 0], 0.5, '#f8fafc', { nopick: true }), s: i % 2 ? 1 : -1, y: -12 + (i >> 1) * 3.2 });
+  [['肌原纖維', [8, 8, 8], '肌原纖維', 30, -10], ['肌膜', [-10, 16, 2], '肌膜', 0, -18], ['橫小管（T 小管）', [-14, 16.6, 2], 'T 小管', -30, -16], ['終池', [-16.2, 8, 8], '終池', 20, -20], ['肌質網（縱走部分）', [-22, 11.8, 8], '肌質網', -30, -10], ['粒線體', [-6, -4, 6], '粒線體', -10, 20], ['運動神經元終端', [-34, 17, 2], '神經終端', -30, -10], ['T 小管膜', V.add(Z, [0, 16, 0]), 'T 小管', 0, -12], ['終池（SR）', V.add(Z, [10, 14, 0]), '終池', 30, -10], ['DHP 受體（電壓閘控 Ca²⁺ 通道）', V.add(Z, [3.4, -9, 0]), 'DHP 受體', 40, 20], ['Ca²⁺ 釋放通道（ryanodine 受體）', V.add(Z, [5.6, 9, 0]), 'RyR', 40, -10], ['Ca²⁺-ATPase 幫浦（SERCA）', V.add(Z, [12.6, -10, 3]), 'SERCA', 30, 16]].forEach(([id, p, t, dx, dy]) => lab(S, p, t, id, '#e2e8f0', dx, dy));
+  let step = 0, tw = 0;
+  const STEPS = [
+    { t: '①', d: '運動神經元釋放 ACh，結合肌膜上的菸鹼型受體 → Na⁺ 內流、去極化' },
+    { t: '②', d: '肌膜產生<b>動作電位</b>並沿肌膜傳導' },
+    { t: '③', d: '動作電位沿<b>橫小管</b>深入纖維內部，打開其上的電壓閘控 Ca²⁺ 通道（DHP 受體）' },
+    { t: '④', d: 'DHP 受體與肌質網上的 <b>Ca²⁺ 釋放通道</b>（ryanodine 受體）機械性相連 → 通道打開，Ca²⁺ 自<b>終池</b>擴散入肌質' },
+    { t: '⑤', d: 'Ca²⁺ 結合肌鈣蛋白 → 橫橋循環 → <b>收縮</b>' },
+    { t: '⑥', d: '動作電位停止：釋放通道關閉，<b>Ca²⁺-ATPase 幫浦</b>把 Ca²⁺ 主動送回肌質網 → <b>舒張</b>（舒張也需要 ATP）' }
+  ].map(s => ({ t: s.t + ' ' + s.d.replace(/<[^>]+>/g, '').slice(0, 14) + '…', d: s.d }));
+  S.tick(dt => {
+    tw = Math.min(1, tw + dt / 1.8); const e = sm(0, 1, tw);
+    ap.forEach((a, i) => { a.hidden = !(step === 1 || step === 2); const k = i / 20; if (step === 1) mv(a.p, [-36 + e * 48 * k, 17, 2 + Math.sin(k * 6) * 14 * 0.3]); else { const x = TT[i % 3], ang = (i / 20) * 6.28; mv(a.p, [x, 2 + Math.cos(ang) * 14.6 * (1 - e * 0.8), 2 + Math.sin(ang) * 14.6 * (1 - e * 0.8)]); } });
+    tubes.forEach(t => { t.glow = step === 2 || step === 3 ? 0.8 : 0; });
+    const rel = step === 3 ? e : step === 4 ? 1 : step === 5 ? 1 - e : 0;
+    ca.forEach(c => mv(c.o.p, V.lerp(c.home, c.out, rel)));
+    ryr.forEach(r => { r.glow = step === 3 || step === 4 ? 1 : 0; }); dhp.forEach(d => { d.glow = step >= 2 && step <= 4 ? 0.8 : 0; });
+    zc.forEach(c => mv(c.o.p, V.add(Z, [c.s * K.lerp(8, step === 5 ? 8 : 3, rel), c.y, 1 + (c.y % 2)])));
+    mf.forEach(() => {});
+  });
+  UI.stepper($('ecc-steps'), STEPS, i => { step = i; tw = 0; $('ecc-cap').innerHTML = STEPS[i].d; }, { dur: 3600 });
+  K.info(S, 'info-ecc', INFO, { picker: 'pk-ecc', hl: false });
+})();
+
+/* ========== ⑥ 肌梭與膝跳反射 ========== */
+(function () {
+  const INFO = {"脊髓（白質）": {"t": "脊髓（白質）", "en": "Spinal cord　〔脊髓〕", "p": "反射中樞所在。"}, "灰質": {"t": "灰質", "en": "Gray matter　〔脊髓〕", "p": "背角接收感覺輸入；前角含 α、γ 運動神經元的細胞本體。"}, "背根神經節": {"t": "背根神經節", "en": "Dorsal root ganglion　〔脊髓〕", "p": "感覺神經元（偽單極）細胞本體所在處。"}, "Ia 感覺神經元（環螺旋末梢）": {"t": "Ia 感覺神經元（環螺旋末梢）", "en": "Ia afferent (primary / annulospiral)　〔神經路徑〕", "p": "自肌梭的<b>初級末梢</b>出發，細胞本體在背根神經節；進入脊髓後<b>直接</b>與 α 運動神經元形成突觸（單突觸）。"}, "α 運動神經元": {"t": "α 運動神經元", "en": "Alpha motor neuron　〔神經路徑〕", "p": "傳導快，支配<b>梭外纖維</b>，使肌肉收縮。細胞本體在前角，軸突經前根離開。"}, "γ 運動神經元": {"t": "γ 運動神經元", "en": "Gamma motor neuron　〔神經路徑〕", "p": "傳導較慢，支配<b>梭內纖維</b>兩端；使梭內纖維收縮、收緊肌梭，提高其對拉長的敏感度（維持肌張力）。"}, "抑制性中間神經元": {"t": "抑制性中間神經元", "en": "Inhibitory interneuron　〔神經路徑〕", "p": "高基氏肌腱器反射中位於感覺與運動神經元之間的神經元，對 α 運動神經元產生<b>抑制性</b>突觸（雙突觸反射）。"}, "Ib 感覺神經元（腱器）": {"t": "Ib 感覺神經元（腱器）", "en": "Golgi tendon organ afferent　〔神經路徑〕", "p": "自高基氏肌腱器出發，在脊髓中與抑制性中間神經元形成突觸。"}, "股骨": {"t": "股骨", "en": "Femur　〔大腿與膝〕", "p": "大腿骨（右側，從內側觀看）。"}, "股四頭肌（梭外纖維）": {"t": "股四頭肌（梭外纖維）", "en": "Quadriceps femoris (extrafusal fibers)　〔大腿與膝〕", "p": "大腿前方的伸膝肌群（股直肌與三塊股肌），經股四頭肌腱、髕骨與髕韌帶止於脛骨粗隆。內含許多肌梭；其<b>梭外纖維</b>受 α 運動神經元支配。"}, "髕骨": {"t": "髕骨", "en": "Patella　〔大腿與膝〕", "p": "膝蓋骨，包在股四頭肌腱中。"}, "脛骨": {"t": "脛骨", "en": "Tibia　〔大腿與膝〕", "p": "股四頭肌收縮時，小腿以膝為軸向前踢起（伸膝）。"}, "腓骨": {"t": "腓骨", "en": "Fibula　〔大腿與膝〕", "p": "小腿外側的細骨。"}, "足骨": {"t": "足骨", "en": "Bones of the foot　〔大腿與膝〕", "p": "跗骨、蹠骨與趾骨（簡化）。"}, "股四頭肌腱": {"t": "股四頭肌腱", "en": "Quadriceps tendon　〔大腿與膝〕", "p": "連接股四頭肌與髕骨。"}, "髕韌帶": {"t": "髕韌帶", "en": "Patellar ligament　〔大腿與膝〕", "p": "敲擊此處會<b>被動拉長</b>股四頭肌與其中的肌梭，引發膝跳反射。"}, "叩診槌": {"t": "叩診槌", "en": "Reflex hammer　〔大腿與膝〕", "p": "輕敲髕韌帶。"}, "肌梭（位置）": {"t": "肌梭（位置）", "en": "Muscle spindle (in situ)　〔大腿與膝〕", "p": "散布在肌肉中、與梭外纖維並聯的牽張感受器；上方為其放大。"}, "高基氏肌腱器": {"t": "高基氏肌腱器", "en": "Golgi tendon organ　〔大腿與膝〕", "p": "位於肌肉與肌腱交界處，感覺神經末梢纏在肌腱膠原纖維之間，偵測肌腱<b>張力</b>。"}, "肌梭囊": {"t": "肌梭囊", "en": "Spindle capsule　〔肌梭放大〕", "p": "包住梭內纖維的結締組織囊（中央較膨大）。"}, "核袋纖維": {"t": "核袋纖維", "en": "Nuclear bag fiber　〔肌梭放大〕", "p": "梭內纖維之一；中央無收縮構造，<b>細胞核聚集成袋狀</b>。兩端（有橫紋）可收縮，受 γ 運動神經元支配。"}, "核鏈纖維": {"t": "核鏈纖維", "en": "Nuclear chain fibers　〔肌梭放大〕", "p": "較細短的梭內纖維；中央的<b>細胞核排成一列</b>。"}, "梭內纖維的細胞核": {"t": "梭內纖維的細胞核", "en": "Nuclei of intrafusal fibers　〔肌梭放大〕", "p": "梭內纖維中央區只有細胞核、沒有肌原纖維，因此中央不會收縮。"}, "初級（環螺旋）末梢": {"t": "初級（環螺旋）末梢", "en": "Primary (annulospiral) ending　〔肌梭放大〕", "p": "Ia 感覺神經元的末梢，<b>纏繞</b>核袋與核鏈纖維的中央部；對肌肉<b>開始被拉長</b>時反應最強。"}, "次級（花枝狀）末梢": {"t": "次級（花枝狀）末梢", "en": "Secondary (flower-spray) ending　〔肌梭放大〕", "p": "一般位於<b>核鏈纖維</b>可收縮的兩端上（課本：人類的次級末梢似乎也分布到核袋纖維）；對<b>持續拉長</b>反應。"}, "γ 運動末梢": {"t": "γ 運動末梢", "en": "Gamma motor endings　〔肌梭放大〕", "p": "位於梭內纖維<b>兩端</b>可收縮的部分。γ 運動神經元興奮 → 兩端收縮、把中央拉緊（主動牽張）。"}, "梭外纖維": {"t": "梭外纖維", "en": "Extrafusal fibers　〔肌梭放大〕", "p": "一般的骨骼肌纖維，與肌梭<b>並聯</b>；受 α 運動神經元支配。"}, "α 運動終板": {"t": "α 運動終板", "en": "Alpha motor end plates　〔肌梭放大〕", "p": "α 運動神經元在梭外纖維上的神經肌肉接合處。"}};
+  const S = K.stage('st-spi', { radius: 64, yaw: 0.25, pitch: 0.12, autoRotate: 0 });
+  const R = { gs: 'r' }, Zm = { gs: 'z' };
+  const SC = [-30, 34, 0];
+  K.ellipsoid(S, SC, [10, 8, 5], '#e2e8f0', 14, 8, Object.assign({ id: '脊髓（白質）', al: 0.3 }, R)); K.ellipsoid(S, SC, [5, 4, 4], '#a8a29e', 12, 6, Object.assign({ id: '灰質', al: 0.7 }, R));
+  const DRG = [-14, 40, 0]; S.sphere(DRG, 2.4, '#60a5fa', Object.assign({ id: '背根神經節' }, R));
+  const hip = [0, 18, 0], knee0 = [40, 8, 0];
+  cyl(S, hip, knee0, 3.2, '#e2e8f0', Object.assign({ id: '股骨' }, R));
+  const quad = K.sweep(S, [[2, 24, 0], [20, 22, 0], [36, 16, 0]], t => 3 + 5 * Math.sin(t * Math.PI), '#ef4444', 16, 12, Object.assign({ id: '股四頭肌（梭外纖維）', al: 0.75 }, R));
+  S.tube([36, 16, 0], [42, 13, 0], 1.2, '#f8fafc', Object.assign({ id: '股四頭肌腱' }, R));
+  const pat = S.sphere([43.5, 12, 0], 2.6, '#f1f5f9', Object.assign({ id: '髕骨' }, R));
+  const tib = { a: [41, 6, 0], b: [0, 0, 0] }, fib = { a: [40, 5, -3], b: [0, 0, 0] }, foot = { a: [0, 0, 0], b: [0, 0, 0] }, lig = { a: [44.5, 10, 0], b: [0, 0, 0] };
+  S.tube(tib.a, tib.b, 2.6, '#e2e8f0', Object.assign({ id: '脛骨' }, R)); S.tube(fib.a, fib.b, 1.2, '#cbd5e1', Object.assign({ id: '腓骨' }, R)); S.tube(foot.a, foot.b, 2, '#e2e8f0', Object.assign({ id: '足骨' }, R)); S.tube(lig.a, lig.b, 0.9, '#f8fafc', Object.assign({ id: '髕韌帶' }, R));
+  const ham = { h: K.mover(K.ellipsoid(S, [0, 0, 0], [3.4, 1.8, 1.8], '#94a3b8', 10, 6, Object.assign({ id: '叩診槌' }, R))), p: [0, 0, 0] };
+  const SPI = [18, 23, 2]; K.ellipsoid(S, SPI, [5, 1.2, 1.2], '#facc15', 10, 5, Object.assign({ id: '肌梭（位置）' }, R));
+  const GTO = [33, 17, 1.5]; S.sphere(GTO, 1.2, '#34d399', Object.assign({ id: '高基氏肌腱器' }, R));
+  const path = (pts, col, id, r) => { const P = new Mini3D.Path(pts, 6); P.pts.slice(0, -1).forEach((p, k) => S.tube(p, P.pts[k + 1], r || 0.5, col, Object.assign({ id }, R))); return P; };
+  const Ia = path([SPI, [8, 34, 2], DRG, [-22, 38, 0], V.add(SC, [2, -2, 0])], '#60a5fa', 'Ia 感覺神經元（環螺旋末梢）');
+  const Am = path([V.add(SC, [-1, -3, 0]), [-24, 26, 0], [-4, 28, 0], [14, 26, 2]], '#ef4444', 'α 運動神經元');
+  const Gm = path([V.add(SC, [1, -3, 1]), [-20, 24, 2], [4, 26, 3], [16, 24, 2.5]], '#22c55e', 'γ 運動神經元', 0.35);
+  const Ib = path([GTO, [20, 36, -2], [-8, 42, -2], [-24, 36, -1], V.add(SC, [3, 0, -1])], '#a78bfa', 'Ib 感覺神經元（腱器）', 0.35);
+  S.sphere(V.add(SC, [-3, 1, -1]), 1.1, '#f472b6', Object.assign({ id: '抑制性中間神經元' }, R));
+  const pIa = S.sphere([0, 0, 0], 1.2, '#bfdbfe', Object.assign({ glow: 1.4, nopick: true, hidden: true }, R)), pA = S.sphere([0, 0, 0], 1.2, '#fecaca', Object.assign({ glow: 1.4, nopick: true, hidden: true }, R));
+  [['脊髓（白質）', SC, '脊髓', -20, -30], ['背根神經節', DRG, '背根神經節', 0, -18], ['股骨', [20, 13, 0], '股骨', 0, 20], ['股四頭肌（梭外纖維）', [20, 29, 0], '股四頭肌', 0, -20], ['髕骨', [43.5, 14, 0], '髕骨', 20, -14], ['髕韌帶', [45, 6, 0], '髕韌帶', 40, 0], ['肌梭（位置）', SPI, '肌梭', -10, 18], ['高基氏肌腱器', GTO, '腱器', 20, 20], ['Ia 感覺神經元（環螺旋末梢）', [8, 34, 2], 'Ia 感覺', 0, -14], ['α 運動神經元', [-4, 28, 0], 'α 運動', -10, 16], ['γ 運動神經元', [4, 26, 3], 'γ', 10, 20], ['抑制性中間神經元', V.add(SC, [-3, 1, -1]), '抑制性中間神經元', -50, 10]].forEach(([id, p, t, dx, dy]) => lab(S, p, t, id, '#e2e8f0', dx, dy, R));
+  // 肌梭放大（位置偏移在後方）
+  const ZC = [10, -30, 0];
+  K.ellipsoid(S, ZC, [26, 5, 5], '#e2e8f0', 18, 8, Object.assign({ id: '肌梭囊', al: 0.18 }, Zm));
+  cyl(S, V.add(ZC, [-24, 1.6, 0]), V.add(ZC, [24, 1.6, 0]), 1.1, '#fca5a5', Object.assign({ id: '核袋纖維' }, Zm));
+  [-1.4, -2.8].forEach(z => cyl(S, V.add(ZC, [-18, -1.4, z]), V.add(ZC, [18, -1.4, z]), 0.6, '#fda4af', Object.assign({ id: '核鏈纖維' }, Zm)));
+  for (let i = 0; i < 6; i++) S.sphere(V.add(ZC, [(i % 3 - 1) * 1.2, 1.6 + (i > 2 ? 0.6 : -0.6), 0.6]), 0.6, '#7c3aed', Object.assign({ id: '梭內纖維的細胞核' }, Zm));
+  for (let i = 0; i < 6; i++) S.sphere(V.add(ZC, [-5 + i * 2, -1.4, -2.1]), 0.45, '#7c3aed', Object.assign({ id: '梭內纖維的細胞核' }, Zm));
+  K.helixPts(V.add(ZC, [-4, 0, 0]), V.add(ZC, [4, 0, 0]), 2.4, 4, 50).forEach((p, i, a) => { if (i) S.tube(a[i - 1], p, 0.3, '#60a5fa', Object.assign({ id: '初級（環螺旋）末梢' }, Zm)); });
+  [-9, 9].forEach(x => S.sphere(V.add(ZC, [x, -1.6, -1.8]), 1, '#93c5fd', Object.assign({ id: '次級（花枝狀）末梢' }, Zm)));
+  [-18, 18].forEach(x => S.sphere(V.add(ZC, [x, 2.4, 0]), 1, '#22c55e', Object.assign({ id: 'γ 運動末梢' }, Zm)));
+  [-8, 8].forEach(z => cyl(S, V.add(ZC, [-30, 0, z]), V.add(ZC, [30, 0, z]), 2.2, '#ef4444', Object.assign({ id: '梭外纖維' }, Zm)));
+  [-6, 6].forEach(x => S.sphere(V.add(ZC, [x, 2.2, 8]), 1, '#fde047', Object.assign({ id: 'α 運動終板' }, Zm)));
+  [['肌梭囊', V.add(ZC, [0, 5, 0]), '肌梭囊', 0, -20], ['核袋纖維', V.add(ZC, [-14, 1.6, 0]), '核袋纖維', -30, -16], ['核鏈纖維', V.add(ZC, [-14, -1.4, -2.8]), '核鏈纖維', -30, 16], ['初級（環螺旋）末梢', V.add(ZC, [0, 2.4, 0]), '初級（環螺旋）末梢', 30, -26], ['次級（花枝狀）末梢', V.add(ZC, [9, -1.6, -1.8]), '次級末梢', 30, 20], ['γ 運動末梢', V.add(ZC, [18, 2.4, 0]), 'γ 運動末梢', 30, -16], ['梭外纖維', V.add(ZC, [26, 0, 8]), '梭外纖維', 30, 10], ['α 運動終板', V.add(ZC, [6, 2.2, 8]), 'α 運動終板', 20, -10]].forEach(([id, p, t, dx, dy]) => lab(S, p, t, id, '#e2e8f0', dx, dy, Zm));
+  let tap = 9, mode = 'r';
+  $('tap').onclick = () => { tap = 0; };
+  S.tick(dt => {
+    tap += dt;
+    const hit = sm(0, 0.25, tap) * (1 - sm(0.25, 0.5, tap)), kick = sm(1.6, 2.1, tap) * (1 - sm(2.8, 3.6, tap));
+    const ang = -1.35 + kick * 0.9;
+    const kn = [41, 6, 0], dir = [Math.cos(ang), Math.sin(ang), 0];
+    mv(tib.b, V.add(kn, V.mul(dir, 34))); mv(fib.b, V.add([40, 5, -3], V.mul(dir, 32))); mv(foot.a, tib.b); mv(foot.b, V.add(tib.b, [Math.cos(ang + 1.57) * -9, Math.sin(ang + 1.57) * -9, 0])); mv(lig.b, V.add(kn, V.mul(dir, 6)));
+    ham.h.set([54 - hit * 4, 2, 0], 1);
+    quad.forEach(f => { f.glow = kick > 0.1 ? 0.6 : 0; });
+    pIa.hidden = !(tap > 0.3 && tap < 1.0); if (!pIa.hidden) mv(pIa.p, Ia.at((tap - 0.3) / 0.7));
+    pA.hidden = !(tap > 1.0 && tap < 1.7); if (!pA.hidden) mv(pA.p, Am.at((tap - 1.0) / 0.7));
+    if (tap < 4) $('spi-cap').innerHTML = tap < 0.3 ? '敲擊髕韌帶 → 被動拉長股四頭肌與肌梭' : tap < 1 ? '肌梭初級末梢 → <b>Ia 感覺神經元</b>傳入脊髓' : tap < 1.7 ? '單突觸：直接興奮 <b>α 運動神經元</b>' : '股四頭肌收縮 → 小腿向前踢（伸膝）';
+  });
+  K.seg('#spimode', m => { mode = m; S.each(o => { if (o.gs) o.hidden = o.gs !== m; }); if (m === 'z') { S.target = [10, -30, 0]; S.dist = S.home.dist * 0.6; } else S.resetView(); $('spi-cap').textContent = m === 'z' ? '肌梭放大：梭內纖維與感覺、運動末梢' : '按「敲擊髕韌帶」看膝跳反射'; }, 'r');
+  K.info(S, 'info-spi', INFO, { picker: 'pk-spi', hl: false });
+})();
+
+/* ========== ⑦ 三種肌肉 ========== */
+(function () {
+  const INFO = {"骨骼肌纖維": {"t": "骨骼肌纖維", "en": "Skeletal muscle fibers　〔骨骼肌〕", "p": "長圓柱形、<b>有橫紋</b>、彼此在結構與功能上<b>分開</b>；受體運動神經元控制（<b>隨意肌</b>）。舌、食道上段、括約肌、橫膈也是骨骼肌。"}, "多個周邊細胞核": {"t": "多個周邊細胞核", "en": "Peripheral nuclei (multinucleate)　〔骨骼肌〕", "p": "由許多肌母細胞融合而成，所以<b>多核</b>，核位於肌膜下方周邊。"}, "心肌細胞": {"t": "心肌細胞", "en": "Myocardial cells　〔心肌〕", "p": "短、<b>分支</b>、有橫紋，彼此相連成網；不隨意。能自發產生動作電位（起源於<b>節律點</b>），速率受自主神經調節。"}, "間盤": {"t": "間盤", "en": "Intercalated discs　〔心肌〕", "p": "相鄰心肌細胞的連接處（染色後為暗線）。含<b>隙型連結</b>（電性突觸，由 connexin 組成）與特殊的胞橋小體；隙型連結集中在細胞兩端，使衝動沿細胞長軸傳遞。"}, "細胞核（居中）": {"t": "細胞核（居中）", "en": "Central nuclei　〔心肌〕", "p": "心肌細胞多為單核（偶有雙核），位於細胞中央。"}, "平滑肌細胞": {"t": "平滑肌細胞", "en": "Smooth muscle cells　〔平滑肌〕", "p": "<b>紡錘形</b>、單核、<b>無橫紋</b>（沒有肌節）；位於消化道、血管、支氣管、泌尿與生殖管道壁。環行與縱行肌層交替收縮產生<b>蠕動</b>。"}, "細胞核（單一、居中）": {"t": "細胞核（單一、居中）", "en": "Central nucleus　〔平滑肌〕", "p": "每個平滑肌細胞一個細長的核，位於最寬的中央部。"}, "自主神經軸突與曲張體": {"t": "自主神經軸突與曲張體", "en": "Autonomic axon with varicosities　〔平滑肌〕", "p": "多單位型平滑肌需神經刺激：自主神經軸突沿途的膨大處（<b>曲張體</b>）釋放神經傳遞物質＝<b>途中突觸</b>（synapses en passant）。"}, "平滑肌細胞（放大）": {"t": "平滑肌細胞（放大）", "en": "Smooth muscle cell (enlarged)　〔平滑肌放大〕", "p": "肌絲斜向交錯成網，收縮時細胞變短變粗（扭轉狀）。"}, "緻密體": {"t": "緻密體", "en": "Dense bodies　〔平滑肌放大〕", "p": "細肌絲的錨定點，功能相當於橫紋肌的 <b>Z 盤</b>；散在胞質中，也附著於細胞膜上。"}, "細肌絲（肌動蛋白）": {"t": "細肌絲（肌動蛋白）", "en": "Thin filaments　〔平滑肌放大〕", "p": "很長、數量多（細:粗 ≈ 16:1），一端固定在緻密體或細胞膜；排列不規則，所以沒有橫紋。"}, "粗肌絲（肌凝蛋白）": {"t": "粗肌絲（肌凝蛋白）", "en": "Thick filaments　〔平滑肌放大〕", "p": "散在細肌絲之間；需<b>肌凝蛋白輕鏈被磷酸化</b>（MLCK）後才能形成橫橋。"}, "細胞核": {"t": "細胞核", "en": "Nucleus　〔平滑肌放大〕", "p": "單一、居中。"}};
+  const S = K.stage('st-typ', { radius: 58, yaw: 0.2, pitch: 0.3, autoRotate: 0 });
+  for (let i = 0; i < 4; i++) { const z = -9 + i * 6; K.sweep(S, [[-48, 0, z], [-22, 0, z]], 2.5, (u) => Math.floor(u * 22) % 2 ? '#991b1b' : '#f87171', 22, 8, { id: '骨骼肌纖維' }); for (let k = 0; k < 3; k++) K.ellipsoid(S, [-44 + k * 9, 2.4, z], [2, 0.6, 0.8], '#7c3aed', 6, 4, { id: '多個周邊細胞核' }); }
+  const cells = [[[-14, 0, -8], [-2, 1, -6]], [[-2, 1, -6], [10, 0, -8]], [[-14, 0, 2], [-2, -1, 2]], [[-2, -1, 2], [10, 0, 0]], [[-2, 1, -6], [-2, -1, 2]], [[-14, 0, 10], [10, 0, 10]]];
+  cells.forEach(([a, b]) => { K.sweep(S, [a, b], 2.1, (u) => Math.floor(u * 10) % 2 ? '#9f1239' : '#fb7185', 10, 8, { id: '心肌細胞' }); K.ellipsoid(S, V.lerp(a, b, 0.5), [1.2, 0.8, 0.8], '#7c3aed', 6, 4, { id: '細胞核（居中）' }); });
+  [[-2, 1, -6], [-2, -1, 2], [-2, 0, 10]].forEach(p => S.face(K.circle(p, 2.4, [1, 0, 0.1], 10), '#fde047', { id: '間盤' }));
+  for (let i = 0; i < 6; i++) { const z = -10 + (i % 3) * 8, x = 22 + (i >> 1) * 0; K.ellipsoid(S, [24 + (i % 2) * 8, (i % 2) * 2 - 1, z + (i % 2) * 3], [8, 1.6, 1.6], '#f9a8d4', 12, 6, { id: '平滑肌細胞' }); K.ellipsoid(S, [24 + (i % 2) * 8, (i % 2) * 2 - 1, z + (i % 2) * 3], [1.8, 0.8, 0.8], '#7c3aed', 6, 4, { id: '細胞核（單一、居中）' }); }
+  const ax = new Mini3D.Path([[18, 6, -14], [26, 4, -4], [30, 5, 6], [38, 4, 14]], 6); ax.pts.slice(0, -1).forEach((p, k) => S.tube(p, ax.pts[k + 1], 0.4, '#fde68a', { id: '自主神經軸突與曲張體' })); [0.25, 0.5, 0.75].forEach(u => S.sphere(ax.at(u), 1, '#facc15', { id: '自主神經軸突與曲張體' }));
+  const SMC = [20, -22, 0];
+  const smF = K.ellipsoid(S, SMC, [16, 5, 5], '#fbcfe8', 16, 8, { id: '平滑肌細胞（放大）', al: 0.25 }); const smM = K.mover(smF, SMC);
+  K.ellipsoid(S, SMC, [3, 1.4, 1.4], '#7c3aed', 8, 5, { id: '細胞核' });
+  const db = []; for (let i = 0; i < 8; i++) db.push({ o: S.sphere([0, 0, 0], 0.8, '#e2e8f0', { id: '緻密體' }), b: [(-12 + i * 3.4), (i % 2 ? 2 : -2), (i % 3 - 1) * 2.2] });
+  const fil = []; for (let i = 0; i < 7; i++) fil.push({ t: S.tube(db[i].o.p, db[i + 1].o.p, 0.3, '#ef4444', { id: '細肌絲（肌動蛋白）' }) });
+  const th = []; for (let i = 0; i < 4; i++) th.push(S.tube([0, 0, 0], [0, 0, 0], 0.6, '#3b82f6', { id: '粗肌絲（肌凝蛋白）' }));
+  [['骨骼肌纖維', [-35, 3, -9], '骨骼肌（橫紋、多核）', 0, -24], ['多個周邊細胞核', [-44, 2.4, 9], '周邊細胞核', -20, 20], ['心肌細胞', [-8, 2, -7], '心肌（分支）', 0, -24], ['間盤', [-2, 0, 10], '間盤', 20, 20], ['平滑肌細胞', [32, 1, -7], '平滑肌（紡錘形）', 20, -24], ['自主神經軸突與曲張體', ax.at(0.5), '曲張體', 30, -10], ['平滑肌細胞（放大）', V.add(SMC, [12, 5, 0]), '平滑肌細胞放大', 30, -10], ['緻密體', V.add(SMC, [-12, -2, -2]), '緻密體', -30, 16]].forEach(([id, p, t, dx, dy]) => lab(S, p, t, id, '#e2e8f0', dx, dy));
+  let T = 0;
+  S.tick(dt => {
+    T += dt; const c = 0.5 + 0.5 * Math.sin(T * 1.2), sx = 1 - 0.3 * c, sy = 1 + 0.25 * c;
+    smM.set(SMC, [sx, sy, sy]);
+    db.forEach((d, i) => mv(d.o.p, V.add(SMC, [d.b[0] * sx, d.b[1] * sy + Math.sin(i + c * 2) * c, d.b[2] * sy])));
+    th.forEach((t, i) => { t.a = V.lerp(db[i * 2].o.p, db[i * 2 + 1].o.p, 0.3); t.b = V.lerp(db[i * 2 + 1].o.p, db[Math.min(7, i * 2 + 2)].o.p, 0.7); });
+    $('typ-cap').textContent = '平滑肌收縮時細胞變短變粗（肌絲斜向交錯）';
+  });
+  K.info(S, 'info-typ', INFO, { picker: 'pk-typ', hl: false });
+})();
+
+/* ========== 快閃卡 / 測驗 ========== */
+UI.flashcards($('fc'), [
+  { f: '結締組織三層（外 → 內）', b: '肌外膜（整塊肌肉）→ 肌束膜（肌束）→ 肌內膜（每條肌纖維）。' },
+  { f: '為何骨骼肌纖維是多核？', b: '由許多胚胎肌母細胞融合而成；細胞核位於周邊肌膜下。' },
+  { f: '肌節的定義與帶', b: 'Z 盤到 Z 盤；A 帶＝粗肌絲全長、I 帶只有細肌絲、H 帶只有粗肌絲、M 線在中央。' },
+  { f: '收縮時哪些帶變短？', b: '<b>I 帶、H 帶</b>變短；A 帶不變；肌絲本身長度不變（滑動）。' },
+  { f: '肌聯蛋白（titin）的功能', b: '從 M 線到 Z 盤的彈性蛋白：穩定粗肌絲、提供被拉長後的彈性回縮。' },
+  { f: '肌鈣蛋白三次單元', b: 'TnI：抑制結合；TnT：結合肌旋蛋白；TnC：結合 Ca²⁺。' },
+  { f: 'Ca²⁺ 如何啟動收縮？', b: 'Ca²⁺ 結合 TnC → 肌旋蛋白移開 → 露出肌動蛋白的結合位 → 橫橋循環。' },
+  { f: '橫橋循環中 ATP 的兩個角色', b: '結合 ATP 使頭部與肌動蛋白<b>分離</b>；水解 ATP 使頭部「扳起」。' },
+  { f: '運動單元與支配比', b: '一個運動神經元 + 其支配的所有肌纖維；眼外肌約 1:23、腓腸肌 1:100–1:2000。' },
+  { f: '增補作用', b: '需要更大力時徵召更多、更大的運動單元（小者先被徵召）。' },
+  { f: 'NMJ 的傳遞', b: 'ACh 結合菸鹼型受體 → Na⁺ 內流 → 終板電位 → 動作電位；AChE 分解 ACh。' },
+  { f: '三聯體', b: '一條 T 小管夾在兩個終池之間。' },
+  { f: '骨骼肌的電機械性釋放', b: 'T 小管 DHP 受體與 SR 的 ryanodine 受體<b>機械性相連</b>（心肌則靠 Ca²⁺ 誘發）。' },
+  { f: '肌肉舒張的機制', b: 'SR 膜上 Ca²⁺-ATPase（SERCA）耗 ATP 把 Ca²⁺ 送回 SR。' },
+  { f: '肌梭 vs 高基氏肌腱器', b: '肌梭（梭內纖維、與梭外並聯）偵測長度；腱器偵測張力（經抑制性中間神經元）。' },
+  { f: '膝跳反射路徑', b: '敲髕韌帶 → 肌梭被拉長 → Ia → 脊髓（單突觸）→ α 運動神經元 → 股四頭肌收縮。' },
+  { f: 'γ 運動神經元的作用', b: '使梭內纖維兩端收縮，收緊肌梭、提高對拉長的敏感度。' },
+  { f: '三種肌肉的 Ca²⁺ 開關', b: '骨骼肌、心肌：肌鈣蛋白；平滑肌：攜鈣素 + MLCK（肌凝蛋白輕鏈磷酸化）。' }
+], 'ch12');
+UI.quiz($('qz'), [
+  { q: '包住每一條肌纖維的結締組織是？', o: ['肌外膜', '肌束膜', '肌內膜', '筋膜'], a: 2, e: '肌內膜 endomysium。' },
+  { q: '肌肉收縮時長度不變的是？', o: ['I 帶', 'H 帶', 'A 帶', '肌節'], a: 2, e: 'A 帶 = 粗肌絲長度。' },
+  { q: '與 Ca²⁺ 結合的是？', o: ['TnI', 'TnT', 'TnC', '肌旋蛋白'], a: 2, e: 'TnC。' },
+  { q: '使肌凝蛋白頭部與肌動蛋白分離的是？', o: ['Pi 釋出', 'ADP 釋出', '新的 ATP 結合', 'Ca²⁺ 結合'], a: 2, e: '死後缺 ATP → 屍僵。' },
+  { q: '動力衝程發生在？', o: ['ATP 結合後', 'Pi 釋出後', 'ATP 水解時', 'Ca²⁺ 移除時'], a: 1, e: 'Pi 釋出引起構形改變 → 動力衝程。' },
+  { q: 'NMJ 上的 ACh 受體屬於？', o: ['蕈毒鹼型', '菸鹼型（配體閘控）', '腎上腺素性', '電壓閘控'], a: 1, e: '配體閘控離子通道。' },
+  { q: '把動作電位傳到肌纖維深處的是？', o: ['肌質網', '橫小管', '粒線體', '肌原纖維'], a: 1, e: 'T 小管。' },
+  { q: '骨骼肌 SR 釋放 Ca²⁺ 的通道是？', o: ['DHP 受體', 'ryanodine 受體', 'SERCA', '菸鹼受體'], a: 1, e: 'DHP 受體是電壓感測器。' },
+  { q: '膝跳反射屬於？', o: ['單突觸牽張反射', '雙突觸抑制反射', '多突觸屈肌反射', '自主反射'], a: 0, e: 'Ia → α 直接突觸。' },
+  { q: '平滑肌中相當於 Z 盤的是？', o: ['間盤', '緻密體', 'M 線', '曲張體'], a: 1, e: '緻密體錨定細肌絲。' },
+  { q: '心肌細胞之間的間盤含？', o: ['緊密連接', '隙型連結', '曲張體', '終池'], a: 1, e: '電性突觸使衝動快速傳遞。' }
+]);
+</script>
+</body>
+</html>

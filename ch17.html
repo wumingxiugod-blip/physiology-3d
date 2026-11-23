@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch17 腎臟生理 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>canvas.anim{width:100%;height:var(--ph,260px);display:block;border-radius:14px;background:#060b17;border:1px solid var(--line)}</style>
+</head>
+<body style="--acc:#fbbf24;--acc2:#38bdf8">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 17 · Physiology of the Kidneys</div>
+  <h1 class="title3d">腎臟生理</h1>
+  <p class="sub">3D 腎臟剖面與腎元（濾液依滲透壓變色、切換 ADH 看尿液濃縮或稀釋、利尿劑作用位置）、腎絲球過濾與 GFR 調節試算、逆流倍增動畫、3D ADH–水通道蛋白、清除率計算與葡萄糖運輸極限、腎素–血管張力素–醛固酮系統。</p>
+  <div class="chips"><a class="chip" href="#kid">腎臟與腎元 3D</a><a class="chip" href="#gfr">腎絲球過濾</a><a class="chip" href="#cc">逆流倍增</a><a class="chip" href="#adh">ADH</a><a class="chip" href="#clr">清除率</a><a class="chip" href="#elec">電解質酸鹼</a><a class="chip" href="#diu">利尿劑</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="kid" data-nav="腎臟與腎元">
+  <h2><span class="num">01</span>腎臟構造與腎元（3D）</h2>
+  <p class="lead">每個腎約有 <b>100 萬個以上腎元</b>。濾液顏色＝滲透壓：<span style="color:#60a5fa">藍 300</span> → <span style="color:#ef4444">紅 1,200</span> → <span style="color:#e2e8f0">淡 100</span> mOsm。切換 ADH 看集尿管產生濃縮尿或稀釋尿。</p>
+  <div class="grid2">
+    <div class="stage" id="st-kid"><canvas aria-label="3D 腎臟與腎元"></canvas><div class="hud" id="kd-hud"></div><div class="hud2" id="kd-cap"></div>
+      <div class="sbar"><div class="seg" id="kdmode"><button class="btn sm" data-v="kid" type="button">腎臟剖面</button><button class="btn sm" data-v="neph" type="button">腎元</button><button class="btn sm" data-v="diu" type="button">利尿劑位置</button></div><div class="seg" id="adhmode"><button class="btn sm" data-v="hi" type="button">ADH 高（脫水）</button><button class="btn sm" data-v="lo" type="button">ADH 低（喝很多水）</button></div></div></div>
+    <div class="card info"><div id="info-kid"><div class="tt">點選構造</div></div><div class="picker" id="pk-kid"></div></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>巨觀構造</h3><ul class="small"><li>外層<b>皮質</b>、內層<b>髓質</b>（腎錐體，之間為腎柱）</li><li>腎錐體 → 小腎盞 → 大腎盞 → 腎盂 → 輸尿管 → 膀胱</li><li>腎小體、近曲與遠曲小管在<b>皮質</b>；亨利氏環在<b>髓質</b></li></ul></div>
+    <div class="card tilt"><h3>血管</h3><ul class="small"><li>入球小動脈 → <b>腎絲球</b> → 出球小動脈 → <b>腎小管周圍微血管</b>（近髓腎元為<b>直血管 vasa recta</b>）</li><li>兩個微血管床串聯</li></ul></div>
+    <div class="card tilt"><h3>排尿反射</h3><ul class="small"><li>膀胱壁＝<b>逼尿肌</b>（有縫隙接合）；內括約肌（平滑肌）、外括約肌（骨骼肌）</li><li>膀胱牽張 → 薦髓 S2–S4 → 橋腦排尿中樞 → 副交感使逼尿肌收縮</li><li>高等腦區抑制橋腦中樞 → 守衛反射，可延遲排尿</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="gfr" data-nav="腎絲球過濾">
+  <h2><span class="num">02</span>腎絲球過濾與 GFR</h2>
+  <p class="lead">濾液穿過三層：微血管<b>窗孔</b>（200–500 Å）→ <b>基底膜</b> → 足細胞的<b>過濾裂隙</b>（裂隙膜擋住大部分蛋白質）。淨過濾壓只有約 10 mmHg，但通透性與面積極大 → <b>GFR 約 115–125 ml/min（每天約 180 L）</b>，尿量只有約 1.5 L（99.2% 被再吸收）。</p>
+  <div class="grid2">
+    <div class="card"><h3>試算：入球／出球小動脈</h3>
+      <div class="ctrl"><label for="aff">入球小動脈</label><input type="range" id="aff" min="-100" max="100" value="0"><output id="aff-v">正常</output></div>
+      <div class="ctrl"><label for="eff">出球小動脈</label><input type="range" id="eff" min="-100" max="100" value="0"><output id="eff-v">正常</output></div>
+      <div class="ctrl"><label for="map">平均動脈壓</label><input type="range" id="map" min="50" max="180" value="95"><output id="map-v">95</output></div>
+      <div class="btns"><button class="btn sm" id="g-auto" type="button">自我調節：開</button><button class="btn sm" id="g-sym" type="button">交感興奮（運動）</button><button class="btn sm" id="g-rs" type="button">重設</button></div>
+      <div class="kv"><div><small>腎絲球微血管壓</small><b id="g-pgc"></b></div><div><small>淨過濾壓</small><b id="g-nfp"></b></div><div><small>GFR (ml/min)</small><b id="g-gfr" style="color:#fbbf24"></b></div><div><small>腎血流（相對）</small><b id="g-rbf"></b></div></div></div>
+    <div class="card"><canvas class="anim" id="gfr-cv" style="--ph:250px"></canvas>
+      <ul class="small mt"><li>交感神經 → 入球小動脈收縮 → GFR↓（保留血量）</li><li><b>自我調節</b>：血壓 70–180 mmHg 時 GFR 大致恆定：<b>肌原性</b>（入球小動脈被拉扯就收縮）與<b>腎小管–腎絲球回饋</b>（緻密斑感受遠曲小管 NaCl↑ → 入球小動脈收縮）</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="cc" data-nav="逆流倍增">
+  <h2><span class="num">03</span>鹽與水的再吸收：逆流倍增系統</h2>
+  <div class="grid2">
+    <div class="card" style="padding:12px"><canvas class="anim" id="cc-cv" style="--ph:380px"></canvas>
+      <div class="btns"><button class="btn sm" id="cc-go" type="button">▶ 從 300 開始建立梯度</button><div class="seg" id="ccadh"><button class="btn sm" data-v="1" type="button">ADH 存在</button><button class="btn sm" data-v="0" type="button">無 ADH</button></div></div></div>
+    <div class="card"><ul class="small"><li><b>近曲小管</b>：約 <b>65%</b> 鹽與水再吸收（Na⁺ 主動、Cl⁻ 跟隨、水滲透）；<b>不受激素調節</b>，濾液仍等張</li><li><b>降支</b>：對水通透 → 水滲出，濾液變濃（約再收 20%）</li><li><b>升支粗段</b>：主動把 NaCl 打出、<b>對水不通透</b> → 濾液變稀（約 100 mOsm），間質變濃</li><li>兩支逆向流動 → 濃度差被「倍增」：皮質 <b>300</b> → 內髓 <b>1,200 mOsm</b></li><li><b>直血管</b>的逆流交換保住髓質高張；<b>尿素</b>由內髓集尿管滲出再循環，貢獻約一部分滲透壓</li><li><b>集尿管</b>對鹽不通透；有 ADH 時對水通透 → 水被高張髓質吸走 → 濃縮尿</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="adh" data-nav="ADH">
+  <h2><span class="num">04</span>ADH 與水通道蛋白（3D）</h2>
+  <div class="grid2">
+    <div class="stage short" id="st-aqp"><canvas aria-label="3D ADH 水通道"></canvas><div class="hud">上：集尿管管腔　下：血液側</div><div class="hud2" id="aq-cap"></div>
+      <div class="sbar"><div class="seg" id="aqmode"><button class="btn sm" data-v="1" type="button">ADH 存在</button><button class="btn sm" data-v="0" type="button">無 ADH</button></div></div></div>
+    <div class="card"><ul class="small"><li>血漿滲透壓↑（或血量↓）→ 下視丘滲透壓受器 → 後葉釋放 <b>ADH</b></li><li>ADH 結合集尿管細胞基底側受體 → <b>cAMP</b> → 含<b>水通道蛋白</b>的囊泡與管腔側細胞膜融合</li><li>水從管腔經水通道進入細胞，再從基底側進入血液</li><li>沒有 ADH → 水通道被胞吞移除 → 尿可稀到 50 mOsm、每小時可達 750 ml</li><li><b>尿崩症</b>：ADH 不足（中樞性）或腎對 ADH 無反應（腎性，例如鋰鹽）→ 多尿（3–10 L/天）、口渴、低張尿</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="clr" data-nav="清除率">
+  <h2><span class="num">05</span>腎血漿清除率與運輸極限</h2>
+  <div class="grid2">
+    <div class="card"><div class="formula">清除率 = (V × U) / P</div><p class="small muted">V＝尿流率（ml/min）、U＝尿中濃度、P＝血漿濃度</p>
+      <div class="btns" id="clr-pre"><button class="btn sm" data-c="2,30,0.5,inulin" type="button">菊糖</button><button class="btn sm" data-c="2,7.5,0.2,urea" type="button">尿素</button><button class="btn sm" data-c="2,62.5,0.2,pah" type="button">PAH</button><button class="btn sm" data-c="2,0,1,glu" type="button">葡萄糖（正常）</button></div>
+      <div class="ctrl"><label for="cV">V (ml/min)</label><input type="range" id="cV" min="0.5" max="10" step="0.1" value="2"><output id="cV-v">2</output></div>
+      <div class="ctrl"><label for="cU">U (mg/ml)</label><input type="range" id="cU" min="0" max="80" step="0.5" value="30"><output id="cU-v">30</output></div>
+      <div class="ctrl"><label for="cP">P (mg/ml)</label><input type="range" id="cP" min="0.1" max="2" step="0.05" value="0.5"><output id="cP-v">0.5</output></div>
+      <div class="kv"><div><small>清除率</small><b id="clr-v" style="color:#fbbf24"></b></div><div><small>解讀</small><b id="clr-t" style="font-size:14px"></b></div></div>
+      <ul class="small mt"><li><b>菊糖</b>：過濾、不再吸收也不分泌 → 清除率 = <b>GFR</b></li><li><b>尿素</b>：部分再吸收 → 清除率 &lt; GFR（約 75）</li><li><b>PAH</b>：過濾 + 分泌，幾乎全清 → 測<b>腎血漿流量</b>（約 625）</li><li>清除率 &gt; GFR → 有淨分泌；&lt; GFR → 有淨再吸收</li></ul></div>
+    <div class="card"><h3>葡萄糖的運輸極限 Tm</h3><canvas class="plot" id="tm-plot" style="--ph:250px"></canvas>
+      <div class="ctrl"><label for="pg">血糖 mg/dl</label><input type="range" id="pg" min="50" max="600" step="5" value="100"><output id="pg-v">100</output></div>
+      <p class="small" id="tm-t"></p><p class="small muted">GFR 125 ml/min × 血糖 1 mg/ml = 濾出 125 mg/min；Tm 平均 375 mg/min。超過 → <b>糖尿</b>（腎血漿閾值；個別腎元 Tm 不同，所以曲線有彎曲）。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="elec" data-nav="電解質酸鹼">
+  <h2><span class="num">06</span>電解質與酸鹼平衡</h2>
+  <div class="grid2">
+    <div class="card"><h3>腎素–血管張力素–醛固酮系統</h3><div class="btns"><button class="btn sm" id="raas-go" type="button">▶ 血壓／血量下降</button></div>
+      <div class="chain" id="raas"><div class="nd">血量／血壓↓<small>交感↑、緻密斑 NaCl↓</small></div><span class="ar">→</span><div class="nd">近腎絲球細胞<small>分泌<b>腎素</b></small></div><span class="ar">→</span><div class="nd">血管張力素原 → <b>Ang I</b><small>（肝製造）</small></div><span class="ar">→</span><div class="nd">ACE（主要在肺）<small>→ <b>Ang II</b></small></div><span class="ar">→</span><div class="nd">血管收縮、口渴<small>腎上腺皮質 → <b>醛固酮</b></small></div><span class="ar">→</span><div class="nd">遠曲小管晚段 / 皮質集尿管<small>Na⁺ 再吸收↑、K⁺ 與 H⁺ 分泌↑</small></div><span class="ar">→</span><div class="nd">血量、血壓回升</div></div>
+      <ul class="small mt"><li>醛固酮也直接受<b>血 K⁺ 升高</b>刺激</li><li><b>心房利鈉肽 ANP</b>：心房被撐開 → 促進排 Na⁺ 與水（與 RAAS 相反）</li><li>Na⁺ 再吸收與 K⁺、H⁺ 分泌互相競爭 → 低血鉀常伴隨鹼中毒</li></ul></div>
+    <div class="card"><h3>碳酸氫根的「間接」再吸收</h3>
+      <div class="chain"><div class="nd">濾液 HCO₃⁻ + 分泌的 H⁺</div><span class="ar">→</span><div class="nd">H₂CO₃</div><span class="ar">→</span><div class="nd on">微絨毛上的碳酸酐酶<small>→ CO₂ + H₂O</small></div><span class="ar">→</span><div class="nd">CO₂ 進入細胞</div><span class="ar">→</span><div class="nd">細胞內再成 H₂CO₃ → HCO₃⁻ 入血、H⁺ 再分泌</div></div>
+      <ul class="small mt"><li>腎過濾 HCO₃⁻，依需要再吸收 → 維持血漿 HCO₃⁻（代謝性成分）</li><li>多餘的 H⁺ 分泌入尿，由<b>磷酸鹽</b>與<b>氨（NH₃ → NH₄⁺）</b>緩衝排出</li><li>尿液 pH 可低至約 4.5</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="diu" data-nav="利尿劑">
+  <h2><span class="num">07</span>利尿劑與腎功能檢查</h2>
+  <div class="tbwrap"><table class="tb"><tr><th>類別</th><th>例子</th><th>作用位置</th><th>機制</th></tr>
+    <tr><td>碳酸酐酶抑制劑</td><td>Acetazolamide</td><td>近曲小管</td><td>抑制 HCO₃⁻ 再吸收</td></tr>
+    <tr><td><b>環利尿劑</b></td><td>Furosemide（Lasix）</td><td>升支粗段</td><td>抑制主動 NaCl 運輸 → 破壞髓質梯度，效果最強</td></tr>
+    <tr><td><b>Thiazides</b></td><td>Hydrochlorothiazide</td><td>遠曲小管前段</td><td>抑制 NaCl 再吸收</td></tr>
+    <tr><td><b>保鉀利尿劑</b></td><td>Spironolactone（醛固酮拮抗）、amiloride</td><td>遠曲小管晚段、集尿管</td><td>抑制 Na⁺ 再吸收與 K⁺ 分泌</td></tr>
+    <tr><td><b>滲透性利尿劑</b></td><td>Mannitol</td><td>整條腎元</td><td>濾液中多出的溶質抑制水的滲透再吸收</td></tr></table></div>
+  <div class="grid2 even mt"><div class="card"><h3>腎臟疾病</h3><ul class="small"><li><b>腎絲球腎炎</b>：發炎使血漿蛋白漏入尿（蛋白尿）</li><li>腎衰竭 → 尿素、K⁺、H⁺ 堆積，需<b>血液透析</b>（透析膜：小分子擴散、蛋白與血球保留）</li><li>多囊腎：先天性，大量囊腫</li></ul></div>
+    <div class="card"><h3>回顧</h3><p class="small">利尿劑增加尿量 → 降低血量與血壓（治療高血壓、水腫）。環利尿劑與 thiazides 會增加 K⁺ 流失 → 可能低血鉀。</p></div></div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">08</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">09</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 17 章整理，僅供個人複習。3D 與模擬為示意。 · <a href="index.html">回總覽</a> · <a href="ch16.html">← 第 16 章 呼吸</a> · <a href="ch18.html">第 18 章 消化 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+const osmCol = o => o >= 300 ? K.hsl(210 - Math.min(1, (o - 300) / 900) * 210, 85, 60) : K.hsl(210, 30, 60 + (300 - o) / 300 * 30);
+
+/* ================= 01 腎臟與腎元 ================= */
+(function () {
+  const S = K.stage('st-kid', { radius: 70, yaw: 0.3, pitch: 0.15, autoRotate: 0 });
+  const KD = { gs: 'kid' }, N = { gs: 'neph diu' };
+  // 腎臟剖面
+  const bean = (th, ph) => 1 - 0.28 * Math.exp(-((th - Math.PI) ** 2) / 0.35) * Math.sin(ph);
+  K.ellipsoid(S, [0, 0, 0], [26, 40, 16], '#92400e', 26, 14, Object.assign({ id: 'cap', al: 0.35 }, KD), { u0: 0, u1: 0.5, noise: bean });
+  K.ellipsoid(S, [0, 0, 0.5], [24, 38, 14], '#b45309', 24, 12, Object.assign({ id: 'cortex', al: 0.9 }, KD), { u0: 0, u1: 0.5, noise: bean });
+  for (let i = 0; i < 7; i++) { const a = -1.2 + i * 0.4, base = [Math.cos(a) * 18, Math.sin(a) * 30, 1], tip = [Math.cos(a) * 7 - 4, Math.sin(a) * 12, 1]; K.sweep(S, [base, V.lerp(base, tip, 0.5), tip], t => 7 * (1 - t * 0.8), '#7f1d1d', 8, 10, Object.assign({ id: 'pyr' }, KD)); S.sphere(V.add(tip, [-2, 0, 0]), 2.4, '#fde68a', Object.assign({ id: 'calyx', al: 0.8 }, KD)); }
+  K.sweep(S, [[-6, 0, 1], [-14, -4, 1], [-22, -12, 1], [-26, -30, 2], [-28, -60, 2]], t => t < 0.4 ? 9 * (1 - t * 1.6) + 1.5 : 2, '#fde68a', 20, 12, Object.assign({ id: 'pelvis', al: 0.7 }, KD));
+  S.tube([-40, 6, 2], [-16, 4, 2], 3, '#dc2626', Object.assign({ id: 'rart' }, KD)); S.tube([-40, -2, 2], [-16, -1, 2], 3.4, '#3b82f6', Object.assign({ id: 'rvein' }, KD));
+  K.lab(S, [20, 28, 6], '皮質', 'cortex', '#fdba74', 30, -16, KD); K.lab(S, [12, 10, 2], '髓質（腎錐體）', 'pyr', '#fca5a5', 40, 0, KD); K.lab(S, [-6, 10, 2], '腎盞', 'calyx', '#fde68a', -30, -20, KD); K.lab(S, [-16, -8, 2], '腎盂', 'pelvis', '#fde68a', -40, 0, KD); K.lab(S, [-28, -52, 2], '輸尿管', 'pelvis', '#fde68a', -30, 0, KD); K.lab(S, [-38, 6, 2], '腎動脈', 'rart', '#fca5a5', 0, -14, KD); K.lab(S, [-38, -2, 2], '腎靜脈', 'rvein', '#93c5fd', 0, 14, KD);
+  // 腎元
+  K.sheet(S, [-50, 0, -14], [100, 0, 0], [0, -64, 0], 1, 16, (u, v) => osmCol(300 + v * 900), Object.assign({ id: 'med', al: 0.28 }, N));
+  K.sheet(S, [-50, 46, -14], [100, 0, 0], [0, -46, 0], 1, 1, '#a16207', Object.assign({ id: 'ctx', al: 0.18 }, N));
+  [['300', 0], ['600', -20], ['900', -40], ['1200', -60]].forEach(([t, y]) => K.lab(S, [-48, y, -14], t + ' mOsm', 'med', '#e2e8f0', 0, 0, Object.assign({ size: 10 }, N)));
+  K.lab(S, [-48, 40, -14], '皮質', 'ctx', '#fbbf24', 0, 0, N); K.lab(S, [-48, -6, -14], '髓質', 'med', '#e2e8f0', 0, 0, N);
+  const GC = [-30, 30, 0], rnd = Mini3D.rng(4);
+  const glomP = []; for (let i = 0; i < 26; i++) glomP.push(V.add(GC, [Math.sin(i * 1.7) * 4, Math.cos(i * 2.3) * 4, Math.sin(i * 0.9) * 4]));
+  const GP = new Mini3D.Path(glomP, 4); GP.pts.slice(0, -1).forEach((p, k) => S.tube(p, GP.pts[k + 1], 1, '#ef4444', Object.assign({ id: 'glom' }, N)));
+  K.ellipsoid(S, V.add(GC, [0, 0, 0]), [8, 8, 8], '#fbbf24', 14, 8, Object.assign({ id: 'bowman', al: 0.25 }, N), { u0: 0.15, u1: 0.95 });
+  S.tube([-54, 38, 0], V.add(GC, [-3, 3, 0]), 1.6, '#dc2626', Object.assign({ id: 'aff' }, N)); S.tube(V.add(GC, [2, 4, 0]), [-16, 42, 2], 1.2, '#dc2626', Object.assign({ id: 'eff' }, N));
+  const tub = [V.add(GC, [6, -4, 0]), [-18, 24, 4], [-12, 30, -3], [-6, 22, 5], [-1, 28, -2], [3, 20, 3], [4, 12, 0], [4, -10, 0], [4, -36, 0], [6, -54, 0], [10, -56, 0], [13, -50, 0], [13, -34, 0], [13, -6, 0], [13, 8, 0], [10, 18, 2], [-4, 34, -4], [-18, 32, -6], [-10, 38, -2], [4, 36, 2], [18, 32, 0], [26, 28, 0]];
+  const CD = [[26, 28, 0], [27, 10, 0], [27, -20, 0], [27, -58, 0]];
+  const TP = new Mini3D.Path(tub, 6), CP = new Mini3D.Path(CD, 6);
+  const segId = u => u < 0.27 ? 'pct' : u < 0.43 ? 'dl' : u < 0.5 ? 'loop' : u < 0.6 ? 'atl' : u < 0.7 ? 'tal' : u < 0.82 ? 'mac' : 'dct';
+  TP.pts.slice(0, -1).forEach((p, k) => { const u = TP.cum[k] / TP.L; S.tube(p, TP.pts[k + 1], 1.8, '#e2e8f0', Object.assign({ id: segId(u), al: 0.55 }, N)); });
+  CP.pts.slice(0, -1).forEach((p, k) => S.tube(p, CP.pts[k + 1], 2.6, '#e2e8f0', Object.assign({ id: 'cd', al: 0.55 }, N)));
+  const vr = [[-16, 42, 2], [-8, 10, 4], [-2, -10, 5], [0, -40, 5], [2, -52, 5], [8, -52, 5], [10, -36, 5], [10, -6, 5], [12, 20, 5]];
+  const VR = new Mini3D.Path(vr, 6); VR.pts.slice(0, -1).forEach((p, k) => S.tube(p, VR.pts[k + 1], 0.8, '#f87171', Object.assign({ id: 'vr', al: 0.6 }, N)));
+  K.ellipsoid(S, [-18, 32, -6], [3, 2, 2], '#a78bfa', 8, 5, Object.assign({ id: 'jga' }, N));
+  // 濾液粒子
+  let adh = 'hi';
+  const osmT = u => u < 0.27 ? 300 : u < 0.5 ? 300 + (u - 0.27) / 0.23 * 900 : u < 0.6 ? 1200 - (u - 0.5) / 0.1 * 500 : u < 0.7 ? 700 - (u - 0.6) / 0.1 * 600 : 100 + (u - 0.7) / 0.3 * (adh === 'hi' ? 200 : 0);
+  const fil = []; for (let i = 0; i < 26; i++) fil.push({ u: i / 26, o: S.sphere([0, 0, 0], 1.4, '#60a5fa', Object.assign({ nopick: true }, N)) });
+  const ur = []; for (let i = 0; i < 8; i++) ur.push({ u: i / 8, o: S.sphere([0, 0, 0], 1.6, '#fde047', Object.assign({ nopick: true }, N)) });
+  const H2O = []; for (let i = 0; i < 10; i++) H2O.push({ u: Math.random(), y: 20 - i * 7, o: S.sphere([0, 0, 0], 0.9, '#7dd3fc', Object.assign({ id: 'water' }, N)) });
+  // 利尿劑標記
+  const D = { gs: 'diu' };
+  [['碳酸酐酶抑制劑', 0.12, '#38bdf8'], ['環利尿劑（Furosemide）', 0.65, '#f472b6'], ['Thiazides', 0.86, '#fbbf24']].forEach(([t, u, c]) => { const p = TP.at(u); S.sphere(p, 3, c, Object.assign({ id: 'drug', glow: 1 }, D)); K.lab(S, p, t, 'drug', c, 40, -14, D); });
+  S.sphere([27, 10, 0], 3, '#34d399', Object.assign({ id: 'drug', glow: 1 }, D)); K.lab(S, [27, 10, 0], '保鉀（Spironolactone）', 'drug', '#86efac', 50, 10, D);
+  const lN = [['glom', GC, '腎絲球', -40, -20], ['bowman', V.add(GC, [0, -8, 0]), '鮑氏囊', -40, 16], ['aff', [-48, 37, 0], '入球小動脈', 0, -16], ['eff', [-18, 41, 2], '出球小動脈', 0, -18], ['pct', [-6, 22, 5], '近曲小管', 10, 22], ['dl', [4, -20, 0], '降支', -30, 0], ['loop', [8, -56, 0], '亨利氏環', 0, 18], ['tal', [13, -2, 0], '升支粗段', 40, 0], ['dct', [4, 36, 2], '遠曲小管', 0, -18], ['cd', [27, -30, 0], '集尿管', 40, 0], ['vr', [0, -40, 5], '直血管', -30, 10], ['jga', [-18, 32, -6], '近腎絲球器', -20, -24]];
+  lN.forEach(([id, p, t, dx, dy]) => K.lab(S, p, t, id, '#e2e8f0', dx, dy, { gs: 'neph', size: 11 }));
+  S.tick(dt => {
+    fil.forEach(f => { f.u = (f.u + dt * 0.06) % 1; mv(f.o.p, TP.at(f.u)); f.o.c = osmCol(osmT(f.u)); f.o.r = 1.4 - (f.u > 0.27 ? 0.4 : f.u * 1.5); });
+    ur.forEach(f => { f.u = (f.u + dt * (adh === 'hi' ? 0.05 : 0.16)) % 1; mv(f.o.p, CP.at(f.u)); f.o.c = adh === 'hi' ? osmCol(300 + f.u * 900) : osmCol(100 - f.u * 50); f.o.r = adh === 'hi' ? 1.6 - f.u * 0.8 : 2; });
+    H2O.forEach(w => { w.o.hidden = adh !== 'hi'; w.u = (w.u + dt * 0.5) % 1; mv(w.o.p, [27 - w.u * 12, w.y + (Math.random() - 0.5) * 0.2, 2]); w.o.al = 1 - w.u; });
+  });
+  const INFO = {
+    cortex: ['腎皮質', ['腎小體、近曲與遠曲小管、皮質集尿管']], pyr: ['腎錐體（髓質）', ['亨利氏環、集尿管穿過；間質高張']], calyx: ['腎盞', ['集尿管開口於乳頭 → 小腎盞 → 大腎盞']], pelvis: ['腎盂與輸尿管', ['尿液經輸尿管蠕動送到膀胱']], cap: ['腎被膜', ['結締組織包膜']], rart: ['腎動脈', ['接受約 20–25% 的心輸出量']], rvein: ['腎靜脈', ['回到下腔靜脈']],
+    glom: ['腎絲球', ['微血管團；<b>過濾</b>發生處', '有窗孔的內皮 + 基底膜 + 足細胞裂隙']], bowman: ['鮑氏囊（腎絲球囊）', ['內層為<b>足細胞</b>；收集濾液']], aff: ['入球小動脈', ['收縮 → GFR↓（交感、自我調節）']], eff: ['出球小動脈', ['接到腎小管周圍微血管 / 直血管']],
+    pct: ['近曲小管', ['再吸收約 <b>65%</b> 鹽與水（等張）', '全部葡萄糖、胺基酸（次級主動運輸）', '刷狀緣；碳酸酐酶；分泌 PAH 等', '<b>不受激素調節</b>']],
+    dl: ['亨利氏環降支', ['對水<b>通透</b>，對鹽相對不通透 → 水滲出，濾液變濃']], loop: ['環的轉彎處', ['濾液與內髓間質等張（約 1,200 mOsm）']], atl: ['升支細段', ['被動流失 NaCl']],
+    tal: ['升支粗段', ['主動把 NaCl 打出（Na⁺/K⁺/2Cl⁻ 共同運輸）', '<b>對水不通透</b> → 濾液變稀、間質變濃', '環利尿劑作用處']], mac: ['緻密斑附近', ['感受 NaCl → 腎小管–腎絲球回饋']], dct: ['遠曲小管', ['醛固酮作用（晚段）：Na⁺ 再吸收、K⁺ 與 H⁺ 分泌', 'Thiazides 作用（前段）']],
+    cd: ['集尿管', ['對鹽不通透；ADH 存在時對水通透 → 濃縮尿', '內髓段讓尿素滲出（尿素再循環）']], vr: ['直血管', ['<b>逆流交換</b>：維持髓質高張，不把鹽帶走']], jga: ['近腎絲球器', ['緻密斑 + 近腎絲球（顆粒）細胞 → 分泌<b>腎素</b>']], water: ['水', ['經集尿管的水通道被高張髓質吸走']],
+    med: ['髓質間質滲透梯度', ['由逆流倍增建立：300 → 1,200 mOsm']], ctx: ['皮質區', ['間質約 300 mOsm']], drug: ['利尿劑作用位置', ['見下方第 07 節表格']]
+  };
+  K.info(S, 'info-kid', INFO, { picker: 'pk-kid' });
+  UI.$$('#pk-kid button').forEach(b => { if (['mac', 'atl', 'water', 'med', 'ctx', 'drug', 'cap'].includes(b.dataset.k)) b.style.display = 'none'; });
+  K.seg('#kdmode', m => { S.each(o => { if (o.gs) o.hidden = !o.gs.split(' ').includes(m); }); $('kd-hud').textContent = { kid: '腎臟縱切面', neph: '近髓腎元（亨利氏環深入內髓）', diu: '利尿劑作用位置' }[m]; S.resetView(); }, 'kid');
+  K.seg('#adhmode', v => { adh = v; $('kd-cap').innerHTML = v === 'hi' ? 'ADH 高：集尿管水通道開 → 水被髓質吸走 → 少量<b>濃縮尿</b>（最高約 1,200 mOsm）' : 'ADH 低：集尿管對水不通透 → 大量<b>稀釋尿</b>（低至約 50 mOsm）'; }, 'hi');
+})();
+
+/* ================= 02 GFR ================= */
+(function () {
+  let auto = true, sym = false, af = 0, ef = 0, map = 95; const cv = $('gfr-cv');
+  const fmt = v => v === 0 ? '正常' : v < 0 ? '收縮 ' + (-v) + '%' : '舒張 ' + v + '%';
+  const rA = K.range('aff', v => { af = v; calc(); }, fmt), rE = K.range('eff', v => { ef = v; calc(); }, fmt), rM = K.range('map', v => { map = v; calc(); });
+  $('g-auto').onclick = e => { auto = !auto; e.currentTarget.textContent = '自我調節：' + (auto ? '開' : '關'); calc(); };
+  $('g-sym').onclick = e => { sym = !sym; e.currentTarget.classList.toggle('on', sym); calc(); };
+  $('g-rs').onclick = () => { sym = false; $('g-sym').classList.remove('on'); rA.set(0); rE.set(0); rM.set(95); };
+  function model(m, a, e, s, au) {
+    let ra = 1 * Math.pow(1 - a / 100 * 0.5, 2) * (s ? 2.2 : 1), re = 1 * Math.pow(1 - e / 100 * 0.5, 2);
+    if (au && m >= 70 && m <= 180) ra *= m / 95; else if (au && m > 180) ra *= 180 / 95; else if (au && m < 70) ra *= 70 / 95;
+    const flow = m / (ra + re) * 1.0, pgc = m - flow * ra;
+    const nfp = Math.max(0, pgc - 15 - 30 * (1 + 0.15 * (ra === 0 ? 0 : (re - 1)))), gfr = nfp * 12;
+    return { pgc, nfp, gfr, flow };
+  }
+  function calc() {
+    const r = model(map, af, ef, sym, auto);
+    $('g-pgc').textContent = r.pgc.toFixed(0) + ' mmHg'; $('g-nfp').textContent = r.nfp.toFixed(0) + ' mmHg'; $('g-gfr').textContent = r.gfr.toFixed(0); $('g-rbf').textContent = (r.flow / model(95, 0, 0, false, true).flow * 100).toFixed(0) + '%';
+    const pts = []; for (let m = 50; m <= 180; m += 2) pts.push([m, model(m, af, ef, sym, auto).gfr]);
+    const pa = []; for (let m = 50; m <= 180; m += 2) pa.push([m, model(m, 0, 0, false, false).gfr]);
+    K.plot(cv, { x: [50, 180], y: [0, 260], xt: [50, 70, 100, 130, 160, 180], yt: [0, 60, 120, 180, 240], xl: '平均動脈壓 (mmHg)', yl: 'GFR (ml/min)', series: [{ pts: pa, c: '#64748b', w: 1.4, dash: [4, 4], label: '無自我調節' }, { pts, c: '#fbbf24', w: 2.8, label: '目前設定' }], bands: auto ? [{ x0: 70, x1: 180, c: 'rgba(52,211,153,.07)', t: '自我調節範圍' }] : [], dots: [{ x: map, y: r.gfr, c: '#fbbf24' }] });
+  }
+  calc(); addEventListener('resize', calc);
+})();
+
+/* ================= 03 逆流倍增 ================= */
+(function () {
+  const cv = $('cc-cv'); const NL = 6;
+  let inter = Array(NL).fill(300), desc = Array(NL).fill(300), asc = Array(NL).fill(300), cdv = Array(NL).fill(300), run = false, it = 0, adh = 1, acc = 0;
+  $('cc-go').onclick = () => { inter = Array(NL).fill(300); desc = Array(NL).fill(300); asc = Array(NL).fill(300); run = true; it = 0; };
+  K.seg('#ccadh', v => { adh = +v; }, '1');
+  function stepModel() {
+    // 1. 升支粗段把 NaCl 打出（最多 200 差）
+    for (let i = 0; i < NL; i++) { const d = Math.min(200, 200); asc[i] = Math.max(100, inter[i] - d); }
+    // 2. 間質由升支獲得溶質；降支與間質平衡
+    for (let i = 0; i < NL; i++) { inter[i] = Math.min(1200, (inter[i] + desc[i]) / 2 + 100 * (i + 1) / NL); desc[i] = inter[i]; }
+    // 3. 流動：降支往下移、升支往上
+    for (let i = NL - 1; i > 0; i--) desc[i] = desc[i - 1]; desc[0] = 300;
+    for (let i = 0; i < NL; i++) inter[i] = Math.min(1200, 300 + (inter[i] - 300) * 1.0);
+    const target = i => 300 + (900 * (i + 1)) / NL; for (let i = 0; i < NL; i++) inter[i] += (target(i) - inter[i]) * 0.18;
+    for (let i = 0; i < NL; i++) { desc[i] = inter[i]; asc[i] = Math.max(100, inter[i] - 200 * (i < 2 ? 1 : 0.6)); }
+    asc[0] = Math.max(100, asc[0] - 100);
+  }
+  K.loop(dt => {
+    if (run) { acc += dt; if (acc > 0.6) { acc = 0; stepModel(); it++; if (it > 20) run = false; } }
+    for (let i = 0; i < NL; i++) cdv[i] = adh ? Math.max(cdv[i] * 0.9 + inter[i] * 0.1, 100) : 100 - i * 8;
+    const [c, w, h] = K.fit(cv); c.clearRect(0, 0, w, h);
+    const top = 40, bot = h - 40, lh = (bot - top) / NL, xD = w * 0.28, xA = w * 0.44, xC = w * 0.72, wd = 30;
+    for (let i = 0; i < NL; i++) { c.fillStyle = osmCol(inter[i]) + '55'; c.fillRect(w * 0.12, top + i * lh, w * 0.8, lh); c.fillStyle = '#e2e8f0'; c.font = '12px ' + Mini3D.FONT; c.textAlign = 'right'; c.fillText(Math.round(inter[i]), w * 0.11, top + i * lh + lh / 2 + 4); }
+    c.textAlign = 'center'; c.fillStyle = '#cbd5e1'; c.fillText('間質 mOsm', w * 0.06, top - 14);
+    const tubeCol = (x, vals, lbl) => { for (let i = 0; i < NL; i++) { c.fillStyle = osmCol(vals[i]); c.fillRect(x - wd / 2, top + i * lh + 3, wd, lh - 6); c.fillStyle = '#04111d'; c.font = '700 11px ' + Mini3D.FONT; c.fillText(Math.round(vals[i]), x, top + i * lh + lh / 2 + 4); } c.fillStyle = '#e2e8f0'; c.font = '12px ' + Mini3D.FONT; c.fillText(lbl, x, top - 14); };
+    tubeCol(xD, desc, '降支 ↓'); tubeCol(xA, asc, '升支 ↑'); tubeCol(xC, cdv, '集尿管 ↓');
+    c.strokeStyle = '#94a3b8'; c.lineWidth = 2; c.beginPath(); c.arc((xD + xA) / 2, bot - 2, (xA - xD) / 2, 0, Math.PI); c.stroke();
+    const t = performance.now() / 1000;
+    for (let i = 0; i < NL; i++) { const y = top + i * lh + lh / 2, k = (t * 0.8 + i * 0.3) % 1; c.fillStyle = '#7dd3fc'; c.beginPath(); c.arc(xD - wd / 2 - k * 30, y, 3, 0, 6.28); c.fill(); c.fillStyle = '#fbbf24'; c.beginPath(); c.arc(xA + wd / 2 + k * 30, y, 3, 0, 6.28); c.fill(); if (adh) { c.fillStyle = '#7dd3fc'; c.beginPath(); c.arc(xC - wd / 2 - k * 30, y, 3, 0, 6.28); c.fill(); } }
+    c.font = '11px ' + Mini3D.FONT; c.fillStyle = '#7dd3fc'; c.fillText('H₂O 滲出', xD - 46, bot + 18); c.fillStyle = '#fbbf24'; c.fillText('NaCl 主動打出（水不通透）', xA + 70, bot + 18); c.fillStyle = adh ? '#7dd3fc' : '#94a3b8'; c.fillText(adh ? 'H₂O 經水通道離開' : '無 ADH：水留在管內', xC, bot + 18);
+    c.fillStyle = '#fde047'; c.font = '700 12px ' + Mini3D.FONT; c.fillText('尿液 ≈ ' + Math.round(cdv[NL - 1]) + ' mOsm', xC, bot + 34);
+    if (run) { c.fillStyle = '#fbbf24'; c.fillText('倍增中… 循環 ' + it, w * 0.5, 18); }
+  }, cv);
+})();
+
+/* ================= 04 ADH 水通道 3D ================= */
+(function () {
+  const S = K.stage('st-aqp', { radius: 40, yaw: 0.4, pitch: 0.25, autoRotate: 0 });
+  K.box(S, [0, 0, 0], [40, 24, 22], '#f59e0b', { id: 'cell', al: 0.18 });
+  K.sheet(S, [-20, 12, -11], [40, 0, 0], [0, 0, 22], 8, 4, '#fbbf24', { id: 'apical', al: 0.5 });
+  K.sheet(S, [-20, -12, -11], [40, 0, 0], [0, 0, 22], 8, 4, '#fb923c', { id: 'baso', al: 0.5 });
+  const rec = S.tube([8, -14, 0], [8, -10, 0], 1.6, '#34d399', { id: 'v2' }); const adhM = S.sphere([0, 0, 0], 1.8, '#a78bfa', { id: 'adh' });
+  const camp = []; for (let i = 0; i < 8; i++) camp.push(S.sphere([0, 0, 0], 0.9, '#fde047', { id: 'camp' }));
+  const ves = []; for (let i = 0; i < 4; i++) ves.push({ v: K.mover(K.ellipsoid(S, [0, 0, 0], [2.6, 2.6, 2.6], '#38bdf8', 8, 5, { id: 'vesicle', al: 0.7 })), x: -12 + i * 7 });
+  const aqp = ves.map(v => S.tube([0, 0, 0], [0, 0, 0], 1.2, '#22d3ee', { id: 'aqp2' }));
+  [-14, -4, 6, 14].forEach(x => S.tube([x, -13, 6], [x, -11, 6], 1.1, '#22d3ee', { id: 'aqp34' }));
+  const H = []; for (let i = 0; i < 18; i++) H.push({ o: S.sphere([0, 0, 0], 0.8, '#7dd3fc', { id: 'water' }), u: i / 18, x: -12 + (i % 4) * 7 });
+  K.lab(S, [-18, 16, 0], '管腔（尿）', 'apical', '#fde68a', 0, -10); K.lab(S, [-18, -18, 0], '血液側', 'baso', '#fdba74', 0, 10); K.lab(S, [8, -14, 0], 'ADH 受體', 'v2', '#86efac', 30, 14); K.lab(S, ves[1].v.F[0].pts[0], '含水通道的囊泡', 'vesicle', '#7dd3fc', -40, 0);
+  let on = 1, k = 1;
+  S.tick(dt => {
+    k += ((on ? 1 : 0) - k) * Math.min(1, dt * 0.8);
+    mv(adhM.p, on ? V.lerp([8, -26, 0], [8, -15.5, 0], Math.min(1, k * 1.5)) : [8, -30, 0]); adhM.hidden = !on && k < 0.2;
+    const t = performance.now() / 1000;
+    camp.forEach((c, i) => { c.hidden = k < 0.2; mv(c.p, [8 - i * 2.4 + Math.sin(t + i) * 0.6, -8 + i * 1.6 * k, Math.cos(t * 1.3 + i) * 3]); c.al = k; });
+    ves.forEach((v, i) => { const y = K.lerp(-2 + (i % 2) * 3, 10.5, k); v.v.set([v.x, y, -3 + (i % 2) * 5], 1 - 0.5 * sm(0.8, 1, k)); mv(aqp[i].a, [v.x, 10.6, -3 + (i % 2) * 5]); mv(aqp[i].b, [v.x, 13.4, -3 + (i % 2) * 5]); aqp[i].hidden = k < 0.85; });
+    H.forEach(w => { w.u = (w.u + dt * 0.35) % 1; w.o.hidden = k < 0.85; const u = w.u; mv(w.o.p, u < 0.25 ? [w.x, 20 - u * 28, 1] : u < 0.75 ? [w.x + (u - 0.25) * 4, 13 - (u - 0.25) * 50, 4] : [w.x + 2, -12 - (u - 0.75) * 40, 6]); });
+    $('aq-cap').textContent = on ? (k > 0.85 ? 'ADH → cAMP → 囊泡融合，水通道插入管腔膜 → 水被再吸收' : 'ADH 結合受體 → cAMP 上升…') : (k > 0.2 ? '無 ADH：水通道被胞吞回細胞內' : '管腔膜沒有水通道 → 水留在尿中 → 稀釋尿');
+  });
+  K.seg('#aqmode', v => { on = +v; }, '1');
+  S.onPick = o => { if (!o) return; const t = { cell: '集尿管主細胞', apical: '管腔側細胞膜', baso: '基底側細胞膜', v2: 'ADH（V2）受體', adh: 'ADH', camp: 'cAMP', vesicle: '儲存水通道（AQP2）的囊泡', aqp2: '水通道蛋白（管腔側，受 ADH 控制）', aqp34: '基底側水通道（持續存在）', water: '水分子' }[o.id]; if (t) $('aq-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 05 清除率 / Tm ================= */
+(function () {
+  let V_ = 2, U = 30, P = 0.5;
+  const rV = K.range('cV', v => { V_ = v; upd(); }), rU = K.range('cU', v => { U = v; upd(); }), rP = K.range('cP', v => { P = v; upd(); });
+  function upd() { const c = V_ * U / P; $('clr-v').textContent = c.toFixed(0) + ' ml/min'; const t = $('clr-t'); if (c < 5) { t.textContent = '幾乎完全再吸收（如葡萄糖）'; } else if (Math.abs(c - 120) < 12) t.textContent = '≈ GFR：只過濾（菊糖）'; else if (c < 120) t.textContent = '< GFR：有淨再吸收'; else t.textContent = '> GFR：有淨分泌' + (c > 500 ? '（PAH → 腎血漿流量）' : ''); }
+  UI.$$('#clr-pre [data-c]').forEach(b => b.onclick = () => { const [v, u, p] = b.dataset.c.split(',').map(Number); rV.set(v); rU.set(u); rP.set(p); });
+  upd();
+  const GFR = 125, TM = 375;
+  const reab = L => { const x = L / TM; return TM * (x - Math.log(1 + Math.exp(18 * (x - 1))) / 18 + Math.log(1 + Math.exp(-18)) / 18); };
+  K.range('pg', g => {
+    const L = g / 100 * GFR, R = Math.min(L, reab(L)), E = Math.max(0, L - R);
+    K.plot($('tm-plot'), { x: [0, 600], y: [0, 800], xt: [0, 100, 200, 300, 400, 500, 600], yt: [0, 200, 375, 600, 800], xl: '血漿葡萄糖 mg/dl', yl: 'mg/min', series: [{ f: x => x / 100 * GFR, c: '#60a5fa', w: 2.2, label: '濾出量' }, { f: x => Math.min(x / 100 * GFR, reab(x / 100 * GFR)), c: '#34d399', w: 2.6, label: '再吸收' }, { f: x => Math.max(0, x / 100 * GFR - reab(x / 100 * GFR)), c: '#fbbf24', w: 2.6, label: '排出（糖尿）' }], hl: [{ y: TM, c: '#34d399', t: 'Tm 375' }], vl: [{ x: g, c: '#fff' }] });
+    $('tm-t').innerHTML = '濾出 <b>' + L.toFixed(0) + '</b> mg/min，再吸收 <b>' + R.toFixed(0) + '</b>，尿中排出 <b style="color:' + (E > 1 ? '#fbbf24' : '#34d399') + '">' + E.toFixed(0) + '</b> mg/min' + (E > 1 ? ' → <b>糖尿</b>（如未控制的糖尿病）' : '');
+  });
+})();
+
+/* ================= 06 RAAS ================= */
+(function () {
+  let tmr = 0;
+  $('raas-go').onclick = () => { clearInterval(tmr); let i = 0; K.chain('raas', 0); tmr = setInterval(() => { i++; if (i > 6) { clearInterval(tmr); K.chain('raas', 'all'); return; } K.chain('raas', i); }, 900); };
+})();
+
+/* ================= 快閃卡 / 測驗 ================= */
+UI.flashcards($('fc'), [
+  { f: '濾液經過的三層屏障', b: '微血管內皮窗孔 → 基底膜 → 足細胞過濾裂隙（裂隙膜擋蛋白）。' },
+  { f: 'GFR 正常值與每日濾液量', b: '約 115–125 ml/min；每天約 180 L，尿量約 1.5 L（99.2% 再吸收）。' },
+  { f: '交感神經對 GFR 的影響', b: '入球小動脈收縮 → GFR↓。' },
+  { f: '腎臟自我調節的兩機制', b: '肌原性（入球小動脈被撐開就收縮）；腎小管–腎絲球回饋（緻密斑感受 NaCl）。' },
+  { f: '近曲小管再吸收多少？受激素調節嗎？', b: '約 65% 鹽與水；<b>不受</b>激素調節（濾液等張）。' },
+  { f: '降支 vs 升支粗段的通透性', b: '降支：水通透 → 濾液變濃；升支粗段：主動打出 NaCl、水不通透 → 濾液變稀。' },
+  { f: '逆流倍增建立的梯度', b: '間質由皮質 300 → 內髓 1,200 mOsm。' },
+  { f: '直血管的功能', b: '逆流交換：維持髓質高張，不把鹽與尿素帶走。' },
+  { f: 'ADH 如何增加水再吸收？', b: '結合集尿管受體 → cAMP → 含水通道的囊泡融入管腔膜。' },
+  { f: '尿崩症', b: 'ADH 不足或腎無反應 → 多尿（3–10 L/天）、口渴、低張尿；鋰鹽可造成腎性尿崩。' },
+  { f: '清除率公式與菊糖', b: '清除率 = V × U / P；菊糖清除率 = GFR。' },
+  { f: 'PAH 清除率測量什麼？', b: '腎血漿流量（約 625 ml/min）：過濾 + 分泌幾乎全清。' },
+  { f: '葡萄糖運輸極限', b: 'Tm 約 375 mg/min；血糖過高超過 → 糖尿。' },
+  { f: '醛固酮的作用', b: '遠曲小管晚段、皮質集尿管：Na⁺ 再吸收↑、K⁺ 與 H⁺ 分泌↑。' },
+  { f: 'RAAS 順序', b: '血壓↓ → 腎素 → Ang I → ACE（肺）→ Ang II → 血管收縮、醛固酮、口渴。' },
+  { f: '碳酸氫根如何再吸收？', b: '間接：濾液 HCO₃⁻ + H⁺ → H₂CO₃ → 刷狀緣碳酸酐酶 → CO₂ 進細胞 → 再生 HCO₃⁻ 入血。' },
+  { f: '尿液中 H⁺ 的緩衝', b: '磷酸鹽與氨（NH₃ → NH₄⁺）。' },
+  { f: '環利尿劑 vs thiazides', b: '環：升支粗段（最強）；thiazides：遠曲小管前段；兩者都會流失 K⁺。' }
+], 'ch17');
+UI.quiz($('qz'), [
+  { q: '阻擋血漿蛋白進入濾液的主要構造是？', o: ['微血管窗孔', '足細胞裂隙膜', '近曲小管刷狀緣', '直血管'], a: 1, e: '蛋白主要被裂隙膜擋住。' },
+  { q: '入球小動脈收縮會使 GFR？', o: ['上升', '下降', '不變', '先升後降'], a: 1, e: '腎絲球微血管壓下降。' },
+  { q: '近曲小管再吸收鹽與水的比例約為？', o: ['15%', '35%', '65%', '99%'], a: 2, e: '約 65%，且不受激素調節。' },
+  { q: '對水不通透但主動打出 NaCl 的是？', o: ['近曲小管', '降支', '升支粗段', '集尿管'], a: 2, e: '升支粗段 → 濾液變稀、間質變濃。' },
+  { q: '內髓間質最高滲透壓約為？', o: ['300 mOsm', '600 mOsm', '1,200 mOsm', '3,000 mOsm'], a: 2, e: '1,200 mOsm。' },
+  { q: 'ADH 作用的主要部位是？', o: ['近曲小管', '亨利氏環降支', '集尿管', '腎絲球'], a: 2, e: '使集尿管對水通透。' },
+  { q: '某物質清除率 = 125 ml/min 且等於菊糖，表示它？', o: ['被分泌', '被部分再吸收', '只被過濾', '完全再吸收'], a: 2, e: '清除率 = GFR → 只過濾。' },
+  { q: '測量腎血漿流量常用？', o: ['菊糖', '尿素', 'PAH', '葡萄糖'], a: 2, e: 'PAH 過濾 + 分泌幾乎全清。' },
+  { q: '血壓下降時，近腎絲球細胞分泌？', o: ['ADH', '腎素', '醛固酮', 'ANP'], a: 1, e: '腎素啟動 RAAS。' },
+  { q: '醛固酮使遠曲小管晚段？', o: ['Na⁺ 再吸收↓、K⁺ 分泌↓', 'Na⁺ 再吸收↑、K⁺ 分泌↑', '水通道插入', 'HCO₃⁻ 分泌↑'], a: 1, e: 'Na⁺ 換 K⁺（與 H⁺）。' },
+  { q: '作用在升支粗段的利尿劑是？', o: ['Thiazides', 'Furosemide', 'Spironolactone', 'Mannitol'], a: 1, e: '環利尿劑。' },
+  { q: '鋰鹽可能造成？', o: ['腎性尿崩症', 'SIADH', '糖尿', '蛋白尿'], a: 0, e: '腎對 ADH 反應下降。' }
+]);
+</script>
+</body>
+</html>

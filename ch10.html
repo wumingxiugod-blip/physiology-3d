@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch10 感覺生理 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .vf{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap}
+  .vf canvas{width:120px;height:120px}
+  .vf small{display:block;text-align:center;color:var(--mut)}
+  .swatch{width:100%;height:46px;border-radius:12px;border:1px solid var(--line);box-shadow:inset 0 0 20px rgba(0,0,0,.3)}
+  canvas.anim{width:100%;height:var(--ph,220px);display:block;border-radius:14px;background:#060b17;border:1px solid var(--line)}
+</style>
+</head>
+<body style="--acc:#22d3ee;--acc2:#f472b6">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 10 · Sensory Physiology</div>
+  <h1 class="title3d">感覺生理</h1>
+  <p class="sub">受器適應與發生器電位、3D 體感覺傳導路徑（交叉位置）、兩點閾、味覺嗅覺、3D 半規管旋轉與毛細胞、3D 耳朵與展開的耳蝸（拉頻率看基底膜行進波）、3D 眼睛光學（調節、近視、遠視與矯正）、視網膜光轉導、色覺、接受域、3D 視覺路徑與病灶視野缺損。</p>
+  <div class="chips"><a class="chip" href="#rec">受器</a><a class="chip" href="#skin">皮膚感覺</a><a class="chip" href="#chem">味嗅覺</a><a class="chip" href="#vest">前庭</a><a class="chip" href="#ear">聽覺</a><a class="chip" href="#eye">眼睛光學</a><a class="chip" href="#ret">視網膜</a><a class="chip" href="#vis">視覺路徑</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="rec" data-nav="受器">
+  <h2><span class="num">01</span>感覺受器的特性</h2>
+  <div class="grid3">
+    <div class="card tilt"><h3>依刺激能量分類</h3><ul class="small"><li><b>化學受器</b>：味、嗅、血液 pH 等</li><li><b>光受器</b>：視桿、視錐</li><li><b>溫度受器</b>：冷、熱</li><li><b>機械受器</b>：觸、壓、聽、平衡</li><li><b>痛覺受器</b>：組織傷害</li><li>本體感受器：肌肉、肌腱、關節</li><li>特殊感覺：視、聽、味、嗅、平衡</li></ul></div>
+    <div class="card tilt"><h3>特定神經能量定律</h3><ul class="small"><li>每種受器對某一種刺激的閾值最低 → <b>適當刺激</b></li><li>任何方式刺激該感覺神經，腦都解讀為該適當刺激（例：按壓眼球看到「光」）</li></ul><h3 class="mt">發生器電位</h3><p class="small">感覺神經末梢的<b>分級去極化</b>，大小與刺激強度成正比；達閾值後，強度愈大 → 動作電位<b>頻率</b>愈高。</p></div>
+    <div class="card"><h3>試一試：刺激強度</h3><canvas class="anim" id="gp-cv" style="--ph:170px"></canvas><div class="ctrl"><label for="gps">刺激強度</label><input type="range" id="gps" min="0" max="100" value="55"><output id="gps-v">55</output></div></div>
+  </div>
+  <div class="grid2 mt">
+    <div class="card"><h3>張力性 vs 相位性受器（適應）</h3><canvas class="anim" id="ad-cv" style="--ph:220px"></canvas><div class="btns"><button class="btn sm" id="ad-go" type="button">▶ 施加持續刺激</button></div></div>
+    <div class="card"><ul class="small"><li><b>張力性 tonic</b>：刺激持續就一直發放 → 監測刺激的<b>存在與強度</b>（如梅克爾盤）</li><li><b>相位性 phasic</b>：只對刺激<b>改變</b>反應（開始與結束），持續刺激時停止 → <b>感覺適應</b>（如巴齊尼氏小體、麥斯納小體）</li><li>例：穿上衣服後很快就感覺不到衣服</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="skin" data-nav="皮膚感覺">
+  <h2><span class="num">02</span>皮膚感覺與體感覺傳導路徑</h2>
+  <p class="lead">三級神經元把訊息送到對側<b>中央後回</b>。切換路徑看<b>在哪裡交叉</b>：觸壓／本體感覺在<b>延腦</b>交叉；痛／溫覺在<b>脊髓</b>交叉。</p>
+  <div class="grid2">
+    <div class="stage" id="st-tract"><canvas aria-label="3D 體感覺傳導路徑"></canvas><div class="hud">刺激右手 → 左側大腦</div><div class="hud2" id="tr-cap"></div>
+      <div class="sbar"><div class="seg" id="trmode"><button class="btn sm" data-v="dc" type="button">後柱–內側蹄系（觸壓、本體）</button><button class="btn sm" data-v="st" type="button">脊髓視丘徑（痛、溫）</button></div></div></div>
+    <div class="card info" id="info-tract"></div>
+  </div>
+  <div class="grid2 mt">
+    <div class="tbwrap"><table class="tb"><tr><th>受器</th><th>構造</th><th>感覺</th></tr>
+      <tr><td>游離神經末梢</td><td>無髓鞘樹突</td><td>痛（≥43 °C 熱痛）、溫、冷；TRPV1（辣椒素、熱）、TRPM8（薄荷、冷）</td></tr>
+      <tr><td>梅克爾盤 Merkel's discs</td><td>擴大的樹突末端</td><td>皮膚凹陷（持續觸壓，張力性）</td></tr>
+      <tr><td>魯斐尼小體 Ruffini</td><td>開放、拉長的囊</td><td>皮膚伸展</td></tr>
+      <tr><td>麥斯納小體 Meissner's</td><td>真皮乳頭內的被囊末梢</td><td>質地變化、輕觸（相位性）</td></tr>
+      <tr><td>巴齊尼氏小體 Pacinian</td><td>同心板層、位於深層</td><td>深壓、振動（相位性）</td></tr></table></div>
+    <div class="card"><h3>兩點觸覺閾（表 10.3）</h3><div id="tp-bars"></div><p class="small">接受域愈小、受器愈密 → 兩點閾愈小、敏銳度愈高（指尖、舌尖）。<b>側抑制</b>抑制周圍較弱刺激的神經元，使感覺更銳利。</p></div>
+  </div>
+  <div class="note extra"><b>轉移痛 Referred pain</b>：內臟受損的痛覺可能被感覺在體表（如心肌缺血 → 左臂痛），因為內臟與體表的感覺神經在脊髓同一節段匯聚。<b>幻肢</b>：截肢者仍感覺失去的肢體。</div>
+</section>
+
+<section class="sec" id="chem" data-nav="味嗅覺">
+  <h2><span class="num">03</span>味覺與嗅覺</h2>
+  <div class="grid2">
+    <div class="card"><h3>味覺：五種基本味</h3><p class="small">味蕾（50–100 個上皮細胞，桶狀）主要位在舌背的乳頭：前方蕈狀、後方輪廓狀、側面葉狀乳頭。</p>
+      <div class="tbwrap"><table class="tb"><tr><th>味道</th><th>刺激</th><th>機制</th></tr>
+        <tr><td>鹹</td><td>Na⁺</td><td>Na⁺ 經膜通道進入 → 去極化</td></tr><tr><td>酸</td><td>H⁺</td><td>H⁺ 經通道進入（或阻斷 K⁺ 通道）→ 去極化</td></tr>
+        <tr><td>甜</td><td>糖等</td><td>G 蛋白偶聯受體（<b>味導蛋白 gustducin</b>）</td></tr><tr><td>鮮 umami</td><td>麩胺酸</td><td>G 蛋白偶聯受體</td></tr><tr><td>苦</td><td>多種毒素</td><td>G 蛋白偶聯受體；低濃度即敏感（警告毒物）</td></tr></table></div></div>
+    <div class="card"><h3>嗅覺</h3><ul class="small"><li>嗅覺受器是<b>雙極神經元</b>，位於嗅上皮；軸突穿過篩板到<b>嗅球</b></li><li>在嗅球的<b>嗅小球</b>與<b>僧帽細胞、簇細胞</b>（次級神經元）突觸 → 嗅徑 → 額葉、內側顳葉（含邊緣系統）</li><li>每個嗅覺神經元只表現一種受體蛋白（約 380 種功能性受體；章末摘要寫可達 1,000 種），組合起來可辨識約 <b>10,000 種</b>氣味</li><li>氣味分子結合受體 → 大量 G 蛋白次單元解離 → <b>放大</b> → 極度敏感</li></ul>
+      <div class="chain mt"><div class="nd">氣味分子</div><span class="ar">→</span><div class="nd">受體（G 蛋白）</div><span class="ar">→</span><div class="nd">cAMP ↑</div><span class="ar">→</span><div class="nd">開陽離子通道</div><span class="ar">→</span><div class="nd">去極化、AP</div></div></div>
+  </div>
+</section>
+
+<section class="sec" id="vest" data-nav="前庭">
+  <h2><span class="num">04</span>前庭器官與平衡</h2>
+  <p class="lead">三個<b>半規管</b>（彼此近乎垂直）感受<b>角加速度</b>；<b>橢圓囊、球狀囊</b>（耳石器官）感受<b>直線加速度</b>。播放旋轉：開始轉時內淋巴因慣性「落後」→ 頂帽彎曲；等速旋轉時恢復；突然停止時內淋巴繼續流 → 反向彎曲（眼球震顫、眩暈）。</p>
+  <div class="grid2">
+    <div class="stage" id="st-vest"><canvas aria-label="3D 前庭器官"></canvas><div class="hud">紅點＝管壁標記　藍點＝內淋巴</div><div class="hud2" id="ve-cap"></div>
+      <div class="sbar"><button class="btn sm" id="ve-start" type="button">▶ 開始旋轉</button><button class="btn sm" id="ve-stop" type="button">■ 突然停止</button></div></div>
+    <div class="card"><h3>毛細胞：纖毛彎向動纖毛 → 去極化</h3><canvas class="anim" id="hc-cv" style="--ph:220px"></canvas><div class="ctrl"><label for="hcs">纖毛彎曲</label><input type="range" id="hcs" min="-100" max="100" value="0"><output id="hcs-v">0</output></div>
+      <p class="small">每個毛細胞有 20–50 根<b>靜纖毛</b>與 1 根<b>動纖毛</b>。彎向動纖毛 → 去極化、傳遞物↑、感覺神經放電↑；反方向 → 過極化、放電↓。前庭神經（VIII）→ 小腦與延腦前庭核 → 動眼中樞（眼球運動）。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="ear" data-nav="聽覺">
+  <h2><span class="num">05</span>耳朵與聽覺</h2>
+  <p class="lead">聲波 → 鼓膜 → 聽小骨（錘、砧、鐙）→ 卵圓窗 → 前庭階的外淋巴行進波 → <b>基底膜</b>振動 → 柯蒂氏器毛細胞的纖毛抵著<b>覆膜</b>彎曲。切換「展開耳蝸」並拉頻率：<b>高頻在基部（近鐙骨）、低頻在頂部（近蝸孔）</b>。</p>
+  <div class="grid2">
+    <div class="stage" id="st-ear"><canvas aria-label="3D 耳朵與耳蝸"></canvas><div class="hud" id="ear-hud"></div><div class="hud2" id="ear-cap"></div>
+      <div class="sbar"><div class="seg" id="earmode"><button class="btn sm" data-v="whole" type="button">整體構造</button><button class="btn sm" data-v="unc" type="button">展開耳蝸</button><button class="btn sm" data-v="corti" type="button">柯蒂氏器</button></div></div></div>
+    <div class="card"><div class="ctrl"><label for="freq">頻率</label><input type="range" id="freq" min="0" max="100" value="55"><output id="freq-v"></output></div>
+      <div class="btns"><button class="btn sm" data-f="20" type="button">20 Hz</button><button class="btn sm" data-f="200" type="button">200 Hz</button><button class="btn sm" data-f="2000" type="button">2 kHz</button><button class="btn sm" data-f="20000" type="button">20 kHz</button></div>
+      <div class="info" id="info-ear"><div class="tt">點選構造</div><p class="empty">人耳可聽 20–20,000 Hz；強度以分貝（dB）表示。</p></div></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>耳蝸的三個腔</h3><ul class="small"><li><b>前庭階</b>（外淋巴）↔ 卵圓窗</li><li><b>蝸管 / 中階</b>（內淋巴，高 K⁺、+80 mV）</li><li><b>鼓階</b>（外淋巴）↔ 圓窗</li><li>前庭膜分隔前庭階與蝸管；<b>基底膜</b>分隔蝸管與鼓階</li></ul></div>
+    <div class="card tilt"><h3>毛細胞</h3><ul class="small"><li><b>內毛細胞</b>約 3,500 個（1 排）：真正的感覺細胞 → 螺旋神經節（麩胺酸）</li><li><b>外毛細胞</b>約 11,000 個（3–5 排）：去極化縮短、過極化伸長 → 主動放大基底膜振動</li><li>纖毛彎向最高者 → K⁺ 通道開、K⁺ 由內淋巴流入 → 去極化</li></ul></div>
+    <div class="card tilt"><h3>聽力損失</h3><ul class="small"><li><b>傳導性</b>：聲波無法傳到內耳（耳垢、中耳炎、耳硬化症）→ 助聽器、手術</li><li><b>感覺神經性</b>：毛細胞或神經受損（噪音、藥物、老化）→ <b>人工電子耳</b></li><li>聲源定位：兩耳到達的時間差與強度差</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="eye" data-nav="眼睛光學">
+  <h2><span class="num">06</span>眼睛的構造與光學（3D）</h2>
+  <p class="lead">移動物體距離，看水晶體如何<b>調節</b>（看近物：睫狀肌收縮 → 懸韌帶放鬆 → 水晶體變凸）。切換近視、遠視、老花，再戴上矯正鏡片。</p>
+  <div class="grid2">
+    <div class="stage" id="st-eye"><canvas aria-label="3D 眼睛光學"></canvas><div class="hud">光線（黃）由左方物體進入</div><div class="hud2" id="eye-cap"></div>
+      <div class="sbar"><div class="seg" id="eyemode"><button class="btn sm" data-v="norm" type="button">正視</button><button class="btn sm" data-v="myo" type="button">近視</button><button class="btn sm" data-v="hyp" type="button">遠視</button><button class="btn sm" data-v="pres" type="button">老花</button></div><button class="btn sm" id="glass" type="button">👓 矯正鏡片</button></div></div>
+    <div class="card"><div class="ctrl"><label for="dist">物體距離</label><input type="range" id="dist" min="0" max="100" value="100"><output id="dist-v"></output></div>
+      <div class="kv"><div><small>調節（水晶體額外屈光）</small><b id="acc-v">0</b></div><div><small>睫狀肌</small><b id="cil-v" style="font-size:16px">放鬆</b></div><div><small>成像</small><b id="img-v" style="font-size:16px"></b></div></div>
+      <div class="info mt" id="info-eye"><div class="tt">點選構造</div><p class="empty">角膜與水晶體屈折光線；影像在視網膜上上下左右顛倒。</p></div></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>近視 Myopia</h3><p class="small">眼球<b>太長</b>，影像聚焦在視網膜<b>前方</b> → <b>凹透鏡</b>矯正。</p></div>
+    <div class="card tilt"><h3>遠視 Hyperopia</h3><p class="small">眼球<b>太短</b>，焦點在視網膜<b>後方</b> → <b>凸透鏡</b>矯正。</p></div>
+    <div class="card tilt"><h3>老花與散光</h3><p class="small"><b>老花</b>：年紀增加（多在 45 歲後）水晶體彈性降低，近點變遠 → 老花眼鏡。<b>散光</b>：角膜/水晶體不對稱，各方向屈光不同。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="ret" data-nav="視網膜">
+  <h2><span class="num">07</span>視網膜、光轉導與色覺</h2>
+  <div class="grid2">
+    <div class="card"><h3>光停止「暗電流」</h3><div class="seg" id="ptmode"><button class="btn sm" data-v="dark" type="button">黑暗</button><button class="btn sm" data-v="light" type="button">光照</button></div>
+      <div class="chain mt" id="pt-chain"></div>
+      <ul class="small mt"><li>黑暗：cGMP 使 Na⁺ 通道開 → <b>暗電流</b> → 部分去極化 → 持續釋放（抑制性）傳遞物</li><li>光：11-cis 視黃醛 → 全反式，視紫質「漂白」→ G 蛋白（轉導蛋白）→ 磷酸二酯酶把 cGMP → GMP → Na⁺ 通道關 → <b>過極化</b> → 傳遞物↓ → 雙極細胞解除抑制</li><li>一個光子可阻止 &gt; 100 萬個 Na⁺ 進入</li><li>全反式 → 11-cis 的再異構化由<b>色素上皮</b>完成（視循環）</li></ul></div>
+    <div class="card"><h3>三色理論（拖曳波長）</h3><canvas class="plot" id="cone-plot" style="--ph:220px"></canvas>
+      <div class="ctrl"><label for="wl">波長</label><input type="range" id="wl" min="400" max="700" value="560"><output id="wl-v">560 nm</output></div><div class="swatch" id="wl-sw"></div><p class="small" id="wl-t"></p></div>
+  </div>
+  <div class="grid2 mt">
+    <div class="card"><h3>視桿 vs 視錐</h3><div class="tbwrap"><table class="tb"><tr><th></th><th>視桿</th><th>視錐</th></tr>
+      <tr><td>數量（每眼）</td><td>約 1.2 億</td><td>約 600 萬</td></tr><tr><td>色素</td><td>視紫質（最大吸收 500 nm）</td><td>三種：420（S 藍）、530（M 綠）、562 nm（L 紅）</td></tr>
+      <tr><td>視覺</td><td>暗光、黑白；暗適應</td><td>強光、色覺</td></tr><tr><td>匯聚</td><td>大量匯聚 → 敏感度高、敏銳度低</td><td>中央小窩 1:1:1 → 敏銳度高</td></tr>
+      <tr><td>分布</td><td>周邊多</td><td><b>中央小窩只有視錐</b></td></tr></table></div><p class="small muted">視神經只有約 120 萬條軸突 → 整體匯聚比約 105:1。夜晚綠色物體比紅色容易看見（視紫質不吸收紅光）。</p></div>
+    <div class="card"><h3>神經節細胞接受域（中心–周邊拮抗）</h3><canvas class="anim" id="rf-cv" style="--ph:200px"></canvas>
+      <div class="seg" id="rfmode"><button class="btn sm" data-v="c" type="button">光點照中心</button><button class="btn sm" data-v="s" type="button">光環照周邊</button><button class="btn sm" data-v="f" type="button">均勻照全區</button><button class="btn sm" data-v="n" type="button">無光</button></div>
+      <p class="small">「開中心」細胞：中心照光興奮、周邊照光抑制；全區照光反應反而較弱 → 側抑制，強化輪廓與敏銳度。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="vis" data-nav="視覺路徑">
+  <h2><span class="num">08</span>視覺路徑（3D）與病灶</h2>
+  <p class="lead"><span style="color:#fb923c">橘</span>＝右視野、<span style="color:#60a5fa">藍</span>＝左視野。右視野投射到兩眼視網膜的<b>左半</b>；鼻側纖維在<b>視交叉</b>交叉 → 左外側膝狀核 → 左側紋狀皮質（枕葉）。選擇病灶看視野缺損（補充）。</p>
+  <div class="grid2">
+    <div class="stage" id="st-vis"><canvas aria-label="3D 視覺路徑"></canvas><div class="hud">由上方俯視：眼睛在前（下方）</div><div class="hud2" id="vis-cap"></div>
+      <div class="sbar"><div class="seg" id="lesion"><button class="btn sm" data-v="none" type="button">正常</button><button class="btn sm" data-v="on" type="button">右視神經</button><button class="btn sm" data-v="ch" type="button">視交叉中央</button><button class="btn sm" data-v="tr" type="button">右視徑</button></div></div></div>
+    <div class="card"><div class="vf"><div><canvas id="vfL" width="240" height="240"></canvas><small>左眼視野</small></div><div><canvas id="vfR" width="240" height="240"></canvas><small>右眼視野</small></div></div>
+      <p class="small" id="vf-t"></p>
+      <ul class="small"><li><b>膝狀紋狀系統</b>：外側膝狀核 → 紋狀皮質（簡單 → 複雜 → 超複雜細胞），賦予影像意義</li><li><b>頂蓋系統</b>：部分纖維到中腦<b>上丘</b> → 眼球追蹤、瞳孔反射、調節</li><li>外側膝狀核分層接受同側與對側眼的輸入</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">09</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">10</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 10 章整理，僅供個人複習。3D 模型與光學為簡化示意；視野缺損為補充。 · <a href="index.html">回總覽</a> · <a href="ch09.html">← 第 9 章 自主神經</a> · <a href="ch11.html">第 11 章 內分泌 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+
+/* ================= 01 發生器電位 / 適應 ================= */
+(function () {
+  let st = 55; const cv = $('gp-cv'); let tt = 0, spikes = [];
+  K.range('gps', v => { st = v; }, v => v);
+  K.loop(dt => {
+    tt += dt; const [c, w, h] = K.fit(cv); c.clearRect(0, 0, w, h);
+    const gp = st * 0.45, th = 20, rate = st > th / 0.45 ? (st - th / 0.45) * 0.28 : 0;
+    c.fillStyle = '#94a3b8'; c.font = '11px ' + Mini3D.FONT; c.fillText('發生器電位', 8, 14); c.fillText('感覺神經 AP', 8, h / 2 + 18);
+    const y0 = h / 2 - 8; c.strokeStyle = '#38bdf8'; c.lineWidth = 2; c.beginPath(); c.moveTo(70, y0); c.lineTo(100, y0); c.lineTo(110, y0 - gp); c.lineTo(w - 10, y0 - gp); c.stroke();
+    c.strokeStyle = '#fb7185'; c.setLineDash([4, 4]); c.beginPath(); c.moveTo(70, y0 - th); c.lineTo(w - 10, y0 - th); c.stroke(); c.setLineDash([]); c.fillStyle = '#fb7185'; c.fillText('閾值', w - 40, y0 - th - 4);
+    if (Math.random() < rate * dt) spikes.push(0);
+    spikes = spikes.map(x => x + dt * 90).filter(x => x < w - 80);
+    const yb = h - 14; c.strokeStyle = '#fbbf24'; c.beginPath(); c.moveTo(70, yb); c.lineTo(w - 10, yb); c.stroke();
+    spikes.forEach(x => { const X = w - 10 - x; c.beginPath(); c.moveTo(X, yb); c.lineTo(X, yb - 36); c.stroke(); });
+    c.fillStyle = '#e2e8f0'; c.fillText(rate ? '頻率 ≈ ' + rate.toFixed(0) + ' Hz（示意）' : '未達閾值：無 AP', 110, h / 2 + 18);
+  }, cv);
+  const ad = $('ad-cv'); let t0 = -99, ev = [];
+  $('ad-go').onclick = () => { t0 = performance.now() / 1000; };
+  K.loop(() => {
+    const now = performance.now() / 1000, tt = now - t0, [c, w, h] = K.fit(ad); c.clearRect(0, 0, w, h);
+    const T = 6, X = s => 80 + (s / T) * (w - 100), on = s => s > 1 && s < 4.5;
+    c.font = '12px ' + Mini3D.FONT; c.fillStyle = '#94a3b8'; c.fillText('刺激', 8, 30); c.fillText('張力性', 8, h * 0.55); c.fillText('相位性', 8, h * 0.85);
+    c.strokeStyle = '#cbd5e1'; c.lineWidth = 2; c.beginPath(); c.moveTo(X(0), 40); c.lineTo(X(1), 40); c.lineTo(X(1), 20); c.lineTo(X(4.5), 20); c.lineTo(X(4.5), 40); c.lineTo(X(T), 40); c.stroke();
+    const cur = Math.min(T, Math.max(0, tt));
+    c.fillStyle = 'rgba(56,189,248,.12)'; c.fillRect(X(0), 0, X(cur) - X(0), h);
+    [['t', h * 0.55], ['p', h * 0.85]].forEach(([k, y]) => {
+      c.strokeStyle = '#475569'; c.beginPath(); c.moveTo(X(0), y); c.lineTo(X(T), y); c.stroke();
+      c.strokeStyle = k === 't' ? '#34d399' : '#f472b6'; c.lineWidth = 2;
+      for (let s = 0; s < cur; s += 0.02) {
+        let r = 0;
+        if (k === 't') r = on(s) ? (s < 1.3 ? 26 : 16) : 1.5;
+        else r = (s > 1 && s < 1.5) ? 30 * (1 - (s - 1) / 0.5) : (s > 4.5 && s < 4.8) ? 14 : 0.6;
+        const ph = Math.floor(s * r) !== Math.floor((s + 0.02) * r);
+        if (ph) { c.beginPath(); c.moveTo(X(s), y); c.lineTo(X(s), y - 26); c.stroke(); }
+      }
+    });
+  }, ad);
+  UI.bars($('tp-bars'), [['食指', 2], ['拇指', 3], ['大腳趾', 10], ['手掌', 13], ['額頭', 18], ['腳底', 22], ['腹部', 36], ['背', 42], ['大腿', 46], ['上臂', 47], ['小腿', 48]].map(([l, v]) => ({ label: l, v, text: v + ' mm', c: v < 5 ? '#22d3ee' : v < 20 ? '#a78bfa' : '#f472b6' })), { max: 50 });
+})();
+
+/* ================= 02 體感覺傳導 3D ================= */
+(function () {
+  const S = K.stage('st-tract', { radius: 80, yaw: 0.6, pitch: 0.18, autoRotate: 0, target: [6, 12, 0] });
+  K.ellipsoid(S, [-14, 56, 0], [16, 13, 20], '#a78bfa', 18, 9, { id: 'cortex', al: 0.28 }); K.ellipsoid(S, [14, 56, 0], [16, 13, 20], '#a78bfa', 18, 9, { id: 'cortex', al: 0.28 });
+  const pcg = (s) => K.surf(S, (u, v) => { const th = -0.2 + u * 1.4, ph = 0.25 + v * 0.5; return [s * (2 + Math.sin(ph * 3.14) * 15 * Math.cos(th * 0.4)), 56 + Math.cos(ph * 3.14) * 13 + 2, (Math.sin(th) * 4)]; }, 6, 6, '#f472b6', { id: 'pcg', al: 0.75 });
+  pcg(-1); pcg(1);
+  K.ellipsoid(S, [-6, 34, 0], [5, 4, 6], '#38bdf8', 12, 6, { id: 'thal', al: 0.8 }); K.ellipsoid(S, [6, 34, 0], [5, 4, 6], '#38bdf8', 12, 6, { id: 'thal', al: 0.8 });
+  K.sweep(S, [[0, 22, 0], [0, 10, 0]], 6, '#94a3b8', 6, 12, { id: 'med', al: 0.4 });
+  K.sweep(S, [[0, 6, 0], [0, -40, 0]], 5, '#e2e8f0', 12, 12, { id: 'cord', al: 0.3 });
+  const hand = K.ellipsoid(S, [52, -28, 0], [6, 3, 8], '#fcd34d', 10, 6, { id: 'hand' });
+  const R = { sk: [50, -28, 0], drg: [16, -26, 2], ent: [4, -26, 0] };
+  const PATH = {
+    dc: [
+      { pts: [R.sk, [30, -30, 2], R.drg, R.ent, [2.5, -20, -3], [2.5, 0, -3], [2.5, 14, -3]], c: '#fbbf24', n: '第一級：同側後柱上行', id: 'n1' },
+      { pts: [[2.5, 14, -3], [0, 16, -1], [-2.5, 18, 1], [-4, 26, 1], [-6, 34, 0]], c: '#34d399', n: '第二級：在延腦交叉 → 內側蹄系', id: 'n2' },
+      { pts: [[-6, 34, 0], [-10, 44, 0], [-16, 58, 2]], c: '#f472b6', n: '第三級：視丘 → 中央後回', id: 'n3' }
+    ],
+    st: [
+      { pts: [R.sk, [30, -30, 2], R.drg, R.ent, [2.5, -26, -2]], c: '#fbbf24', n: '第一級：進入後角突觸', id: 'n1' },
+      { pts: [[2.5, -26, -2], [0, -25, 1], [-3, -24, 3], [-3.5, -10, 3], [-4, 8, 3], [-5, 22, 2], [-6, 34, 0]], c: '#34d399', n: '第二級：在脊髓交叉 → 脊髓視丘徑', id: 'n2' },
+      { pts: [[-6, 34, 0], [-10, 44, 0], [-16, 58, 2]], c: '#f472b6', n: '第三級：視丘 → 中央後回', id: 'n3' }
+    ]
+  };
+  const groups = {};
+  Object.keys(PATH).forEach(k => { groups[k] = []; PATH[k].forEach(seg => { const P = new Mini3D.Path(seg.pts, 6); P.pts.slice(0, -1).forEach((p, i) => groups[k].push(S.tube(p, P.pts[i + 1], 1.1, seg.c, { id: seg.id }))); const f = K.flow(S, P, 2, 1.8, '#fef9c3', 0.35, { glow: 1, gc: seg.c }); seg.f = f; f.arr.forEach(a => groups[k].push(a.o)); }); });
+  const xl = K.lab(S, [0, 16, 0], '交叉（延腦）', 'x', '#fde047', -50, 0), xs = K.lab(S, [0, -25, 1], '交叉（脊髓）', 'x', '#fde047', -50, 10);
+  K.lab(S, [-14, 66, 2], '左中央後回（體感覺皮質）', 'pcg', '#f9a8d4', -30, -24); K.lab(S, [-6, 34, 0], '視丘', 'thal', '#7dd3fc', -40, 0); K.lab(S, [0, 16, 0], '延腦', 'med', '#cbd5e1', 40, 0);
+  K.lab(S, [0, -36, 0], '脊髓', 'cord', '#cbd5e1', 30, 10); K.lab(S, R.sk, '右手受器', 'hand', '#fde68a', 0, -20); K.lab(S, R.drg, '背根神經節', 'drg', '#fde68a', 0, 20);
+  S.sphere(R.drg, 2.6, '#fbbf24', { id: 'drg' });
+  const INFO = {
+    dc: { t: '後柱–內側蹄系路徑', li: ['傳遞<b>本體感覺、壓覺、精細觸覺</b>', '第一級：粗、有髓鞘的 Aα、Aβ 纖維，在<b>同側</b>後柱上行到延腦', '在延腦（薄束核、楔束核）突觸，第二級<b>交叉到對側</b>，經<b>內側蹄系</b>到視丘', '第三級：視丘 → 對側<b>中央後回</b>'] },
+    st: { t: '脊髓視丘徑（前外側系統）', li: ['傳遞<b>痛覺、溫度覺</b>（及粗觸覺）', '第一級：細的 Aδ（有髓）與 C（無髓）纖維進入後角突觸', '第二級在<b>脊髓</b>就交叉，經外側與腹側脊髓視丘徑上行到視丘', '第三級 → 中央後回；痛的情緒成分與邊緣系統等有關'] }
+  };
+  K.seg('#trmode', m => {
+    Object.keys(groups).forEach(k => groups[k].forEach(o => { o.hidden = k !== m; }));
+    xl.hidden = m !== 'dc'; xs.hidden = m !== 'st';
+    const d = INFO[m]; $('info-tract').innerHTML = '<div class="tt">' + d.t + '</div><ul>' + d.li.map(x => '<li>' + x + '</li>').join('') + '</ul><p class="small muted">同一身體部位的訊息投射到體感覺皮質的固定區域 → 可畫出身體「地圖」（小矮人）。</p>';
+    $('tr-cap').textContent = m === 'dc' ? '同側上行 → 延腦交叉 → 對側視丘 → 對側皮質' : '進入脊髓即交叉 → 對側上行 → 視丘 → 皮質';
+  }, 'dc');
+  S.onPick = o => { if (!o) return; const t = { n1: '第一級神經元（感覺神經元）', n2: '第二級神經元（交叉）', n3: '第三級神經元（視丘 → 皮質）', pcg: '中央後回：初級體感覺皮質', thal: '視丘：感覺的轉運站', med: '延腦', cord: '脊髓', hand: '皮膚受器', drg: '背根神經節：第一級神經元細胞體', x: '交叉處' }[o.id]; if (t) $('tr-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 04 前庭 3D + 毛細胞 ================= */
+(function () {
+  const S = K.stage('st-vest', { radius: 50, yaw: 0.5, pitch: 0.35, autoRotate: 0 });
+  const C0 = [0, 0, 0];
+  K.ellipsoid(S, [0, -4, 0], [9, 6, 7], '#a78bfa', 14, 8, { id: 'utr', al: 0.55 }); K.ellipsoid(S, [2, -14, 4], [6, 5, 5], '#c084fc', 12, 7, { id: 'sac', al: 0.55 });
+  const canals = [
+    { id: 'hor', n: [0, 1, 0], c: [-14, 0, 0], r: 14, col: '#38bdf8' },
+    { id: 'ant', n: [1, 0, 0.3], c: [0, 14, -10], r: 14, col: '#34d399' },
+    { id: 'post', n: [0.3, 0, 1], c: [-6, 14, 10], r: 14, col: '#fbbf24' }
+  ];
+  canals.forEach(cn => { const pts = K.circle(cn.c, cn.r, cn.n, 36).concat([K.circle(cn.c, cn.r, cn.n, 36)[0]]); K.sweep(S, pts, 1.8, cn.col, 48, 8, { id: cn.id, al: 0.55 }, { smooth: 2 }); });
+  const amp = K.circle(canals[0].c, canals[0].r, canals[0].n, 36)[0];
+  K.ellipsoid(S, amp, [3.4, 3.4, 3.4], '#38bdf8', 10, 6, { id: 'amp', al: 0.5 });
+  const cupBase = V.add(amp, [0, -3, 0]), cupTop = [0, 0, 0];
+  const cup = S.tube(cupBase, cupTop, 1.6, '#fde047', { id: 'cup', glow: 0.4 });
+  // 耳蝸（示意螺旋）
+  const coch = []; for (let i = 0; i <= 60; i++) { const t = i / 60, a = t * 2.5 * 6.2832, r = 9 * (1 - t * 0.7); coch.push([14 + Math.cos(a) * r, -18 + t * 8, -8 + Math.sin(a) * r]); }
+  K.sweep(S, coch, t => 2.6 * (1 - t * 0.6), '#f472b6', 60, 8, { id: 'coch', al: 0.45 });
+  const wall = [], fluid = [];
+  const hc = canals[0];
+  const [u0, v0] = K.basis(hc.n);
+  const onC = (a, rr) => V.add(hc.c, V.add(V.mul(u0, Math.cos(a) * rr), V.mul(v0, Math.sin(a) * rr)));
+  for (let i = 0; i < 8; i++) wall.push({ o: S.sphere([0, 0, 0], 1.3, '#f87171', { id: 'hor' }), a0: i * 0.785 });
+  for (let i = 0; i < 14; i++) fluid.push({ o: S.sphere([0, 0, 0], 1.1, '#93c5fd', { id: 'endo' }), a0: i * 0.449 });
+  K.lab(S, onC(2.2, 16), '水平半規管', 'hor', '#7dd3fc', -20, -12); K.lab(S, [6, 26, -10], '前半規管', 'ant', '#86efac', 20, -10); K.lab(S, [-6, 28, 12], '後半規管', 'post', '#fde047', -20, -10);
+  K.lab(S, [0, -4, 0], '橢圓囊', 'utr', '#c4b5fd', 30, 16); K.lab(S, [2, -14, 4], '球狀囊', 'sac', '#d8b4fe', 30, 14); K.lab(S, amp, '壺腹與頂帽', 'cup', '#fde047', -40, 20); K.lab(S, [18, -14, -8], '耳蝸', 'coch', '#f9a8d4', 30, 10);
+  let wc = 0, wf = 0, ac = 0, af = 0, target = 0;
+  S.tick(dt => {
+    wc += (target - wc) * Math.min(1, dt * 6);
+    wf += (wc - wf) * Math.min(1, dt * 0.5);
+    ac += wc * dt; af += wf * dt;
+    wall.forEach(w => mv(w.o.p, onC(w.a0 + ac, hc.r + 1.9)));
+    fluid.forEach(f => mv(f.o.p, onC(f.a0 + af, hc.r)));
+    const def = Math.max(-1, Math.min(1, (wf - wc) * 0.9));
+    const tan = V.norm(V.sub(onC(0.1, hc.r), onC(-0.1, hc.r)));
+    mv(cupTop, V.add(V.add(amp, [0, 3.2, 0]), V.mul(tan, def * 4)));
+    cup.c = Math.abs(def) > 0.15 ? (def > 0 ? '#22d3ee' : '#fb7185') : '#fde047';
+    const st = Math.abs(target) < 0.01 ? (Math.abs(wf) > 0.1 ? '突然停止：內淋巴仍在流動 → 頂帽<b>反向</b>彎曲 → 感覺反方向旋轉、眼球震顫' : '靜止') : Math.abs(wc - wf) > 0.25 ? '開始旋轉：內淋巴因慣性落後 → 頂帽向<b>相反方向</b>彎曲 → 毛細胞受刺激' : '等速旋轉：內淋巴跟上，頂帽回正 → 不再感覺旋轉';
+    $('ve-cap').innerHTML = st;
+  });
+  $('ve-start').onclick = () => { target = 1.6; }; $('ve-stop').onclick = () => { target = 0; wc = 0; };
+  S.onPick = o => { if (!o) return; const t = { hor: '水平半規管：感受水平面的角加速度（如轉頭說「不」）', ant: '前半規管', post: '後半規管', utr: '橢圓囊：直立時纖毛垂直 → 感受水平方向直線加速度', sac: '球狀囊：直立時纖毛水平 → 感受垂直方向直線加速度', cup: '頂帽 cupula：膠狀，毛細胞纖毛埋在其中', amp: '壺腹：半規管基部的膨大', endo: '內淋巴', coch: '耳蝸（聽覺）' }[o.id]; if (t) $('ve-cap').textContent = '👉 ' + t; };
+  // 毛細胞 2D
+  const cv = $('hc-cv'); let bend = 0, spk = [];
+  K.range('hcs', v => { bend = v / 100; }, v => (v > 0 ? '→ 動纖毛 ' : v < 0 ? '← 反向 ' : '') + Math.abs(v));
+  K.loop(dt => {
+    const [c, w, h] = K.fit(cv); c.clearRect(0, 0, w, h);
+    const bx = w * 0.28, by = h * 0.85;
+    c.fillStyle = '#4c1d95'; c.strokeStyle = '#a78bfa'; c.lineWidth = 2; c.beginPath(); c.roundRect ? c.roundRect(bx - 34, by - 70, 68, 80, 16) : c.rect(bx - 34, by - 70, 68, 80); c.fill(); c.stroke();
+    for (let i = 0; i < 6; i++) { const x = bx - 26 + i * 9, hh = 26 + i * 9, tip = bend * hh * 0.6; c.strokeStyle = i === 5 ? '#fde047' : '#e2e8f0'; c.lineWidth = i === 5 ? 3.5 : 2.5; c.beginPath(); c.moveTo(x, by - 70); c.quadraticCurveTo(x, by - 70 - hh * 0.6, x + tip, by - 70 - hh); c.stroke(); }
+    c.fillStyle = '#fde047'; c.font = '11px ' + Mini3D.FONT; c.fillText('動纖毛', bx + 26, by - 150); c.fillStyle = '#e2e8f0'; c.fillText('靜纖毛', bx - 60, by - 110);
+    const vm = -60 + bend * 18, rate = Math.max(0, 30 + bend * 45);
+    if (Math.random() < rate * dt) spk.push(0); spk = spk.map(x => x + dt * 80).filter(x => x < w * 0.5);
+    const gx = w * 0.5, gy = h * 0.35;
+    c.fillStyle = '#94a3b8'; c.fillText('膜電位 ' + vm.toFixed(0) + ' mV', gx, 18); c.strokeStyle = bend > 0.05 ? '#34d399' : bend < -0.05 ? '#fb7185' : '#94a3b8'; c.lineWidth = 3; c.beginPath(); c.moveTo(gx, gy); c.lineTo(w - 10, gy - bend * 26); c.stroke();
+    c.fillStyle = '#94a3b8'; c.fillText('感覺神經放電 ≈ ' + rate.toFixed(0) + ' Hz（休息時也有基礎放電）', gx, h * 0.6);
+    c.strokeStyle = '#fbbf24'; c.lineWidth = 1.6; const yb = h * 0.88; c.beginPath(); c.moveTo(gx, yb); c.lineTo(w - 10, yb); c.stroke(); spk.forEach(x => { const X = w - 10 - x; c.beginPath(); c.moveTo(X, yb); c.lineTo(X, yb - 30); c.stroke(); });
+  }, cv);
+})();
+
+/* ================= 05 耳朵與耳蝸 ================= */
+(function () {
+  const S = K.stage('st-ear', { radius: 64, yaw: 0.35, pitch: 0.2, autoRotate: 0 });
+  const W = { gs: 'whole' }, U = { gs: 'unc' }, C = { gs: 'corti' };
+  // 整體
+  K.surf(S, (u, v) => { const a = -1.2 + u * 2.6, r = 14 + 6 * Math.sin(v * 3.14); return [-58 + v * 6 - Math.sin(a) * 3, Math.sin(a) * r, Math.cos(a) * r * 0.5 - 4]; }, 10, 5, '#fcd34d', Object.assign({ id: 'pinna', al: 0.7 }, W));
+  K.sweep(S, [[-54, 0, 0], [-40, 1, 0], [-26, -1, 0]], t => 4 - t * 0.8, '#fbbf24', 12, 10, Object.assign({ id: 'canal', al: 0.35 }, W));
+  const tm = K.mover(K.ellipsoid(S, [0, 0, 0], [0.8, 4.6, 4.6], '#f9a8d4', 12, 6, Object.assign({ id: 'tm' }, W)));
+  const oss = { mal: S.tube([-22, 4, 0], [-20, -2, 0], 1.6, '#e2e8f0', Object.assign({ id: 'mal' }, W)), inc: S.tube([-20, 4, 0], [-15, 1, 0], 1.6, '#e2e8f0', Object.assign({ id: 'inc' }, W)), sta: S.tube([-15, 1, 0], [-10, 0, 0], 1.3, '#e2e8f0', Object.assign({ id: 'sta' }, W)) };
+  const fp = S.sphere([-10, 0, 0], 2.2, '#e2e8f0', Object.assign({ id: 'sta' }, W));
+  const coch = []; for (let i = 0; i <= 70; i++) { const t = i / 70, a = t * 2.6 * 6.2832, r = 11 * (1 - t * 0.72); coch.push([-2 + t * 6, Math.sin(a) * r - 6, Math.cos(a) * r]); }
+  K.sweep(S, coch, t => 3.4 * (1 - t * 0.55), '#f472b6', 70, 8, Object.assign({ id: 'coch', al: 0.6 }, W));
+  [[[0, 1, 0], [-8, 14, 0]], [[1, 0, 0.2], [-2, 18, -6]], [[0.2, 0, 1], [-10, 18, 6]]].forEach(([n, c]) => { const pts = K.circle(c, 7, n, 24); K.sweep(S, pts.concat([pts[0]]), 1.2, '#38bdf8', 30, 6, Object.assign({ id: 'semi', al: 0.6 }, W), { smooth: 2 }); });
+  K.sweep(S, [[0, -6, 0], [10, -2, 4], [24, 2, 8]], 1.6, '#fde047', 12, 6, Object.assign({ id: 'nerve' }, W));
+  K.sweep(S, [[-18, -6, 0], [-14, -18, 4], [-8, -30, 10]], t => 1.8 + t, '#94a3b8', 12, 8, Object.assign({ id: 'eus', al: 0.5 }, W));
+  const waves = []; for (let i = 0; i < 4; i++) waves.push({ f: K.mover(K.surf(S, (u, v) => [0, Math.cos(u * 6.2832) * (2 + v * 8), Math.sin(u * 6.2832) * (2 + v * 8)], 16, 1, '#7dd3fc', Object.assign({ id: 'sound', al: 0.3 }, W))), u: i / 4 });
+  const LW = [['pinna', [-58, 14, -4], '耳廓'], ['canal', [-40, 4, 0], '外耳道'], ['tm', [-24, 5, 0], '鼓膜'], ['mal', [-22, 4, 0], '錘骨'], ['inc', [-17, 4, 0], '砧骨'], ['sta', [-12, 1, 0], '鐙骨→卵圓窗'], ['coch', [4, -6, 8], '耳蝸'], ['semi', [-4, 22, 0], '半規管'], ['nerve', [24, 2, 8], '前庭耳蝸神經 VIII'], ['eus', [-10, -28, 10], '耳咽管']];
+  LW.forEach(([id, p, t], i) => K.lab(S, p, t, id, '#e2e8f0', [0, -20, 0, -30, 20, 10, 30, 20, 0, 20][i], [-20, -26, 26, -26, -30, 26, 20, -14, 18, 0][i], W));
+  // 展開耳蝸
+  const L0 = -50, L1 = 50, NB = 60, BM = [];
+  K.box(S, [0, 9, 0], [100, 8, 14], '#60a5fa', Object.assign({ id: 'sv', al: 0.12 }, U)); K.box(S, [0, -9, 0], [100, 8, 14], '#a78bfa', Object.assign({ id: 'stym', al: 0.12 }, U));
+  const vm = K.sheet(S, [L0, 4.5, -7], [100, 0, 0], [0, 0, 14], 20, 1, '#cbd5e1', Object.assign({ id: 'vmem', al: 0.35 }, U));
+  const bm = K.surf(S, (u, v) => { const x = K.lerp(L0, L1, u), wdt = 3 + u * 6; return [x, -4.5, (v - 0.5) * 2 * wdt]; }, NB, 2, (u) => K.hsl(200 - u * 160, 80, 60), Object.assign({ id: 'bm' }, U));
+  const st = K.mover(K.ellipsoid(S, [0, 0, 0], [2, 4, 4], '#e2e8f0', 10, 6, Object.assign({ id: 'sta' }, U)));
+  const rw = K.mover(K.ellipsoid(S, [0, 0, 0], [0.8, 3.5, 3.5], '#f9a8d4', 10, 6, Object.assign({ id: 'rw' }, U)));
+  K.lab(S, [L0, 9, 0], '前庭階（卵圓窗）', 'sv', '#93c5fd', -10, -26, U); K.lab(S, [L0, -9, 0], '鼓階（圓窗）', 'stym', '#c4b5fd', -10, 26, U); K.lab(S, [L1, 0, 0], '蝸孔（頂部）', 'heli', '#e2e8f0', 20, -20, U); K.lab(S, [0, 0, 6], '蝸管（內淋巴）', 'duct', '#fde68a', 0, -40, U);
+  const lPk = K.lab(S, [0, -4.5, 0], '最大振動', 'bm', '#fde047', 0, 30, U);
+  K.lab(S, [L0 + 4, -4.5, 8], '基部：窄而硬', 'bm', '#7dd3fc', -10, 30, U); K.lab(S, [L1 - 4, -4.5, 8], '頂部：寬而軟', 'bm', '#fca5a5', 10, 30, U);
+  // 柯蒂氏器
+  K.sheet(S, [-30, -10, -16], [60, 0, 0], [0, 0, 32], 6, 4, '#38bdf8', Object.assign({ id: 'bm', al: 0.8 }, C));
+  const cells = [], hairs = [];
+  const ihc = { x: -14 }, ohc = [2, 8, 14];
+  [[ihc.x, '#f472b6', 'ihc', 4.4]].concat(ohc.map(x => [x, '#fbbf24', 'ohc', 3.4])).forEach(([x, col, id, r]) => { for (let z = -12; z <= 12; z += 8) { const base = [x, -10, z]; const m = K.mover(K.ellipsoid(S, [0, 0, 0], [r * 0.7, r * 1.4, r * 0.7], col, 8, 5, Object.assign({ id }, C))); cells.push({ m, base, r }); for (let k = -1; k <= 1; k++) { const a = [x + k * 1.2, -10 + r * 2.8, z], b = [0, 0, 0]; hairs.push({ t: S.tube(a, b, 0.5, '#e2e8f0', Object.assign({ id: 'stereo' }, C)), a0: a.slice(), b, a, len: 3 + (k + 1) * 1.4 }); } } });
+  const tect = K.mover(K.surf(S, (u, v) => [K.lerp(-22, 22, u), 0, K.lerp(-16, 16, v)], 6, 4, '#a3e635', Object.assign({ id: 'tect', al: 0.55 }, C)));
+  K.lab(S, [ihc.x, -2, -16], '內毛細胞（1 排）', 'ihc', '#f9a8d4', -30, -10, C); K.lab(S, [8, -2, -16], '外毛細胞（3 排）', 'ohc', '#fde047', 20, -10, C); K.lab(S, [0, 6, 16], '覆膜', 'tect', '#bef264', 20, -16, C); K.lab(S, [0, -10, 16], '基底膜', 'bm', '#7dd3fc', 20, 16, C);
+  let freq = 1000, mode = 'whole', t = 0;
+  const fpos = f => 1 - (Math.log10(f) - Math.log10(20)) / 3;
+  S.tick(dt => {
+    t += dt;
+    if (mode === 'whole') {
+      const vib = Math.sin(t * 14) * 0.6;
+      tm.set([-25 + vib * 0.6, 0, 0], 1); mv(oss.mal.a, [-22 + vib * 0.5, 4, 0]); mv(oss.sta.b, [-10 + vib * 0.7, 0, 0]); mv(fp.p, oss.sta.b);
+      waves.forEach(w => { w.u = (w.u + dt * 0.5) % 1; w.f.set([K.lerp(-70, -27, w.u), 0, 0], 1 - w.u * 0.55, 0.35 * (1 - w.u)); });
+    } else if (mode === 'unc') {
+      const pk = fpos(freq), om = 9, row = bm.grid;
+      row.forEach((r, i) => { const u = i / NB, env = Math.exp(-(((u - pk) / (u < pk ? 0.22 : 0.06)) ** 2)) * (u < pk + 0.18 ? 1 : 0), ph = om * t - u * 38; r.forEach(p => { p[1] = -4.5 + 4.2 * env * Math.sin(ph); }); });
+      lPk.p = [K.lerp(L0, L1, pk), -4.5, 0];
+      st.set([L0 - 3 + Math.sin(om * t) * 0.8, 9, 0], 1); rw.set([L0 - 1 - Math.sin(om * t) * 0.8, -9, 0], 1);
+    } else {
+      const d = Math.sin(t * 6) * 2.4;
+      cells.forEach(c => c.m.set(V.add(c.base, [0, c.r * 1.4 + d, 0]), 1));
+      tect.set([0, 1 + d * 0.3, 0], 1);
+      hairs.forEach(hh => { mv(hh.a, V.add(hh.a0, [0, d, 0])); mv(hh.b, V.add(hh.a, [d * 0.8, hh.len, 0])); });
+    }
+  });
+  const fr = $('freq');
+  const setF = v => { freq = v; fr.value = ((Math.log10(v) - Math.log10(20)) / 3) * 100; $('freq-v').textContent = v >= 1000 ? (v / 1000).toFixed(v >= 10000 ? 0 : 1) + ' kHz' : Math.round(v) + ' Hz'; $('ear-cap').textContent = mode === 'unc' ? (v > 4000 ? '高頻 → 基部（靠近鐙骨）振動最大' : v < 200 ? '低頻 → 靠近頂部（蝸孔）振動最大' : '中頻 → 基底膜中段') : $('ear-cap').textContent; };
+  fr.oninput = () => setF(Math.pow(10, Math.log10(20) + (+fr.value / 100) * 3));
+  UI.$$('[data-f]').forEach(b => b.onclick = () => { setF(+b.dataset.f); });
+  K.seg('#earmode', m => { mode = m; S.each(o => { if (o.gs) o.hidden = o.gs !== m; }); $('ear-hud').textContent = { whole: '外耳 → 中耳 → 內耳', unc: '展開的耳蝸（色帶＝基底膜）', corti: '柯蒂氏器橫切面' }[m]; $('ear-cap').textContent = { whole: '聲波使鼓膜振動，聽小骨把振動傳到卵圓窗', unc: '', corti: '基底膜上下振動 → 纖毛抵著覆膜彎曲 → 毛細胞去極化' }[m]; S.resetView(); if (m !== 'whole') S.dist = S.home.dist * 0.75; setF(freq); }, 'whole');
+  setF(1000);
+  K.info(S, 'info-ear', {
+    pinna: ['耳廓', ['收集聲波導入外耳道']], canal: ['外耳道', ['把聲波導向鼓膜']], tm: ['鼓膜', ['隨聲波振動']], mal: ['錘骨', ['附著鼓膜']], inc: ['砧骨', ['中間的聽小骨']], sta: ['鐙骨', ['足板嵌在<b>卵圓窗</b>，推動前庭階的外淋巴']],
+    coch: ['耳蝸', ['螺旋形；內含柯蒂氏器（螺旋器）']], semi: ['半規管', ['平衡（前庭器官）']], nerve: ['前庭耳蝸神經（VIII）', ['把聽覺與平衡訊息送到腦']], eus: ['耳咽管', ['連接中耳與咽，平衡壓力']], sound: ['聲波', ['頻率（Hz）決定音高；振幅決定強度（dB）']],
+    sv: ['前庭階', ['外淋巴；卵圓窗推動形成行進波']], stym: ['鼓階', ['外淋巴；末端為圓窗，壓力由此釋放']], heli: ['蝸孔', ['頂部前庭階與鼓階相通處；低頻波可繞過去']], duct: ['蝸管（中階）', ['內淋巴；含柯蒂氏器']], vmem: ['前庭膜', ['分隔前庭階與蝸管']],
+    bm: ['基底膜', ['基部窄而硬 → 對<b>高頻</b>共振；頂部寬而軟 → 對<b>低頻</b>共振', '不同頻率在不同位置振動最大 → <b>音高辨別</b>（側抑制使其更銳利）']], rw: ['圓窗', ['卵圓窗內推時圓窗外凸']],
+    ihc: ['內毛細胞', ['約 3,500 個，1 排；真正把振動轉成神經衝動']], ohc: ['外毛細胞', ['約 11,000 個；電動性縮短/伸長，主動放大振動']], tect: ['覆膜', ['膠狀膜，懸在毛細胞上方，纖毛埋入其中']], stereo: ['靜纖毛', ['彎向最高者 → K⁺ 通道開 → 去極化']]
+  });
+})();
+
+/* ================= 06 眼睛光學 ================= */
+(function () {
+  const S = K.stage('st-eye', { radius: 62, yaw: -0.25, pitch: 0.18, autoRotate: 0, target: [-14, 0, 0] });
+  const R = 30, LX = -20, GX = -46;
+  const eyeF = K.ellipsoid(S, [0, 0, 0], [R, R, R], '#e2e8f0', 30, 14, { id: 'sclera', al: 0.13, st: '#cbd5e1', sa: 0.2 }, { v0: 0, v1: 1, u0: 0, u1: 0.5 });
+  const eyeM = K.mover(eyeF);
+  const ret = K.mover(K.ellipsoid(S, [0, 0, 0], [R - 1, R - 1, R - 1], '#f472b6', 20, 10, { id: 'retina', al: 0.35 }, { u0: -0.17, u1: 0.17, v0: 0.18, v1: 0.82 }));
+  const cornea = K.mover(K.ellipsoid(S, [-27, 0, 0], [5, 12, 12], '#7dd3fc', 14, 8, { id: 'cornea', al: 0.35 }, { u0: 0.25, u1: 0.75 }));
+  const iris = []; for (let k = 0; k < 18; k++) { const a = k / 18 * 6.2832, b = (k + 1) / 18 * 6.2832; iris.push(S.face([[-23, Math.cos(a) * 7.2, Math.sin(a) * 7.2], [-23, Math.cos(a) * 12, Math.sin(a) * 12], [-23, Math.cos(b) * 12, Math.sin(b) * 12], [-23, Math.cos(b) * 7.2, Math.sin(b) * 7.2]], '#0ea5e9', { id: 'iris', al: 0.85 })); }
+  const lensF = K.ellipsoid(S, [0, 0, 0], [1, 1, 1], '#fde68a', 16, 10, { id: 'lens', al: 0.55 }); const lens = K.mover(lensF);
+  const cil = []; for (let k = 0; k < 16; k++) { const a = k / 16 * 6.2832; cil.push(S.sphere([LX, Math.cos(a) * 15, Math.sin(a) * 15], 1.8, '#fb7185', { id: 'cil', al: 0.85 })); }
+  const zon = cil.map(c => S.tube(c.p, [0, 0, 0], 0.35, '#fef3c7', { id: 'zon', flat: 1, al: 0.8 }));
+  const fov = S.sphere([R - 1.4, 0, 0], 1.6, '#fde047', { id: 'fovea' });
+  const disc = S.sphere([0, 0, 0], 2.2, '#f8fafc', { id: 'disc' });
+  const nerve = []; for (let k = 0; k < 6; k++) nerve.push(S.tube([0, 0, 0], [0, 0, 0], 2.6 - k * 0.1, '#facc15', { id: 'onerve', al: 0.7 }));
+  const glassF = K.ellipsoid(S, [0, 0, 0], [1, 13, 13], '#a5f3fc', 12, 8, { id: 'glass', al: 0.4 }); const glass = K.mover(glassF);
+  const NR = 7, rays = []; for (let i = 0; i < NR; i++) rays.push([0, 1, 2, 3].map(() => S.tube([0, 0, 0], [0, 0, 0], 0.45, '#fde047', { flat: 1, al: 0.85, nopick: true })));
+  const objA = S.sphere([0, 0, 0], 2.6, '#f97316', { id: 'obj' }), focus = S.sphere([0, 0, 0], 1.8, '#ffffff', { glow: 1.2, nopick: true });
+  const L = { obj: K.lab(S, objA.p, '物體', 'obj', '#fdba74', 0, -18), lens: K.lab(S, [LX, 6, 0], '水晶體', 'lens', '#fde68a', 0, -50), cil: K.lab(S, [LX, 15, 0], '睫狀肌', 'cil', '#fda4af', 20, -24), cor: K.lab(S, [-31, 8, 0], '角膜', 'cornea', '#7dd3fc', -20, -26), iris: K.lab(S, [-23, -9, 0], '虹膜／瞳孔', 'iris', '#38bdf8', -30, 26), ret: K.lab(S, [24, 14, 0], '視網膜', 'retina', '#f9a8d4', 20, -20), fov: K.lab(S, fov.p, '中央小窩', 'fovea', '#fde047', 30, 20), disc: K.lab(S, disc.p, '視神經盤（盲點）', 'disc', '#f8fafc', 30, 26), gl: K.lab(S, [GX, 12, 0], '矯正鏡片', 'glass', '#a5f3fc', 0, -14), vit: K.lab(S, [8, -12, 6], '玻璃體', 'sclera', '#cbd5e1', 0, 20) };
+  const P0 = 1 / 50;
+  let mode = 'norm', glassOn = false, dReal = 6000;
+  const SX = { norm: 1, myo: 1.3, hyp: 0.78, pres: 1 }, AMAX = { norm: 10, myo: 10, hyp: 10, pres: 1 };
+    const KD = 0.004; // 示意比例：1 D ≈ 0.004 單位屈光力
+  S.tick(() => {
+    const sx = SX[mode], rx = R * sx, Lr = rx - LX;
+    eyeM.set([0, 0, 0], [sx, 1, 1]); ret.set([0, 0, 0], [sx, 1, 1]);
+    mv(fov.p, [rx - 1.4, 0, 0]);
+    mv(disc.p, [Math.cos(-0.32) * (rx - 1), 0, Math.sin(-0.32) * (R - 1)]);
+    nerve.forEach((n, k) => { n.a = V.add(disc.p, [k * 4, 0, -k * 1.4]); n.b = V.add(disc.p, [(k + 1) * 4, 0, -(k + 1) * 1.4]); });
+    const dU = dReal * 0.25, tGap = LX - GX, gOn = glassOn && mode !== 'norm';
+    let Pc = 0;
+    if (gOn) { if (mode === 'pres') Pc = 2.5 * KD; else { const need = 1 / Lr - P0; Pc = need / (1 + tGap * need); } }
+    const V1 = -1 / dU + Pc, V2 = V1 / (1 - tGap * V1);
+    const A = Math.max(0, Math.min(AMAX[mode] * KD, 1 / Lr - V2 - P0)), P = P0 + A;
+    lens.set([LX, 0, 0], [3.2 + A * 140, 7.5, 7.5]);
+    cil.forEach((c, k) => { const a = k / 16 * 6.2832, r = 15 - A * 100; mv(c.p, [LX, Math.cos(a) * r, Math.sin(a) * r]); });
+    zon.forEach((z, k) => { const a = k / 16 * 6.2832; z.b = [LX, Math.cos(a) * 7.4, Math.sin(a) * 7.4]; z.c = A > 0.002 ? '#78716c' : '#fef3c7'; });
+    glass.set([GX, 0, 0], [Math.max(0.6, Math.abs(Pc) * 250), 1, 1]); glass.hide(!gOn); L.gl.hidden = !gOn; glassF.forEach(f => { f.c = Pc < 0 ? '#a5f3fc' : '#bbf7d0'; });
+    const x0 = Math.max(-118, LX - dU); mv(objA.p, [x0, 0, 0]);
+    let fx = null;
+    for (let i = 0; i < NR; i++) {
+      const hL = (i - (NR - 1) / 2) * 2.2, seg = rays[i];
+      let s = hL / dU, y0 = hL - s * (LX - x0), yL;
+      if (gOn) {
+        const gy = y0 + s * (GX - x0); seg[0].a = [x0, y0, 0]; seg[0].b = [GX, gy, 0];
+        s = s - gy * Pc; yL = gy + s * (LX - GX); seg[1].a = [GX, gy, 0]; seg[1].b = [LX, yL, 0]; seg[1].hidden = false;
+      } else { yL = hL; seg[0].a = [x0, y0, 0]; seg[0].b = [LX, yL, 0]; seg[1].hidden = true; }
+      s = s - yL * P;
+      let xe = LX, ye = yL;
+      for (let k = 0; k < 90; k++) { const nx = xe + 1, ny = ye + s; if ((nx / rx) ** 2 + (ny / R) ** 2 > 1) break; xe = nx; ye = ny; }
+      seg[2].a = [LX, yL, 0]; seg[2].b = [xe, ye, 0]; seg[3].hidden = true;
+      if (i === 0 && Math.abs(s) > 1e-6) fx = LX - yL / s;
+    }
+    if (fx != null) { mv(focus.p, [Math.min(fx, 60), 0, 0]); focus.al = fx > rx + 0.5 ? 0.35 : 1; }
+    const err = fx == null ? 0 : fx - rx;
+    $('acc-v').textContent = (A / KD).toFixed(1) + ' D';
+    $('cil-v').textContent = A > 0.002 ? '收縮（懸韌帶鬆）' : '放鬆（懸韌帶緊）';
+    $('img-v').textContent = Math.abs(err) < 1.5 ? '✓ 聚焦在視網膜' : err < 0 ? '焦點在視網膜前 → 模糊' : '焦點在視網膜後 → 模糊';
+    $('img-v').style.color = Math.abs(err) < 1.5 ? '#34d399' : '#fb7185';
+    L.obj.p = objA.p;
+  });
+  const dist = $('dist');
+  const setD = () => { const v = +dist.value; dReal = Math.pow(10, 2 + (v / 100) * (Math.log10(6000) - 2)); $('dist-v').textContent = dReal >= 1000 ? (dReal / 1000).toFixed(1) + ' m' : (dReal / 10).toFixed(0) + ' cm'; };
+  dist.oninput = setD; setD();
+  const CAP = { norm: '正視眼：遠物時睫狀肌放鬆即可聚焦；近物靠調節', myo: '近視：眼球太長，遠物焦點落在視網膜前（看近物反而清楚）', hyp: '遠視：眼球太短，焦點在視網膜後；年輕時可用調節補償', pres: '老花：調節能力下降，近點變遠 → 看近模糊' };
+  K.seg('#eyemode', m => { mode = m; $('eye-cap').textContent = CAP[m]; }, 'norm');
+  $('glass').onclick = e => { glassOn = !glassOn; e.currentTarget.classList.toggle('on', glassOn); };
+  K.info(S, 'info-eye', {
+    cornea: ['角膜', ['透明、最主要的屈光構造之一']], iris: ['虹膜與瞳孔', ['虹膜的平滑肌控制瞳孔大小（第 9 章自主神經）']], lens: ['水晶體', ['無血管、透明；由懸韌帶（小帶纖維）懸吊', '改變凸度 → <b>調節</b>'], '白內障：水晶體混濁。'],
+    cil: ['睫狀體／睫狀肌', ['看遠：放鬆 → 懸韌帶<b>緊</b> → 水晶體較扁、屈光力低', '看近（&lt; 20 英尺）：收縮 → 懸韌帶<b>鬆</b> → 水晶體變凸', '分泌房水']], zon: ['懸韌帶（小帶纖維）', ['連接睫狀體與水晶體']],
+    retina: ['視網膜', ['含視桿、視錐（光受器）、雙極細胞、神經節細胞', '光必須穿過神經細胞層才到達光受器（倒置）']], fovea: ['中央小窩', ['黃斑中央，<b>只有視錐</b>，視覺最敏銳']], disc: ['視神經盤（盲點）', ['神經節細胞軸突離開眼球處，沒有光受器']], onerve: ['視神經', ['約 120 萬條神經節細胞軸突']],
+    sclera: ['鞏膜／玻璃體', ['鞏膜：白色外層；玻璃體：水晶體後方的膠狀物'], '青光眼：房水排出受阻使眼壓升高，損傷視神經。'], glass: ['矯正鏡片', ['近視：凹透鏡；遠視、老花：凸透鏡']], obj: ['物體', ['拖曳上方滑桿改變距離']]
+  });
+})();
+
+/* ================= 07 光轉導 / 色覺 / 接受域 ================= */
+(function () {
+  K.seg('#ptmode', m => {
+    const dark = m === 'dark';
+    $('pt-chain').innerHTML = dark ? '<div class="nd on">cGMP 高</div><span class="ar on">→</span><div class="nd on">Na⁺ 通道開</div><span class="ar on">→</span><div class="nd on">暗電流（−40 mV）</div><span class="ar on">→</span><div class="nd on">持續釋放抑制性傳遞物</div><span class="ar on">→</span><div class="nd">雙極細胞受抑制</div>'
+      : '<div class="nd on">光子 → 視紫質漂白</div><span class="ar on">→</span><div class="nd on">轉導蛋白（G 蛋白）</div><span class="ar on">→</span><div class="nd on">PDE：cGMP → GMP</div><span class="ar on">→</span><div class="nd on">Na⁺ 通道關 → 過極化</div><span class="ar on">→</span><div class="nd on">傳遞物↓ → 雙極細胞興奮 → 神經節細胞 AP</div>';
+  }, 'dark');
+  const g = (x, m, s) => Math.exp(-(((x - m) / s) ** 2));
+  const CONES = [['S（藍）420', 420, 38, '#60a5fa'], ['M（綠）530', 530, 48, '#34d399'], ['L（紅）562', 562, 52, '#f87171'], ['視桿 500', 500, 45, '#cbd5e1']];
+  function wlColor(w) { let r = 0, gg = 0, b = 0; if (w < 440) { r = -(w - 440) / 40; b = 1; } else if (w < 490) { gg = (w - 440) / 50; b = 1; } else if (w < 510) { gg = 1; b = -(w - 510) / 20; } else if (w < 580) { r = (w - 510) / 70; gg = 1; } else if (w < 645) { r = 1; gg = -(w - 645) / 65; } else r = 1; return 'rgb(' + Math.round(r * 255) + ',' + Math.round(gg * 255) + ',' + Math.round(b * 255) + ')'; }
+  K.range('wl', w => {
+    K.plot($('cone-plot'), { x: [400, 700], y: [0, 1.1], xt: [400, 450, 500, 550, 600, 650, 700], yt: [0, 0.5, 1], xl: '波長 (nm)', yl: '相對吸收', series: CONES.map(([n, m, s, c]) => ({ f: x => g(x, m, s), c, w: n.startsWith('視桿') ? 1.4 : 2.4, dash: n.startsWith('視桿') ? [4, 4] : [], label: n })), vl: [{ x: w, c: '#fff' }], padL: 36 });
+    $('wl-sw').style.background = wlColor(w);
+    const r = CONES.slice(0, 3).map(([n, m, s]) => g(w, m, s)), tot = r.reduce((a, b) => a + b, 0) || 1;
+    $('wl-t').innerHTML = 'S : M : L = ' + r.map(x => Math.round((x / tot) * 100)).join(' : ') + '　— 腦依三種視錐的<b>相對</b>反應判斷顏色。';
+  }, v => v + ' nm');
+  const cv = $('rf-cv'); let st = 'c', spk = [];
+  K.seg('#rfmode', v => { st = v; }, 'c');
+  K.loop(dt => {
+    const [c, w, h] = K.fit(cv); c.clearRect(0, 0, w, h);
+    const cx = w * 0.22, cy = h / 2, R1 = 26, R2 = 64;
+    c.fillStyle = '#111827'; c.beginPath(); c.arc(cx, cy, R2, 0, 6.28); c.fill();
+    if (st === 's' || st === 'f') { c.fillStyle = '#fde68a'; c.beginPath(); c.arc(cx, cy, R2, 0, 6.28); c.fill(); }
+    if (st === 's') { c.fillStyle = '#111827'; c.beginPath(); c.arc(cx, cy, R1, 0, 6.28); c.fill(); }
+    if (st === 'c' || st === 'f') { c.fillStyle = '#fde68a'; c.beginPath(); c.arc(cx, cy, R1, 0, 6.28); c.fill(); }
+    c.strokeStyle = '#94a3b8'; c.setLineDash([4, 4]); c.beginPath(); c.arc(cx, cy, R1, 0, 6.28); c.stroke(); c.beginPath(); c.arc(cx, cy, R2, 0, 6.28); c.stroke(); c.setLineDash([]);
+    c.fillStyle = '#e2e8f0'; c.font = '11px ' + Mini3D.FONT; c.textAlign = 'center'; c.fillText('中心 +', cx, cy + 4); c.fillText('周邊 −', cx, cy + R2 - 10);
+    const rate = { c: 70, s: 2, f: 22, n: 12 }[st];
+    if (Math.random() < rate * dt) spk.push(0); spk = spk.map(x => x + dt * 120).filter(x => x < w * 0.6);
+    const x0 = w * 0.42, yb = h * 0.7; c.strokeStyle = '#fbbf24'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(x0, yb); c.lineTo(w - 10, yb); c.stroke();
+    spk.forEach(x => { const X = w - 10 - x; if (X < x0) return; c.beginPath(); c.moveTo(X, yb); c.lineTo(X, yb - 40); c.stroke(); });
+    c.textAlign = 'left'; c.fillStyle = '#cbd5e1'; c.fillText('神經節細胞放電 ≈ ' + rate + ' Hz（' + { c: '強烈興奮', s: '被抑制', f: '較弱', n: '自發' }[st] + '）', x0, h * 0.28);
+  }, cv);
+})();
+
+/* ================= 08 視覺路徑 3D ================= */
+(function () {
+  const S = K.stage('st-vis', { radius: 62, yaw: 0, pitch: 1.05, autoRotate: 0 });
+  const eyeL = [-14, 0, -44], eyeR = [14, 0, -44];
+  [eyeL, eyeR].forEach((e, i) => { K.ellipsoid(S, e, [9, 9, 9], '#e2e8f0', 16, 8, { id: 'eye', al: 0.35 }); K.ellipsoid(S, V.add(e, [-4, 0, 2]), [5, 8, 6], '#60a5fa', 8, 6, { id: 'retT' + i, al: 0.4 }, { u0: 0.3, u1: 0.7 }); });
+  const chi = [0, 0, -24], lgnL = [-14, 0, 2], lgnR = [14, 0, 2], ctxL = [-12, 2, 44], ctxR = [12, 2, 44], scL = [-6, 6, 6], scR = [6, 6, 6];
+  K.ellipsoid(S, lgnL, [4, 3, 4], '#a78bfa', 10, 6, { id: 'lgn' }); K.ellipsoid(S, lgnR, [4, 3, 4], '#a78bfa', 10, 6, { id: 'lgn' });
+  K.ellipsoid(S, ctxL, [10, 6, 8], '#f472b6', 12, 6, { id: 'v1', al: 0.6 }); K.ellipsoid(S, ctxR, [10, 6, 8], '#f472b6', 12, 6, { id: 'v1', al: 0.6 });
+  S.sphere(scL, 2.4, '#34d399', { id: 'sc' }); S.sphere(scR, 2.4, '#34d399', { id: 'sc' });
+  const RVF = '#fb923c', LVF = '#60a5fa';
+  // 纖維：[名稱, 點, 顏色(視野), 屬於哪段]
+  const F = [
+    ['L-temp', [V.add(eyeL, [-5, 0, 6]), [-9, 0, -30], [-4, 0, -24], [-10, 0, -10], lgnL], RVF, 'onL'],
+    ['L-nasal', [V.add(eyeL, [5, 0, 6]), [-6, 0, -30], [0, 0, -24], [8, 0, -12], lgnR], LVF, 'onL'],
+    ['R-temp', [V.add(eyeR, [5, 0, 6]), [9, 0, -30], [4, 0, -24], [10, 0, -10], lgnR], LVF, 'onR'],
+    ['R-nasal', [V.add(eyeR, [-5, 0, 6]), [6, 0, -30], [0, 0, -24], [-8, 0, -12], lgnL], RVF, 'onR'],
+    ['radL', [lgnL, [-18, 0, 20], ctxL], RVF, 'radL'], ['radR', [lgnR, [18, 0, 20], ctxR], LVF, 'radR'],
+    ['scL', [[-10, 0, -10], [-8, 4, 0], scL], RVF, 'tect'], ['scR', [[10, 0, -10], [8, 4, 0], scR], LVF, 'tect']
+  ];
+  const fib = F.map(([n, pts, col, part]) => { const P = new Mini3D.Path(pts, 6); const tubes = P.pts.slice(0, -1).map((p, i) => S.tube(p, P.pts[i + 1], 1, col, { id: part, uu: i / (P.pts.length - 1) })); const f = K.flow(S, P, 2, 1.4, '#fef9c3', 0.3, { glow: 1, gc: col }); return { n, P, tubes, f, col, part }; });
+  K.lab(S, chi, '視交叉', 'chi', '#fde047', 30, 0); K.lab(S, lgnL, '左外側膝狀核', 'lgn', '#c4b5fd', -40, 10); K.lab(S, ctxL, '左紋狀皮質（枕葉）', 'v1', '#f9a8d4', -30, 20); K.lab(S, scL, '上丘（頂蓋）', 'sc', '#86efac', -30, -20);
+  K.lab(S, eyeL, '左眼', 'eye', '#e2e8f0', -20, -10); K.lab(S, eyeR, '右眼', 'eye', '#e2e8f0', 20, -10); K.lab(S, [-10, 0, -10], '視徑', 'tract', '#cbd5e1', -30, 0); K.lab(S, [-6, 0, -32], '視神經', 'onL', '#cbd5e1', -30, 0);
+  const cut = S.sphere([0, 0, 0], 3, '#ef4444', { glow: 1, hidden: true, nopick: true });
+  function drawVF(id, missL, missR) {
+    const cv = $(id), c = cv.getContext('2d'), w = cv.width, h = cv.height; c.clearRect(0, 0, w, h);
+    const r = w * 0.44, cx = w / 2, cy = h / 2;
+    c.fillStyle = missL ? '#111' : LVF; c.beginPath(); c.moveTo(cx, cy); c.arc(cx, cy, r, Math.PI / 2, Math.PI * 1.5); c.fill();
+    c.fillStyle = missR ? '#111' : RVF; c.beginPath(); c.moveTo(cx, cy); c.arc(cx, cy, r, -Math.PI / 2, Math.PI / 2); c.fill();
+    c.strokeStyle = '#94a3b8'; c.lineWidth = 2; c.beginPath(); c.arc(cx, cy, r, 0, 6.28); c.stroke();
+  }
+  K.seg('#lesion', v => {
+    fib.forEach(f => { let dead = false; if (v === 'on' && f.part === 'onR') dead = true; if (v === 'ch' && f.n.endsWith('nasal')) dead = true; if (v === 'tr' && (f.n === 'R-temp' || f.n === 'L-nasal' || f.n === 'radR' || f.n === 'scR')) dead = true; f.tubes.forEach(t => { t.c = dead ? '#374151' : f.col; }); f.f.show(!dead); });
+    cut.hidden = v === 'none'; mv(cut.p, v === 'on' ? [8, 0, -32] : v === 'ch' ? chi : [10, 0, -10]);
+    const T = { none: ['正常：兩眼各看到左右視野', [0, 0], [0, 0]], on: ['右視神經切斷 → <b>右眼全盲</b>（單眼）', [0, 0], [1, 1]], ch: ['視交叉中央受損（如腦下垂體腫瘤壓迫）→ 兩眼鼻側纖維中斷 → <b>雙顳側偏盲</b>', [1, 0], [0, 1]], tr: ['右視徑受損 → 兩眼的<b>左視野</b>都看不到（同側偏盲）', [1, 0], [1, 0]] }[v];
+    drawVF('vfL', T[1][0], T[1][1]); drawVF('vfR', T[2][0], T[2][1]); $('vf-t').innerHTML = T[0]; $('vis-cap').innerHTML = T[0];
+  }, 'none');
+  S.onPick = o => { if (!o) return; const t = { onL: '左視神經', onR: '右視神經', chi: '視交叉：鼻側纖維交叉', tract: '視徑：交叉後的纖維', radL: '視放射', radR: '視放射', lgn: '外側膝狀核（視丘）', v1: '紋狀皮質（初級視覺皮質）', sc: '上丘：頂蓋系統，眼球運動與瞳孔反射', tect: '到上丘的纖維', eye: '眼球' }[o.id]; if (t) $('vis-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 快閃卡 / 測驗 ================= */
+UI.flashcards($('fc'), [
+  { f: '張力性 vs 相位性受器', b: '張力性：持續發放，監測刺激存在與強度；相位性：只對改變反應 → 感覺適應。' },
+  { f: '發生器電位與動作電位頻率', b: '發生器電位為分級去極化，與刺激強度成正比；超過閾值後，強度愈大 AP 頻率愈高。' },
+  { f: '觸壓覺 vs 痛溫覺在哪裡交叉？', b: '觸壓/本體：<b>延腦</b>（內側蹄系）；痛/溫：<b>脊髓</b>（脊髓視丘徑）。都到對側中央後回。' },
+  { f: '兩點閾最小的部位？', b: '指尖（食指 2 mm）、舌尖；接受域小、受器密。' },
+  { f: '五種基本味與機制', b: '鹹（Na⁺）、酸（H⁺）→ 離子通道；甜、苦、鮮 → G 蛋白偶聯受體（gustducin）。' },
+  { f: '嗅覺路徑', b: '嗅上皮雙極神經元 → 嗅球嗅小球（僧帽、簇細胞）→ 嗅徑 → 額葉、內側顳葉（邊緣系統）。' },
+  { f: '半規管 vs 耳石器官', b: '半規管：角加速度（頂帽）；橢圓囊、球狀囊：直線加速度（耳石膜）。' },
+  { f: '毛細胞何時去極化？', b: '靜纖毛彎向<b>動纖毛</b>時去極化；反方向過極化。' },
+  { f: '聲音傳導順序', b: '鼓膜 → 錘骨 → 砧骨 → 鐙骨 → 卵圓窗 → 前庭階 → （蝸孔/前庭膜）→ 鼓階 → 圓窗。' },
+  { f: '音高辨別的原理', b: '基底膜：基部窄硬對高頻、頂部寬軟對低頻 → 最大振動位置不同（加上側抑制）。' },
+  { f: '內毛細胞 vs 外毛細胞', b: '內（約 3,500，1 排）：感覺；外（約 11,000，3–5 排）：電動性伸縮，放大振動。' },
+  { f: '看近物時的調節', b: '睫狀肌<b>收縮</b> → 懸韌帶<b>放鬆</b> → 水晶體<b>變凸</b>、屈光力增加。' },
+  { f: '近視、遠視的原因與矯正', b: '近視：眼球太長、焦點在前 → 凹透鏡；遠視：太短、焦點在後 → 凸透鏡。' },
+  { f: '光如何改變視桿的膜電位？', b: '光 → 視紫質漂白 → 轉導蛋白 → PDE 分解 cGMP → Na⁺ 通道關 → 暗電流停止 → <b>過極化</b>。' },
+  { f: '三種視錐的最大吸收波長', b: 'S 420 nm（藍）、M 530 nm（綠）、L 562 nm（紅）；視紫質 500 nm。' },
+  { f: '中央小窩的特點', b: '只有視錐，1 視錐 : 1 雙極 : 1 神經節 → 敏銳度最高，但暗光敏感度低。' },
+  { f: '右視野的訊息送到哪側大腦？', b: '投射到兩眼視網膜的左半 → 左外側膝狀核 → <b>左</b>紋狀皮質。' },
+  { f: '開中心神經節細胞', b: '中心照光興奮、周邊照光抑制、全區照光反應弱 → 側抑制強化輪廓。' }
+], 'ch10');
+UI.quiz($('qz'), [
+  { q: '巴齊尼氏小體屬於何種受器且主要感受？', o: ['張力性，溫度', '相位性，深壓與振動', '張力性，痛覺', '相位性，冷覺'], a: 1, e: '巴齊尼氏小體快速適應，感受深壓、振動。' },
+  { q: '痛覺的第二級神經元在何處交叉？', o: ['延腦', '脊髓', '視丘', '大腦皮質'], a: 1, e: '脊髓視丘徑在脊髓交叉。' },
+  { q: '鹹味的轉導機制是？', o: ['G 蛋白偶聯受體', 'Na⁺ 經膜通道進入', 'cAMP 減少', 'K⁺ 通道開啟'], a: 1, e: '鹹與酸是離子經通道；甜苦鮮為 G 蛋白。' },
+  { q: '感受頭部旋轉（角加速度）的是？', o: ['橢圓囊', '球狀囊', '半規管', '耳蝸'], a: 2, e: '半規管的壺腹頂帽。' },
+  { q: '突然停止旋轉後仍覺得在轉，原因是？', o: ['耳石脫落', '內淋巴因慣性繼續流動使頂帽彎曲', '外淋巴壓力升高', '鼓膜震動'], a: 1, e: '內淋巴繼續流動 → 頂帽反向彎曲。' },
+  { q: '高頻聲音使基底膜何處振動最大？', o: ['靠近蝸孔的頂部', '靠近鐙骨的基部', '整條均勻', '前庭膜'], a: 1, e: '基部窄而硬，對高頻反應。' },
+  { q: '看近物時下列何者正確？', o: ['睫狀肌放鬆、水晶體變扁', '睫狀肌收縮、懸韌帶變緊', '睫狀肌收縮、懸韌帶放鬆、水晶體變凸', '瞳孔放大'], a: 2, e: '調節：睫狀肌收縮 → 懸韌帶鬆 → 水晶體凸。' },
+  { q: '近視應以何種鏡片矯正？', o: ['凸透鏡', '凹透鏡', '柱狀鏡', '不需矯正'], a: 1, e: '近視焦點在視網膜前，用凹透鏡發散光線。' },
+  { q: '光照使視桿細胞？', o: ['去極化、釋放更多傳遞物', '過極化、釋放較少傳遞物', '產生全有全無 AP', 'cGMP 增加'], a: 1, e: '光關閉 Na⁺ 通道 → 過極化。' },
+  { q: '視網膜中能產生全有全無動作電位的是？', o: ['視桿', '雙極細胞', '水平細胞', '神經節細胞'], a: 3, e: '只有神經節細胞（與無軸突細胞）產生 AP。' },
+  { q: '視交叉中央受壓（腦下垂體腫瘤）常造成？', o: ['單眼全盲', '雙顳側偏盲', '同側偏盲', '中央盲點'], a: 1, e: '交叉的鼻側纖維負責顳側視野。（補充）' },
+  { q: '負責瞳孔反射與眼球追蹤的是？', o: ['外側膝狀核', '上丘（頂蓋系統）', '紋狀皮質', '中央後回'], a: 1, e: '頂蓋系統經上丘。' }
+]);
+</script>
+</body>
+</html>

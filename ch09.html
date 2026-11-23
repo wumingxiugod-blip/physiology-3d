@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch9 自主神經系統 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .gauge{display:grid;grid-template-columns:120px minmax(0,1fr) 92px;gap:10px;align-items:center;margin:9px 0;font-size:14px}
+  .gauge .trk{position:relative;height:16px;background:var(--panel2);border-radius:8px;overflow:hidden}
+  .gauge .trk::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:2px;background:rgba(255,255,255,.4)}
+  .gauge .f{position:absolute;top:0;bottom:0;border-radius:8px;transition:left .6s,width .6s,background .6s}
+  .gauge .v{text-align:right;font-weight:800;font-size:13px}
+  .drugs{display:flex;flex-wrap:wrap;gap:6px}
+  .drugs .btn small{opacity:.75;font-weight:600;margin-left:4px}
+</style>
+</head>
+<body style="--acc:#f87171;--acc2:#4ade80">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 9 · The Autonomic Nervous System</div>
+  <h1 class="title3d">自主神經系統</h1>
+  <p class="sub">3D 比較軀體運動、交感、腎上腺髓質與副交感的神經路徑；3D 全身自主神經解剖（胸腰段 vs 顱薦段、交感鏈、側副神經節、迷走神經），切換「戰或逃」與「休息消化」看器官反應；受體與藥物模擬器（阿托品、β 阻斷劑、albuterol…）。</p>
+  <div class="chips"><a class="chip" href="#path">神經路徑 3D</a><a class="chip" href="#ana">解剖 3D</a><a class="chip" href="#rec">受體</a><a class="chip" href="#drug">藥物模擬</a><a class="chip" href="#dual">雙重支配</a><a class="chip" href="#cns">中樞控制</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="path" data-nav="神經路徑">
+  <h2><span class="num">01</span>兩個神經元的路徑：節前與節後</h2>
+  <p class="lead">自主運動需要<b>兩個神經元</b>：節前神經元（細胞體在 CNS）在<b>自主神經節</b>與節後神經元突觸，節後神經元再支配<b>平滑肌、心肌、腺體</b>。點選突觸看神經傳遞物與受體。</p>
+  <div class="grid2">
+    <div class="stage" id="st-path"><canvas aria-label="3D 神經路徑比較"></canvas><div class="hud">綠＝ACh　橘＝正腎上腺素　粉＝腎上腺素</div><div class="hud2" id="pa-cap">點選路徑或突觸</div></div>
+    <div class="card info" id="info-path"><div class="tt">點一個突觸</div><p class="empty">四條路徑由上而下：軀體運動、交感、交感→腎上腺髓質、副交感。</p></div>
+  </div>
+  <div class="tbwrap mt"><table class="tb">
+    <tr><th></th><th>軀體運動</th><th>自主運動</th></tr>
+    <tr><td>受動器</td><td>骨骼肌</td><td>心肌、平滑肌、腺體</td></tr>
+    <tr><td>神經元數</td><td>1（CNS → 肌肉）</td><td>2（節前 → 神經節 → 節後）</td></tr>
+    <tr><td>神經節</td><td>無</td><td>椎旁（交感鏈）、椎前（側副）、終末神經節</td></tr>
+    <tr><td>作用</td><td>只有興奮</td><td>興奮或抑制</td></tr>
+    <tr><td>去神經後</td><td>弛緩性麻痺、萎縮</td><td>張力與功能仍在；<b>去神經過敏</b></td></tr>
+  </table></div>
+</section>
+
+<section class="sec" id="ana" data-nav="解剖 3D">
+  <h2><span class="num">02</span>交感 vs 副交感（3D 解剖）</h2>
+  <p class="lead">切換分支與身體狀態：<span class="red">紅</span>＝交感（胸腰段 T1–L2），<span class="grn">綠</span>＝副交感（顱神經 III、VII、IX、X 與薦段 S2–S4）。粗線＝節前、細線＝節後。點器官看雙重支配。</p>
+  <div class="grid2">
+    <div class="stage" id="st-ans"><canvas aria-label="3D 自主神經解剖"></canvas><div class="hud" id="an-hud"></div><div class="hud2" id="an-cap"></div>
+      <div class="sbar"><div class="seg" id="anmode"><button class="btn sm" data-v="sym" type="button">交感</button><button class="btn sm" data-v="par" type="button">副交感</button><button class="btn sm" data-v="both" type="button">兩者</button></div><div class="seg" id="anstate"><button class="btn sm" data-v="fight" type="button">⚡ 戰或逃</button><button class="btn sm" data-v="rest" type="button">🍽 休息消化</button></div></div></div>
+    <div class="card info"><div id="info-ans"><div class="tt">點選器官或神經節</div><p class="empty">或用下方按鈕選取。</p></div><div class="picker" id="pk-ans"></div></div>
+  </div>
+  <div class="grid2 even mt">
+    <div class="card tilt"><h3>交感（胸腰段）</h3><ul class="small"><li>節前纖維由 <b>T1–L2</b> 腹根離開 → <b>白交通枝</b> → 椎旁交感鏈神經節（雙排）</li><li>節前短、節後長；一個節前可分歧到多個節後 → <b>大量活化</b></li><li>部分節前穿過交感鏈 → <b>內臟神經</b> → 側副神經節（腹腔、上腸繫膜、下腸繫膜）</li><li>部分直接到<b>腎上腺髓質</b>（像變形的交感神經節）→ 分泌腎上腺素（及少量 NE）入血 → <b>交感腎上腺系統</b></li></ul></div>
+    <div class="card tilt"><h3>副交感（顱薦段）</h3><ul class="small"><li>節前起自腦幹（中腦、橋腦、延腦）與薦段 <b>S2–S4</b></li><li>III → 睫狀神經節（眼）；VII → 翼腭、下頷下神經節（淚腺、鼻腔、下頷下/舌下腺）；IX → 耳神經節（腮腺）</li><li><b>迷走神經 X</b>：長節前 → 器官旁或內的<b>終末神經節</b>：心、肺、食道、胃、肝、小腸、大腸上半</li><li>薦段 → 大腸下半、直腸、泌尿與生殖系統</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="rec" data-nav="受體">
+  <h2><span class="num">03</span>神經傳遞物與受體</h2>
+  <div class="grid2 even">
+    <div class="card"><h3>膽鹼性 vs 腎上腺素性</h3><ul class="small"><li><b>所有節前</b>纖維：ACh（膽鹼性）→ 節後神經元上的<b>菸鹼型</b>受體</li><li><b>所有副交感節後</b>：ACh → 受動器上的<b>蕈毒鹼型</b>受體</li><li><b>多數交感節後</b>：正腎上腺素（腎上腺素性）</li><li>例外：支配<b>汗腺</b>與骨骼肌血管的交感節後纖維是<b>膽鹼性</b></li><li>節後軸突有<b>膨體 varicosities</b>，沿途釋放神經傳遞物（en passant 突觸）</li><li>非腎上腺素非膽鹼性：ATP、VIP、<b>NO</b>（陰莖血管舒張→勃起、腦動脈舒張）</li></ul></div>
+    <div class="tbwrap"><table class="tb"><tr><th>受體</th><th>機制</th><th>典型作用</th></tr>
+      <tr><td><b>α₁</b></td><td>↑ 細胞質 Ca²⁺</td><td>平滑肌<b>收縮</b>：血管收縮、瞳孔放大肌、括約肌</td></tr>
+      <tr><td><b>α₂</b></td><td>突觸前：減少 NE 釋放；CNS</td><td>降低交感輸出（clonidine）</td></tr>
+      <tr><td><b>β₁</b></td><td>↑ cAMP</td><td>心率與收縮力增加</td></tr>
+      <tr><td><b>β₂</b></td><td>↑ cAMP</td><td>平滑肌<b>放鬆</b>：支氣管擴張、骨骼肌血管舒張（腎上腺素）</td></tr>
+      <tr><td>β₃</td><td>↑ cAMP</td><td>脂肪組織：脂肪分解、產熱</td></tr>
+      <tr><td><b>菸鹼型 N</b></td><td>配體閘控陽離子通道 → 去極化</td><td>自主神經節、骨骼肌（永遠興奮）</td></tr>
+      <tr><td><b>蕈毒鹼 M₃、M₅</b></td><td>G 蛋白 → ↑ Ca²⁺</td><td>平滑肌收縮、腺體分泌</td></tr>
+      <tr><td><b>蕈毒鹼 M₂</b></td><td>G 蛋白 → 開 K⁺ 通道 → 過極化</td><td>心臟：心率變慢</td></tr></table></div>
+  </div>
+</section>
+
+<section class="sec" id="drug" data-nav="藥物模擬">
+  <h2><span class="num">04</span>受體藥物模擬器</h2>
+  <p class="lead">選身體狀態與藥物，看受體活化與器官反應（中線＝正常休息狀態；示意模型）。<b>促效劑 agonist</b> 促進傳遞物的作用；<b>拮抗劑 antagonist</b> 阻斷它。</p>
+  <div class="grid2">
+    <div class="card">
+      <div class="seg" id="dstate"><button class="btn sm" data-v="rest" type="button">休息</button><button class="btn sm" data-v="fight" type="button">戰或逃</button><button class="btn sm" data-v="dig" type="button">休息消化</button></div>
+      <h4>藥物（可複選）</h4><div class="drugs" id="drugs"></div>
+      <h4>受體活化</h4><div id="recbars"></div>
+    </div>
+    <div class="card"><h4 style="margin-top:0">器官反應</h4><div id="orgbars"></div><div class="note" id="drug-note"></div></div>
+  </div>
+</section>
+
+<section class="sec" id="dual" data-nav="雙重支配">
+  <h2><span class="num">05</span>雙重支配：拮抗、互補、協同</h2>
+  <div class="grid3">
+    <div class="card tilt"><div class="ic">⚖️</div><h3>拮抗 Antagonistic</h3><ul class="small"><li><b>心臟</b>：交感 β₁ ↑心率；副交感（迷走）M₂ ↓心率</li><li><b>瞳孔</b>：交感 α₁ 使<b>輻射肌</b>收縮 → 放大；副交感使<b>環狀肌</b>收縮 → 縮小</li><li>腸胃道：交感抑制、副交感促進蠕動與分泌</li></ul></div>
+    <div class="card tilt"><div class="ic">🤝</div><h3>互補 Complementary</h3><ul class="small"><li><b>唾液腺</b>：副交感 → 大量稀薄唾液；交感 → 收縮血管，唾液少而黏稠</li><li>兩者都刺激分泌，只是性質不同</li></ul></div>
+    <div class="card tilt"><div class="ic">🔗</div><h3>協同 Cooperative</h3><ul class="small"><li><b>生殖</b>：副交感 → 勃起（血管舒張，NO）；交感 → 射精</li><li><b>排尿</b>：副交感使逼尿肌收縮；交感協助括約肌張力</li></ul></div>
+  </div>
+  <div class="note"><b>無雙重支配的器官</b>：腎上腺髓質、豎毛肌、汗腺與<b>大多數血管</b>只有交感支配 → 靠交感神經活性<b>增減</b>來調節（例：交感↓ → 血管舒張）。交感神經有持續的<b>張力性</b>活動，不只在緊急時作用。</div>
+</section>
+
+<section class="sec" id="cns" data-nav="中樞控制">
+  <h2><span class="num">06</span>自主神經的中樞控制</h2>
+  <div class="chain"><div class="nd">大腦皮質<small>情緒、意識</small></div><span class="ar">→</span><div class="nd">邊緣系統<small>情緒反應</small></div><span class="ar">→</span><div class="nd on">下視丘<small>體溫、口渴、情緒的內臟反應</small></div><span class="ar">→</span><div class="nd on">延腦<small>最直接控制：心血管、呼吸中樞</small></div><span class="ar">→</span><div class="nd">脊髓 → 節前神經元</div></div>
+  <p class="small">延腦接受感覺輸入與下視丘的輸入；下視丘又受邊緣系統、小腦、大腦影響 → 情緒伴隨的內臟反應（如臉紅、心跳加快、昏厥）。</p>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">07</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">08</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 9 章整理，僅供個人複習。3D 解剖與藥物模型為示意。 · <a href="index.html">回總覽</a> · <a href="huntington.html">← 補充：杭丁頓氏症</a> · <a href="ch10.html">第 10 章 感覺 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+
+/* ================= 01 路徑比較 ================= */
+(function () {
+  const S = K.stage('st-path', { radius: 66, yaw: 0.35, pitch: 0.25, autoRotate: 0 });
+  K.box(S, [-62, 0, 0], [16, 84, 22], '#64748b', { id: 'cns', al: 0.35 });
+  K.lab(S, [-62, 46, 0], 'CNS（腦／脊髓）', 'cns', '#cbd5e1', 0, -12);
+  const ROW = [30, 10, -10, -30];
+  const nt = [];
+  function neuron(x0, x1, y, col, r, id, myel) {
+    S.sphere([x0, y, 0], 3.4, col, { id: id + 'b' });
+    const P = new Mini3D.Path([[x0, y, 0], [K.lerp(x0, x1, 0.5), y + 2, 4], [x1, y, 0]], 8);
+    P.pts.slice(0, -1).forEach((p, i) => S.tube(p, P.pts[i + 1], r, col, { id }));
+    if (myel) for (let k = 1; k < 6; k++) { const p = P.at(k / 6.5); S.tube(V.add(p, [-2, 0, 0]), V.add(p, [2, 0, 0]), r * 2.1, '#e2e8f0', { id, al: 0.8 }); }
+    return P;
+  }
+  const muscle = (c, col, id, r) => K.ellipsoid(S, c, r || [8, 5, 5], col, 12, 6, { id });
+  const PATHS = [];
+  // 軀體
+  PATHS.push({ P: neuron(-56, 48, ROW[0], '#93c5fd', 1.1, 'som', true), nt: 'ACh', syn: [48, ROW[0], 0], row: 0 });
+  muscle([58, ROW[0], 0], '#ef4444', 'skm'); K.lab(S, [58, ROW[0] + 6, 0], '骨骼肌', 'skm', '#fca5a5', 0, -12);
+  // 交感
+  PATHS.push({ P: neuron(-56, -30, ROW[1], '#f87171', 1.0, 'spre', true), nt: 'ACh', syn: [-30, ROW[1], 0], row: 1 });
+  S.sphere([-28, ROW[1], 0], 4.2, '#fca5a5', { id: 'sgang', al: 0.6 });
+  PATHS.push({ P: neuron(-26, 48, ROW[1], '#f87171', 0.6, 'spost', false), nt: 'NE', syn: [48, ROW[1], 0], row: 1 });
+  muscle([58, ROW[1], 0], '#f472b6', 'smo'); K.lab(S, [58, ROW[1] + 6, 0], '平滑肌／心肌／腺體', 'smo', '#f9a8d4', 0, -12);
+  K.lab(S, [-28, ROW[1] + 5, 0], '交感鏈神經節', 'sgang', '#fca5a5', 0, -14);
+  // 腎上腺髓質
+  PATHS.push({ P: neuron(-56, -2, ROW[2], '#f87171', 1.0, 'apre', true), nt: 'ACh', syn: [-2, ROW[2], 0], row: 2 });
+  K.ellipsoid(S, [4, ROW[2], 0], [7, 5, 5], '#facc15', 12, 6, { id: 'adr' }); K.lab(S, [4, ROW[2] + 6, 0], '腎上腺髓質', 'adr', '#fde047', 0, -12);
+  const vessel = new Mini3D.Path([[10, ROW[2], 0], [28, ROW[2] - 4, 6], [48, ROW[2], 0]], 8);
+  vessel.pts.slice(0, -1).forEach((p, i) => S.tube(p, vessel.pts[i + 1], 2.4, '#7f1d1d', { id: 'blood', al: 0.6 }));
+  K.lab(S, [28, ROW[2] - 4, 6], '血液', 'blood', '#fca5a5', 0, 16);
+  muscle([58, ROW[2], 0], '#f472b6', 'smo');
+  // 副交感
+  PATHS.push({ P: neuron(-56, 34, ROW[3], '#4ade80', 1.0, 'ppre', true), nt: 'ACh', syn: [34, ROW[3], 0], row: 3 });
+  S.sphere([36, ROW[3], 0], 3.8, '#86efac', { id: 'pgang', al: 0.6 });
+  PATHS.push({ P: neuron(38, 48, ROW[3], '#4ade80', 0.6, 'ppost', false), nt: 'ACh', syn: [48, ROW[3], 0], row: 3 });
+  muscle([58, ROW[3], 0], '#f472b6', 'smo'); K.lab(S, [36, ROW[3] + 5, 0], '終末神經節', 'pgang', '#86efac', 0, -14);
+  ['軀體運動', '交感', '交感 → 腎上腺髓質', '副交感'].forEach((t, i) => K.lab(S, [-74, ROW[i], 0], t, ['som', 'spre', 'apre', 'ppre'][i], ['#93c5fd', '#fca5a5', '#fde047', '#86efac'][i], -10, 0));
+  const SYN = [
+    [[48, ROW[0], 0], 'syn0', 'ACh → 菸鹼型（神經肌肉接合）'], [[-30, ROW[1], 0], 'syn1', 'ACh → 菸鹼型（神經節）'], [[48, ROW[1], 0], 'syn2', 'NE → α / β 受體'],
+    [[-2, ROW[2], 0], 'syn3', 'ACh → 菸鹼型（嗜鉻細胞）'], [[34, ROW[3], 0], 'syn4', 'ACh → 菸鹼型（神經節）'], [[48, ROW[3], 0], 'syn5', 'ACh → 蕈毒鹼型']
+  ];
+  SYN.forEach(([p, id, t]) => { S.sphere(p, 2.2, '#fde047', { id, glow: 0.5 }); });
+  // 脈衝與傳遞物
+  const NTC = { ACh: '#4ade80', NE: '#fb923c', Epi: '#f472b6' };
+  const pulses = PATHS.map(pp => ({ pp, o: S.sphere([0, 0, 0], 2, '#fef9c3', { glow: 1.4, gc: '#fde047', nopick: true }), u: Math.random() }));
+  const puffs = []; for (let i = 0; i < 60; i++) puffs.push({ o: S.dot([0, 0, 0], 1, '#fff', { hidden: true }), age: 9 });
+  const epi = []; for (let i = 0; i < 8; i++) epi.push({ o: S.sphere([0, 0, 0], 1.4, NTC.Epi, { hidden: true, nopick: true }), u: i / 8 });
+  function puff(p, c) { let n = 0; puffs.forEach(f => { if (f.age > 1 && n < 8) { f.age = 0; f.base = p; f.d = V.norm([Math.random() * 0.6 + 0.4, Math.random() - 0.5, Math.random() - 0.5]); f.o.c = c; f.o.hidden = false; n++; } }); }
+  S.tick(dt => {
+    pulses.forEach(p => { const was = p.u; p.u += dt * 0.42; if (p.u >= 1) { p.u = 0; puff(p.pp.syn, NTC[p.pp.nt]); } mv(p.o.p, p.pp.P.at(p.u)); });
+    puffs.forEach(f => { if (f.age > 1) { f.o.hidden = true; return; } f.age += dt; mv(f.o.p, V.add(f.base, V.mul(f.d, f.age * 7))); f.o.al = 1 - f.age; });
+    epi.forEach(e => { e.u = (e.u + dt * 0.25) % 1; e.o.hidden = false; mv(e.o.p, vessel.at(e.u)); });
+  });
+  const INFO = {
+    syn0: ['神經肌肉接合', ['軀體運動神經元直接支配骨骼肌', 'ACh → <b>菸鹼型</b>受體 → 去極化、收縮（只會興奮）']],
+    syn1: ['交感神經節', ['節前纖維（有髓鞘、短）釋放 <b>ACh</b>', '節後神經元上為<b>菸鹼型</b>受體']],
+    syn2: ['交感節後 → 受動器', ['節後纖維（無髓鞘、長）多釋放<b>正腎上腺素</b>（腎上腺素性）', '受體 α₁、α₂、β₁、β₂', '例外：汗腺、骨骼肌血管的交感節後為膽鹼性']],
+    syn3: ['腎上腺髓質', ['節前纖維直接支配<b>嗜鉻細胞</b>（像變形的交感神經節）', '分泌<b>腎上腺素</b>（及少量 NE）進入血液 → 激素作用']],
+    syn4: ['副交感神經節（終末神經節）', ['節前纖維長，神經節在器官旁或器官內', 'ACh → 菸鹼型']],
+    syn5: ['副交感節後 → 受動器', ['節後纖維短，釋放 <b>ACh</b>', '受動器上為<b>蕈毒鹼型</b>受體（可被阿托品阻斷）']],
+    som: ['軀體運動神經元', ['只有 1 個神經元，由 CNS 直達骨骼肌']], spre: ['交感節前', ['T1–L2 側角；短、有髓鞘']], spost: ['交感節後', ['長、無髓鞘']], apre: ['到腎上腺髓質的節前纖維', ['不在神經節突觸']], ppre: ['副交感節前', ['腦幹或 S2–S4；長']], ppost: ['副交感節後', ['短']],
+    sgang: ['椎旁神經節（交感鏈）', ['脊髓兩旁的雙排神經節']], pgang: ['終末神經節', ['在器官旁或器官內']], adr: ['腎上腺髓質', ['腎上腺素約佔分泌物的大部分，另有少量 NE']], blood: ['血液', ['腎上腺素隨血液到達各受動器']],
+    skm: ['骨骼肌', ['隨意肌；去神經 → 弛緩性麻痺與萎縮']], smo: ['不隨意受動器', ['平滑肌、心肌、腺體；去神經後仍有張力並出現去神經過敏']], cns: ['中樞神經系統', ['節前神經元的細胞體在腦或脊髓灰質']]
+  };
+  K.info(S, 'info-path', INFO, { on: id => { $('pa-cap').textContent = '👉 ' + (Array.isArray(INFO[id]) ? INFO[id][0] : id); } });
+})();
+
+/* ================= 02 3D 解剖 ================= */
+(function () {
+  const S = K.stage('st-ans', { radius: 82, yaw: -0.55, pitch: 0.12, autoRotate: 0, target: [16, 14, 6] });
+  const segY = n => { const m = /^([CTLS])(\d+)$/.exec(n), base = { C: 0, T: 8, L: 20, S: 25 }[m[1]]; return 58 - (base + +m[2] - 1) * 3.6; };
+  K.ellipsoid(S, [0, 76, 0], [17, 11, 13], '#c4b5fd', 18, 9, { id: 'brain', al: 0.35 });
+  K.sweep(S, [[0, 68, 0], [0, 40, 0], [0, 0, 0], [0, -46, 0]], 2.8, '#e2e8f0', 30, 8, { id: 'cord', al: 0.85 });
+  [['C1', 'C1'], ['T1', 'T1'], ['T12', 'T12'], ['L2', 'L2'], ['S2', 'S2'], ['S4', 'S4']].forEach(([n]) => K.lab(S, [-4, segY(n), 0], n, 'cord', '#94a3b8', -18, 0, { size: 11 }));
+  K.lab(S, [0, 64, 0], '腦幹', 'brain', '#c4b5fd', -36, 0);
+  const SYMC = '#f87171', PARC = '#4ade80';
+  const groups = { sym: [], par: [] };
+  const flows = { sym: [], par: [] };
+  const G = (div, o) => { groups[div].push(o); return o; };
+  function fiber(div, pts, pre, id) {
+    const P = new Mini3D.Path(pts, 6);
+    P.pts.slice(0, -1).forEach((p, i) => G(div, S.tube(p, P.pts[i + 1], pre ? 0.85 : 0.5, div === 'sym' ? SYMC : PARC, { id: id || (div === 'sym' ? 'symf' : 'parf'), al: pre ? 0.95 : 0.7 })));
+    const f = K.flow(S, P, 2, pre ? 1.4 : 1.1, '#fef9c3', 0.3, { glow: 1, gc: div === 'sym' ? '#fca5a5' : '#86efac' });
+    f.div = div; flows[div].push(f); f.arr.forEach(a => G(div, a.o));
+    return P;
+  }
+  const gang = (div, p, id, r) => G(div, S.sphere(p, r || 2.2, div === 'sym' ? '#fca5a5' : '#86efac', { id }));
+  // 器官
+  const ORG = {
+    eye: { c: [44, 74, 8], r: [5, 5, 5], col: '#f8fafc', n: '眼' }, sal: { c: [46, 63, 8], r: [5, 3, 4], col: '#fda4af', n: '唾液腺' },
+    heart: { c: [34, 30, 10], r: [7, 8, 6], col: '#ef4444', n: '心臟' }, lung: { c: [52, 36, 0], r: [7, 11, 6], col: '#f9a8d4', n: '肺' },
+    sto: { c: [48, 14, 14], r: [8, 5, 5], col: '#fbbf24', n: '胃' }, liver: { c: [28, 14, 20], r: [9, 5, 6], col: '#b45309', n: '肝' },
+    adr: { c: [30, -2, 6], r: [3.5, 3, 3], col: '#facc15', n: '腎上腺髓質' }, int: { c: [48, -6, 16], r: [9, 5, 6], col: '#fb923c', n: '小腸' },
+    colon: { c: [48, -22, 14], r: [9, 4, 5], col: '#d97706', n: '大腸' }, blad: { c: [40, -38, 12], r: [5, 5, 5], col: '#fde68a', n: '膀胱' }, gen: { c: [44, -48, 10], r: [4, 3, 3], col: '#f472b6', n: '生殖器' }
+  };
+  const orgM = {}, orgL = {};
+  Object.keys(ORG).forEach(k => { const o = ORG[k]; orgM[k] = K.mover(K.ellipsoid(S, [0, 0, 0], o.r, o.col, 14, 7, { id: k }), [0, 0, 0]); orgM[k].set(o.c, 1); orgL[k] = K.lab(S, V.add(o.c, [0, o.r[1] + 2, 0]), o.n, k, '#e2e8f0', 22, -10, { size: 12 }); });
+  const pupil = S.sphere(V.add(ORG.eye.c, [-4.2, 0, -2]), 2, '#0f172a', { id: 'eye' });
+  // 交感
+  const CH = []; for (let i = 0; i < 30; i++) { if (i < 8 && ![1, 5, 7].includes(i)) continue; const y = 58 - i * 3.6; CH.push(gang('sym', [9, y, -3], 'chain', i < 8 ? 2.6 : 1.7)); }
+  for (let i = 0; i < CH.length - 1; i++) G('sym', S.tube(CH[i].p, CH[i + 1].p, 0.5, SYMC, { id: 'chain', al: 0.7 }));
+  for (let i = 8; i <= 21; i++) { const y = 58 - i * 3.6; G('sym', S.tube([2.5, y, 0], [9, y, -3], 0.6, SYMC, { id: 'white' })); }
+  const scg = [9, 58 - 3.6, -3];
+  fiber('sym', [scg, [24, 70, 4], ORG.eye.c], false); fiber('sym', [scg, [26, 62, 4], ORG.sal.c], false);
+  fiber('sym', [[9, segY('T2'), -3], [22, 34, 6], ORG.heart.c], false); fiber('sym', [[9, segY('T3'), -3], [30, 40, 0], ORG.lung.c], false);
+  const cel = gang('sym', [18, 8, 14], 'celiac', 3), smg = gang('sym', [20, -6, 14], 'smg', 2.8), img = gang('sym', [20, -20, 14], 'img', 2.6);
+  fiber('sym', [[2.5, segY('T6'), 0], [9, segY('T7'), -1], [14, 12, 10], cel.p], true, 'splanch'); fiber('sym', [cel.p, [34, 14, 16], ORG.sto.c], false); fiber('sym', [cel.p, [24, 12, 18], ORG.liver.c], false);
+  fiber('sym', [[2.5, segY('T10'), 0], [9, segY('T11'), -1], [16, -2, 10], smg.p], true, 'splanch'); fiber('sym', [smg.p, [34, -6, 16], ORG.int.c], false);
+  fiber('sym', [[2.5, segY('L1'), 0], [9, segY('L2'), -1], [16, -18, 10], img.p], true, 'splanch'); fiber('sym', [img.p, [34, -22, 16], ORG.colon.c], false); fiber('sym', [img.p, [32, -32, 14], ORG.blad.c], false); fiber('sym', [img.p, [32, -42, 12], ORG.gen.c], false);
+  fiber('sym', [[2.5, segY('T9'), 0], [9, segY('T10'), -2], [22, 0, 6], ORG.adr.c], true, 'adrpre');
+  // 副交感
+  const bs = [3, 64, 0];
+  const cil = gang('par', [36, 73, 8], 'cil'), ptp = gang('par', [37, 68, 9], 'ptp'), sub = gang('par', [39, 62, 9], 'subm'), otc = gang('par', [40, 59, 7], 'otic');
+  fiber('par', [bs, [18, 72, 6], cil.p], true, 'cn3'); fiber('par', [cil.p, ORG.eye.c], false);
+  fiber('par', [bs, [20, 66, 8], ptp.p], true, 'cn7'); fiber('par', [ptp.p, [42, 72, 10], ORG.eye.c], false);
+  fiber('par', [bs, [20, 62, 8], sub.p], true, 'cn7'); fiber('par', [sub.p, ORG.sal.c], false);
+  fiber('par', [bs, [20, 58, 6], otc.p], true, 'cn9'); fiber('par', [otc.p, ORG.sal.c], false);
+  const vag = [[3, 62, 0], [16, 52, 4], [22, 38, 6], [24, 20, 8], [26, 4, 10], [28, -12, 10]];
+  const tg = (o, d) => V.add(ORG[o].c, d || [-ORG[o].r[0] - 1.5, 0, 0]);
+  fiber('par', [vag[0], vag[1], vag[2], tg('heart')], true, 'vagus'); fiber('par', [vag[0], vag[1], [30, 42, 4], tg('lung')], true, 'vagus');
+  fiber('par', [vag[0], vag[1], vag[2], vag[3], tg('sto')], true, 'vagus'); fiber('par', [vag[0], vag[1], vag[2], vag[3], tg('liver', [0, 0, -7])], true, 'vagus');
+  fiber('par', [vag[0], vag[1], vag[2], vag[3], vag[4], tg('int')], true, 'vagus'); fiber('par', [vag[0], vag[1], vag[2], vag[3], vag[4], vag[5], tg('colon')], true, 'vagus');
+  ['heart', 'lung', 'sto', 'int', 'colon'].forEach(o => gang('par', tg(o), 'term', 1.6)); gang('par', tg('liver', [0, 0, -7]), 'term', 1.6);
+  const sac = [[2.5, segY('S2'), 0], [2.5, segY('S4'), 0]];
+  fiber('par', [sac[0], [18, -36, 6], tg('blad')], true, 'pelvic'); fiber('par', [sac[0], [20, -30, 8], tg('colon', [0, -5, 0])], true, 'pelvic'); fiber('par', [sac[1], [20, -44, 6], tg('gen')], true, 'pelvic');
+  ['blad', 'gen'].forEach(o => gang('par', tg(o), 'term', 1.6)); gang('par', tg('colon', [0, -5, 0]), 'term', 1.6);
+  K.lab(S, [20, 54, 5], '迷走神經 X', 'vagus', '#86efac', -10, -14); K.lab(S, [9, 30, -3], '交感鏈', 'chain', '#fca5a5', -40, 0); K.lab(S, cel.p, '腹腔神經節', 'celiac', '#fca5a5', -40, 10); K.lab(S, [18, -36, 6], '骨盆神經 S2–S4', 'pelvic', '#86efac', -40, 14);
+  // 狀態與效果
+  const EFF = {
+    fight: { eye: '瞳孔放大', sal: '唾液少而黏', heart: '心率↑ 收縮力↑', lung: '支氣管擴張', sto: '蠕動↓', liver: '肝醣分解 → 血糖↑', adr: '分泌腎上腺素', int: '蠕動↓', colon: '蠕動↓', blad: '逼尿肌放鬆', gen: '射精' },
+    rest: { eye: '瞳孔縮小', sal: '大量稀薄唾液', heart: '心率↓', lung: '支氣管收縮', sto: '蠕動↑ 分泌↑', liver: '—', adr: '—', int: '蠕動↑', colon: '蠕動↑', blad: '逼尿肌收縮（排尿）', gen: '勃起' }
+  };
+  let div = 'both', state = 'fight', ph = 0;
+  function apply() {
+    ['sym', 'par'].forEach(d => { const show = div === 'both' || div === d; groups[d].forEach(o => { o.hidden = !show; }); });
+    ['sym', 'par'].forEach(d => flows[d].forEach(f => { const on = (div === 'both' || div === d); f.show(on); f.speed = (d === 'sym') === (state === 'fight') ? 0.55 : 0.12; }));
+    Object.keys(orgL).forEach(k => { orgL[k].text = ORG[k].n + '：' + EFF[state][k]; });
+    $('an-hud').textContent = state === 'fight' ? '戰或逃：交感大量活化（+ 腎上腺素）' : '休息與消化：副交感為主';
+    $('an-cap').textContent = div === 'sym' ? '交感：胸腰段 T1–L2' : div === 'par' ? '副交感：顱神經 III VII IX X + S2–S4' : '紅＝交感、綠＝副交感';
+  }
+  S.tick(dt => {
+    const hr = state === 'fight' ? 2.2 : 0.9; ph += dt * hr * 6.2832;
+    const beat = 1 + 0.12 * Math.max(0, Math.sin(ph));
+    orgM.heart.set(ORG.heart.c, beat);
+    orgM.lung.set(ORG.lung.c, state === 'fight' ? 1.12 + 0.04 * Math.sin(ph * 0.5) : 0.92);
+    const wig = state === 'rest' ? 1 + 0.08 * Math.sin(performance.now() / 180) : 1;
+    orgM.int.set(ORG.int.c, [wig, 2 - wig, 1]); orgM.colon.set(ORG.colon.c, [1, wig, 2 - wig]);
+    pupil.r = state === 'fight' ? 3 : 1.1;
+  });
+  const INFO = {
+    eye: ['眼（虹膜）', ['交感 α₁：<b>輻射肌</b>收縮 → 瞳孔放大', '副交感（III → 睫狀神經節）：<b>環狀肌</b>收縮 → 瞳孔縮小；睫狀肌收縮 → 看近物', '→ <b>拮抗</b>']],
+    sal: ['唾液腺', ['副交感（VII、IX）：大量稀薄唾液', '交感：血管收縮，少量黏稠唾液', '→ <b>互補</b>']],
+    heart: ['心臟', ['交感 β₁：竇房結 → 心率↑、收縮力↑', '副交感（迷走）M₂：開 K⁺ 通道 → 過極化 → 心率↓', '→ <b>拮抗</b>']],
+    lung: ['肺（支氣管平滑肌）', ['β₂（主要是循環的腎上腺素）→ 支氣管擴張', '副交感（迷走）→ 支氣管收縮']],
+    sto: ['胃', ['交感：抑制蠕動與分泌（β₂、α₂）、括約肌收縮（α₁）', '副交感（迷走）：促進蠕動與分泌']],
+    liver: ['肝臟', ['交感 α₁、β₂：<b>肝醣分解</b>，釋出葡萄糖', '副交感（迷走）也有支配']],
+    adr: ['腎上腺髓質', ['只有交感節前纖維支配（無雙重支配）', '分泌腎上腺素與少量 NE 進入血液']],
+    int: ['小腸', ['交感：抑制蠕動；腸壁平滑肌 β₂ 放鬆', '副交感（迷走）：促進蠕動與分泌']],
+    colon: ['大腸', ['上半：迷走神經；下半與直腸：薦段副交感', '交感抑制、副交感促進']],
+    blad: ['膀胱', ['副交感（S2–S4）：逼尿肌收縮 → 排尿', '交感：逼尿肌略放鬆（β₂）、尿道括約肌收縮（α₁）', '→ <b>協同</b>調節排尿']],
+    gen: ['生殖器', ['副交感：血管舒張（NO）→ <b>勃起</b>', '交感 α₁：<b>射精</b>', '→ <b>協同</b>']],
+    chain: ['交感鏈（椎旁神經節）', ['脊髓兩側的雙排神經節', '節前經白交通枝進入，可上下行再突觸']],
+    white: ['白交通枝', ['有髓鞘的節前纖維，由 T1–L2 腹根離開']],
+    celiac: ['腹腔神經節（側副）', ['內臟神經的節前纖維在此突觸 → 胃、肝等']], smg: ['上腸繫膜神經節', ['→ 小腸']], img: ['下腸繫膜神經節', ['→ 大腸、膀胱、生殖器']],
+    splanch: ['內臟神經 Splanchnic nerve', ['穿過交感鏈但不突觸的節前纖維', '到達側副神經節']],
+    adrpre: ['到腎上腺髓質的節前纖維', ['直接支配嗜鉻細胞']],
+    vagus: ['迷走神經 X', ['約 75% 的副交感纖維', '長節前 → 器官旁/內的終末神經節', '心、肺、食道、胃、肝、小腸、大腸上半']],
+    cn3: ['動眼神經 III', ['→ 睫狀神經節 → 虹膜環狀肌、睫狀肌']], cn7: ['顏面神經 VII', ['→ 翼腭神經節（淚腺、鼻腔、腭腺）、下頷下神經節（下頷下與舌下腺）']], cn9: ['舌咽神經 IX', ['→ 耳神經節 → 腮腺']],
+    cil: ['睫狀神經節', ['動眼神經的副交感神經節']], ptp: ['翼腭神經節', ['顏面神經 → 淚腺等']], subm: ['下頷下神經節', ['顏面神經 → 下頷下、舌下腺']], otic: ['耳神經節', ['舌咽神經 → 腮腺']],
+    pelvic: ['骨盆內臟神經（S2–S4）', ['薦段副交感 → 大腸下半、直腸、膀胱、生殖器']], term: ['終末神經節', ['在器官旁或器官壁內；節後纖維很短']],
+    cord: ['脊髓', ['交感節前細胞體位於 T1–L2 的側角']], brain: ['腦／腦幹', ['副交感節前起自中腦、橋腦、延腦']]
+  };
+  K.info(S, 'info-ans', INFO, { picker: 'pk-ans', hl: true });
+  UI.$$('#pk-ans button').forEach((b, i) => { if (i > 10) b.style.display = 'none'; });
+  K.seg('#anmode', v => { div = v; apply(); }, 'both');
+  K.seg('#anstate', v => { state = v; apply(); }, 'fight');
+})();
+
+/* ================= 04 藥物模擬 ================= */
+(function () {
+  const DR = [
+    { k: 'phe', n: '苯腎上腺素／偽麻黃鹼', t: 'α₁ 促效', r: { a1: 1 }, note: '感冒藥：收縮鼻黏膜血管消除鼻塞，但會升高血壓。' },
+    { k: 'clo', n: 'Clonidine', t: 'α₂ 促效（CNS）', r: { a2: 1 }, note: '作用於 CNS 降低交感腎上腺系統活性 → 血管舒張、血壓下降。' },
+    { k: 'dob', n: 'Dobutamine', t: 'β₁ 促效', r: { b1: 1 }, note: '增加心肌收縮力與心輸出量。' },
+    { k: 'alb', n: 'Albuterol／Terbutaline', t: 'β₂ 促效', r: { b2: 1 }, note: '氣喘吸入劑：選擇性擴張支氣管；比吸入腎上腺素少刺激心臟 β₁。' },
+    { k: 'pht', n: 'Phentolamine', t: 'α₁ 阻斷', r: { a1: -1 }, note: '短期控制高血壓（阻斷血管收縮）。' },
+    { k: 'yoh', n: 'Yohimbine', t: 'α₂ 阻斷', r: { a2: -1 }, note: '升高血壓（解除 α₂ 對交感輸出的抑制）。' },
+    { k: 'ate', n: 'Atenolol／Metoprolol', t: 'β₁ 選擇性阻斷', r: { b1: -1 }, note: '治療高血壓：降低心率與收縮力。' },
+    { k: 'pro', n: 'Propranolol', t: 'β₁ + β₂ 阻斷', r: { b1: -1, b2: -1 }, note: '非選擇性 β 阻斷：也阻斷支氣管 β₂ → 易感者可能<b>誘發支氣管收縮（氣喘）</b>。' },
+    { k: 'atr', n: '阿托品 Atropine', t: '蕈毒鹼阻斷', r: { m: -1 }, note: '散瞳（眼科檢查）、減少呼吸道分泌、治療膀胱過動、減少腸道收縮；心率上升、口乾。' },
+    { k: 'mus', n: '蕈毒鹼 Muscarine', t: '蕈毒鹼促效', r: { m: 1 }, note: '模擬副交感：心率下降、瞳孔縮小、大量分泌。' }
+  ];
+  const ST = { rest: [0.5, 0.5], fight: [0.95, 0.15], dig: [0.2, 0.9] };
+  let st = 'rest'; const on = new Set();
+  const box = $('drugs');
+  DR.forEach(d => { const b = UI.h('button', 'btn sm', d.n + '<small>' + d.t + '</small>'); b.type = 'button'; b.onclick = () => { if (on.has(d.k)) on.delete(d.k); else on.add(d.k); b.classList.toggle('on', on.has(d.k)); upd(); }; box.appendChild(b); });
+  const gauge = (lbl, v, lo, hi, col) => { const x = Math.max(-1, Math.min(1, v)), l = x < 0 ? 50 + x * 50 : 50, w = Math.abs(x) * 50; return '<div class="gauge"><span>' + lbl + '</span><div class="trk"><div class="f" style="left:' + l + '%;width:' + w + '%;background:' + (x < 0 ? '#60a5fa' : col || '#f87171') + '"></div></div><span class="v" style="color:' + (Math.abs(x) < 0.08 ? '#94a3b8' : x < 0 ? '#93c5fd' : '#fca5a5') + '">' + (Math.abs(x) < 0.08 ? '正常' : x < 0 ? lo : hi) + '</span></div>'; };
+  function upd() {
+    let [S, P] = ST[st];
+    const mod = { a1: 0, a2: 0, b1: 0, b2: 0, m: 0 };
+    on.forEach(k => { const d = DR.find(x => x.k === k); Object.keys(d.r).forEach(r => { mod[r] = d.r[r]; }); });
+    if (mod.a2 > 0) S *= 0.35; if (mod.a2 < 0) S = Math.min(1, S * 1.5 + 0.1);
+    const act = r => { const base = r === 'm' ? P : r === 'b2' ? S * 0.9 : S; return mod[r] > 0 ? Math.min(1, base + 0.55) : mod[r] < 0 ? base * 0.12 : base; };
+    const A = { a1: act('a1'), a2: mod.a2 > 0 ? 1 : mod.a2 < 0 ? 0.05 : S, b1: act('b1'), b2: act('b2'), m: act('m') };
+    $('recbars').innerHTML = [['α₁', A.a1], ['α₂', A.a2], ['β₁', A.b1], ['β₂', A.b2], ['蕈毒鹼 M', A.m]].map(([n, v]) => '<div class="hbar" style="--c:' + (n.startsWith('蕈') ? '#4ade80' : '#f87171') + '"><span>' + n + '</span><div class="trk"><div class="rg" style="left:0;width:' + (v * 100).toFixed(0) + '%"></div></div><span class="v">' + (v * 100).toFixed(0) + '%</span></div>').join('');
+    const hr = (A.b1 - 0.5) * 1.3 - (A.m - 0.5) * 1.1, con = (A.b1 - 0.5) * 1.6, vc = (A.a1 - 0.5) * 1.6;
+    const bp = 0.45 * hr + 0.35 * con + 0.7 * vc, br = (A.b2 - 0.5) * 1.5 - (A.m - 0.5) * 1.2, pup = (A.a1 - 0.5) * 1.2 - (A.m - 0.5) * 1.4, sec = (A.m - 0.5) * 1.7, gi = (A.m - 0.5) * 1.5 - (S - 0.5) * 0.8;
+    $('orgbars').innerHTML = gauge('心率', hr, '變慢', '加快') + gauge('心肌收縮力', con, '減弱', '增強') + gauge('皮膚/內臟血管', vc, '舒張', '收縮') + gauge('血壓', bp, '下降', '上升') + gauge('支氣管', br, '收縮', '擴張', '#34d399') + gauge('瞳孔', pup, '縮小', '放大', '#fbbf24') + gauge('唾液/呼吸道分泌', sec, '減少', '增加', '#38bdf8') + gauge('腸胃蠕動', gi, '減弱', '增強', '#a78bfa');
+    $('drug-note').innerHTML = on.size ? Array.from(on).map(k => { const d = DR.find(x => x.k === k); return '<b>' + d.n + '</b>（' + d.t + '）：' + d.note; }).join('<br>') : '<b>提示</b>試試「Atenolol + 偽麻黃鹼 + Albuterol」（課本臨床案例：高血壓患者吃感冒藥、氣喘發作時用吸入劑），或在「戰或逃」時加 Propranolol。';
+  }
+  K.seg('#dstate', v => { st = v; upd(); }, 'rest');
+})();
+
+/* ================= 快閃卡 / 測驗 ================= */
+UI.flashcards($('fc'), [
+  { f: '自主神經支配哪些受動器？', b: '<b>心肌、平滑肌、腺體</b>（不隨意受動器）。' },
+  { f: '交感 vs 副交感的起源', b: '交感：<b>胸腰段 T1–L2</b>；副交感：<b>顱薦段</b>（腦幹 III、VII、IX、X 與 S2–S4）。' },
+  { f: '交感神經節在哪裡？', b: '<b>椎旁</b>（交感鏈）與<b>椎前/側副</b>（腹腔、上腸繫膜、下腸繫膜）；副交感是<b>終末神經節</b>（器官旁或器官內）。' },
+  { f: '節前/節後的長短', b: '交感：節前短、節後長；副交感：節前長、節後短。' },
+  { f: '腎上腺髓質與交感的關係', b: '像變形的交感神經節，由節前纖維直接支配，分泌腎上腺素（及少量 NE）入血 → 交感腎上腺系統。' },
+  { f: '迷走神經支配哪些器官？', b: '心、肺、食道、胃、肝、小腸、大腸上半（終末神經節）。' },
+  { f: '哪些纖維是膽鹼性？', b: '所有節前、所有副交感節後，以及支配<b>汗腺</b>與骨骼肌血管的交感節後。' },
+  { f: '菸鹼型 vs 蕈毒鹼型受體', b: '菸鹼：配體閘控通道、永遠興奮（神經節、骨骼肌）；蕈毒鹼：G 蛋白偶聯，可興奮（M₃）或抑制（心臟 M₂）。' },
+  { f: 'α₁、β₁、β₂ 的作用', b: 'α₁：平滑肌收縮（血管收縮、散瞳）；β₁：心率與收縮力↑；β₂：平滑肌放鬆（支氣管擴張）。' },
+  { f: '為何氣喘患者避免 propranolol？', b: '非選擇性阻斷 β₂ → 抑制支氣管擴張，可能誘發支氣管收縮。' },
+  { f: '阿托品的作用', b: '<b>蕈毒鹼型拮抗劑</b>：散瞳、減少分泌、心率↑、腸道收縮↓。' },
+  { f: '雙重支配的三種關係與例子', b: '拮抗：心臟、瞳孔；互補：唾液腺；協同：生殖、泌尿。' },
+  { f: '沒有雙重支配的器官如何調節？', b: '如多數血管：靠交感張力的增減（交感↓ → 舒張）。' },
+  { f: '最直接控制自主神經的腦區？', b: '<b>延腦</b>；受下視丘影響，下視丘又受邊緣系統、小腦、大腦影響。' },
+  { f: '去神經過敏', b: '自主受動器失去神經支配後仍有張力，且對神經傳遞物變得更敏感。' }
+], 'ch09');
+UI.quiz($('qz'), [
+  { q: '交感神經節前纖維由哪些脊髓節段離開？', o: ['C1–C8', 'T1–L2', 'L3–S1', 'S2–S4'], a: 1, e: '胸腰段 T1–L2。' },
+  { q: '所有節前自主神經纖維釋放的神經傳遞物是？', o: ['正腎上腺素', '腎上腺素', '乙醯膽鹼', '多巴胺'], a: 2, e: '所有節前纖維都是膽鹼性。' },
+  { q: '下列何者為副交感神經節？', o: ['腹腔神經節', '上腸繫膜神經節', '睫狀神經節', '交感鏈神經節'], a: 2, e: '睫狀神經節屬於動眼神經 III 的副交感路徑。' },
+  { q: '支配汗腺的交感節後纖維釋放？', o: ['NE', 'ACh', '腎上腺素', 'NO'], a: 1, e: '汗腺的交感節後纖維為膽鹼性。' },
+  { q: '刺激 β₂ 受體會導致？', o: ['支氣管收縮', '支氣管擴張', '心率下降', '瞳孔縮小'], a: 1, e: 'β₂ 使平滑肌放鬆。' },
+  { q: 'Atenolol 主要阻斷哪一種受體？', o: ['α₁', 'α₂', 'β₁', '蕈毒鹼'], a: 2, e: '選擇性 β₁ 阻斷，降低心率與血壓。' },
+  { q: '鼻塞藥偽麻黃鹼的副作用可能是？', o: ['血壓下降', '血壓上升', '支氣管收縮', '心率變慢'], a: 1, e: 'α₁ 促效使血管收縮 → 血壓上升。' },
+  { q: '迷走神經使心率變慢的機制是？', o: ['β₁ 受體 → cAMP↑', 'M₂ 受體 → 開 K⁺ 通道過極化', '菸鹼受體 → 去極化', 'α₁ 受體 → Ca²⁺↑'], a: 1, e: 'M₂ 蕈毒鹼受體使節律細胞過極化。' },
+  { q: '交感與副交感對唾液腺的作用屬於？', o: ['拮抗', '互補', '協同', '無雙重支配'], a: 1, e: '兩者都刺激分泌，性質不同 → 互補。' },
+  { q: '大多數血管的調節方式是？', o: ['交感與副交感拮抗', '只靠副交感', '交感神經活性增減', '只靠腎上腺素'], a: 2, e: '多數血管沒有副交感支配。' },
+  { q: '最直接控制自主神經活動的腦區是？', o: ['大腦皮質', '小腦', '延腦', '視丘'], a: 2, e: '延腦含心血管與呼吸中樞。' }
+]);
+</script>
+</body>
+</html>

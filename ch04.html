@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch4 酵素與能量 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .cks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .cks div{border-radius:14px;padding:12px;text-align:center;background:linear-gradient(160deg,#1a2440,#0b1222);border:1px solid var(--line);box-shadow:0 6px 0 #050913}
+  .cks b{display:block;font-size:20px}
+  @media (max-width:640px){.cks{grid-template-columns:1fr}}
+</style>
+</head>
+<body style="--acc:#fbbf24;--acc2:#22d3ee">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 4 · Enzymes and Energy</div>
+  <h1 class="title3d">酵素與能量</h1>
+  <p class="sub">3D 酵素與受質（鎖與鑰匙、誘導契合、異位抑制）、活化能與分子能量分布、溫度／pH／受質濃度試算、可逆反應的 3D 天平、代謝途徑與先天代謝缺陷模擬、3D ATP 分子水解與合成、氧化還原。</p>
+  <div class="chips"><a class="chip" href="#cat">酵素催化</a><a class="chip" href="#ea">活化能</a><a class="chip" href="#name">命名與同功酶</a><a class="chip" href="#fac">影響因素</a><a class="chip" href="#rev">可逆反應</a><a class="chip" href="#path">代謝途徑</a><a class="chip" href="#atp">ATP</a><a class="chip" href="#redox">氧化還原</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="cat" data-nav="酵素催化">
+  <h2><span class="num">01</span>酵素是生物催化劑</h2>
+  <p class="lead">受質嵌入酵素的<b>活性部位</b>形成<b>酵素–受質複合體</b>：受質被擺成正確方向、原有的鍵被削弱，新鍵更容易形成。反應後酵素<b>本身不變</b>，可重複使用。</p>
+  <div class="grid2">
+    <div class="stage" id="st-enz"><canvas aria-label="3D 酵素與受質"></canvas>
+      <div class="hud">青色＝酵素　黃＝活性部位　紅＝異位部位</div><div class="hud2" id="e-cap"></div>
+      <div class="sbar"><div class="seg" id="emode"><button class="btn sm" data-v="lock" type="button">鎖與鑰匙</button><button class="btn sm" data-v="fit" type="button">誘導契合</button><button class="btn sm" data-v="allo" type="button">異位抑制</button></div></div>
+    </div>
+    <div class="card info" id="e-info"></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>催化劑的特性</h3><ul class="small"><li>加快反應速率</li><li>反應後<b>本身不被改變</b></li><li><b>不改變</b>反應的最終結果（平衡）</li><li>方法：<b>降低活化能</b></li></ul></div>
+    <div class="card tilt"><h3>酵素多為蛋白質</h3><ul class="small"><li>特定的三維形狀由胺基酸序列（基因）決定</li><li>專一性：只有形狀相符的受質能進入活性部位</li><li>少數 RNA 也有催化能力（核酶）</li></ul></div>
+    <div class="card tilt"><h3>酵素的活化</h3><ul class="small"><li>有些酵素先以非活性形式產生</li><li><b>磷酸化</b>（由蛋白激酶催化）可活化或抑制；去磷酸化則相反</li><li>蛋白激酶本身可能需要第二傳訊者 <b>cAMP</b> 才活化（第 11 章）</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="ea" data-nav="活化能">
+  <h2><span class="num">02</span>活化能與溫度</h2>
+  <p class="lead">活化能＝反應物分子要參與反應所需的能量。沒有催化劑時只有少數分子具備足夠能量；酵素降低門檻 → 更多分子能反應 → 速率上升。</p>
+  <div class="grid2 even">
+    <div class="card"><canvas class="plot" id="ea-plot" style="--ph:260px"></canvas>
+      <div class="btns"><button class="btn sm on" id="ea-enz" type="button">有酵素</button><button class="btn sm" id="ea-no" type="button">無酵素</button></div></div>
+    <div class="card"><canvas class="plot" id="mb-plot" style="--ph:260px"></canvas>
+      <div class="ctrl"><label for="tmp">溫度</label><input type="range" id="tmp" min="0" max="60" value="37"><output id="tmp-v">37 °C</output></div>
+      <div class="kv"><div><small>可反應比例（無酵素）</small><b id="fr0"></b></div><div><small>可反應比例（有酵素）</small><b id="fr1" style="color:#fbbf24"></b></div></div></div>
+  </div>
+  <p class="small muted">右圖為分子能量分布示意（Maxwell–Boltzmann 形狀）。溫度上升 → 分布右移，越過門檻的分子變多；但溫度過高時酵素蛋白會<b>變性</b>（見第 04 節）。</p>
+</section>
+
+<section class="sec" id="name" data-nav="命名與同功酶">
+  <h2><span class="num">03</span>酵素的命名、同功酶與臨床診斷</h2>
+  <div class="grid2 even">
+    <div class="card"><h3>命名</h3><ul class="small"><li>字尾多為 <b>-ase</b>，並指出受質與工作類型：<b>乳酸脫氫酶</b>從乳酸移除氫</li><li>例：catalase（2H₂O₂ → 2H₂O + O₂）、碳酸酐酶（H₂CO₃ → H₂O + CO₂）、澱粉酶（澱粉 + H₂O → 麥芽糖）</li><li><b>同功酶 isoenzymes</b>：催化相同反應、但結構不同的酵素（由不同基因編碼）</li></ul>
+      <h3 class="mt">肌酸激酶 CK 的同功酶</h3>
+      <div class="cks"><div><b style="color:#a78bfa">CK-BB</b><small>CK-1</small><p class="small">腦、肺受損</p></div><div><b style="color:#fb7185">CK-MB</b><small>CK-2</small><p class="small"><b>心肌梗塞</b></p></div><div><b style="color:#34d399">CK-MM</b><small>CK-3</small><p class="small">骨骼肌受損</p></div></div></div>
+    <div class="tbwrap"><table class="tb">
+      <tr><th>血漿中升高的酵素</th><th>相關疾病</th></tr>
+      <tr><td>鹼性磷酸酶</td><td>阻塞性黃疸、Paget 氏病、骨癌</td></tr>
+      <tr><td>酸性磷酸酶</td><td>良性前列腺肥大、前列腺癌</td></tr>
+      <tr><td>澱粉酶</td><td>胰臟炎、消化性潰瘍穿孔</td></tr>
+      <tr><td>醛縮酶</td><td>肌肉失養症</td></tr>
+      <tr><td>肌酸激酶 CK</td><td>肌肉失養症、心肌梗塞</td></tr>
+      <tr><td>乳酸脫氫酶 LDH</td><td>心肌梗塞、肝病、腎病、惡性貧血</td></tr>
+      <tr><td>轉胺酶 AST、ALT</td><td>心肌梗塞、肝炎、肌肉失養症</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section class="sec" id="fac" data-nav="影響因素">
+  <h2><span class="num">04</span>影響酵素活性的因素</h2>
+  <div class="grid3">
+    <div class="card"><h3>① 溫度</h3><canvas class="plot" id="t-plot" style="--ph:200px"></canvas><p class="small">升溫 → 速率上升直到最大值；比體溫高幾度後多數酵素開始<b>變性</b>，速率下降。</p></div>
+    <div class="card"><h3>② pH</h3><canvas class="plot" id="ph-plot" style="--ph:200px"></canvas>
+      <div class="ctrl"><label for="eph">pH</label><input type="range" id="eph" min="0" max="12" step="0.1" value="7"><output id="eph-v">7.0</output></div><div id="ph-bars" class="small"></div></div>
+    <div class="card"><h3>③ 受質與酵素濃度</h3><canvas class="plot" id="s-plot" style="--ph:200px"></canvas>
+      <div class="ctrl"><label for="ce">[酵素]</label><input type="range" id="ce" min="1" max="3" step="0.1" value="1"><output id="ce-v">1.0×</output></div>
+      <div class="ctrl"><label for="cs">[受質]</label><input type="range" id="cs" min="0" max="10" step="0.1" value="2"><output id="cs-v">2.0</output></div>
+      <p class="small" id="s-txt"></p></div>
+  </div>
+  <div class="grid2 even mt">
+    <div class="tbwrap"><table class="tb"><tr><th>酵素（所在）</th><th>作用</th><th>最適 pH</th></tr>
+      <tr><td>胃蛋白酶 Pepsin（胃）</td><td>消化蛋白質</td><td><b>2.0</b></td></tr><tr><td>酸性磷酸酶（前列腺）</td><td>移除磷酸根</td><td>5.5</td></tr>
+      <tr><td>唾液澱粉酶（唾液）</td><td>消化澱粉</td><td>6.8</td></tr><tr><td>脂肪酶（胰液）</td><td>消化脂肪</td><td>7.0</td></tr>
+      <tr><td>鹼性磷酸酶（骨）</td><td>移除磷酸根</td><td>9.0</td></tr><tr><td>胰蛋白酶 Trypsin（胰液）</td><td>消化蛋白質</td><td><b>9.5</b></td></tr>
+      <tr><td>單胺氧化酶（神經）</td><td>移除胺基</td><td>9.8</td></tr></table></div>
+    <div class="card"><h3>輔因子與輔酶</h3><ul class="small"><li><b>輔因子 cofactor</b>：金屬離子（Ca²⁺、Mg²⁺、Mn²⁺、Cu²⁺、Zn²⁺ 等），改變活性部位形狀或參與結合</li><li><b>輔酶 coenzyme</b>：小型有機分子，衍生自<b>水溶性維生素</b>（菸鹼酸 → NAD、核黃素 → FAD）</li><li>輔酶在酵素之間<b>運送氫原子</b>與小分子受質</li><li>酵素也會被分解與再合成（turnover）調節數量</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="rev" data-nav="可逆反應">
+  <h2><span class="num">05</span>可逆反應與質量作用定律</h2>
+  <p class="lead">同一個酵素可催化正反兩個方向。反應方向取決於兩側濃度：<b>質量作用定律</b>。例：碳酸酐酶 CO₂ + H₂O ⇄ H₂CO₃。</p>
+  <div class="grid2">
+    <div class="stage short" id="st-bal"><canvas aria-label="3D 質量作用天平"></canvas><div class="hud">天平示意：哪一側濃度高，反應就往另一側進行</div><div class="hud2" id="bal-cap"></div>
+      <div class="sbar"><div class="seg" id="bmode"><button class="btn sm" data-v="tis" type="button">組織微血管（CO₂ 高）</button><button class="btn sm" data-v="lung" type="button">肺微血管（CO₂ 低）</button></div></div></div>
+    <div class="card"><div class="ctrl"><label for="co2">[CO₂]</label><input type="range" id="co2" min="1" max="9" value="7"><output id="co2-v">7</output></div>
+      <div class="ctrl"><label for="h2co3">[H₂CO₃]</label><input type="range" id="h2co3" min="1" max="9" value="3"><output id="h2co3-v">3</output></div>
+      <div class="formula" id="bal-eq">CO₂ + H₂O → H₂CO₃</div>
+      <p class="small">在<b>組織</b>，CO₂ 濃度高 → 反應向右生成碳酸；在<b>肺</b>，CO₂ 被呼出而濃度低 → 向左分解成 CO₂ 排出（第 16 章）。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="path" data-nav="代謝途徑">
+  <h2><span class="num">06</span>代謝途徑：終產物抑制與先天代謝缺陷</h2>
+  <p class="lead">多酵素系統中，前一個酵素的產物就是下一個的受質。點按鈕看「終產物抑制」或「某個酵素缺陷」時各中間物的量怎麼變（圓柱高度＝濃度）。</p>
+  <div class="grid2">
+    <div class="card" style="padding:12px"><canvas class="plot" id="pw" style="--ph:340px"></canvas>
+      <div class="btns" id="pw-btn"><button class="btn sm" data-p="gen" type="button">一般分支途徑</button><button class="btn sm" data-p="phe" type="button">苯丙胺酸代謝</button><span style="width:10px"></span><span id="pw-acts"></span></div></div>
+    <div class="card" id="pw-info"></div>
+  </div>
+  <div class="tbwrap mt"><table class="tb"><tr><th>代謝</th><th>先天代謝缺陷</th><th>異常</th><th>臨床結果</th></tr>
+    <tr><td rowspan="4">胺基酸</td><td><b>苯酮尿症 PKU</b></td><td>苯丙酮酸增加</td><td>智能障礙、癲癇</td></tr><tr><td><b>白化症</b></td><td>缺乏黑色素</td><td>易患皮膚癌</td></tr><tr><td>楓糖尿症</td><td>白胺酸、異白胺酸、纈胺酸增加</td><td>腦退化、早夭</td></tr><tr><td>同半胱胺酸尿症</td><td>同半胱胺酸堆積</td><td>智能障礙、眼睛問題</td></tr>
+    <tr><td rowspan="3">碳水化合物</td><td>乳糖不耐症</td><td>乳糖無法利用</td><td>腹瀉、脹氣</td></tr><tr><td>葡萄糖-6-磷酸酶缺乏（Gierke 氏病）</td><td>肝臟肝醣堆積</td><td>肝腫大、低血糖</td></tr><tr><td>肝醣磷解酶缺乏</td><td>肌肉肝醣堆積</td><td>肌肉疲勞與疼痛</td></tr>
+    <tr><td rowspan="3">脂質</td><td>Gaucher 氏病</td><td>葡萄糖腦苷脂堆積</td><td>肝脾腫大、腦退化</td></tr><tr><td>Tay-Sachs 病</td><td>神經節苷脂 GM2 堆積</td><td>腦退化，約 5 歲死亡</td></tr><tr><td>高膽固醇血症</td><td>血膽固醇高</td><td>冠狀動脈與大動脈粥狀硬化</td></tr>
+  </table></div>
+</section>
+
+<section class="sec" id="atp" data-nav="ATP">
+  <h2><span class="num">07</span>生物能量學與 ATP</h2>
+  <p class="lead"><b>熱力學第一定律</b>：能量不生不滅，只轉換形式；<b>第二定律</b>：每次轉換都使熵（亂度）增加、可用的自由能減少。細胞把放能反應與吸能反應<b>偶聯</b>：分解食物 → 合成 ATP；分解 ATP → 驅動耗能工作。</p>
+  <div class="grid2">
+    <div class="stage" id="st-atp"><canvas aria-label="3D ATP 分子"></canvas><div class="hud">腺嘌呤 + 核糖 + 3 個磷酸</div><div class="hud2" id="atp-cap">ATP（腺苷三磷酸）</div>
+      <div class="sbar"><button class="btn sm" id="atp-h" type="button">⚡ ATP → ADP + Pi</button><button class="btn sm" id="atp-s" type="button">🔋 ADP + Pi → ATP</button></div></div>
+    <div class="card"><canvas class="plot" id="eg-plot" style="--ph:220px"></canvas>
+      <div class="btns"><button class="btn sm on" data-eg="ex" type="button">放能 exergonic</button><button class="btn sm" data-eg="en" type="button">吸能 endergonic</button></div>
+      <ul class="small" id="eg-txt"></ul></div>
+  </div>
+  <div class="chain mt"><div class="nd">葡萄糖 + O₂<small>高自由能</small></div><span class="ar">→</span><div class="nd on">放能反應<small>細胞呼吸</small></div><span class="ar">→</span><div class="nd">ADP + Pi → ATP<small>吸能（偶聯）</small></div><span class="ar">→</span><div class="nd on">ATP → ADP + Pi<small>放能</small></div><span class="ar">→</span><div class="nd">肌肉收縮、主動運輸、合成作用<small>耗能工作</small></div></div>
+  <div class="note"><b>ATP 是「通用能量攜帶者」</b>：食物分解的部分化學鍵能轉存到 ATP 末端的「高能」磷酸鍵；燃燒葡萄糖成 CO₂ + H₂O 釋放的總能量，在細胞內分成許多小步驟進行時總量相同。植物以光合作用把太陽能存入葡萄糖（吸能）。</div>
+</section>
+
+<section class="sec" id="redox" data-nav="氧化還原">
+  <h2><span class="num">08</span>氧化還原反應與 NAD、FAD</h2>
+  <div class="grid2">
+    <div class="card"><h3>定義</h3><ul class="small"><li><b>氧化</b>：失去電子（常以失去氫原子的形式）；<b>還原</b>：得到電子</li><li><b>還原劑</b> = 電子提供者；<b>氧化劑</b> = 電子接受者</li><li>兩者必定<b>偶聯</b>：一方被氧化，另一方就被還原</li><li>「氧化」不一定有氧參與；但<b>氧是細胞內最終的電子接受者</b></li></ul>
+      <div class="btns"><button class="btn sm" id="rx-play" type="button">▶ 播放氫的接力</button></div>
+      <div class="chain" id="rx-chain"><div class="nd">分子 X–H₂<small>被氧化</small></div><span class="ar">→</span><div class="nd">NAD⁺ → NADH + H⁺<small>NAD 被還原（作氧化劑）</small></div><span class="ar">→</span><div class="nd">NADH → NAD⁺<small>NADH 被氧化（作還原劑）</small></div><span class="ar">→</span><div class="nd">分子 Y → Y–H₂<small>被還原</small></div></div></div>
+    <div class="card"><h3>NAD 與 FAD</h3><ul class="small"><li><b>NAD</b>（菸鹼醯胺腺嘌呤二核苷酸）← 菸鹼酸（維生素 B₃）；接受 2 個電子 + 1 個質子：NAD⁺ + 2H → <b>NADH + H⁺</b></li><li><b>FAD</b>（黃素腺嘌呤二核苷酸）← 核黃素（維生素 B₂）；接受 2 電子 + 2 質子：FAD + 2H → <b>FADH₂</b></li><li>還原態的 NADH、FADH₂ 把電子帶到<b>電子傳遞鏈</b>，最後交給 O₂ → 產生 ATP（第 5 章）</li><li>菸鹼酸缺乏 → <b>糙皮病 pellagra</b></li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">09</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">10</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 4 章整理，僅供個人複習。曲線為示意（形狀正確、數值為說明用）。 · <a href="index.html">回總覽</a> · <a href="ch03.html">← 第 3 章 細胞與基因</a> · <a href="ch05.html">第 5 章 細胞呼吸 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+
+/* ================= 01 3D 酵素 ================= */
+(function () {
+  const S = K.stage('st-enz', { radius: 44, yaw: -0.25, pitch: 0.22, autoRotate: 0 });
+  const AS = V.norm([0, 0.35, -1]), ALS = V.norm([0.3, 0.7, 0.9]);
+  const st = { depth: 9, w: 0.42, allo: 0, clamp: 0 };
+  const ang = (d, a) => Math.acos(Math.max(-1, Math.min(1, V.dot(d, a))));
+  const enzP = (u, v) => {
+    const th = u * 6.2832, ph = v * Math.PI, d = [Math.cos(th) * Math.sin(ph), Math.cos(ph), Math.sin(th) * Math.sin(ph)];
+    let r = 19 + 1.8 * Math.sin(3 * th) * Math.sin(2 * ph) + 1.3 * Math.cos(5 * th + ph);
+    const a = ang(d, AS), b = ang(d, ALS);
+    r -= st.depth * Math.exp(-((a / st.w) ** 2));
+    r += st.clamp * 3.2 * Math.exp(-(((a - st.w * 1.15) / 0.16) ** 2));
+    r -= st.allo * 4.5 * Math.exp(-((b / 0.32) ** 2));
+    return V.mul(d, r);
+  };
+  const NU = 40, NV = 22;
+  const F = K.surf(S, enzP, NU, NV, (u, v) => { const th = u * 6.2832, ph = v * Math.PI, d = [Math.cos(th) * Math.sin(ph), Math.cos(ph), Math.sin(th) * Math.sin(ph)]; return ang(d, AS) < 0.5 ? '#fbbf24' : ang(d, ALS) < 0.38 ? '#f87171' : '#22d3ee'; }, { id: 'enz' });
+  F.forEach(f => { const th = f.fu * 6.2832, ph = f.fv * Math.PI, d = [Math.cos(th) * Math.sin(ph), Math.cos(ph), Math.sin(th) * Math.sin(ph)]; if (ang(d, AS) < 0.5) f.id = 'site'; else if (ang(d, ALS) < 0.38) f.id = 'allo'; });
+  const reshape = () => F.grid.forEach((row, i) => row.forEach((p, j) => mv(p, enzP(i / NU, j / NV))));
+  const pk = V.mul(AS, 13.5);
+  const A = [S.sphere([0, 0, 0], 3.2, '#4ade80', { id: 'sub' }), S.sphere([0, 0, 0], 2.4, '#86efac', { id: 'sub' })];
+  const B = [S.sphere([0, 0, 0], 3.2, '#818cf8', { id: 'sub' }), S.sphere([0, 0, 0], 2.4, '#a5b4fc', { id: 'sub' })];
+  const tA = S.tube(A[0].p, A[1].p, 1.1, '#cbd5e1', { id: 'sub' }), tB = S.tube(B[0].p, B[1].p, 1.1, '#cbd5e1', { id: 'sub' });
+  const bond = S.tube(A[0].p, B[0].p, 1.3, '#fde047', { id: 'bond', glow: 1 });
+  const inh = S.sphere([0, 0, 0], 4.2, '#ef4444', { id: 'inh' });
+  const lab = { e: K.lab(S, [-16, -14, 6], '酵素', 'enz', '#67e8f9', -30, 20), s: K.lab(S, pk, '活性部位', 'site', '#fde047', 50, 34), a: K.lab(S, A[0].p, '受質 A', 'sub', '#86efac', -30, -20), b: K.lab(S, B[0].p, '受質 B', 'sub', '#a5b4fc', 30, -20), i: K.lab(S, inh.p, '抑制物（終產物）', 'inh', '#fca5a5', 30, -24), al: K.lab(S, V.mul(ALS, 18), '異位部位', 'allo', '#fca5a5', 40, 0) };
+  const placeMol = (M, c, ax) => { mv(M[0].p, c); mv(M[1].p, V.add(c, V.mul(ax, 4.8))); };
+  let mode = 'lock', T = 0;
+  const CAP = {
+    lock: t => t < 0.3 ? '受質靠近活性部位' : t < 0.5 ? '形成酵素–受質複合體（受質就像鑰匙插入鎖）' : t < 0.8 ? '形成新鍵 → 產物離開' : '酵素不變，可再次使用',
+    fit: t => t < 0.3 ? '活性部位一開始並不完全吻合' : t < 0.5 ? '受質進入時誘導酵素形狀改變 → 緊密包住（誘導契合）' : t < 0.8 ? '舊鍵被削弱、新鍵形成 → 產物離開' : '酵素恢復原狀',
+    allo: t => t < 0.3 ? '終產物（抑制物）結合在活性部位<b>以外</b>的異位部位' : t < 0.55 ? '酵素構形改變，活性部位變形' : '受質無法正確結合 → 反應受抑制（負回饋）'
+  };
+  const INFO = {
+    lock: ['鎖與鑰匙模型', ['受質（鑰匙）的形狀恰好嵌入活性部位（鎖）', '解釋酵素的<b>專一性</b>', '受質被帶到正確方位，既有鍵被削弱']],
+    fit: ['誘導契合 Induced fit', ['受質與活性部位一開始不一定完全吻合', '受質滑入時<b>誘導</b>酵素構形改變，形成完美契合', '加上暫時性的鍵結 → 削弱受質內的鍵']],
+    allo: ['異位抑制 Allosteric inhibition', ['抑制物結合在活性部位<b>以外</b>的位置', '引起酵素構形改變 → 活性部位無法結合受質', '<b>終產物抑制</b>就是這種機制：途徑的最終產物抑制前段酵素（負回饋）']]
+  };
+  S.tick(dt => {
+    T = (T + dt / 7) % 1;
+    const t = T, inA = sm(0, 0.3, t), out = sm(0.5, 0.8, t);
+    st.depth = 9; st.w = 0.42; st.clamp = 0; st.allo = 0;
+    let ax = [-1, 0, 0];
+    if (mode === 'fit') { st.w = 0.3 + 0.12 * sm(0.12, 0.3, t) * (1 - sm(0.75, 0.95, t)); st.clamp = sm(0.28, 0.42, t) * (1 - sm(0.55, 0.7, t)); }
+    if (mode === 'allo') { st.allo = sm(0.15, 0.32, t) * (1 - sm(0.92, 1, t)); st.depth = 9 - 7 * sm(0.25, 0.45, t) * (1 - sm(0.92, 1, t)); }
+    reshape();
+    const site = V.mul(AS, 19 - st.depth + 3.2);
+    const offA = [-30, 22, -22], offB = [30, 18, -26];
+    let pa, pb;
+    if (mode !== 'allo') {
+      pa = V.lerp(offA, V.add(site, [-3.2, 0, 0]), inA); pb = V.lerp(offB, V.add(site, [3.2, 0, 0]), inA);
+      if (out > 0) { const o = V.mul(V.norm([0.6, -0.4, -1]), out * 42); pa = V.add(pa, o); pb = V.add(pb, o); }
+      bond.hidden = t < 0.38 || t > 0.85; bond.glow = 0.6 + 0.4 * Math.sin(t * 60);
+      if (t > 0.8) { pa = offA; pb = offB; [A, B].forEach(M => M.forEach(o => { o.al = sm(0.85, 1, t); })); } else [A, B].forEach(M => M.forEach(o => { o.al = 1; }));
+      inh.hidden = true; lab.i.hidden = true;
+    } else {
+      const ap = sm(0.45, 0.62, t), bo = sm(0.62, 0.9, t);
+      pa = V.lerp(offA, V.add(site, [-6, 6, -8]), ap); pb = V.lerp(offB, V.add(site, [6, 6, -8]), ap);
+      if (bo > 0) { pa = V.add(pa, V.mul([-1, 0.6, -1], bo * 30)); pb = V.add(pb, V.mul([1, 0.6, -1], bo * 30)); }
+      bond.hidden = true; [A, B].forEach(M => M.forEach(o => { o.al = 1 - sm(0.85, 1, t); }));
+      inh.hidden = false; lab.i.hidden = false; mv(inh.p, V.lerp(V.add(V.mul(ALS, 46), [10, 10, 0]), V.mul(ALS, 16.5), sm(0, 0.25, t)));
+    }
+    placeMol(A, pa, ax); placeMol(B, pb, [1, 0, 0]);
+    lab.a.p = A[0].p; lab.b.p = B[0].p; lab.s.p = site; lab.i.p = inh.p;
+    $('e-cap').innerHTML = CAP[mode](t);
+  });
+  K.seg('#emode', m => { mode = m; T = 0; const d = INFO[m]; $('e-info').innerHTML = '<div class="tt">' + d[0] + '</div><ul>' + d[1].map(x => '<li>' + x + '</li>').join('') + '</ul><p class="small muted">拖曳可旋轉觀察活性部位的凹槽。</p>'; lab.al.hidden = m !== 'allo'; }, 'lock');
+  S.onPick = o => { if (!o) return; const t = { enz: '酵素（蛋白質）', site: '活性部位：受質結合處', allo: '異位（調節）部位', sub: '受質', bond: '新形成的化學鍵', inh: '異位抑制物' }[o.id]; if (t) $('e-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 02 活化能 ================= */
+(function () {
+  let enz = true, T = 37;
+  const R = 60, P = 30, EA0 = 150, EA1 = 100;
+  const curve = (x, ea) => K.lerp(R, P, sm(0.25, 0.75, x)) + (ea - K.lerp(R, P, 0.5)) * Math.exp(-(((x - 0.5) / 0.13) ** 2));
+  function drawEA() {
+    K.plot($('ea-plot'), { x: [0, 1], y: [0, 170], yt: [0, 50, 100, 150], xl: '反應進行 →', yl: '自由能', fx: () => '', xt: [], series: [{ f: x => curve(x, EA0), c: '#94a3b8', w: enz ? 1.6 : 2.6, dash: enz ? [5, 4] : [], label: '無酵素' }].concat(enz ? [{ f: x => curve(x, EA1), c: '#fbbf24', w: 2.8, label: '有酵素' }] : []), hl: [{ y: R, c: '#60a5fa', t: '反應物' }, { y: P, c: '#34d399', t: '產物' }], vl: [{ x: 0.5, c: enz ? '#fbbf24' : '#94a3b8', t: '活化能 ' + (enz ? '較低' : '較高') }] });
+  }
+  const f = (E, kT) => Math.sqrt(E) * Math.exp(-E / kT);
+  const frac = (ea, kT) => { let a = 0, b = 0; for (let E = 0.5; E < 400; E += 1) { const v = f(E, kT); a += v; if (E > ea - R) b += v; } return b / a; };
+  function drawMB() {
+    const kT = 14 + T * 0.35, ea0 = EA0, ea1 = EA1;
+    const mx = Math.max(...Array.from({ length: 200 }, (_, i) => f(i + 0.5, kT)));
+    const pts = Array.from({ length: 201 }, (_, i) => [i, f(i + 0.01, kT) / mx]);
+    const r = K.plot($('mb-plot'), { x: [0, 200], y: [0, 1.15], xt: [0, 50, 100, 150, 200], yt: [], xl: '分子能量 →', yl: '分子數', series: [{ pts, c: '#60a5fa', w: 2.4, fill: 'rgba(96,165,250,.12)', label: T + ' °C' }], vl: [{ x: ea0 - R, c: '#94a3b8', t: '無酵素門檻' }, { x: ea1 - R, c: '#fbbf24', t: '有酵素門檻', dy: 14 }] });
+    const c = r.c; c.save(); c.beginPath(); c.moveTo(r.X(ea1 - R), r.Y(0)); pts.filter(p => p[0] >= ea1 - R).forEach(p => c.lineTo(r.X(p[0]), r.Y(p[1]))); c.lineTo(r.X(200), r.Y(0)); c.closePath(); c.fillStyle = 'rgba(251,191,36,.35)'; c.fill(); c.restore();
+    $('fr0').textContent = (frac(ea0, kT) * 100).toFixed(2) + '%'; $('fr1').textContent = (frac(ea1, kT) * 100).toFixed(1) + '%';
+  }
+  $('ea-enz').onclick = () => { enz = true; $('ea-enz').classList.add('on'); $('ea-no').classList.remove('on'); drawEA(); };
+  $('ea-no').onclick = () => { enz = false; $('ea-no').classList.add('on'); $('ea-enz').classList.remove('on'); drawEA(); };
+  K.range('tmp', v => { T = v; drawMB(); }, v => v + ' °C');
+  drawEA(); addEventListener('resize', () => { drawEA(); drawMB(); });
+})();
+
+/* ================= 04 影響因素 ================= */
+(function () {
+  const rateT = t => Math.exp((t - 37) / 14) / (1 + Math.exp((t - 43) / 2.2));
+  const mxT = Math.max(...Array.from({ length: 70 }, (_, i) => rateT(i)));
+  const PH = [['胃蛋白酶', 2.0, '#fb7185'], ['唾液澱粉酶', 6.8, '#34d399'], ['胰蛋白酶', 9.5, '#60a5fa']];
+  const act = (p, o) => Math.exp(-(((p - o) / 1.1) ** 2));
+  let ph = 7, E = 1, Sc = 2;
+  function draw() {
+    K.plot($('t-plot'), { x: [0, 60], y: [0, 1.1], xt: [0, 20, 37, 60], yt: [0, 0.5, 1], xl: '溫度 (°C)', yl: '反應速率', series: [{ f: t => rateT(t) / mxT, c: '#fbbf24', w: 2.6 }], vl: [{ x: 37, c: '#34d399', t: '體溫' }], legend: false, padL: 36 });
+    K.plot($('ph-plot'), { x: [0, 12], y: [0, 1.1], xt: [0, 2, 4, 6, 8, 10, 12], yt: [0, 0.5, 1], xl: 'pH', yl: '活性', series: PH.map(([n, o, c]) => ({ f: p => act(p, o), c, w: 2.4, label: n })), vl: [{ x: ph, c: '#fff' }], legend: false, padL: 36 });
+    $('ph-bars').innerHTML = PH.map(([n, o, c]) => '<div class="hbar" style="--c:' + c + '"><span>' + n + '</span><div class="trk"><div class="rg" style="left:0;width:' + (act(ph, o) * 100).toFixed(0) + '%"></div></div><span class="v">' + (act(ph, o) * 100).toFixed(0) + '%</span></div>').join('');
+    const Km = 2, v = s => E * s / (Km + s);
+    K.plot($('s-plot'), { x: [0, 10], y: [0, 3.2], xt: [0, 2, 4, 6, 8, 10], yt: [0, 1, 2, 3], xl: '[受質]', yl: '速率', series: [{ f: s => s / (Km + s), c: '#64748b', w: 1.4, dash: [4, 4], label: '1× 酵素' }, { f: v, c: '#22d3ee', w: 2.6, label: E.toFixed(1) + '× 酵素' }], hl: [{ y: E, c: '#22d3ee', t: '最大速率（飽和）' }], dots: [{ x: Sc, y: v(Sc), c: '#fbbf24' }], padL: 36 });
+    const sat = v(Sc) / E;
+    $('s-txt').innerHTML = '速率 = 最大值的 <b>' + (sat * 100).toFixed(0) + '%</b>。' + (sat > 0.75 ? '接近<b>飽和</b>：再加受質速率幾乎不增加，只能增加酵素量。' : '受質增加 → 速率明顯上升。');
+  }
+  K.range('eph', x => { ph = x; draw(); }, x => x.toFixed(1));
+  K.range('ce', x => { E = x; draw(); }, x => x.toFixed(1) + '×');
+  K.range('cs', x => { Sc = x; draw(); }, x => x.toFixed(1));
+  addEventListener('resize', draw);
+})();
+
+/* ================= 05 可逆反應天平 ================= */
+(function () {
+  const S = K.stage('st-bal', { radius: 50, yaw: 0.3, pitch: 0.25, autoRotate: 0.05 });
+  K.box(S, [0, -14, 0], [10, 22, 10], '#475569', { id: 'ca' });
+  S.sphere([0, 0, 0], 4, '#22d3ee', { id: 'ca' });
+  const beam = K.mover(K.surf(S, (u, v) => [(u - 0.5) * 80, (v - 0.5) * 3, 0], 1, 1, '#94a3b8', { id: 'beam' }));
+  const L = [0, 0, 0], Rr = [0, 0, 0];
+  const panL = K.mover(K.ellipsoid(S, [0, 0, 0], [12, 3, 12], '#60a5fa', 14, 5, { id: 'pl', al: 0.7 }, { v0: 0.5, v1: 1 })), panR = K.mover(K.ellipsoid(S, [0, 0, 0], [12, 3, 12], '#f472b6', 14, 5, { id: 'pr', al: 0.7 }, { v0: 0.5, v1: 1 }));
+  const strL = [0, 1, 2].map(k => S.tube(L, [0, 0, 0], 0.3, '#cbd5e1', { flat: 1 })), strR = [0, 1, 2].map(k => S.tube(Rr, [0, 0, 0], 0.3, '#cbd5e1', { flat: 1 }));
+  const molL = [], molR = [];
+  for (let i = 0; i < 9; i++) {
+    const c = S.sphere([0, 0, 0], 2, '#9ca3af', { id: 'co2' }), o1 = S.sphere([0, 0, 0], 1.8, '#ef4444', { id: 'co2' }), o2 = S.sphere([0, 0, 0], 1.8, '#ef4444', { id: 'co2' });
+    molL.push([c, o1, o2]);
+    const h = [S.sphere([0, 0, 0], 2.4, '#f472b6', { id: 'h2co3' }), S.sphere([0, 0, 0], 1.5, '#ef4444', { id: 'h2co3' }), S.sphere([0, 0, 0], 1.5, '#ef4444', { id: 'h2co3' })];
+    molR.push(h);
+  }
+  const lL = K.lab(S, [0, 0, 0], 'CO₂ + H₂O', 'co2', '#cbd5e1', 0, 30), lR = K.lab(S, [0, 0, 0], 'H₂CO₃', 'h2co3', '#f9a8d4', 0, 30), lE = K.lab(S, [0, 0, 0], '碳酸酐酶', 'ca', '#67e8f9', 0, -16);
+  let cL = 7, cR = 3, ang = 0;
+  S.tick(dt => {
+    const target = Math.max(-0.35, Math.min(0.35, (cL - cR) * 0.06));
+    ang += (target - ang) * Math.min(1, dt * 3);
+    const dir = [Math.cos(ang), Math.sin(ang), 0];
+    beam.F.grid.forEach((row, i) => row.forEach((p, j) => mv(p, V.add(V.mul(dir, (i - 0.5) * 80), [0, (j - 0.5) * 3, 0]))));
+    mv(L, V.mul(dir, -36)); mv(Rr, V.mul(dir, 36));
+    const pl = V.add(L, [0, -16, 0]), pr = V.add(Rr, [0, -16, 0]);
+    panL.set(pl, 1); panR.set(pr, 1);
+    [[strL, pl], [strR, pr]].forEach(([ss, pc]) => ss.forEach((t, k) => { t.b = V.add(pc, [Math.cos(k * 2.09) * 11, 0, Math.sin(k * 2.09) * 11]); }));
+    molL.forEach((m, i) => { const vis = i < cL; m.forEach(o => { o.hidden = !vis; }); const c = V.add(pl, [((i % 3) - 1) * 6, -1 - Math.floor(i / 3) * -3.5 + 2, (Math.floor(i / 3) - 1) * 5]); mv(m[0].p, c); mv(m[1].p, V.add(c, [-2.6, 0, 0])); mv(m[2].p, V.add(c, [2.6, 0, 0])); });
+    molR.forEach((m, i) => { const vis = i < cR; m.forEach(o => { o.hidden = !vis; }); const c = V.add(pr, [((i % 3) - 1) * 6, 2 + Math.floor(i / 3) * 3.5, (Math.floor(i / 3) - 1) * 5]); mv(m[0].p, c); mv(m[1].p, V.add(c, [-1.6, 2, 0])); mv(m[2].p, V.add(c, [1.6, 2, 0])); });
+    lL.p = V.add(pl, [0, -4, 0]); lR.p = V.add(pr, [0, -4, 0]); lE.p = [0, 4, 0];
+  });
+  const iC = $('co2'), iH = $('h2co3');
+  function upd() {
+    cL = +iC.value; cR = +iH.value; $('co2-v').textContent = cL; $('h2co3-v').textContent = cR;
+    const eq = $('bal-eq'), cap = $('bal-cap');
+    if (cL > cR) { eq.innerHTML = 'CO₂ + H₂O <span style="color:#fbbf24">→</span> H₂CO₃'; cap.textContent = '左側濃度高 → 反應向右（生成碳酸）'; }
+    else if (cL < cR) { eq.innerHTML = 'CO₂ + H₂O <span style="color:#fbbf24">←</span> H₂CO₃'; cap.textContent = '右側濃度高 → 反應向左（分解出 CO₂）'; }
+    else { eq.innerHTML = 'CO₂ + H₂O ⇄ H₂CO₃'; cap.textContent = '兩側平衡'; }
+  }
+  iC.oninput = upd; iH.oninput = upd;
+  K.seg('#bmode', m => { if (m === 'tis') { iC.value = 8; iH.value = 3; } else { iC.value = 2; iH.value = 7; } upd(); }, 'tis');
+  S.onPick = o => { if (!o) return; const t = { ca: '碳酸酐酶：同一個酵素催化正、逆兩個方向', co2: 'CO₂（灰 C、紅 O）', h2co3: '碳酸 H₂CO₃', beam: '天平：濃度決定反應方向' }[o.id]; if (t) $('bal-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 06 代謝途徑模擬 ================= */
+(function () {
+  const cv = $('pw');
+  const CFG = {
+    gen: {
+      nodes: { A: [0.07, 0.5], B: [0.24, 0.5], C: [0.42, 0.5], D: [0.62, 0.22], E: [0.84, 0.22], D2: [0.62, 0.78], E2: [0.84, 0.78] },
+      names: { A: 'A', B: 'B', C: 'C', D: 'D', E: 'E', D2: 'D′', E2: 'E′' },
+      edges: [['A', 'B', 'E1', 1], ['B', 'C', 'E2', 1], ['C', 'D', 'E3', 0.6], ['D', 'E', 'E4', 1], ['C', 'D2', "E3'", 0.6], ['D2', 'E2', "E4'", 1]],
+      out: { E: 0.5, E2: 0.5 }, inh: { node: 'E', enz: 'E3' },
+      acts: [['inh', '開啟終產物抑制'], ['addE', '大量 E'], ['E4', 'E4 缺陷'], ['reset', '重設']],
+      info: { t: '分支途徑', li: ['產物 E 濃度高時抑制分支點的酵素 E3（<b>終產物抑制</b>，負回饋、異位抑制）→ 代謝流轉向 D′→E′', '<b>先天代謝缺陷</b>：某酵素（如 E4）缺陷 → 它<b>之前</b>的中間物（D）堆積、之後的產物（E）減少；分支的另一路徑產物增加', '疾病可能來自終產物不足，或中間物過多造成器官傷害'] }
+    },
+    phe: {
+      nodes: { Phe: [0.08, 0.42], Tyr: [0.32, 0.42], PPA: [0.08, 0.86], HGA: [0.56, 0.2], CO2: [0.84, 0.2], DOPA: [0.56, 0.68], Mel: [0.84, 0.68] },
+      names: { Phe: '苯丙胺酸', Tyr: '酪胺酸', PPA: '苯丙酮酸', HGA: '尿黑酸', CO2: 'CO₂ + H₂O', DOPA: 'DOPA', Mel: '黑色素' },
+      edges: [['Phe', 'Tyr', '酶1', 1], ['Phe', 'PPA', '', 0.04], ['Tyr', 'HGA', '', 0.6], ['HGA', 'CO2', '酶5', 1], ['Tyr', 'DOPA', '', 0.5], ['DOPA', 'Mel', '酶6', 1]],
+      out: { CO2: 0.9, Mel: 0.35, PPA: 0.08 }, inh: null,
+      acts: [['酶1', 'PKU（酶1 缺陷）'], ['酶5', '黑尿症（酶5）'], ['酶6', '白化症（酶6）'], ['reset', '正常']],
+      info: { t: '苯丙胺酸的分解（圖 4.11）', li: ['正常：<b>苯丙胺酸羥化酶（酶1）</b>把苯丙胺酸轉成酪胺酸', '<b>PKU</b>（體染色體隱性）：酶1 缺陷 → 苯丙胺酸堆積並轉成<b>苯丙酮酸</b> → 未治療會嚴重智能障礙；新生兒篩檢，終身低苯丙胺酸飲食', '<b>白化症</b>：DOPA → 黑色素的酶6 缺陷', '<b>黑尿症</b>：酶5 缺陷，臨床上不嚴重'] }
+    }
+  };
+  let cfg, amt = {}, dead = {}, inhOn = false, extraE = 0;
+  function setCfg(k) {
+    cfg = CFG[k]; amt = {}; dead = {}; inhOn = false; extraE = 0;
+    Object.keys(cfg.nodes).forEach(n => { amt[n] = 0; });
+    UI.$$('#pw-btn [data-p]').forEach(b => b.classList.toggle('on', b.dataset.p === k));
+    const box = $('pw-acts'); box.innerHTML = '';
+    cfg.acts.forEach(([a, t]) => { const b = UI.h('button', 'btn sm', t); b.type = 'button'; b.dataset.a = a; b.onclick = () => act(a, b); box.appendChild(b); });
+    $('pw-info').innerHTML = '<div class="info"><div class="tt">' + cfg.info.t + '</div></div><ul class="small">' + cfg.info.li.map(x => '<li>' + x + '</li>').join('') + '</ul>';
+  }
+  function act(a, b) {
+    if (a === 'reset') { dead = {}; inhOn = false; extraE = 0; UI.$$('#pw-acts .btn').forEach(x => x.classList.remove('on')); return; }
+    if (a === 'inh') { inhOn = !inhOn; b.classList.toggle('on', inhOn); return; }
+    if (a === 'addE') { extraE = extraE ? 0 : 6; b.classList.toggle('on', !!extraE); if (extraE) { inhOn = true; UI.$$('#pw-acts [data-a=inh]').forEach(x => x.classList.add('on')); } return; }
+    dead[a] = !dead[a]; b.classList.toggle('on', dead[a]);
+  }
+  UI.$$('#pw-btn [data-p]').forEach(b => b.onclick = () => setCfg(b.dataset.p));
+  setCfg('gen');
+  K.loop(dt => {
+    for (let it = 0; it < 4; it++) {
+      const h = dt * 1.6, d = {}; Object.keys(amt).forEach(n => { d[n] = 0; });
+      const first = Object.keys(cfg.nodes)[0]; d[first] += 1.0;
+      cfg.edges.forEach(([a, b, e, k]) => {
+        let r = k * (dead[e] ? 0.02 : 1);
+        if (cfg.inh && inhOn && e === cfg.inh.enz) r *= 1 / (1 + Math.pow((amt[cfg.inh.node] + extraE) / 1.2, 2));
+        const f = r * amt[a]; d[a] -= f; d[b] += f;
+      });
+      Object.keys(cfg.out || {}).forEach(n => { d[n] -= cfg.out[n] * amt[n]; });
+      Object.keys(amt).forEach(n => { amt[n] = Math.max(0, amt[n] + d[n] * h); });
+    }
+    const [c, w, H] = K.fit(cv); c.clearRect(0, 0, w, H);
+    const P = n => [cfg.nodes[n][0] * w, cfg.nodes[n][1] * H];
+    c.font = '12px ' + Mini3D.FONT; c.textAlign = 'center';
+    cfg.edges.forEach(([a, b, e]) => {
+      const [x1, y1] = P(a), [x2, y2] = P(b), dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L;
+      const sx = x1 + ux * 34, sy = y1 + uy * 34, ex = x2 - ux * 34, ey = y2 - uy * 34;
+      const off = dead[e];
+      c.strokeStyle = off ? '#7f1d1d' : '#64748b'; c.lineWidth = 2.4; c.setLineDash(off ? [4, 4] : []); c.beginPath(); c.moveTo(sx, sy); c.lineTo(ex, ey); c.stroke(); c.setLineDash([]);
+      c.fillStyle = off ? '#7f1d1d' : '#64748b'; c.beginPath(); c.moveTo(ex, ey); c.lineTo(ex - ux * 9 - uy * 5, ey - uy * 9 + ux * 5); c.lineTo(ex - ux * 9 + uy * 5, ey - uy * 9 - ux * 5); c.fill();
+      if (e) { c.fillStyle = off ? '#fb7185' : '#fbbf24'; c.fillText((off ? '✖ ' : '') + e, (sx + ex) / 2 - uy * 12, (sy + ey) / 2 + ux * 12 - 2); }
+    });
+    if (cfg.inh && inhOn) { const [x1, y1] = P(cfg.inh.node), [xa, ya] = P('C'), [xb, yb] = P('D'); const mx = (xa + xb) / 2, my = (ya + yb) / 2; c.strokeStyle = '#fb7185'; c.setLineDash([6, 4]); c.lineWidth = 2; c.beginPath(); c.moveTo(x1, y1 - 30); c.quadraticCurveTo(x1 - 20, y1 - 80, mx, my - 8); c.stroke(); c.setLineDash([]); c.fillStyle = '#fb7185'; c.fillText('⊖ 抑制', x1 - 30, y1 - 64); }
+    Object.keys(cfg.nodes).forEach(n => {
+      const [x, y] = P(n), v = Math.min(1, amt[n] / 4.5), hh = 46, rw = 22;
+      c.fillStyle = '#0b1222'; c.strokeStyle = 'rgba(255,255,255,.25)'; c.lineWidth = 1;
+      c.beginPath(); c.ellipse(x, y + hh / 2, rw, 6, 0, 0, 6.2832); c.fill(); c.stroke();
+      c.fillRect(x - rw, y - hh / 2, rw * 2, hh); c.strokeRect(x - rw, y - hh / 2, rw * 2, hh);
+      const lv = hh * v, top = y + hh / 2 - lv, col = v > 0.85 ? '#fb7185' : v < 0.12 ? '#475569' : '#22d3ee';
+      const g = c.createLinearGradient(x - rw, 0, x + rw, 0); g.addColorStop(0, col); g.addColorStop(0.5, '#ffffff55'); g.addColorStop(1, col);
+      c.fillStyle = g; c.globalAlpha = 0.85; c.fillRect(x - rw, top, rw * 2, lv); c.globalAlpha = 1;
+      c.fillStyle = col; c.beginPath(); c.ellipse(x, top, rw, 6, 0, 0, 6.2832); c.fill();
+      c.strokeStyle = 'rgba(255,255,255,.35)'; c.beginPath(); c.ellipse(x, y - hh / 2, rw, 6, 0, 0, 6.2832); c.stroke();
+      c.fillStyle = '#e2e8f0'; c.fillText(cfg.names[n], x, y + hh / 2 + 18);
+      c.fillStyle = '#94a3b8'; c.fillText(amt[n].toFixed(1), x, y - hh / 2 - 10);
+    });
+  }, cv);
+})();
+
+/* ================= 07 ATP ================= */
+(function () {
+  const S = K.stage('st-atp', { radius: 48, yaw: 0.15, pitch: 0.2, autoRotate: 0.08, target: [-10, 2, 0] });
+  const s = 7, at = {}, objs = [];
+  const add = (n, e, p, id) => { at[n] = S.sphere(V.mul(p, 1), K.RAD[e] * 0.95, K.CPK[e], { id, nm: n }); objs.push(at[n]); return at[n]; };
+  const bonds = [];
+  const bd = (a, b, id, c) => { const t = S.tube(at[a].p, at[b].p, 0.85, c || '#cbd5e1', { id: id || 'bond', zb: 1 }); bonds.push(t); return t; };
+  const X0 = -42;
+  const hx = k => [X0 + Math.cos((30 + 60 * k) * Math.PI / 180) * s, Math.sin((30 + 60 * k) * Math.PI / 180) * s + 10, 0];
+  ['C5', 'C6', 'N1', 'C2', 'N3', 'C4'].forEach((n, k) => add(n, n[0], hx(k), 'ade'));
+  const pc = [X0 + 0.866 * s + 0.6882 * s, 10, 0], pr = 0.8507 * s, pa = a => V.add(pc, [Math.cos(a * Math.PI / 180) * pr, Math.sin(a * Math.PI / 180) * pr, 0]);
+  add('N7', 'N', pa(72), 'ade'); add('C8', 'C', pa(0), 'ade'); add('N9', 'N', pa(-72), 'ade');
+  add('N6', 'N', V.add(at.C6.p, [0, 1.4 * 5, 0]), 'ade');
+  [['C5', 'C6'], ['C6', 'N1'], ['N1', 'C2'], ['C2', 'N3'], ['N3', 'C4'], ['C4', 'C5'], ['C5', 'N7'], ['N7', 'C8'], ['C8', 'N9'], ['N9', 'C4'], ['C6', 'N6']].forEach(([a, b]) => bd(a, b, 'ade'));
+  S.face(['C5', 'C6', 'N1', 'C2', 'N3', 'C4'].map(n => at[n].p), '#3b82f6', { id: 'ade', al: 0.3 }); S.face(['C4', 'C5', 'N7', 'C8', 'N9'].map(n => at[n].p), '#3b82f6', { id: 'ade', al: 0.3 });
+  const rc = V.add(at.N9.p, [0.25 * s, -1.75 * s, 0]), ra = (a, r) => V.add(rc, [Math.cos(a * Math.PI / 180) * (r || pr), Math.sin(a * Math.PI / 180) * (r || pr), 0]);
+  add("C1'", 'C', ra(100), 'rib'); add("O4'", 'O', ra(28), 'rib'); add("C4'", 'C', ra(-44), 'rib'); add("C3'", 'C', ra(-116), 'rib'); add("C2'", 'C', ra(172), 'rib');
+  add("O2'", 'O', V.add(at["C2'"].p, [-0.5 * s, -0.9 * s, 2]), 'rib'); add("O3'", 'O', V.add(at["C3'"].p, [0, -1.0 * s, 2]), 'rib');
+  [["N9", "C1'"], ["C1'", "O4'"], ["O4'", "C4'"], ["C4'", "C3'"], ["C3'", "C2'"], ["C2'", "C1'"], ["C2'", "O2'"], ["C3'", "O3'"]].forEach(([a, b]) => bd(a, b, 'rib'));
+  S.face(["C1'", "O4'", "C4'", "C3'", "C2'"].map(n => at[n].p), '#e2e8f0', { id: 'rib', al: 0.22 });
+  add("C5'", 'C', V.add(at["C4'"].p, [1.0 * s, 0.3 * s, 0]), 'rib'); bd("C4'", "C5'", 'rib');
+  add("O5'", 'O', V.add(at["C5'"].p, [0.95 * s, 0, 0]), 'pa'); bd("C5'", "O5'", 'pa');
+  const PH = ['Pa', 'Pb', 'Pg'], PID = ['pa', 'pb', 'pg'];
+  let prev = "O5'";
+  PH.forEach((P, i) => {
+    const base = V.add(at[prev].p, [1.05 * s, 0, 0]);
+    add(P, 'P', base, PID[i]); bd(prev, P, i === 2 ? 'hi' : i === 1 ? 'hi1' : PID[i], i ? '#fde047' : null);
+    add(P + 'o1', 'O', V.add(base, [0, 1.05 * s, 0]), PID[i]); add(P + 'o2', 'O', V.add(base, [0, -0.6 * s, 0.85 * s]), PID[i]);
+    bd(P, P + 'o1', PID[i]); bd(P, P + 'o2', PID[i]);
+    if (i < 2) { add(P + 'b', 'O', V.add(base, [1.05 * s, 0, 0]), PID[i]); bd(P, P + 'b', PID[i]); prev = P + 'b'; }
+    else { add(P + 'o3', 'O', V.add(base, [1.0 * s, 0, 0]), PID[i]); bd(P, P + 'o3', PID[i]); }
+  });
+  const gamma = ['Pg', 'Pgo1', 'Pgo2', 'Pgo3'].map(n => at[n]);
+  gamma.forEach(o => { o.base = o.p.slice(); });
+  const hiB = bonds.find(b => b.id === 'hi');
+  const sparks = []; for (let i = 0; i < 26; i++) sparks.push({ o: S.sphere([0, 0, 0], 1.1, '#fde047', { glow: 1.2, gc: '#facc15', nopick: true, hidden: true }), d: V.norm([Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5]) });
+  const L = [K.lab(S, at.C2.p, '腺嘌呤 Adenine', 'ade', '#93c5fd', -30, -30), K.lab(S, rc, '核糖 Ribose', 'rib', '#e2e8f0', -40, 26), K.lab(S, at.Pa.p, 'α', 'pa', '#fbbf24', 0, -26), K.lab(S, at.Pb.p, 'β', 'pb', '#fbbf24', 0, -26), K.lab(S, at.Pg.p, 'γ 磷酸', 'pg', '#fbbf24', 0, -26)];
+  const lHi = K.lab(S, V.lerp(at.Pbb.p, at.Pg.p, 0.5), '高能磷酸鍵 ~', 'hi', '#fde047', 10, 34);
+  const lPi = K.lab(S, at.Pg.p, 'Pi（無機磷酸）', 'pg', '#fbbf24', 30, 20, { hidden: true });
+  let u = 0, uT = 0, burst = 0;
+  S.tick(dt => {
+    u += Math.sign(uT - u) * Math.min(Math.abs(uT - u), dt * 0.6);
+    const off = V.add(V.mul([16, -14, 8], sm(0, 1, u)), [0, 0, 0]);
+    gamma.forEach(o => mv(o.p, V.add(o.base, off)));
+    hiB.hidden = u > 0.08; lHi.hidden = u > 0.08; L[4].hidden = u > 0.5; lPi.hidden = u < 0.5; lPi.p = at.Pg.p;
+    hiB.glow = 0.5 + 0.5 * Math.sin(performance.now() / 250);
+    if (burst > 0) {
+      burst -= dt; const k = 1 - burst / 1.4, c = V.lerp(at.Pbb.p, gamma[0].base, 0.5);
+      sparks.forEach(s => { s.o.hidden = false; mv(s.o.p, V.add(c, V.mul(s.d, (s.inward ? 1 - k : k) * 30))); s.o.al = s.inward ? k : 1 - k; });
+    } else sparks.forEach(s => { s.o.hidden = true; });
+    $('atp-cap').textContent = u < 0.05 ? 'ATP（腺苷三磷酸）' : u > 0.95 ? 'ADP（腺苷二磷酸）+ Pi' : uT > u ? '水解：末端磷酸鍵斷裂，釋放能量' : '合成：輸入能量，接回磷酸';
+  });
+  $('atp-h').onclick = () => { if (uT === 1) return; uT = 1; burst = 1.4; sparks.forEach(s => { s.inward = false; }); };
+  $('atp-s').onclick = () => { if (uT === 0) return; uT = 0; burst = 1.4; sparks.forEach(s => { s.inward = true; }); };
+  S.onPick = o => { if (!o) return; const t = { ade: '腺嘌呤（嘌呤鹼基）', rib: '核糖（五碳糖）；腺嘌呤 + 核糖 = 腺苷', pa: 'α 磷酸', pb: 'β 磷酸', pg: 'γ（末端）磷酸', hi: '「高能」磷酸鍵：水解時釋放能量', hi1: '高能磷酸鍵（β–α 之間）', bond: '共價鍵' }[o.id]; if (t) $('atp-cap').textContent = '👉 ' + t; };
+  let eg = 'ex';
+  function drawEG() {
+    const ex = eg === 'ex';
+    const R = ex ? 100 : 30, P = ex ? 30 : 100;
+    K.plot($('eg-plot'), { x: [0, 1], y: [0, 160], xt: [], yt: [], xl: '反應進行 →', yl: '自由能', series: [{ f: x => K.lerp(R, P, sm(0.25, 0.75, x)) + 40 * Math.exp(-(((x - 0.5) / 0.13) ** 2)), c: ex ? '#fbbf24' : '#60a5fa', w: 2.8 }], hl: [{ y: R, c: '#94a3b8', t: '反應物' }, { y: P, c: ex ? '#34d399' : '#f472b6', t: '產物' }], legend: false });
+    $('eg-txt').innerHTML = ex ? '<li><b>放能反應</b>：產物自由能 &lt; 反應物 → 釋放能量（如葡萄糖燃燒成 CO₂ + H₂O、ATP 水解）</li><li>大分子較有組織、含較多自由能</li>' : '<li><b>吸能反應</b>：需輸入能量，產物自由能較高（如光合作用、ADP + Pi → ATP、蛋白質合成）</li><li>細胞以放能反應驅動吸能反應（偶聯）</li>';
+    UI.$$('[data-eg]').forEach(b => b.classList.toggle('on', b.dataset.eg === eg));
+  }
+  UI.$$('[data-eg]').forEach(b => b.onclick = () => { eg = b.dataset.eg; drawEG(); });
+  drawEG(); addEventListener('resize', drawEG);
+})();
+
+/* ================= 08 氧化還原 ================= */
+(function () {
+  let timer = 0;
+  $('rx-play').onclick = () => { clearInterval(timer); let i = 0; K.chain('rx-chain', 0); timer = setInterval(() => { i++; if (i > 3) { clearInterval(timer); K.chain('rx-chain', 'all'); return; } K.chain('rx-chain', i); }, 1100); };
+})();
+
+/* ================= 快閃卡 / 測驗 ================= */
+UI.flashcards($('fc'), [
+  { f: '催化劑如何加快反應？', b: '<b>降低活化能</b>，使更多反應物分子具有足夠能量；本身不被改變，也不改變反應的最終結果。' },
+  { f: '鎖與鑰匙 vs 誘導契合', b: '鎖鑰：受質形狀恰好嵌入活性部位；誘導契合：受質滑入時誘導酵素改變形狀而完全吻合。' },
+  { f: '同功酶的定義與例子', b: '催化同一反應、結構不同的酵素。CK-MB（心肌梗塞）、CK-MM（骨骼肌）、CK-BB（腦、肺）。' },
+  { f: '溫度對酵素的影響', b: '升溫 → 更多分子達活化能、速率上升；高於體溫數度後酵素<b>變性</b>，速率下降。' },
+  { f: '胃蛋白酶與胰蛋白酶的最適 pH', b: '胃蛋白酶 <b>2</b>（胃酸中作用）；胰蛋白酶 <b>9.5</b>（小腸鹼性環境）。唾液澱粉酶 6.8。' },
+  { f: '輔因子 vs 輔酶', b: '輔因子：金屬離子；輔酶：小型有機分子，由<b>水溶性維生素</b>衍生（NAD←菸鹼酸、FAD←核黃素），運送氫原子。' },
+  { f: '何謂酵素飽和？', b: '酵素量固定時，受質增加到某程度後速率不再上升 → 所有活性部位都被占用。' },
+  { f: '質量作用定律', b: '可逆反應的方向取決於兩側濃度；例：組織 CO₂ 高 → 生成碳酸；肺 CO₂ 低 → 分解出 CO₂。' },
+  { f: '終產物抑制', b: '途徑最終產物以<b>異位抑制</b>抑制前段（分支點）酵素 → 負回饋，代謝流轉向另一分支。' },
+  { f: '先天代謝缺陷的後果', b: '缺陷步驟<b>之前</b>的中間物堆積、<b>之後</b>的產物減少；分支另一路徑產物增加。例：PKU、白化症。' },
+  { f: 'PKU 的原因與處理', b: '<b>苯丙胺酸羥化酶</b>缺陷 → 苯丙胺酸轉成苯丙酮酸 → 智能障礙；新生兒篩檢、終身低苯丙胺酸飲食。' },
+  { f: '熱力學第一、第二定律', b: '一：能量不生不滅只轉換；二：每次轉換熵增加、可用自由能減少。' },
+  { f: '放能 vs 吸能反應', b: '放能：產物自由能較低，釋放能量；吸能：需輸入能量，產物自由能較高。' },
+  { f: '為何 ATP 稱為通用能量攜帶者？', b: '食物分解（放能）偶聯合成 ATP；ATP → ADP + Pi 釋放的能量驅動細胞所有耗能過程。' },
+  { f: '氧化劑與還原劑', b: '氧化 = 失電子（失 H）；還原 = 得電子。還原劑提供電子、氧化劑接受電子；<b>O₂ 是最終電子接受者</b>。' },
+  { f: 'NAD⁺ 與 FAD 被還原後寫成？', b: 'NAD⁺ + 2H → <b>NADH + H⁺</b>；FAD + 2H → <b>FADH₂</b>' }
+], 'ch04');
+UI.quiz($('qz'), [
+  { q: '酵素加快反應速率的方式是？', o: ['提高活化能', '降低活化能', '改變反應的平衡點', '提供反應所需的能量'], a: 1, e: '催化劑降低活化能，不改變最終結果。' },
+  { q: '血中 CK-MB 升高最可能代表？', o: ['腦部受損', '心肌梗塞', '骨骼肌受損', '胰臟炎'], a: 1, e: 'CK-MB（CK-2）主要來自心肌。' },
+  { q: '下列哪個酵素最適 pH 最低？', o: ['胰蛋白酶', '唾液澱粉酶', '胃蛋白酶', '鹼性磷酸酶'], a: 2, e: '胃蛋白酶 pH 2。' },
+  { q: '酵素已飽和時，要提高反應速率應？', o: ['增加受質', '增加酵素濃度', '降低溫度', '加入異位抑制物'], a: 1, e: '飽和代表活性部位全被占用，只能增加酵素量。' },
+  { q: '輔酶 NAD 由哪種維生素衍生？', o: ['維生素 C', '核黃素（B₂）', '菸鹼酸（B₃）', '維生素 A'], a: 2, e: 'FAD 才來自核黃素。' },
+  { q: '終產物抑制屬於哪一種調節？', o: ['正回饋、競爭性抑制', '負回饋、異位抑制', '正回饋、磷酸化', '負回饋、酵素變性'], a: 1, e: '終產物結合在異位部位，屬負回饋。' },
+  { q: '某途徑中酵素 3 缺陷，下列何者會增加？', o: ['酵素 3 之後的產物', '酵素 3 之前的中間物', '所有中間物', '最終產物'], a: 1, e: '缺陷步驟前的中間物堆積。' },
+  { q: 'PKU 患者缺陷的酵素是？', o: ['酪胺酸酶', '苯丙胺酸羥化酶', '葡萄糖-6-磷酸酶', '肝醣磷解酶'], a: 1, e: '苯丙胺酸無法轉成酪胺酸，改轉成苯丙酮酸。' },
+  { q: '在肺微血管中碳酸酐酶主要催化？', o: ['CO₂ + H₂O → H₂CO₃', 'H₂CO₃ → CO₂ + H₂O', '2H₂O₂ → 2H₂O + O₂', '澱粉 → 麥芽糖'], a: 1, e: '肺中 CO₂ 低，反應向左產生 CO₂ 呼出。' },
+  { q: 'ATP 水解成 ADP + Pi 屬於？', o: ['吸能反應', '放能反應', '氧化反應', '還原反應'], a: 1, e: '釋放能量供細胞工作使用。' },
+  { q: '在 NAD⁺ + 2H → NADH + H⁺ 中，NAD⁺ 扮演？', o: ['還原劑（被氧化）', '氧化劑（被還原）', '催化劑', '最終電子接受者'], a: 1, e: 'NAD⁺ 接受電子而被還原，所以是氧化劑。' }
+]);
+</script>
+</body>
+</html>

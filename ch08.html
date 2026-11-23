@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch8 中樞神經系統 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .cn-card{text-align:center;min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+  .cn-n{font-size:34px;font-weight:900;font-family:"Times New Roman",serif;color:#fff;line-height:1}
+  .cn-name{font-size:18px;font-weight:800}
+  .t-s{color:#60a5fa;border-color:#60a5fa66}.t-m{color:#fb923c;border-color:#fb923c66}.t-x{color:#c084fc;border-color:#c084fc66}
+  .spine{perspective:900px;display:flex;justify-content:center}
+  .spine-col{display:flex;flex-direction:column;gap:3px;margin-right:110px;transform:rotateY(-24deg) rotateX(8deg);transform-style:preserve-3d}
+  .vt{width:150px;height:13px;border-radius:5px;position:relative;cursor:pointer;transition:.25s;box-shadow:6px 4px 0 rgba(0,0,0,.45)}
+  .vt::after{content:attr(data-l);position:absolute;left:160px;top:-2px;font-size:11px;color:var(--mut);white-space:nowrap}
+  .vt:hover,.vt.on{transform:translateZ(16px) translateX(6px)}
+  @media (max-width:420px){.spine-col{margin-right:96px}.vt{width:116px}.vt::after{left:124px;font-size:10px}}
+  .day .sky{background:linear-gradient(180deg,#0ea5e9,#38bdf8)} .night .sky{background:linear-gradient(180deg,#0b1026,#1e1b4b)}
+  .sky{height:70px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-size:34px;transition:background .6s}
+  .meter{height:14px;border-radius:99px;background:var(--panel2);overflow:hidden}
+  .meter i{display:block;height:100%;background:linear-gradient(90deg,#a78bfa,#f0abfc);transition:width 1s}
+</style>
+</head>
+<body style="--acc:#a78bfa;--acc2:#f472b6">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 8 · The Central Nervous System</div>
+  <h1 class="title3d">中樞神經系統</h1>
+  <p class="sub">大腦皮質分區、側化與語言、邊緣系統、學習與記憶（LTP）、間腦/中腦/後腦、脊髓徑路與反射弧、12 對腦神經與 31 對脊神經。3D 大腦可切換<b>外觀 / 內部 / 正中矢狀切</b>並點選結構。</p>
+  <div class="chips">
+    <a class="chip" href="#cns">CNS 概論</a><a class="chip" href="#brain">3D 大腦</a><a class="chip" href="#lat">側化與語言</a><a class="chip" href="#mem">學習與記憶</a><a class="chip" href="#rhythm">晝夜節律</a><a class="chip" href="#cord">脊髓與反射</a><a class="chip" href="#pns">腦神經/脊神經</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a>
+  </div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="cns" data-nav="CNS 概論">
+  <h2><span class="num">01</span>CNS 概論</h2>
+  <div class="grid2">
+    <div class="grid2 even" style="gap:14px">
+      <div class="card tilt"><h3>CNS 做什麼？</h3><ul class="small"><li>＝ 腦 + 脊髓</li><li>接收<b>感覺神經元</b>的輸入</li><li>指揮<b>運動神經元</b>的活動</li><li><b>聯絡神經元</b>整合感覺與運動</li><li>執行學習與記憶</li></ul></div>
+      <div class="card tilt"><h3>灰質 vs 白質</h3><ul class="small"><li><b>灰質</b>：神經元細胞體 + 樹突</li><li><b>白質</b>：有髓鞘的軸突徑路（髓鞘使其發白）</li><li>大腦表面：<b>迴 gyrus</b>（隆起）、<b>溝 sulcus</b>（凹陷）</li></ul></div>
+      <div class="card tilt" style="grid-column:1/-1"><h3>成人腦的數字</h3><div class="kv"><div><small>重量</small><b>1.5 kg</b></div><div><small>神經元</small><b>1000 億</b></div><div><small>佔全身血流</small><b>20%</b></div></div></div>
+    </div>
+    <div class="card"><h3>腦重比較（講義補充）</h3><div id="bw"></div><p class="small muted">狗為 60–150 g，圖中取中間值 105 g。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="brain" data-nav="3D 大腦">
+  <h2><span class="num">02</span>3D 大腦：皮質分葉與深部構造</h2>
+  <p class="lead">左邊是左半球（前方＝額葉朝左）。用模式鈕看皮質外觀、讓皮質變透明看深部構造，或切成正中矢狀面；「分開兩半球」可看到胼胝體。</p>
+  <div class="grid2">
+    <div class="stage" id="st-brain"><canvas aria-label="3D 大腦模型"></canvas>
+      <div class="hud">拖曳旋轉 · 點選結構 · 點一下後滾輪縮放</div>
+      <div class="sbar">
+        <span class="seg" id="bmode"><button class="btn sm on" data-m="cortex" type="button">外觀</button><button class="btn sm" data-m="deep" type="button">內部</button><button class="btn sm" data-m="sag" type="button">矢狀切</button><button class="btn sm" data-m="lat" type="button">左右分化</button></span>
+        <button class="btn sm" id="bsplit" type="button">分開兩半球</button>
+      </div>
+    </div>
+    <div class="card info" id="info-brain">
+      <div class="tt">選一個結構</div>
+      <div class="picker" id="pick-brain"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="lat" data-nav="側化與語言">
+  <h2><span class="num">03</span>大腦側化、語言與情緒</h2>
+  <div class="grid3">
+    <div class="card tilt"><h3>大腦側化 Lateralization</h3><ul class="small"><li>兩半球各自專精某些功能</li><li>每側半球控制<b>對側</b>身體的運動，並接收對側的感覺</li><li>兩半球經<b>胼胝體</b>溝通（約 2 億條纖維）</li><li><b>左半球</b>：語言、分析能力；<b>右半球</b>：視覺空間作業（cerebral dominance）</li></ul></div>
+    <div class="card tilt"><h3>語言區與失語症</h3><p class="small">語言區大多由<b>失語症 aphasia</b>（腦傷造成的言語/語言障礙）得知。</p><ul class="small"><li><b>Broca 區</b>（額葉）：說話所必需 → 受損：說話困難、不流暢</li><li><b>Wernicke 區</b>（顳葉）：語言理解 → 受損：理解困難、話語空洞</li></ul></div>
+    <div class="card tilt"><h3>邊緣系統與情緒</h3><p class="small"><b>下視丘 + 邊緣系統</b>對情緒非常重要：攻擊、恐懼、進食、性與目標導向行為。</p><p class="small">講義標示的邊緣結構：<span class="tag">扣帶回</span><span class="tag">中隔內核</span><span class="tag">海馬迴</span><span class="tag">杏仁核</span></p><button class="btn sm" type="button" onclick="brainSelect('limbic')">在 3D 中顯示 →</button></div>
+  </div>
+</section>
+
+<section class="sec" id="mem" data-nav="學習與記憶">
+  <h2><span class="num">04</span>學習與記憶：LTP 長期增益</h2>
+  <div class="grid3">
+    <div class="card tilt"><h3>記憶的種類</h3><ul class="small"><li>短期記憶與長期記憶；牽涉腦中多個區域</li><li><b>非陳述性（內隱）</b> non-declarative / implicit：簡單技能與制約</li><li><b>陳述性（外顯）</b> declarative / explicit：語文記憶</li><li>失憶症 amnesiacs：<b>陳述性記憶</b>受損</li></ul></div>
+    <div class="card tilt"><h3>海馬迴的神經新生</h3><ul class="small"><li>對學習與記憶似乎非常重要</li><li>海馬迴含<b>神經幹細胞</b>，持續產生新神經元</li><li>壓力或憂鬱 → 阻礙學習、海馬迴萎縮</li><li>減壓與抗憂鬱藥 → 恢復正常大小</li></ul></div>
+    <div class="card tilt"><h3>LTP 定義</h3><p class="small">突觸經<b>高頻刺激</b>後興奮性持續增加，被認為是突觸層次的學習形式；發生在海馬迴。</p></div>
+  </div>
+  <div class="grid2 mt">
+    <div class="card" style="padding:12px"><canvas class="plot" id="ltp" style="--ph:360px" aria-label="LTP 機制動畫"></canvas></div>
+    <div class="card" id="ltp-steps"></div>
+  </div>
+</section>
+
+<section class="sec" id="rhythm" data-nav="晝夜節律">
+  <h2><span class="num">05</span>下視丘、腦下垂體與晝夜節律</h2>
+  <div class="grid2">
+    <div class="card" id="circ">
+      <div class="sky"><span id="sky-i">☀️</span><button class="btn sm" id="dn" type="button">切換 白天 / 夜晚</button></div>
+      <div class="chain mt" id="cchain">
+        <div class="nd">光<small>Light</small></div><span class="ar">→</span>
+        <div class="nd">視網膜<small>Retina</small></div><span class="ar">→</span>
+        <div class="nd">下視丘 SCN<small>主時鐘</small></div><span class="ar">→</span>
+        <div class="nd">松果腺<small>Pineal gland</small></div><span class="ar">→</span>
+        <div class="nd">褪黑激素<small>Melatonin</small></div><span class="ar">→</span>
+        <div class="nd">GnRH 釋放<small>季節性生殖</small></div>
+      </div>
+      <p class="small mt">褪黑激素濃度</p><div class="meter"><i id="mel" style="width:15%"></i></div>
+      <p class="small mt" id="circ-t"></p>
+    </div>
+    <div class="card">
+      <h3>下視丘 Hypothalamus：恆定的總司令</h3>
+      <ul class="small"><li>飢餓、口渴、體溫的神經中樞</li><li>調節睡眠、情緒、性興奮、憤怒、恐懼、痛與愉悅</li><li>以<b>釋放 / 抑制激素</b>控制<b>腦下垂體前葉</b></li><li>製造 <b>ADH</b> 與<b>催產素 oxytocin</b>，經軸突送到<b>後葉</b>儲存釋放</li><li>協調交感與副交感</li><li><b>SCN 視交叉上核</b>＝主時鐘，每天由眼睛的光重設</li></ul>
+      <h4>視丘 / 上視丘</h4>
+      <ul class="small"><li><b>視丘</b>：除<b>嗅覺</b>外所有感覺傳到大腦的轉運站；參與覺醒程度</li><li><b>上視丘</b>：脈絡叢（分泌 CSF）＋松果腺（褪黑激素：睡眠週期、季節性生殖）</li></ul>
+    </div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>中腦 Midbrain</h3><ul class="small"><li><b>上丘</b>：視覺反射</li><li><b>下丘</b>：聽覺轉運</li><li><b>紅核、黑質</b>：運動協調</li><li>黑質多巴胺神經元退化 → <b>巴金森氏症</b>（黑質紋狀體系統）</li><li><b>中腦邊緣多巴胺系統</b>：獎賞與成癮；濫用藥物使<b>伏隔核</b>釋放多巴胺</li></ul></div>
+    <div class="card tilt"><h3>後腦 Hindbrain</h3><ul class="small"><li><b>橋腦</b>：腦神經核；呼吸中樞（長吸 apneustic、呼吸調節 pneumotaxic）</li><li><b>小腦</b>：第二大；接收本體感受器；協調動作、運動學習</li><li><b>延腦（生命中樞）</b>：所有上下行徑經過；血管運動、心臟控制、呼吸中樞</li></ul></div>
+    <div class="card tilt"><h3>網狀活化系統 RAS</h3><ul class="small"><li>上行覺醒系統，起自橋腦、中腦網狀結構、下視丘與基底前腦</li><li>投射到大腦皮質，控制覺醒程度</li><li>活化 → 清醒；抑制 → 睡眠</li></ul><button class="btn sm" type="button" onclick="brainSelect('ras')">在 3D 中顯示 →</button></div>
+  </div>
+</section>
+
+<section class="sec" id="cord" data-nav="脊髓與反射">
+  <h2><span class="num">06</span>脊髓、徑路與反射弧 3D</h2>
+  <p class="lead">按「刺激受器」看訊號走完反射弧：受器 → 感覺神經元 → 背根 → 中間神經元 → 運動神經元 → 腹根 → 動器（肌肉）。</p>
+  <div class="grid2">
+    <div class="stage" id="st-cord"><canvas aria-label="3D 脊髓反射弧"></canvas>
+      <div class="hud">脊髓橫切面＋反射弧</div>
+      <div class="sbar"><button class="btn sm on" id="rf-go" type="button">⚡ 刺激受器</button><button class="btn sm on" id="rf-auto" type="button">自動</button><button class="btn sm" id="rf-tract" type="button">上/下行徑</button></div>
+    </div>
+    <div class="card">
+      <ol class="st-list" id="rf-list">
+        <li><b>受器 Receptor</b><span>皮膚受器偵測刺激</span></li>
+        <li><b>感覺（傳入）神經元</b><span>經脊神經傳向脊髓；細胞體在背根神經節（假單極）</span></li>
+        <li><b>背根 Dorsal root</b><span>由感覺纖維組成，進入背角</span></li>
+        <li><b>中間神經元</b><span>聯絡神經元（有時才有），位於灰質</span></li>
+        <li><b>運動（傳出）神經元</b><span>細胞體在腹角</span></li>
+        <li><b>腹根 Ventral root</b><span>由運動纖維組成</span></li>
+        <li><b>動器 Effector</b><span>骨骼肌收縮</span></li>
+      </ol>
+      <div class="note mt"><b>反射弧</b>只牽涉周邊神經與脊髓，是簡單的感覺輸入→運動輸出迴路。</div>
+    </div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>上行徑 Ascending</h3><ul class="small"><li>身體的感覺資訊經上行徑傳到腦</li><li>多數會<b>交叉 decussate</b> → 大腦半球接收<b>對側</b>身體的資訊</li></ul></div>
+    <div class="card tilt"><h3>錐體徑 Pyramidal</h3><ul class="small"><li>＝皮質脊髓徑 corticospinal</li><li>由運動皮質直接下行到脊髓，<b>中途不形成突觸</b></li><li>控制<b>精細動作</b></li></ul></div>
+    <div class="card tilt"><h3>錐體外徑 Extrapyramidal</h3><ul class="small"><li>＝網狀脊髓徑 reticulospinal</li><li>下行途中有<b>許多突觸</b></li><li>間接影響動作</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="pns" data-nav="腦神經/脊神經">
+  <h2><span class="num">07</span>周邊神經系統：12 對腦神經、31 對脊神經</h2>
+  <p class="lead">PNS＝離開 CNS 的神經＋其神經節（CNS 外的細胞體集合）。腦神經：2 對源自前腦，10 對源自中腦與後腦；大多為混合神經。拖曳或按箭頭轉動 3D 環。</p>
+  <div class="btns" id="cn-filter"><button class="btn sm on" data-f="all" type="button">全部</button><button class="btn sm" data-f="感覺性" type="button">感覺性</button><button class="btn sm" data-f="運動性" type="button">運動性</button><button class="btn sm" data-f="混合性" type="button">混合性</button></div>
+  <div class="grid2">
+    <div class="card" style="padding:0;overflow:hidden"><div id="cn-ring"></div></div>
+    <div class="card info" id="cn-info"></div>
+  </div>
+  <div class="note extra"><b>記憶口訣（補充）</b>名稱：Oh Oh Oh To Touch And Feel Very Good Velvet, Such Heaven；性質（S 感覺 M 運動 B 混合）：Some Say Marry Money But My Brother Says Big Brains Matter More。</div>
+  <div class="grid2 mt">
+    <div class="card"><h3>31 對脊神經</h3><div class="spine"><div class="spine-col" id="spine"></div></div></div>
+    <div class="card"><h3>脊神經的組成</h3><ul class="small"><li>皆為<b>混合神經</b>，在脊髓旁分成<b>背根</b>與<b>腹根</b></li><li><b>背根</b>：感覺纖維（背根神經節含感覺神經元細胞體）</li><li><b>腹根</b>：運動纖維</li></ul><div class="kv mt" id="spine-kv"></div><p class="small muted mt">點左邊的節段可高亮該區。補充：頸椎 7 節但頸神經 8 對。</p>
+      <div class="note mt"><b>狂犬病 Rabies：</b>病毒由咬傷處進入周邊神經，經<b>逆向軸突運輸（dynein）</b>上行到 CNS（呼應第 7 章）。</div></div>
+  </div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">08</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="自我測驗"><h2><span class="num">09</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>整理自課程講義 Chapter 8（The Central Nervous System），僅供個人複習使用。3D 腦模型為示意，形狀與比例經簡化。 · <a href="index.html">回總覽</a> · <a href="ch07.html">← 第 7 章 神經元與突觸</a> · <a href="huntington.html">補充：杭丁頓氏症 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+
+UI.bars(document.getElementById('bw'), [
+  { label: '人', v: 1500, text: '1500 g', c: '#a78bfa' }, { label: '馬', v: 590, text: '590 g', c: '#38bdf8' },
+  { label: '牛', v: 500, text: '500 g', c: '#34d399' }, { label: '豬', v: 125, text: '125 g', c: '#fbbf24' }, { label: '狗', v: 105, text: '60–150 g', c: '#fb7185' }
+]);
+
+/* ================= 3D 大腦 ================= */
+const BINFO = {
+  frontal: ['額葉 Frontal lobe', '中央溝之前', ['含<b>中央前回</b>（初級運動皮質）', '左側額葉下部有 <b>Broca 區</b>（說話）'], 0],
+  precentral: ['中央前回 Precentral gyrus', '額葉 · 初級運動皮質', ['控制<b>對側</b>身體的隨意運動', '錐體徑（皮質脊髓徑）由運動皮質發出'], 0],
+  cs: ['中央溝 Central sulcus', '額葉與頂葉的分界', ['前方＝中央前回（運動），後方＝中央後回（體感覺）'], 0],
+  parietal: ['頂葉 Parietal lobe', '中央溝之後', ['含<b>中央後回</b>（初級體感覺皮質）'], 0],
+  postcentral: ['中央後回 Postcentral gyrus', '頂葉 · 初級體感覺皮質', ['接收由中央前回所控制的身體部位傳來的感覺（對側）'], 0],
+  temporal: ['顳葉 Temporal lobe', '外側溝下方', ['<b>聽覺中樞</b>：接收耳蝸 cochlea 的感覺資訊', '連結並處理聽覺與視覺資訊', '左側含 <b>Wernicke 區</b>'], 0],
+  occipital: ['枕葉 Occipital lobe', '大腦後端', ['負責<b>視覺</b>', '協調<b>眼球運動</b>'], 0],
+  insula: ['島葉 Insula', '藏在外側溝深處（第 5 個葉）', ['參與<b>記憶入碼</b>', '整合感覺與內臟反應', '協調壓力下的<b>心血管反應</b>'], 1],
+  broca: ['Broca 區', '左額葉下部', ['<b>說話所必需</b>（語言表達）', '受損：能理解但說話困難、不流暢'], 0],
+  wernicke: ['Wernicke 區', '左顳葉後上部', ['<b>語言理解</b>', '受損：說話流利但內容空洞、理解困難'], 0],
+  cc: ['胼胝體 Corpus callosum', '連接左右半球', ['約 <b>2 億條</b>纖維', '兩半球藉此溝通'], 1],
+  thalamus: ['視丘 Thalamus', '間腦 · 大腦半球底部', ['除<b>嗅覺</b>外，所有感覺資訊經此轉運到大腦', '參與<b>覺醒程度</b>'], 1],
+  pineal: ['上視丘 / 松果腺 Epithalamus', '間腦', ['含<b>脈絡叢</b>：分泌腦脊髓液 CSF', '含<b>松果腺</b>：分泌<b>褪黑激素</b> melatonin → 睡眠週期、季節性生殖'], 1],
+  hypo: ['下視丘 Hypothalamus', '間腦 · 恆定最重要的結構', ['飢餓、口渴、體溫中樞', '調節睡眠、情緒、性興奮、憤怒、恐懼、痛與愉悅', '控制腦下垂體前葉激素釋放', '製造 ADH 與催產素', '協調交感與副交感'], 1],
+  scn: ['視交叉上核 SCN', '下視丘 · 主時鐘', ['調節晝夜節律', '每天由眼睛傳來的光重設', '控制松果腺分泌褪黑激素'], 1],
+  pituitary: ['腦下垂體 Pituitary', '前葉 + 後葉', ['<b>後葉</b>：儲存並釋放 ADH（vasopressin）與催產素（兩者由下視丘製造後運來）', '<b>前葉</b>：受下視丘的釋放/抑制激素控制'], 1],
+  hippo: ['海馬迴 Hippocampus', '邊緣系統 · 學習與記憶', ['LTP：glutamate 活化 AMPA 與 NMDA 受體', '含神經幹細胞，持續神經新生', '壓力/憂鬱使其萎縮'], 1],
+  amyg: ['杏仁核 Amygdala', '邊緣系統', ['情緒（恐懼、攻擊）'], 1],
+  cingulate: ['扣帶回 Cingulate gyrus', '邊緣系統', ['位於胼胝體上方的皮質，參與情緒'], 1],
+  septal: ['中隔內核 Septal nuclei', '邊緣系統', ['講義標示的邊緣系統結構之一'], 1],
+  nacc: ['伏隔核 Nucleus accumbens', '中腦邊緣多巴胺系統的終點', ['<b>獎賞與成癮</b>', '濫用藥物使伏隔核釋放多巴胺'], 1],
+  striatum: ['紋狀體（基底核） Striatum', '黑質紋狀體系統的目標', ['巴金森氏症：黑質的多巴胺神經元退化 → 紋狀體失去多巴胺', '杭丁頓氏症：基底核神經元大量死亡（見<a href="huntington.html">補充講義</a>）'], 1],
+  nigrostriatal: ['黑質紋狀體多巴胺系統', 'Nigrostriatal dopamine system', ['黑質 → 紋狀體', '與運動協調有關；退化 → 巴金森氏症'], 1],
+  mesolimbic: ['中腦邊緣多巴胺系統', 'Mesolimbic dopamine system', ['中腦 → 伏隔核等邊緣結構', '獎賞與成癮'], 1],
+  midbrain: ['中腦 Midbrain', '腦幹上段', ['上丘：視覺反射；下丘：聽覺轉運', '紅核與黑質：運動協調'], 0],
+  sc: ['上丘 Superior colliculi', '中腦', ['參與<b>視覺反射</b>'], 1],
+  ic: ['下丘 Inferior colliculi', '中腦', ['<b>轉運聽覺</b>資訊'], 1],
+  rn: ['紅核 Red nucleus', '中腦', ['參與運動協調'], 1],
+  sn: ['黑質 Substantia nigra', '中腦', ['含多巴胺神經元，參與運動協調', '退化 → <b>巴金森氏症</b>'], 1],
+  pons: ['橋腦 Pons', '後腦', ['含數對腦神經的神經核', '兩個呼吸控制中樞：<b>長吸中樞 apneustic</b>、<b>呼吸調節中樞 pneumotaxic</b>'], 0],
+  cerebellum: ['小腦 Cerebellum', '後腦 · 腦中第二大', ['接收<b>本體感受器</b>（關節、肌腱、肌肉）輸入', '協調動作與<b>運動學習</b>'], 0],
+  medulla: ['延腦 Medulla（生命中樞）', '後腦', ['腦與脊髓之間的<b>所有徑路</b>都經過', '多對腦神經的神經核', '① 血管運動中樞 ② 心臟控制中樞 ③ 呼吸中樞'], 0],
+  ras: ['網狀活化系統 RAS', '上行覺醒系統', ['起自橋腦、中腦網狀結構、下視丘與基底前腦的神經元群', '投射到大腦皮質，控制覺醒程度', '活化 → 清醒；抑制 → 睡眠'], 1],
+  spinal: ['脊髓 Spinal cord', 'CNS 的一部分', ['上行徑（感覺）與下行徑（運動）', '見下方「脊髓與反射」'], 0]
+};
+const BGROUP = { limbic: ['hippo', 'amyg', 'cingulate', 'septal'], dopamine: ['nigrostriatal', 'mesolimbic', 'sn', 'striatum', 'nacc'] };
+let brainSelect = () => {};
+(function () {
+  const st = document.getElementById('st-brain');
+  const S = new Mini3D.Scene(st.querySelector('canvas'), { radius: 100, yaw: -1.2, pitch: 0.22, autoRotate: 0.09, target: [0, -10, -6] });
+  Mini3D.controls(S, st);
+  const LC = { frontal: '#38bdf8', precentral: '#7dd3fc', parietal: '#a78bfa', postcentral: '#c4b5fd', temporal: '#34d399', occipital: '#fbbf24', cs: '#475569', broca: '#fb7185', wernicke: '#e879f9', insula: '#f472b6', cerebellum: '#fb923c' };
+  const HC = 31, HY = 20, RL = 34, RM = 29, RY = 46, RZ = 74;
+  const TE = s => ({ c: [s * 40, -10, 14], r: [21, 19, 38] });
+  const inHemi = (p, s) => { const dx = p[0] - s * HC; const rx = dx * s > 0 ? RL : RM; return (dx / rx) ** 2 + ((p[1] - HY) / RY) ** 2 + (p[2] / RZ) ** 2 < 1; };
+  const noise = u => 1 + 0.045 * Math.sin(u[0] * 11 + u[1] * 7) * Math.sin(u[2] * 13 - u[1] * 9) + 0.025 * Math.sin(u[1] * 21 + u[2] * 17);
+  const cortex = [];
+  function assign(p, s, isTemp) {
+    const y = p[1], z = p[2], zcs = 10 - y * 0.28, lat = Math.abs(p[0]) > 48;
+    if (isTemp) { if (s < 0 && lat && z > -27 && z < -5 && y > -16) return ['temporal', 'wernicke']; return ['temporal', null]; }
+    if (Math.abs(z - zcs) < 1.9 && y > -8) return ['cs', null];
+    if (z > zcs) { if (s < 0 && lat && z > zcs + 13 && z < zcs + 34 && y > -6 && y < 16) return ['frontal', 'broca']; if (z < zcs + 11 && y > -6) return ['frontal', 'precentral']; return ['frontal', null]; }
+    if (z < -47) return ['occipital', null];
+    if (z > zcs - 11 && y > -6) return ['parietal', 'postcentral'];
+    return ['parietal', null];
+  }
+  [-1, 1].forEach(s => {
+    Mini3D.fib(1500).forEach(u => {
+      const n = noise(u);
+      let x = u[0] * (u[0] * s > 0 ? RL : RM) * n, y = u[1] * RY * n, z = u[2] * RZ * n;
+      if (y < -15) y = -15 + (y + 15) * 0.55;
+      const p = [s * HC + x, HY + y, z];
+      const t = TE(s); if (Mini3D.insideE(p, t.c, V.mul(t.r, 1.02))) return;
+      const [id, sub] = assign(p, s, false);
+      cortex.push(S.dot(p, 1.9, LC[sub || id], { id, sub, side: s, p0: p.slice(), cx: 1, base: LC[sub || id] }));
+    });
+    const t = TE(s);
+    Mini3D.shell(460, t.c, t.r, { noise }).forEach(q => {
+      if (inHemi(q.p, s) && q.p[1] > -6) return;
+      if (q.u[0] * s < -0.55) return;
+      const [id, sub] = assign(q.p, s, true);
+      cortex.push(S.dot(q.p, 1.9, LC[sub || id], { id, sub, side: s, p0: q.p.slice(), cx: 1, base: LC[sub || id] }));
+    });
+    for (let i = 0; i < 90; i++) {
+      const a = Math.random() * 6.283, r = Math.sqrt(Math.random());
+      const p = [s * 44, 2 + Math.sin(a) * 11 * r, 10 + Math.cos(a) * 17 * r];
+      S.dot(p, 1.8, LC.insula, { id: 'insula', side: s, p0: p.slice(), deep: 1, base: LC.insula, ins: 1 });
+    }
+  });
+  Mini3D.shell(1000, [0, -30, -50], [46, 19, 26]).forEach(q => {
+    if (inHemi(q.p, -1) || inHemi(q.p, 1)) return;
+    const band = Math.sin(q.p[1] * 1.25 + q.p[2] * 0.25) > 0.35;
+    const c = band ? '#fdba74' : '#ea580c';
+    S.dot(q.p, 1.8, c, { id: 'cerebellum', base: c, p0: q.p.slice() });
+  });
+  S.path([[0, -4, -12], [0, -14, -14], [0, -26, -16]], [10, 9.5], '#c084fc', { id: 'midbrain' }, 2);
+  S.sphere([0, -37, -14], 13, '#facc15', { id: 'pons' });
+  S.path([[0, -48, -19], [0, -60, -22], [0, -74, -25]], [9, 7], '#f87171', { id: 'medulla' }, 2);
+  S.path([[0, -74, -25], [0, -102, -29]], [6.5, 5.5], '#94a3b8', { id: 'spinal' }, 2);
+  const D = { deep: 1 };
+  S.path([[0, 22, 40], [0, 33, 22], [0, 37, 0], [0, 35, -20], [0, 27, -38], [0, 18, -42]], 5, '#e2e8f0', Object.assign({ id: 'cc' }, D), 4);
+  [-1, 1].forEach(s => {
+    S.path([[s * 6, 30, 44], [s * 6, 45, 22], [s * 6, 49, 0], [s * 6, 47, -20], [s * 6, 37, -42]], 3.6, '#86efac', Object.assign({ id: 'cingulate' }, D), 4);
+    S.sphere([s * 9, 8, -6], 10, '#f9a8d4', Object.assign({ id: 'thalamus' }, D));
+    S.path([[s * 20, -2, -18], [s * 24, -8, -6], [s * 26, -14, 6], [s * 25, -18, 14]], 4.2, '#4ade80', Object.assign({ id: 'hippo' }, D), 4);
+    S.sphere([s * 24, -19, 22], 5.2, '#facc15', Object.assign({ id: 'amyg' }, D));
+    S.path([[s * 12, 26, 24], [s * 14, 22, 8], [s * 16, 16, -8], [s * 20, 8, -18]], [6.5, 3], '#38bdf8', Object.assign({ id: 'striatum' }, D), 4);
+    S.sphere([s * 24, 5, 8], 8, '#38bdf8', Object.assign({ id: 'striatum', al: 0.9 }, D));
+    S.sphere([s * 8, -2, 22], 4.2, '#c084fc', Object.assign({ id: 'nacc' }, D));
+    S.sphere([s * 3, 8, 16], 3, '#a3e635', Object.assign({ id: 'septal' }, D));
+    S.sphere([s * 7, -20, -15], 3.6, '#cbd5e1', Object.assign({ id: 'sn', zb: -12 }, D));
+    S.sphere([s * 3.6, -17, -11], 2.6, '#ef4444', Object.assign({ id: 'rn', zb: -12 }, D));
+    S.sphere([s * 5, -9, -25], 3.2, '#22d3ee', Object.assign({ id: 'sc', zb: -4 }, D));
+    S.sphere([s * 5, -17, -27], 3.2, '#818cf8', Object.assign({ id: 'ic', zb: -4 }, D));
+    S.path([[s * 7, -20, -15], [s * 12, -8, -6], [s * 18, 6, 2]], 1.6, '#3b82f6', Object.assign({ id: 'nigrostriatal', flat: 1, glow: 0.4 }, D), 6);
+    S.path([[0, -20, -8], [s * 5, -12, 8], [s * 8, -2, 22]], 1.6, '#e879f9', Object.assign({ id: 'mesolimbic', flat: 1, glow: 0.4 }, D), 6);
+  });
+  S.sphere([0, 10, -20], 3.6, '#fde047', Object.assign({ id: 'pineal' }, D));
+  S.sphere([0, -4, 8], 6.5, '#f87171', Object.assign({ id: 'hypo' }, D));
+  S.sphere([0, -9, 15], 2.6, '#fef08a', Object.assign({ id: 'scn', zb: -6 }, D));
+  S.tube([0, -9, 12], [0, -18, 16], 1.5, '#fb7185', Object.assign({ id: 'pituitary' }, D));
+  S.sphere([0, -21, 17], 5, '#fb7185', Object.assign({ id: 'pituitary' }, D));
+  for (let i = 0; i < 34; i++) { const f = i / 33; S.dot([(Math.random() - .5) * 5, -72 + f * 64, -25 + f * 12 + (Math.random() - .5) * 4], 1.5, '#fde047', Object.assign({ id: 'ras', zb: -14 }, D)); }
+  const rasProj = [[-24, 52, 26], [24, 52, 26], [-26, 56, -10], [26, 56, -10], [-22, 44, -46], [22, 44, -46], [-42, 30, 30], [42, 30, 30]]
+    .map(e => S.path([[0, -8, -12], V.lerp([0, -8, -12], e, 0.5).map((v, k) => k === 1 ? v + 10 : v), e], 0.9, '#fde047', { id: 'ras', flat: 1, glow: 0.5, hidden: true, rp: 1 }, 6));
+  const L = (p, t, id, c, grp, extra) => S.label(p, t, Object.assign({ id, c, grp }, extra));
+  const labs = [
+    L([-60, 36, 46], '額葉', 'frontal', LC.frontal, 'cx'), L([-60, 54, -26], '頂葉', 'parietal', LC.parietal, 'cx'),
+    L([-64, -16, 14], '顳葉', 'temporal', LC.temporal, 'cx'), L([-44, 22, -74], '枕葉', 'occipital', LC.occipital, 'cx'),
+    L([-44, -26, -74], '小腦', 'cerebellum', LC.cerebellum, 'cx'), L([-62, 4, 30], 'Broca', 'broca', LC.broca, 'cx', { size: 11 }),
+    L([-62, -6, -16], 'Wernicke', 'wernicke', LC.wernicke, 'cx', { size: 11 }), L([-36, 66, 8], '中央溝', 'cs', '#cbd5e1', 'cx', { size: 11 }),
+    L([0, -37, -14], '橋腦', 'pons', '#facc15', 'all', { dx: 46, dy: 6 }), L([0, -62, -22], '延腦', 'medulla', '#f87171', 'all', { dx: 44, dy: 4 }),
+    L([0, 40, 0], '胼胝體', 'cc', '#e2e8f0', 'dp', { dy: -16 }), L([-9, 8, -6], '視丘', 'thalamus', '#f9a8d4', 'dp', { dx: -40, dy: -24 }),
+    L([0, -4, 8], '下視丘', 'hypo', '#f87171', 'dp', { dx: 46, dy: 18 }), L([0, -21, 17], '腦下垂體', 'pituitary', '#fb7185', 'dp', { dx: 40, dy: 26 }),
+    L([-25, -14, 6], '海馬迴', 'hippo', '#4ade80', 'dp', { dx: -46, dy: 20 }), L([-24, -19, 22], '杏仁核', 'amyg', '#facc15', 'dp', { dx: -40, dy: 30 }),
+    L([-16, 16, -8], '紋狀體', 'striatum', '#38bdf8', 'dp', { dx: -50, dy: -16 }), L([0, 10, -20], '松果腺', 'pineal', '#fde047', 'dp', { dx: 30, dy: -24 }),
+    L([0, -15, -14], '中腦', 'midbrain', '#c084fc', 'all', { dx: 50, dy: -4 }), L([-7, -20, -15], '黑質', 'sn', '#cbd5e1', 'dp', { dx: -44, dy: 10 }),
+    L([-6, 47, 20], '扣帶回', 'cingulate', '#86efac', 'dp', { dy: -14 }), L([-8, -2, 22], '伏隔核', 'nacc', '#c084fc', 'dp', { dx: -30, dy: -26 }),
+    L([-44, 2, 10], '島葉', 'insula', LC.insula, 'dp', { dx: -20, dy: -20 })
+  ];
+  const latL = [S.label([-56, 64, 0], '左半球：語言、分析', { c: '#38bdf8', hidden: true, force: 1 }), S.label([56, 64, 0], '右半球：視覺空間', { c: '#f59e0b', hidden: true, force: 1 })];
+  let mode = 'cortex', split = 0, splitT = 0, sel = null;
+  function apply() {
+    const deepVis = mode !== 'cortex' && mode !== 'lat';
+    S.each(o => {
+      if (o.t === 'l') return;
+      if (o.cx) {
+        o.hidden = mode === 'sag' && o.side < 0;
+        o.al = deepVis ? 0.13 : 1; o.nopick = deepVis; o.r = deepVis ? 1.5 : 1.9;
+        o.c = mode === 'lat' ? (o.side < 0 ? '#38bdf8' : '#f59e0b') : o.base;
+      }
+      if (o.deep) o.hidden = !deepVis || (o.rp && sel !== 'ras') || (mode === 'sag' && o.side < 0 && o.ins);
+      if (o.ins) o.hidden = !deepVis || (mode === 'sag' && o.side < 0);
+      if (o.rp) o.hidden = sel !== 'ras';
+    });
+    rasProj.forEach(P => P.tubes.forEach(t => { t.hidden = sel !== 'ras'; }));
+    labs.forEach(l => { l.hidden = l.grp === 'cx' ? deepVis : l.grp === 'dp' ? !deepVis : false; });
+    latL.forEach(l => { l.hidden = mode !== 'lat'; });
+    UI.$$('#bmode .btn').forEach(b => b.classList.toggle('on', b.dataset.m === mode));
+    highlight();
+  }
+  function ids(k) { return BGROUP[k] || [k]; }
+  function highlight() {
+    const set = sel ? ids(sel) : [];
+    S.each(o => { const on = !!sel && (set.includes(o.id) || set.includes(o.sub)); o.hl = on; if (o.t !== 'l') o.glow = on ? 0.5 : (o.flat ? 0.4 : 0); });
+  }
+  const info = document.getElementById('info-brain');
+  function show(k) {
+    sel = k;
+    const list = ids(k), deepNeeded = list.some(i => BINFO[i] && BINFO[i][3]);
+    if (deepNeeded && (mode === 'cortex' || mode === 'lat')) mode = 'deep';
+    if (!deepNeeded && mode !== 'cortex' && ['frontal', 'precentral', 'parietal', 'postcentral', 'temporal', 'occipital', 'broca', 'wernicke', 'cs'].includes(k)) mode = 'cortex';
+    apply();
+    if (BGROUP[k]) {
+      info.innerHTML = '<div class="tt">' + (k === 'limbic' ? '邊緣系統 Limbic system' : '多巴胺系統') + '</div>' + list.map(i => '<p class="small"><b>' + BINFO[i][0] + '</b>：' + BINFO[i][2].join('；') + '</p>').join('') + backBtn();
+    } else {
+      const d = BINFO[k]; if (!d) return;
+      info.innerHTML = '<div class="tt">' + d[0] + '<small>' + d[1] + '</small></div><ul>' + d[2].map(x => '<li>' + x + '</li>').join('') + '</ul>' + backBtn();
+    }
+    document.getElementById('b-back').onclick = home;
+  }
+  const backBtn = () => '<button class="btn sm mt" type="button" id="b-back">← 全部結構</button>';
+  const GROUPS = [
+    ['大腦皮質', ['frontal', 'precentral', 'cs', 'parietal', 'postcentral', 'temporal', 'occipital', 'insula', 'broca', 'wernicke', 'cc']],
+    ['間腦', ['thalamus', 'pineal', 'hypo', 'scn', 'pituitary']],
+    ['邊緣系統', ['limbic', 'hippo', 'amyg', 'cingulate', 'septal']],
+    ['基底核 / 多巴胺', ['striatum', 'dopamine', 'nigrostriatal', 'mesolimbic', 'nacc']],
+    ['中腦', ['midbrain', 'sc', 'ic', 'rn', 'sn']],
+    ['後腦 / 其他', ['pons', 'cerebellum', 'medulla', 'ras', 'spinal']]
+  ];
+  function home() {
+    sel = null; apply();
+    let h = '<div class="tt">選一個結構<small>點 3D 模型或下方按鈕</small></div><div class="picker">';
+    GROUPS.forEach(([g, arr]) => {
+      h += '<div class="grp">' + g + '</div>';
+      arr.forEach(k => { const name = k === 'limbic' ? '整個邊緣系統' : k === 'dopamine' ? '多巴胺系統' : BINFO[k][0].split(' ')[0].split('（')[0]; h += '<button class="btn sm" type="button" data-k="' + k + '">' + name + '</button>'; });
+    });
+    info.innerHTML = h + '</div>';
+    UI.$$('[data-k]', info).forEach(b => { b.onclick = () => show(b.dataset.k); });
+  }
+  UI.$$('#bmode .btn').forEach(b => b.addEventListener('click', () => { mode = b.dataset.m; apply(); }));
+  document.getElementById('bsplit').addEventListener('click', e => { split = split ? 0 : 1; e.currentTarget.classList.toggle('on', !!split); if (split && mode === 'cortex') { mode = 'deep'; apply(); } });
+  S.onPick = o => { if (o) show(o.sub && BINFO[o.sub] ? o.sub : o.id); };
+  S.onFrame = dt => {
+    const prev = splitT; splitT += (split - splitT) * Math.min(1, dt * 4);
+    if (Math.abs(prev - splitT) > 1e-4) S.each(o => { if (o.side && o.p0 && (o.cx || o.ins)) o.p = [o.p0[0] + o.side * 22 * splitT, o.p0[1], o.p0[2]]; });
+  };
+  brainSelect = k => { document.getElementById('brain').scrollIntoView({ behavior: 'smooth' }); show(k); };
+  home(); apply();
+  const m = location.hash.match(/^#brain-(\w+)/);
+  if (m && (BINFO[m[1]] || BGROUP[m[1]])) setTimeout(() => brainSelect(m[1]), 300);
+})();
+
+/* ================= LTP ================= */
+(function () {
+  const cv = document.getElementById('ltp');
+  let step = 0, t = 0;
+  const P = [];
+  const STEPS = [
+    { t: '高頻刺激', d: '突觸前神經元以高頻率發放 AP，釋放大量 glutamate', dur: 3000 },
+    { t: 'Glutamate 活化 AMPA 與 NMDA', d: '海馬迴的突觸後受體被 glutamate 活化', dur: 3000 },
+    { t: 'Glycine/serine 共同活化 NMDA', d: 'NMDA 受體需共同活化才打開 Ca²⁺ 通道 → Ca²⁺ 進入突觸後', dur: 3200 },
+    { t: '突觸後 Ca²⁺ 升高 → LTP', d: '高濃度 Ca²⁺ 造成 LTP，並使樹突棘生長（變大）', dur: 3200 },
+    { t: 'NO 逆行訊號', d: '突觸後釋放 NO，擴散到突觸前 → 突觸前 Ca²⁺ 上升 → NT 釋放增加', dur: 3600 }
+  ];
+  UI.stepper(document.getElementById('ltp-steps'), STEPS, i => { step = i; t = 0; P.length = 0; });
+  function size() { const w = cv.clientWidth, h = cv.clientHeight, d = Math.min(2, devicePixelRatio || 1); if (cv.width !== Math.round(w * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); } const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return [c, w, h]; }
+  let last = performance.now(), vis = true;
+  new IntersectionObserver(es => { vis = es[0].isIntersecting; }).observe(cv);
+  function blob(c, x, y, rx, ry, c1, c2) { const g = c.createRadialGradient(x - rx * .3, y - ry * .4, 4, x, y, Math.max(rx, ry)); g.addColorStop(0, c1); g.addColorStop(1, c2); c.fillStyle = g; c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, 6.3); c.fill(); }
+  (function loop(now) {
+    const dt = Math.max(0, Math.min(0.05, (now - last) / 1000)); last = now;
+    if (vis) {
+      t += dt;
+      const [c, w, h] = size(); c.clearRect(0, 0, w, h);
+      const cx = w / 2, preY = h * 0.2, postY = h * 0.78, grow = step >= 3 ? Math.min(1, (step === 3 ? t : 3) / 2) : 0;
+      blob(c, cx, preY, w * 0.3, h * 0.17, '#fbcfe8', '#9d174d');
+      c.fillStyle = '#9d174d'; c.fillRect(cx - 18, 0, 36, preY - h * 0.1);
+      const sr = w * 0.22 * (1 + 0.25 * grow), sry = h * 0.15 * (1 + 0.25 * grow);
+      c.fillStyle = '#1e3a8a'; c.fillRect(cx - 16, postY + sry * 0.5, 32, h);
+      blob(c, cx, postY, sr, sry, '#bfdbfe', '#1e3a8a');
+      const fireOn = step === 0 ? (Math.sin(t * 18) > 0.6) : step >= 1;
+      if (step === 0 && fireOn) { c.strokeStyle = '#fde047'; c.lineWidth = 3; c.beginPath(); c.arc(cx, preY, w * 0.3 + 4, 0, 6.3); c.stroke(); }
+      const recY = postY - sry + 4;
+      const recs = [[-0.6, 'AMPA', '#4ade80'], [-0.2, 'NMDA', '#c084fc'], [0.2, 'AMPA', '#4ade80'], [0.6, 'NMDA', '#c084fc']];
+      const gap = 0.4 * sr * 0.8, fs = Math.max(9, Math.min(11, gap / 2.8)), stag = gap < 34;
+      recs.forEach(([k, n, col], ri) => {
+        const x = cx + k * sr * 0.8, open = (n === 'AMPA' && step >= 1) || (n === 'NMDA' && step >= 2);
+        c.fillStyle = col; c.globalAlpha = open ? 1 : 0.55;
+        c.fillRect(x - 9 - (open ? 3 : 0), recY - 12, 7, 18); c.fillRect(x + 2 + (open ? 3 : 0), recY - 12, 7, 18); c.globalAlpha = 1;
+        c.fillStyle = '#e2e8f0'; c.font = fs + 'px ' + Mini3D.FONT; c.textAlign = 'center'; c.fillText(n, x, recY + 22 + (stag && ri % 2 ? fs + 3 : 0));
+      });
+      if (step <= 1 && Math.random() < dt * (step === 0 ? 40 : 16)) P.push({ k: 'glu', x: cx + (Math.random() - .5) * w * 0.4, y: preY + h * 0.15, vx: (Math.random() - .5) * 30, vy: 60 + Math.random() * 40 });
+      if (step === 2 && Math.random() < dt * 22) { const k = Math.random() < .5 ? -0.2 : 0.6; P.push({ k: 'ca', x: cx + k * sr * 0.8, y: recY - 30, vx: (Math.random() - .5) * 8, vy: 70 }); }
+      if (step === 2 && Math.random() < dt * 6) P.push({ k: 'gly', x: cx + (Math.random() - .5) * sr, y: recY - 50, vx: 0, vy: 30 });
+      if (step === 3 && Math.random() < dt * 14) P.push({ k: 'ca', x: cx + (Math.random() - .5) * sr, y: postY + (Math.random() - .5) * sry, vx: (Math.random() - .5) * 20, vy: (Math.random() - .5) * 20 });
+      if (step === 4 && Math.random() < dt * 14) P.push({ k: 'no', x: cx + (Math.random() - .5) * sr, y: recY - 6, vx: (Math.random() - .5) * 20, vy: -60 });
+      if (step === 4 && Math.random() < dt * 30) P.push({ k: 'glu', x: cx + (Math.random() - .5) * w * 0.4, y: preY + h * 0.15, vx: (Math.random() - .5) * 30, vy: 70 });
+      for (let i = P.length - 1; i >= 0; i--) {
+        const p = P[i]; p.x += p.vx * dt; p.y += p.vy * dt;
+        if (p.k === 'glu' && p.y > recY - 14) { p.vy = 0; p.vx *= 0.9; }
+        const col = { glu: '#fde047', ca: '#22d3ee', gly: '#fb923c', no: '#ffffff' }[p.k];
+        c.fillStyle = col; c.beginPath(); c.arc(p.x, p.y, p.k === 'no' ? 4 : 3, 0, 6.3); c.fill();
+        if ((p.life = (p.life || 0) + dt) > 2.2 || p.y < preY) P.splice(i, 1);
+      }
+      if (step === 4) { c.fillStyle = 'rgba(253,224,71,' + (0.25 + 0.2 * Math.sin(t * 6)) + ')'; c.beginPath(); c.ellipse(cx, preY, w * 0.3, h * 0.17, 0, 0, 6.3); c.fill(); }
+      c.font = '12px ' + Mini3D.FONT; c.textAlign = 'left'; c.fillStyle = '#fbcfe8'; c.fillText('突觸前終扣', 12, 18); c.fillStyle = '#bfdbfe'; c.fillText(grow ? '突觸後樹突棘（變大）' : '突觸後樹突棘', 12, h - 10);
+      const leg = [['#fde047', 'Glutamate'], ['#22d3ee', 'Ca²⁺'], ['#fb923c', 'Glycine/Serine'], ['#ffffff', 'NO']];
+      leg.forEach(([col, n], i) => { c.fillStyle = col; c.beginPath(); c.arc(w - 120, 16 + i * 17, 4, 0, 6.3); c.fill(); c.fillStyle = '#cbd5e1'; c.fillText(n, w - 110, 20 + i * 17); });
+    }
+    requestAnimationFrame(loop);
+  })(last);
+})();
+
+/* ================= 晝夜節律 ================= */
+(function () {
+  let day = true;
+  const box = document.getElementById('circ'), nodes = UI.$$('#cchain .nd'), ars = UI.$$('#cchain .ar');
+  const T = { d: '白天：光 → 視網膜 → SCN，抑制松果腺 → <b>褪黑激素下降</b>，保持清醒。', n: '夜晚：沒有光訊號 → 松果腺分泌<b>褪黑激素增加</b> → 調節睡眠；褪黑激素也影響 <b>GnRH</b> 釋放（季節性生殖）。' };
+  let k = 0;
+  function render() {
+    box.classList.toggle('day', day); box.classList.toggle('night', !day);
+    document.getElementById('sky-i').textContent = day ? '☀️' : '🌙';
+    document.getElementById('mel').style.width = day ? '14%' : '88%';
+    document.getElementById('circ-t').innerHTML = day ? T.d : T.n;
+  }
+  setInterval(() => {
+    k = (k + 1) % (nodes.length + 2);
+    nodes.forEach((n, i) => { n.classList.toggle('on', i <= k && (day || i >= 3)); n.classList.toggle('off', !day && i < 2); });
+    ars.forEach((a, i) => a.classList.toggle('on', i < k && (day || i >= 3)));
+  }, 600);
+  document.getElementById('dn').addEventListener('click', () => { day = !day; k = 0; render(); });
+  render();
+})();
+
+/* ================= 脊髓反射弧 3D ================= */
+(function () {
+  const st = document.getElementById('st-cord');
+  const S = new Mini3D.Scene(st.querySelector('canvas'), { radius: 112, yaw: 0.55, pitch: 0.72, autoRotate: 0.05, target: [70, -30, 10] });
+  Mini3D.controls(S, st);
+  const inGray = (x, z) => {
+    const ax = Math.abs(x);
+    const dh = ((ax - 10) * Math.cos(.4) + (z - 12) * Math.sin(.4)) ** 2 / 16 + (-(ax - 10) * Math.sin(.4) + (z - 12) * Math.cos(.4)) ** 2 / 121 < 1;
+    const vh = ((ax - 12) / 8.5) ** 2 + ((z + 10) / 8.5) ** 2 < 1;
+    const mid = ax < 14 && Math.abs(z) < 4;
+    return dh || vh || mid;
+  };
+  for (let x = -34; x <= 34; x += 2.4) for (let z = -26; z <= 26; z += 2.4) {
+    if ((x / 34) ** 2 + (z / 26) ** 2 > 1) continue;
+    if (Math.hypot(x, z) < 1.6) continue;
+    const g = inGray(x, z);
+    S.dot([x, 0, z], 1.25, g ? '#f9a8d4' : '#e2e8f0', { id: g ? 'gray' : 'white', al: g ? 0.95 : 0.55 });
+  }
+  for (let a = 0; a < 6.283; a += 0.13) for (let y = -6; y >= -70; y -= 5) S.dot([Math.cos(a) * 34, y, Math.sin(a) * 26], 1.2, '#cbd5e1', { id: 'white', al: 0.18 });
+  const nerve = { al: 0.28, id: 'nerve' };
+  S.path([[24, 0, 18], [52, 0, 22], [78, 0, 9]], 4, '#cbd5e1', Object.assign({}, nerve, { id: 'droot' }), 6);
+  S.path([[26, 0, -12], [52, 0, -8], [78, 0, 9]], 4, '#cbd5e1', Object.assign({}, nerve, { id: 'vroot' }), 6);
+  S.path([[78, 0, 9], [96, -12, 12], [116, -26, 15]], 5.5, '#cbd5e1', nerve, 6);
+  S.sphere([52, 0, 22], 7.5, '#fbbf24', { id: 'drg', al: 0.85 });
+  for (let i = 0; i < 70; i++) { const u = Math.random(), v = Math.random(); S.dot([140 + u * 24, -2 - v * 22, 50 + (Math.random() - .5) * 2], 1.6, '#fda4af', { id: 'skin', al: 0.6 }); }
+  const rec = S.sphere([150, -10, 46], 4, '#fde047', { id: 'receptor' });
+  const muscle = [S.tube([138, -52, -8], [188, -84, -10], 11, '#ef4444', { id: 'muscle' }), S.tube([140, -60, -2], [186, -90, -4], 7, '#dc2626', { id: 'muscle' })];
+  const sens = new Mini3D.Path([[150, -10, 46], [130, -18, 30], [112, -24, 17], [96, -11, 13], [78, 1, 11], [62, 0, 20], [52, 0, 22], [38, 0, 20], [24, 0, 18], [14, 0, 15], [9, 0, 9]], 6);
+  const inter = new Mini3D.Path([[9, 0, 9], [8, 0, 2], [11, 0, -6]], 6);
+  const mot = new Mini3D.Path([[13, 0, -10], [24, 0, -12], [38, 0, -11], [52, 0, -8], [78, 0, 7], [96, -13, 10], [116, -27, 13], [134, -44, 2], [150, -60, -8]], 6);
+  const draw = (P, c, id) => { for (let i = 0; i < P.pts.length - 1; i++) S.tube(P.pts[i], P.pts[i + 1], 1.4, c, { id, zb: -4 }); };
+  draw(sens, '#60a5fa', 'sensory'); draw(inter, '#34d399', 'inter'); draw(mot, '#fb923c', 'motor');
+  S.sphere([52, 0, 22], 3.2, '#60a5fa', { id: 'drg', zb: -9 });
+  S.sphere([13, 0, -10], 3.6, '#fb923c', { id: 'motor', zb: -4 });
+  S.sphere([9, 0, 6], 2.6, '#34d399', { id: 'inter', zb: -4 });
+  const lb = (p, t, c, id, dx, dy) => S.label(p, t, { c, id, dx, dy });
+  lb([0, 0, 20], '灰質（背角）', '#f9a8d4', 'gray', -60, -26); lb([0, 0, -26], '白質', '#e2e8f0', 'white', -50, 20);
+  lb([38, 0, 20], '背根（感覺）', '#60a5fa', 'droot', -10, -30); lb([52, 0, 22], '背根神經節', '#fbbf24', 'drg', 40, -36);
+  lb([40, 0, -11], '腹根（運動）', '#fb923c', 'vroot', 0, 30); lb([150, -10, 46], '受器', '#fde047', 'receptor', 20, -22);
+  lb([165, -70, -8], '動器（肌肉）', '#ef4444', 'muscle', 40, 20); lb([9, 0, 2], '中間神經元', '#34d399', 'inter', -50, 10);
+  const RI = { gray: '灰質：神經元細胞體與樹突（H/蝴蝶形）', white: '白質：有髓鞘的上行與下行徑路', droot: '背根：感覺纖維', vroot: '腹根：運動纖維', drg: '背根神經節：感覺神經元（假單極）的細胞體', receptor: '受器：偵測刺激', muscle: '動器：骨骼肌', sensory: '感覺（傳入）神經元', inter: '中間（聯絡）神經元', motor: '運動（傳出）神經元', skin: '皮膚', nerve: '脊神經：混合神經' };
+  const pulse = S.sphere([0, 0, 0], 4.2, '#fef9c3', { hidden: true, glow: 1.6, gc: '#fde047', nopick: true, zb: -20 });
+  const asc = [], desc = [];
+  for (let i = 0; i < 16; i++) { asc.push(S.sphere([(i % 2 ? 1 : -1) * 6, -70 + Math.random() * 70, 18], 1.8, '#60a5fa', { hidden: true, nopick: true, zb: -6 })); desc.push(S.sphere([(i % 2 ? 1 : -1) * 24, -70 + Math.random() * 70, -2], 1.8, '#fb923c', { hidden: true, nopick: true, zb: -6 })); }
+  const tl = [S.label([-6, -40, 26], '上行徑（感覺）↑', { c: '#60a5fa', hidden: true, force: 1 }), S.label([24, -40, -4], '下行徑（運動）↓', { c: '#fb923c', hidden: true, force: 1 })];
+  let T = -1, auto = true, at = 0, tract = false;
+  const lis = UI.$$('#rf-list li');
+  const total = 3.4;
+  S.onFrame = dt => {
+    if (auto) { at += dt; if (at > 5) { at = 0; T = 0; } }
+    pulse.hidden = true; rec.glow = 0; muscle.forEach(m => { m.glow = 0; m.r = m === muscle[0] ? 11 : 7; });
+    let stage = -1;
+    if (T >= 0) {
+      T += dt; const f = T / total;
+      if (f < 0.08) { rec.glow = 1.5; stage = 0; }
+      else if (f < 0.45) { const u = (f - 0.08) / 0.37; pulse.hidden = false; pulse.p = sens.at(u); stage = u < 0.75 ? 1 : 2; }
+      else if (f < 0.55) { pulse.hidden = false; pulse.p = inter.at((f - 0.45) / 0.1); stage = 3; }
+      else if (f < 0.95) { const u = (f - 0.55) / 0.4; pulse.hidden = false; pulse.p = mot.at(u); stage = u < 0.12 ? 4 : 5; }
+      else if (f < 1.4) { stage = 6; muscle.forEach((m, i) => { m.glow = 1.2; m.r = (i ? 7 : 11) * 1.18; }); }
+      else T = -1;
+    }
+    lis.forEach((li, i) => { li.classList.toggle('on', i === stage); });
+    asc.forEach(p => { p.hidden = !tract; p.p[1] += dt * 22; if (p.p[1] > 0) p.p[1] = -70; });
+    desc.forEach(p => { p.hidden = !tract; p.p[1] -= dt * 22; if (p.p[1] < -70) p.p[1] = 0; });
+    tl.forEach(l => { l.hidden = !tract; });
+  };
+  document.getElementById('rf-go').addEventListener('click', () => { T = 0; at = 0; });
+  document.getElementById('rf-auto').addEventListener('click', e => { auto = !auto; e.currentTarget.classList.toggle('on', auto); });
+  document.getElementById('rf-tract').addEventListener('click', e => { tract = !tract; e.currentTarget.classList.toggle('on', tract); });
+  const hud = st.querySelector('.hud');
+  S.onPick = o => { if (o && RI[o.id]) { hud.textContent = '👉 ' + RI[o.id]; S.each(q => { q.hl = q.id === o.id; }); } };
+})();
+
+/* ================= 腦神經環 ================= */
+(function () {
+  const CN = [
+    ['I', '嗅神經', 'Olfactory', '感覺性', '端腦', '傳遞嗅覺'],
+    ['II', '視神經', 'Optic', '感覺性', '間腦', '向大腦傳遞視覺'],
+    ['III', '動眼神經', 'Oculomotor', '運動性', '中腦前部', '支配上瞼與多數眼外肌，完成眼球運動；支配瞳孔括約肌與睫狀體收縮'],
+    ['IV', '滑車神經', 'Trochlear', '運動性', '中腦後部', '控制眼球運動（支配上斜肌）'],
+    ['V', '三叉神經', 'Trigeminal', '混合性', '橋腦', '接收臉部感覺；支配咀嚼肌'],
+    ['VI', '外旋（外展）神經', 'Abducens', '運動性', '橋腦前緣', '支配外直肌（眼球外轉）'],
+    ['VII', '顏面神經', 'Facial', '混合性', '橋腦', '舌前 2/3 的感覺（味覺）；支配表情肌、唾液腺與淚腺分泌'],
+    ['VIII', '前庭耳蝸神經', 'Vestibulocochlear', '感覺性', '橋腦', '前庭支：旋轉、重力（平衡）；耳蝸支：聽覺'],
+    ['IX', '舌咽神經', 'Glossopharyngeal', '混合性', '延腦', '舌後 1/3 的感覺；支配腮腺分泌與咽部肌肉'],
+    ['X', '迷走神經', 'Vagus', '混合性', '延腦', '提供胸、腹部內臟的副交感纖維；控制發聲肌肉與軟腭'],
+    ['XI', '副神經', 'Accessory', '運動性', '延腦', '支配胸鎖乳突肌與斜方肌'],
+    ['XII', '舌下神經', 'Hypoglossal', '運動性', '延腦', '支配舌肌運動；對吞嚥與發音清晰度很重要']
+  ];
+  const cls = t => t === '感覺性' ? 't-s' : t === '運動性' ? 't-m' : 't-x';
+  const info = document.getElementById('cn-info');
+  const showCN = c => { info.innerHTML = '<div class="tt">' + c[0] + '　' + c[1] + '<small>' + c[2] + ' nerve</small></div><p><span class="tag ' + cls(c[3]) + '">' + c[3] + '</span><span class="tag">連腦部位：' + c[4] + '</span></p><p>' + c[5] + '</p><p class="small muted">' + (['I', 'II'].includes(c[0]) ? '這 2 對源自前腦。' : '源自中腦或後腦（10 對之一）。') + '</p>'; };
+  const ring = UI.ring(document.getElementById('cn-ring'), CN, {
+    w: 210, render: c => '<div class="cn-card"><div class="cn-n">' + c[0] + '</div><div class="cn-name">' + c[1] + '</div><div class="en">' + c[2] + '</div><span class="tag ' + cls(c[3]) + '">' + c[3] + '</span></div>',
+    onFront: c => showCN(c), auto: 0.12
+  });
+  UI.$$('#cn-filter .btn').forEach(b => b.addEventListener('click', () => {
+    UI.$$('#cn-filter .btn').forEach(x => x.classList.toggle('on', x === b));
+    const f = b.dataset.f;
+    UI.$$('#cn-ring .ring-item').forEach((el, i) => { el.style.filter = f === 'all' || CN[i][3] === f ? '' : 'grayscale(1) brightness(.35)'; });
+    if (f !== 'all') { const i = CN.findIndex(c => c[3] === f); ring.go(i); }
+  }));
+
+  const SP = [['C', '頸 Cervical', 8, '#38bdf8'], ['T', '胸 Thoracic', 12, '#a78bfa'], ['L', '腰 Lumbar', 5, '#34d399'], ['S', '薦 Sacral', 5, '#fbbf24'], ['Co', '尾 Coccygeal', 1, '#fb7185']];
+  const col = document.getElementById('spine'), kv = document.getElementById('spine-kv');
+  SP.forEach(([k, n, cnt, c]) => {
+    for (let i = 1; i <= cnt; i++) { const d = UI.h('div', 'vt'); d.style.background = 'linear-gradient(90deg,' + c + ',' + c + '88)'; d.dataset.r = k; if (i === 1) d.dataset.l = n + ' ' + cnt + ' 對'; col.appendChild(d); }
+    const box = UI.h('div', '', '<small>' + n + '</small><b style="color:' + c + '">' + cnt + '</b> 對'); box.dataset.r = k; box.style.cursor = 'pointer'; kv.appendChild(box);
+  });
+  kv.appendChild(UI.h('div', '', '<small>合計</small><b>31</b> 對'));
+  const hl = r => UI.$$('.vt', col).forEach(v => v.classList.toggle('on', v.dataset.r === r));
+  [...UI.$$('.vt', col), ...UI.$$('[data-r]', kv)].forEach(el => { el.addEventListener('click', () => hl(el.dataset.r)); el.addEventListener('mouseenter', () => hl(el.dataset.r)); });
+})();
+
+/* ================= 快閃卡與測驗 ================= */
+UI.flashcards(document.getElementById('fc'), [
+  { tag: 'CNS', f: '灰質與白質的組成？', b: '灰質：細胞體 + 樹突<br>白質：有髓鞘的軸突徑路' },
+  { tag: 'CNS', f: '成人腦的重量、神經元數、血流比例？', b: '1.5 kg、1000 億個神經元、全身血流的 20%' },
+  { tag: '皮質', f: '每側大腦半球的 5 個葉？', b: '額葉、頂葉、顳葉、枕葉、島葉' },
+  { tag: '皮質', f: '中央前回 vs 中央後回', b: '中央前回（額葉）：運動控制<br>中央後回（頂葉）：接收體感覺<br>兩者以中央溝分隔' },
+  { tag: '皮質', f: '顳葉與枕葉的功能？', b: '顳葉：聽覺中樞（耳蝸）、整合聽覺與視覺<br>枕葉：視覺、協調眼球運動' },
+  { tag: '皮質', f: '島葉的三個功能？', b: '記憶入碼；整合感覺與內臟反應；協調壓力下的心血管反應' },
+  { tag: '側化', f: '左右半球各擅長？', b: '左：語言與分析<br>右：視覺空間作業<br>經胼胝體（約 2 億纖維）溝通' },
+  { tag: '語言', f: 'Broca 區 vs Wernicke 區', b: 'Broca：說話所必需<br>Wernicke：語言理解<br>由失語症研究得知' },
+  { tag: '情緒', f: '對情緒最重要的結構？', b: '下視丘與邊緣系統（扣帶回、中隔內核、海馬迴、杏仁核）' },
+  { tag: '記憶', f: '兩種長期記憶？', b: '非陳述性（內隱）：技能、制約<br>陳述性（外顯）：語文；失憶症受損的是這種' },
+  { tag: 'LTP', f: 'LTP 的分子機制？', b: 'Glutamate → AMPA、NMDA；NMDA 需 glycine/serine 共同活化 → Ca²⁺ 進入；高 Ca²⁺ → LTP、樹突棘生長；NO 逆行 → 突觸前 NT 釋放↑' },
+  { tag: '記憶', f: '壓力對海馬迴的影響？', b: '壓力/憂鬱阻礙學習、使海馬迴萎縮；減壓與抗憂鬱藥使其恢復' },
+  { tag: '間腦', f: '視丘的功能？', b: '除嗅覺外的所有感覺轉運到大腦；參與覺醒程度' },
+  { tag: '間腦', f: '上視丘含哪兩個構造？', b: '脈絡叢（分泌 CSF）、松果腺（分泌褪黑激素）' },
+  { tag: '間腦', f: '下視丘製造哪兩種激素送到後葉？', b: 'ADH（vasopressin）與催產素 oxytocin' },
+  { tag: '節律', f: '主時鐘在哪？如何重設？', b: '下視丘的 SCN；每天由眼睛傳來的光重設，控制松果腺分泌褪黑激素' },
+  { tag: '中腦', f: '上丘、下丘、黑質的功能？', b: '上丘：視覺反射；下丘：聽覺轉運；紅核與黑質：運動協調（黑質退化→巴金森）' },
+  { tag: '中腦', f: '與獎賞、成癮相關的系統？', b: '中腦邊緣多巴胺系統；濫用藥物使伏隔核釋放多巴胺' },
+  { tag: '後腦', f: '橋腦的兩個呼吸中樞？', b: '長吸中樞 apneustic、呼吸調節中樞 pneumotaxic' },
+  { tag: '後腦', f: '延腦的三個生命中樞？', b: '血管運動中樞、心臟控制中樞、呼吸中樞' },
+  { tag: '後腦', f: '小腦的輸入與功能？', b: '接收本體感受器（關節、肌腱、肌肉）；協調動作與運動學習' },
+  { tag: 'RAS', f: 'RAS 的作用？', b: '上行覺醒系統，投射到皮質；活化 → 清醒，抑制 → 睡眠' },
+  { tag: '脊髓', f: '錐體徑 vs 錐體外徑', b: '錐體（皮質脊髓）徑：不經突觸、精細動作<br>錐體外（網狀脊髓）徑：多突觸、間接影響動作' },
+  { tag: 'PNS', f: '脊神經 31 對的分布？', b: '頸 8、胸 12、腰 5、薦 5、尾 1' },
+  { tag: 'PNS', f: '背根 vs 腹根', b: '背根：感覺纖維<br>腹根：運動纖維<br>脊神經皆為混合神經' },
+  { tag: 'PNS', f: '12 對腦神經中純感覺的是？', b: 'I 嗅神經、II 視神經、VIII 前庭耳蝸神經' }
+], 'ch08');
+UI.quiz(document.getElementById('qz'), [
+  { q: '中央溝分隔哪兩個腦葉？', o: ['額葉與顳葉', '額葉與頂葉', '頂葉與枕葉', '顳葉與枕葉'], a: 1, e: '中央溝前為額葉（中央前回），後為頂葉（中央後回）。' },
+  { q: '接收來自耳蝸聽覺資訊的是？', o: ['枕葉', '頂葉', '顳葉', '島葉'], a: 2, e: '顳葉含聽覺中樞。' },
+  { q: '語言理解主要與哪一區相關？', o: ['Broca 區', 'Wernicke 區', '中央前回', '扣帶回'], a: 1, e: 'Wernicke 區負責理解；Broca 區為說話所必需。' },
+  { q: '除哪一種感覺外，所有感覺都經視丘轉運？', o: ['視覺', '聽覺', '嗅覺', '觸覺'], a: 2, e: '嗅覺不經視丘。' },
+  { q: '分泌褪黑激素的是？', o: ['腦下垂體前葉', '松果腺', '下視丘', '脈絡叢'], a: 1, e: '松果腺位於上視丘。' },
+  { q: 'ADH 與催產素在哪裡製造？', o: ['腦下垂體後葉', '腦下垂體前葉', '下視丘', '松果腺'], a: 2, e: '在下視丘製造，運到後葉儲存與釋放。' },
+  { q: '巴金森氏症主要是哪裡的多巴胺神經元退化？', o: ['伏隔核', '黑質', '紅核', '海馬迴'], a: 1, e: '黑質紋狀體多巴胺系統退化。' },
+  { q: '長吸中樞與呼吸調節中樞位於？', o: ['延腦', '橋腦', '中腦', '小腦'], a: 1, e: '橋腦含 apneustic 與 pneumotaxic center。' },
+  { q: '下列何者「不是」延腦的生命中樞？', o: ['血管運動中樞', '心臟控制中樞', '呼吸中樞', '體溫中樞'], a: 3, e: '體溫中樞在下視丘。' },
+  { q: 'LTP 中，NMDA 受體需要誰共同活化才打開 Ca²⁺ 通道？', o: ['GABA', 'Glycine 或 serine', 'Dopamine', 'Acetylcholine'], a: 1, e: 'Glycine 或 serine 共同活化 NMDA。' },
+  { q: '錐體徑（皮質脊髓徑）的特徵是？', o: ['多突觸、間接影響', '不經突觸、控制精細動作', '上行感覺徑', '只在 PNS'], a: 1, e: '由運動皮質直達脊髓，中途不形成突觸。' },
+  { q: '脊神經共有幾對？', o: ['12', '24', '31', '33'], a: 2, e: '8 頸 + 12 胸 + 5 腰 + 5 薦 + 1 尾 = 31。' },
+  { q: '背根由什麼纖維組成？', o: ['運動纖維', '感覺纖維', '自主神經節後纖維', '混合纖維'], a: 1, e: '背根＝感覺；腹根＝運動。' },
+  { q: '失憶症患者受損的主要是？', o: ['非陳述性記憶', '陳述性記憶', '運動技能', '制約反應'], a: 1, e: '失憶症損害陳述性（外顯）記憶。' }
+]);
+</script>
+</body>
+</html>

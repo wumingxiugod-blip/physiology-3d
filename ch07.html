@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch7 神經元與突觸 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body style="--acc:#5ad1ff;--acc2:#a78bfa">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 7 · The Nervous System</div>
+  <h1 class="title3d">神經元與突觸</h1>
+  <p class="sub">Neurons and Synapses｜3D 神經元、膜電位、動作電位、軸突傳導、突觸傳遞與突觸整合。3D 模型可<b>拖曳旋轉</b>、<b>點選部位</b>看重點；先點一下畫面再用滾輪縮放。</p>
+  <div class="chips">
+    <a class="chip" href="#ns">NS 結構</a><a class="chip" href="#neuron">神經元</a><a class="chip" href="#glia">膠細胞</a><a class="chip" href="#mp">膜電位</a><a class="chip" href="#ap">動作電位</a><a class="chip" href="#cond">軸突傳導</a><a class="chip" href="#syn">突觸傳遞</a><a class="chip" href="#integ">突觸整合</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a>
+  </div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<!-- 01 NS -->
+<section class="sec" id="ns" data-nav="神經系統">
+  <h2><span class="num">01</span>神經系統的組成</h2>
+  <p class="lead">神經系統分成中樞與周邊兩部分，由兩大類細胞組成。</p>
+  <div class="grid3">
+    <div class="card tilt"><div class="ic">🧠</div><h3>CNS vs PNS</h3>
+      <ul><li><b>CNS 中樞</b>＝腦 + 脊髓</li><li><b>PNS 周邊</b>＝腦神經 + 脊神經</li></ul></div>
+    <div class="card tilt"><div class="ic">🔬</div><h3>兩類細胞</h3>
+      <ul><li><b>神經元 Neurons</b>：神經系統的功能單位</li><li><b>膠細胞 Glial cells</b>（支持細胞）：維持恆定；數量約為神經元的 <b>5 倍</b></li></ul></div>
+    <div class="card tilt"><div class="ic">⚡</div><h3>神經元的工作</h3>
+      <ul><li>對刺激產生反應</li><li>產生並傳送電化學衝動</li><li>釋放化學訊息（神經傳遞物）</li></ul></div>
+  </div>
+  <div class="grid2 even mt">
+    <div class="card"><h3>功能分類 Functional</h3>
+      <table class="tb" style="min-width:0"><tr><th>類型</th><th>方向/位置</th></tr>
+      <tr><td><b>感覺神經元</b> Sensory / Afferent 傳入</td><td>把衝動<b>傳入</b> CNS</td></tr>
+      <tr><td><b>運動神經元</b> Motor / Efferent 輸出</td><td>把衝動<b>傳出</b> CNS</td></tr>
+      <tr><td><b>聯絡神經元</b> Association / Interneuron</td><td>整合神經活動；<b>完全位於 CNS 內</b></td></tr></table></div>
+    <div class="card"><h3>構造分類 Structural</h3>
+      <svg viewBox="0 0 420 150" width="100%" role="img" aria-label="三種神經元構造示意">
+        <defs><radialGradient id="sg" cx=".35" cy=".35"><stop offset="0" stop-color="#ffe0b5"/><stop offset="1" stop-color="#c2410c"/></radialGradient></defs>
+        <g stroke="#fdba74" stroke-width="3" fill="none" stroke-linecap="round">
+          <path d="M20 70 H120"/><path d="M70 70 V40"/><path d="M120 70 l12 -8 M120 70 l12 8"/><path d="M20 70 l-10 -8 M20 70 l-10 8"/>
+          <path d="M160 70 H200 M240 70 H280"/><path d="M160 70 l-10 -9 M160 70 l-10 9 M280 70 l10 -9 M280 70 l10 9"/>
+          <path d="M350 70 H410"/><path d="M350 70 l-20 -30 M350 70 l-28 -6 M350 70 l-24 22 M350 70 l-4 -34 M350 70 l2 32"/><path d="M410 70 l8 -6 M410 70 l8 6"/>
+        </g>
+        <circle cx="70" cy="34" r="12" fill="url(#sg)"/><circle cx="220" cy="70" r="13" fill="url(#sg)"/><circle cx="350" cy="70" r="14" fill="url(#sg)"/>
+        <g fill="#cbd5e1" font-size="13" text-anchor="middle" font-family="sans-serif"><text x="70" y="110">假單極</text><text x="220" y="110">雙極</text><text x="365" y="110">多極</text>
+        <text x="70" y="130" fill="#94a3b8" font-size="11">感覺神經元</text><text x="220" y="130" fill="#94a3b8" font-size="11">視網膜神經元</text><text x="365" y="130" fill="#94a3b8" font-size="11">運動神經元</text></g>
+      </svg>
+      <ul class="small"><li><b>Pseudounipolar 假單極</b>：細胞體位在單一突起的側邊</li><li><b>Bipolar 雙極</b>：樹突與軸突由細胞體兩端伸出</li><li><b>Multipolar 多極</b>：許多樹突＋一條軸突</li></ul></div>
+  </div>
+</section>
+
+<!-- 02 neuron 3D -->
+<section class="sec" id="neuron" data-nav="3D 神經元">
+  <h2><span class="num">02</span>3D 神經元：構造與軸突運輸</h2>
+  <p class="lead">點選樹突、細胞體、軸丘、髓鞘、蘭氏結或軸突末梢。按「發放 AP」看衝動傳導；切換「無髓鞘」比較速度；「軸突運輸」顯示 kinesin / dynein 雙向運送。</p>
+  <div class="grid2">
+    <div class="stage" id="st-neuron"><canvas aria-label="3D 神經元模型"></canvas>
+      <div class="hud">拖曳旋轉 · 點選部位 · 點一下後滾輪縮放</div>
+      <div class="hud2" id="ap-read">跳躍傳導（有髓鞘）</div>
+      <div class="sbar">
+        <button class="btn sm on" id="nb-fire" type="button">⚡ 發放 AP</button>
+        <button class="btn sm on" id="nb-auto" type="button">自動</button>
+        <span class="seg"><button class="btn sm on" data-m="myelin" type="button">有髓鞘</button><button class="btn sm" data-m="bare" type="button">無髓鞘</button></span>
+        <button class="btn sm" id="nb-trans" type="button">軸突運輸</button>
+      </div>
+    </div>
+    <div class="card info" id="info-neuron">
+      <div class="tt">點選模型上的部位</div>
+      <p class="empty">或使用下方按鈕：</p>
+      <div class="picker" id="pick-neuron"></div>
+      <div class="note extra mt"><b>軸突 vs 細胞體：</b>內質網 ER 不延伸進軸突，所以軸突需要特別的運輸系統把物質送到末梢。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 glia -->
+<section class="sec" id="glia" data-nav="膠細胞">
+  <h2><span class="num">03</span>支持細胞（膠細胞）與再生</h2>
+  <div class="grid4">
+    <div class="card tilt"><span class="tag">PNS</span><h3>Schwann cell 許旺細胞</h3><ul class="small"><li>形成 PNS 軸突的髓鞘</li><li>每個只包 <b>1 條軸突、約 1 mm</b>，一圈圈纏繞</li><li>軸突斷裂後存活並形成<b>再生管</b></li></ul></div>
+    <div class="card tilt"><span class="tag">PNS</span><h3>Satellite cell 衛星細胞</h3><ul class="small"><li>PNS 中的另一種膠細胞，包圍神經節內的神經元細胞體</li></ul></div>
+    <div class="card tilt"><span class="tag">CNS</span><h3>Oligodendrocyte 寡樹突膠細胞</h3><ul class="small"><li>一個可替<b>多條</b> CNS 軸突形成髓鞘</li><li>產生<b>抑制軸突再生</b>的蛋白，並形成<b>膠質疤痕</b></li></ul></div>
+    <div class="card tilt"><span class="tag">CNS</span><h3>Astrocyte 星形膠質細胞</h3><ul class="small"><li><b>最多</b>的膠細胞</li><li>緩衝細胞外 K⁺</li><li>回收神經傳遞物</li><li>調節成人神經新生</li><li>釋放傳遞物調節神經元活性</li><li>誘導形成血腦障壁</li></ul></div>
+    <div class="card tilt"><span class="tag">CNS</span><h3>Microglia 微膠細胞</h3><ul class="small"><li>參與神經系統的維護（CNS 的吞噬/免疫防衛）</li></ul></div>
+    <div class="card tilt"><span class="tag">CNS</span><h3>Ependymal cell 室管膜細胞</h3><ul class="small"><li>內襯腦室與中央管</li><li>似乎是<b>神經幹細胞</b></li></ul></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card"><h3>🛡️ 血腦障壁 BBB</h3><p class="small">只讓特定物質（如 <b>O₂、CO₂、glucose</b>）進入腦；由腦微血管特化而成，似乎由 astrocyte 誘導。</p>
+      <ol class="small"><li>內皮細胞以<b>緊密接合</b>相連，沒有一般組織的縫隙</li><li>內皮外有<b>連續的基底膜</b></li><li>約 <b>85%</b> 管壁外表被膠細胞<b>終足</b>包圍</li></ol></div>
+    <div class="card"><h3>🔁 軸突再生</h3><p class="small"><b>PNS 遠比 CNS 容易</b>。PNS 軸突被切斷時：</p>
+      <ol class="small"><li>遠端軸突退化</li><li>Schwann cells 存活並形成<b>再生管</b></li><li>再生管釋放化學物質吸引生長中的軸突</li><li>引導軸突長回突觸位置</li></ol><p class="small muted">CNS：寡樹突膠細胞的抑制蛋白＋膠質疤痕阻擋再生。</p></div>
+    <div class="card"><h3>🌱 神經滋養因子 Neurotrophins</h3><ul class="small"><li>促進胎兒神經生長</li><li>許多成人神經元存活所必需</li><li>對再生很重要</li></ul></div>
+  </div>
+</section>
+
+<!-- 04 MP -->
+<section class="sec" id="mp" data-nav="膜電位">
+  <h2><span class="num">04</span>膜電位與 Nernst 方程式</h2>
+  <p class="lead">膜電位＝膜兩側的電荷差。靜止時細胞內帶負電，離子分布不均。</p>
+  <div class="grid3">
+    <div class="card tilt"><div class="ic">①</div><h3>大陰離子被困在細胞內</h3><p class="small">蛋白質、磷酸根等無法離開，使細胞內偏負，吸引可擴散的陽離子（K⁺）進入。</p></div>
+    <div class="card tilt"><div class="ic">②</div><h3>Na⁺/K⁺ ATPase</h3><p class="small">主動把 Na⁺ 送出；膜對 Na⁺ 通透性低 → Na⁺ 留在胞外。每次 <b>3 Na⁺ 出、2 K⁺ 進</b>，是<b>生電性 electrogenic</b>，約貢獻 <b>−3 mV</b>。</p></div>
+    <div class="card tilt"><div class="ic">③</div><h3>K⁺ 高通透、細胞內濃度高</h3><p class="small">K⁺ 被陰離子吸引進入，又被濃度梯度推出；兩力相等時即 <b>K⁺ 平衡電位 E<sub>K</sub> ≈ −90 mV</b>。</p></div>
+  </div>
+  <div class="grid2 mt">
+    <div class="card glow">
+      <h3>🧮 Nernst 計算器</h3>
+      <div class="formula">E<sub>x</sub> = (61 / z) · log<sub>10</sub>( [X]<sub>out</sub> / [X]<sub>in</sub> )</div>
+      <div class="btns" id="nern-pre">
+        <button class="btn sm on" data-i="0" type="button">K⁺</button><button class="btn sm" data-i="1" type="button">Na⁺</button><button class="btn sm" data-i="2" type="button">Cl⁻（補充）</button><button class="btn sm" data-i="3" type="button">Ca²⁺（補充）</button>
+      </div>
+      <div class="ctrl"><label for="n-out">[X]<sub>out</sub> mM</label><input type="range" id="n-out" min="0.1" max="200" step="0.1"><output id="n-out-v"></output></div>
+      <div class="ctrl"><label for="n-in">[X]<sub>in</sub> mM</label><input type="range" id="n-in" min="0.1" max="200" step="0.1"><output id="n-in-v"></output></div>
+      <div class="ctrl"><label for="n-z">價數 z</label><select id="n-z"><option value="1">+1</option><option value="2">+2</option><option value="-1">−1</option></select><span></span></div>
+      <div class="kv mt"><div><small>平衡電位</small><b class="big" id="n-res">−90</b> <small>mV</small></div><div><small>說明</small><span id="n-note" class="small"></span></div></div>
+    </div>
+    <div class="card">
+      <h3>🔋 為什麼靜止膜電位 RMP 不等於 E<sub>K</sub>？</h3>
+      <p class="small">膜除了 K⁺ 外也讓少量 Na⁺ 漏入，所以 RMP（一般 <b>−65 ~ −85 mV</b>，常以 −70 mV 表示）比 E<sub>K</sub>（−90）<b>正一些</b>。拉動下方「Na⁺ 相對通透度」看看：</p>
+      <div class="ctrl"><label for="g-r">P<sub>Na</sub>/P<sub>K</sub></label><input type="range" id="g-r" min="0" max="0.3" step="0.005" value="0.04"><output id="g-rv">0.040</output></div>
+      <canvas class="plot" id="g-plot" style="--ph:120px"></canvas>
+      <div class="kv mt"><div><small>膜電位</small><b id="g-vm">−70</b> mV</div><div><small>E<sub>K</sub></small><b>−90</b> mV</div><div><small>E<sub>Na</sub></small><b>+66</b> mV</div></div>
+      <p class="small muted">補充：此處以 Goldman 方程式（只含 K⁺、Na⁺）示意；講義用 Nernst 說明單一離子的平衡電位。</p>
+    </div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>可興奮性 Excitability</h3><p class="small">可興奮細胞（神經、肌肉）能藉離子通透性的快速改變，迅速「放掉」RMP，用來產生與傳導衝動。</p></div>
+    <div class="card tilt"><h3>膜電位變化名詞</h3><ul class="small"><li><b>去極化</b> Depolarization：MP 變得更正</li><li><b>過極化</b> Hyperpolarization：比 RMP 更負</li><li><b>再極化</b> Repolarization：回到 RMP</li></ul><p class="small muted">量法：一電極在細胞內、一電極在細胞外。</p></div>
+    <div class="card tilt"><h3>講義數值</h3><ul class="small"><li>E<sub>K</sub> = 61/1 · log(5/150) = <b>−90 mV</b></li><li>E<sub>Na</sub> = 61/1 · log(145/12) ≈ <b>+60 mV</b>（精算約 +66）</li><li>RMP 一般 −65 ~ −85 mV</li></ul></div>
+  </div>
+</section>
+
+<!-- 05 AP -->
+<section class="sec" id="ap" data-nav="動作電位">
+  <h2><span class="num">05</span>動作電位 Action Potential</h2>
+  <p class="lead">AP 是沿軸突由細胞體掃向突觸的膜電位波：<b>Na⁺ 內流造成快速去極化</b>，接著 <b>K⁺ 外流造成快速再極化</b>。拖動時間軸或按播放。</p>
+  <div class="grid2">
+    <div class="card" style="padding:12px">
+      <canvas class="plot" id="ap-plot" style="--ph:300px" aria-label="動作電位曲線"></canvas>
+      <canvas class="plot mt" id="ap-mem" style="--ph:210px;margin-top:10px" aria-label="離子通道示意"></canvas>
+      <div class="ctrl"><button class="btn sm on" id="ap-play" type="button">⏸</button><input type="range" id="ap-t" min="0" max="8" step="0.01" value="0" aria-label="時間"><output id="ap-tv">0.0 ms</output></div>
+    </div>
+    <div class="card info">
+      <div class="tt" id="ap-ph">靜止</div>
+      <p id="ap-desc" class="small"></p>
+      <div class="kv"><div><small>膜電位</small><b id="ap-v">−70</b> mV</div><div><small>VG Na⁺ 通道</small><b id="ap-na">關閉</b></div><div><small>VG K⁺ 通道</small><b id="ap-k">關閉</b></div><div><small>不反應期</small><b id="ap-rf">—</b></div></div>
+      <h4>重點</h4>
+      <ul class="small">
+        <li><b>正回饋</b>：達閾值 → VG Na⁺ 開 → Na⁺ 內流 → 更去極化 → 更多通道打開；MP 由 −70 衝到 +30 mV</li>
+        <li><b>全有全無</b>：一旦達閾值就不可逆地發放；Na⁺ 通道打開後很快關閉並<b>失活</b>，直到再極化</li>
+        <li>去/再極化都靠<b>擴散</b>，不需主動運輸；AP 之後由 Na⁺/K⁺ pump 把 Na⁺ 排出、K⁺ 收回</li>
+        <li><b>絕對不反應期</b>：Na⁺ 通道失活，無法再產生 AP</li>
+        <li><b>相對不反應期</b>：VG K⁺ 通道仍開，較難去極化到閾值（需更強刺激）</li>
+      </ul>
+    </div>
+  </div>
+  <div class="grid2 mt">
+    <div class="card"><h3>📶 刺激強度如何編碼？</h3>
+      <p class="small">刺激越強 → <b>AP 頻率越高</b>；但每個 AP 的<b>大小不變</b>（全有全無）。</p>
+      <div class="ctrl"><label for="int-s">刺激強度</label><input type="range" id="int-s" min="0" max="100" value="55"><output id="int-v">55</output></div>
+      <canvas class="plot" id="int-plot" style="--ph:170px"></canvas>
+    </div>
+    <div class="card"><h3>電位閘控離子通道模型</h3>
+      <ul class="small">
+        <li>通道蛋白具<b>電壓感應器</b>，膜電位改變時構形改變而開/關</li>
+        <li><b>VG Na⁺</b>：活化閘快開；之後失活閘塞住孔道 → 失活</li>
+        <li><b>VG K⁺</b>：較慢打開、較慢關閉 → 造成短暫<b>過極化</b></li>
+      </ul>
+      <div class="note"><b>口訣：</b>Na⁺ 快進快關（失活）、K⁺ 慢開慢關；Na⁺ 造成上升支，K⁺ 造成下降支。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 conduction -->
+<section class="sec" id="cond" data-nav="軸突傳導">
+  <h2><span class="num">06</span>軸突傳導</h2>
+  <div class="grid3">
+    <div class="card tilt"><h3>纜線性質 Cable properties</h3><ul class="small"><li>軸突本身傳導電流的能力</li><li>細胞質<b>電阻高</b></li><li><b>直徑越大 → 電阻越小</b></li><li>電流會經離子通道洩漏出去</li></ul></div>
+    <div class="card tilt"><h3>無髓鞘軸突</h3><ul class="small"><li>軸丘達閾值發放 AP → Na⁺ 內流使相鄰區域去極化到閾值 → 再產生新 AP</li><li>沿軸突一路重複 → <b>AP 振幅始終相同</b></li><li>傳導<b>慢</b></li></ul></div>
+    <div class="card tilt"><h3>有髓鞘軸突：跳躍傳導</h3><ul class="small"><li>髓鞘下離子無法通過 → 不產生 AP、電流不洩漏 → 電流擴散更遠</li><li>VG Na⁺ 通道只在<b>蘭氏結</b></li><li>一個結的 AP 電流使下一結達閾值 → AP 在結之間「跳」 → <b>saltatory conduction，快</b></li></ul></div>
+  </div>
+  <p class="small muted mt">👉 回到 <a href="#neuron">3D 神經元</a> 切換「有髓鞘 / 無髓鞘」可直接比較兩種傳導。</p>
+</section>
+
+<!-- 07 synapse -->
+<section class="sec" id="syn" data-nav="突觸傳遞">
+  <h2><span class="num">07</span>突觸傳遞 3D</h2>
+  <p class="lead">突觸是神經元（突觸前）與另一細胞（突觸後）的功能連接。化學突觸靠神經傳遞物 NT；電突觸在神經系統中較少見。</p>
+  <div class="grid2">
+    <div class="stage" id="st-syn"><canvas aria-label="3D 化學突觸"></canvas><div class="hud">化學突觸 · 拖曳旋轉 · 點選結構</div><div class="hud2" id="syn-cap"></div></div>
+    <div class="card" id="syn-steps"></div>
+  </div>
+  <div class="grid2 even mt">
+    <div class="card"><h3>電突觸 Electrical synapse</h3><ul class="small"><li>去極化經<b>間隙接合 gap junctions</b> 由突觸前直接流到突觸後細胞</li><li>由 <b>connexin</b> 蛋白構成</li><li>見於平滑肌、心肌、腦與膠細胞</li></ul></div>
+    <div class="card"><h3>化學突觸 Chemical synapse</h3><ul class="small"><li>突觸裂隙分隔突觸前<b>終扣</b>與突觸後細胞</li><li>NT 存在突觸小泡中，以<b>胞吐</b>釋放</li><li>釋放量取決於 <b>AP 頻率</b></li><li>釋放很快：小泡在 AP 到達前就已停靠在釋放位置（融合複合體）</li></ul></div>
+  </div>
+</section>
+
+<!-- 08 integration -->
+<section class="sec" id="integ" data-nav="突觸整合">
+  <h2><span class="num">08</span>突觸整合：EPSP、IPSP 與加成</h2>
+  <p class="lead">按 E1、E2（興奮性）或 I（抑制性）送出突觸後電位，看軸丘的膜電位能否達到 <b>−55 mV 閾值</b>。</p>
+  <div class="grid2">
+    <div class="card" style="padding:12px">
+      <canvas class="plot" id="sum-plot" style="--ph:330px" aria-label="突觸加成模擬"></canvas>
+      <div class="btns">
+        <button class="btn" data-s="E1" type="button">E1 興奮</button><button class="btn" data-s="E2" type="button">E2 興奮</button><button class="btn warn" data-s="I" type="button">I 抑制</button>
+        <button class="btn on" data-s="spatial" type="button">空間加成 E1+E2</button><button class="btn on" data-s="temporal" type="button">時間加成 E1×3</button><button class="btn" data-s="inhib" type="button">E1+E2+I</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>EPSP 的特性</h3>
+      <div class="tbwrap"><table class="tb" style="min-width:0"><tr><th>EPSP（分級電位）</th><th>動作電位 AP</th></tr>
+        <tr><td>大小分級 graded</td><td>全有全無</td></tr><tr><td>無閾值</td><td>有閾值</td></tr><tr><td>去極化</td><td>去極化後再極化</td></tr><tr><td>可加成</td><td>不可加成</td></tr><tr><td>無不反應期</td><td>有不反應期</td></tr></table></div>
+      <h4>空間加成 Spatial summation</h4><p class="small">不同突觸的 EPSP <b>同時</b>出現在突觸後細胞而加總。纜線性質讓 EPSP 隨時間與距離快速衰退。</p>
+      <h4>時間加成 Temporal summation</h4><p class="small"><b>同一個</b>突觸前神經元短時間內連續刺激，前一個 EPSP 還沒消退就疊上下一個。</p>
+      <h4>軸丘 Axon hillock</h4><p class="small">VG 通道多，是 AP 正常的起始處；EPSP 與 IPSP 在此加總達閾值才產生新 AP。</p>
+    </div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>突觸可塑性</h3><ul class="small"><li>重複使用可增加或減少傳遞的容易度＝<b>突觸促進 / 突觸抑壓</b></li><li>高頻刺激常造成興奮性增強＝<b>長期增益 LTP</b>，被認為是學習的基礎</li></ul></div>
+    <div class="card tilt"><h3>突觸後抑制</h3><ul class="small"><li><b>GABA</b> 與 <b>glycine</b> 產生 IPSP</li><li>IPSP 抵銷 EPSP → 更難達閾值</li></ul></div>
+    <div class="card tilt"><h3>突觸前抑制</h3><ul class="small"><li>一個神經元與另一神經元的<b>軸突或終扣</b>形成突觸，抑制其 NT 釋放</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡">
+  <h2><span class="num">09</span>快閃卡</h2>
+  <p class="lead">點卡片翻面；標記「已熟」會記在這台電腦的瀏覽器裡。</p>
+  <div id="fc"></div>
+</section>
+<section class="sec" id="quiz" data-nav="自我測驗">
+  <h2><span class="num">10</span>自我測驗</h2>
+  <div id="qz"></div>
+</section>
+</main>
+<footer>整理自課程講義 Chapter 7（The Nervous System: Neurons and Synapses），僅供個人複習使用。3D 模型為示意，比例非真實。 · <a href="index.html">回總覽</a> · <a href="ch06.html">← 第 6 章 細胞膜運輸</a> · <a href="ch08.html">第 8 章 中樞神經 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+
+/* ================= 3D 神經元 ================= */
+(function () {
+  const st = document.getElementById('st-neuron');
+  const S = new Mini3D.Scene(st.querySelector('canvas'), { radius: 180, yaw: -0.3, pitch: 0.32, autoRotate: 0.1, target: [-35, 0, 0] });
+  Mini3D.controls(S, st);
+  const R = Mini3D.rng(11);
+  const SOMA = [-140, 0, 0];
+  const INFO = {
+    dend: ['樹突 Dendrites', ['接收其他神經元傳來的訊息，傳向細胞體', '突觸後電位（EPSP / IPSP）多在此產生，屬於分級電位']],
+    soma: ['細胞體 Cell body', ['含細胞核，是神經元的<b>營養中心</b>，製造大分子', 'CNS 中成群的細胞體稱 <b>nuclei（神經核）</b>；PNS 中稱 <b>ganglia（神經節）</b>']],
+    nucleus: ['細胞核 Nucleus', ['位在細胞體內；神經元的蛋白質合成多在細胞體進行，再由軸突運輸送到末梢']],
+    hillock: ['軸丘 Axon hillock', ['軸突的起始處，含大量 <b>VG Na⁺ 通道</b>', 'EPSP 與 IPSP 在此加總；達閾值就在此產生動作電位（AP 的正常起點）']],
+    axon: ['軸突 Axon', ['把衝動<b>傳離</b>細胞體；分為軸丘、軸突本體、軸突末梢', '<b>Axoplasmic flow 軸漿流</b>：靠軸突節律性收縮，<b>慢速</b>把可溶性物質送往末梢', '<b>Axonal transport 軸突運輸</b>：沿微管<b>雙向、很快</b>運送大型或不可溶物質', '順向 anterograde（離開細胞體）＝ <b>kinesin 驅動蛋白</b>；逆向 retrograde（回到細胞體）＝ <b>dynein 動力蛋白</b>', '病毒與毒素可經逆向運輸進入 CNS（例：狂犬病）']],
+    myelin: ['髓鞘 Myelin sheath', ['PNS：<b>Schwann cell</b> 一圈圈纏繞，每個只包 1 條軸突約 1 mm', 'CNS：一個 <b>oligodendrocyte</b> 可包多條軸突', '電絕緣：髓鞘下沒有離子流、沒有 AP、電流不洩漏 → 電流擴散更遠']],
+    node: ['蘭氏結 Node of Ranvier', ['相鄰 Schwann cells 之間<b>未絕緣的間隙</b>', 'VG Na⁺ 通道只在結上 → AP 只在結上發生', 'AP 由一結跳到下一結＝<b>跳躍傳導 saltatory conduction</b>（快）']],
+    terminal: ['軸突末梢 / 終扣 Axon terminal (bouton)', ['AP 使終扣去極化 → 打開 <b>VG Ca²⁺ 通道</b>', 'Ca²⁺ 流入 → 突觸小泡胞吐 → 釋放神經傳遞物（見 07 突觸傳遞）']],
+    kinesin: ['順向運輸（kinesin）', ['物質由細胞體送往軸突末梢', '分子馬達 <b>kinesin 驅動蛋白</b>沿微管行走']],
+    dynein: ['逆向運輸（dynein）', ['物質由末梢送回細胞體', '分子馬達 <b>dynein 動力蛋白</b>']],
+    virus: ['病毒經逆向運輸入侵', ['狂犬病毒、破傷風毒素等可搭 dynein 的便車，沿軸突逆行進入 CNS']]
+  };
+  /* 樹突 */
+  function branch(start, dir, len, r, depth) {
+    const pts = [start]; let p = start, d = dir;
+    for (let i = 1; i <= 3; i++) { d = V.norm(V.add(d, [(R() - .5) * .7, (R() - .5) * .7, (R() - .5) * .7])); p = V.add(p, V.mul(d, len / 3)); pts.push(p); }
+    S.path(pts, [r, r * 0.62], '#fdba74', { id: 'dend' }, 2);
+    if (depth > 0) for (let j = 0; j < 2; j++) branch(p, V.norm(V.add(d, [(R() - .5) * 1.5, (R() - .5) * 1.5, (R() - .5) * 1.5])), len * 0.68, r * 0.62, depth - 1);
+  }
+  [[-1, .6, .2], [-1, -.5, .4], [-.6, 1, -.4], [-.5, -1, -.3], [-1, .1, -.9], [-.3, .4, 1], [.15, 1, .3], [.1, -1, .5]]
+    .forEach(d0 => { const d = V.norm(d0); branch(V.add(SOMA, V.mul(d, 18)), d, 46, 4.4, 2); });
+  S.sphere(SOMA, 22, '#fb923c', { id: 'soma', al: 0.62 });
+  S.sphere(V.add(SOMA, [0, 2, 0]), 9, '#8b5cf6', { id: 'nucleus', zb: -20 });
+  S.path([[-121, 0, 0], [-110, 0, 0], [-98, 0, 0]], [8.5, 3.4], '#fde047', { id: 'hillock' }, 3);
+  /* 軸突 */
+  const AX = new Mini3D.Path([[-98, 0, 0], [-60, 6, 8], [-10, -5, -6], [40, 7, 6], [90, -4, -4], [130, 0, 2]], 22);
+  const IN = []; for (let k = 0; k < 6; k++) IN.push([0.1 + 0.15 * k + 0.025, 0.1 + 0.15 * (k + 1)]);
+  const core = [], myel = [];
+  for (let i = 0; i < AX.pts.length - 1; i++) {
+    const um = (AX.cum[i] + AX.cum[i + 1]) / 2 / AX.L, a = AX.pts[i], b = AX.pts[i + 1];
+    core.push(S.tube(a, b, 3.2, '#fb923c', { id: 'axon', u: um }));
+    if (IN.some(([s, e]) => um > s && um < e)) myel.push(S.tube(a, b, 8, '#dbeafe', { id: 'myelin', u: um, zb: -6, al: 0.93 }));
+  }
+  IN.forEach(([s, e]) => myel.push(S.sphere(V.add(AX.at((s + e) / 2), [0, 8.5, 0]), 3.2, '#93c5fd', { id: 'myelin', zb: -8 })));
+  const nodes = []; for (let k = 0; k < 6; k++) { const u = 0.1 + 0.15 * k + 0.0125; nodes.push(S.sphere(AX.at(u), 4.6, '#34d399', { id: 'node', u })); }
+  const END = AX.at(1), boutons = [];
+  [[.9, .6, .3], [1, -.5, .5], [.8, .2, -.9], [1, 0, 0]].forEach(d0 => {
+    const d = V.norm(d0), e = V.add(END, V.mul(d, 34)), mid = V.add(V.lerp(END, e, .5), [0, (R() - .5) * 8, 0]);
+    S.path([END, mid, e], [2.6, 1.6], '#fb923c', { id: 'terminal' }, 3);
+    boutons.push(S.sphere(e, 6.5, '#f472b6', { id: 'terminal' }));
+  });
+  /* 標籤 */
+  S.label(V.add(SOMA, [-18, 64, 0]), '樹突 Dendrites', { id: 'dend', c: '#fdba74' });
+  S.label(V.add(SOMA, [0, -36, 0]), '細胞體 Soma', { id: 'soma', c: '#fb923c' });
+  S.label([-108, 24, 0], '軸丘', { id: 'hillock', c: '#fde047' });
+  S.label(V.add(AX.at(0.32), [0, 24, 0]), '髓鞘 Myelin', { id: 'myelin', c: '#dbeafe' });
+  S.label(V.add(nodes[3].p, [0, -22, 0]), '蘭氏結 Node', { id: 'node', c: '#34d399' });
+  S.label(V.add(AX.at(0.04), [0, -20, 0]), '軸突 Axon', { id: 'axon', c: '#fb923c' });
+  S.label(V.add(END, [26, 40, 0]), '軸突末梢', { id: 'terminal', c: '#f472b6' });
+  /* 傳導脈衝與運輸粒子 */
+  const pulse = S.sphere([0, 0, 0], 6, '#fef9c3', { hidden: true, glow: 1.6, gc: '#fde047', nopick: true, zb: -14 });
+  const hillGlow = S.sphere([-108, 0, 0], 7, '#fde047', { hidden: true, glow: 1.4, nopick: true, zb: -10 });
+  const parts = [];
+  for (let i = 0; i < 26; i++) {
+    const type = i < 14 ? 'kinesin' : i < 23 ? 'dynein' : 'virus';
+    const o = S.sphere([0, 0, 0], type === 'virus' ? 3 : 2.2, type === 'kinesin' ? '#fde047' : type === 'dynein' ? '#c084fc' : '#ef4444',
+      { id: type, hidden: true, zb: -12, u: R(), off: [(R() - .5) * 2.4, (R() - .5) * 2.4, (R() - .5) * 2.4], sp: 0.07 + R() * 0.05 });
+    parts.push(o);
+  }
+  let mode = 'myelin', apT = -1, auto = true, autoT = 2.6, trans = false;
+  const read = document.getElementById('ap-read');
+  function fire() { apT = 0; }
+  S.onFrame = dt => {
+    if (auto) { autoT += dt; if (autoT > 3.4) { autoT = 0; fire(); } }
+    core.forEach(o => { o.glow = 0; }); nodes.forEach(o => { o.glow = 0; o.c = '#34d399'; }); boutons.forEach(o => { o.glow = 0; });
+    pulse.hidden = true; hillGlow.hidden = true;
+    if (apT >= 0) {
+      apT += dt;
+      if (apT < 0.3) { hillGlow.hidden = false; hillGlow.glow = 1.5 * (1 - apT / 0.3); }
+      let tEnd;
+      if (mode === 'myelin') {
+        const step = 0.09, t0 = 0.06;
+        nodes.forEach((n, k) => { const d = apT - (t0 + k * step); if (d >= 0) { n.glow = Math.max(0, 1.7 - d * 5); if (d < 0.25) n.c = '#fef08a'; } });
+        const kf = (apT - t0) / step;
+        if (kf >= 0 && kf < 6) { const k = Math.floor(kf), f = kf - k, u0 = nodes[k].u, u1 = k < 5 ? nodes[k + 1].u : 1; pulse.hidden = false; pulse.p = AX.at(u0 + (u1 - u0) * f); }
+        tEnd = t0 + 6 * step;
+      } else {
+        const dur = 1.55, u = 0.02 + (apT / dur) * 0.98;
+        if (u <= 1) { pulse.hidden = false; pulse.p = AX.at(u); core.forEach(o => { const d = Math.abs(o.u - u); if (d < 0.05) o.glow = 1.3 * (1 - d / 0.05); }); }
+        tEnd = dur;
+      }
+      if (apT > tEnd) boutons.forEach(b => { b.glow = Math.max(0, 1.6 - (apT - tEnd) * 2.5); });
+      if (apT > tEnd + 0.9) apT = -1;
+    }
+    parts.forEach(p => {
+      p.hidden = !trans;
+      if (!trans) return;
+      p.u += (p.id === 'kinesin' ? 1 : -1) * p.sp * dt;
+      if (p.u > 1) p.u -= 1; if (p.u < 0) p.u += 1;
+      p.p = V.add(AX.at(p.u), p.off);
+    });
+  };
+  function setMode(m) {
+    mode = m;
+    myel.forEach(o => { o.hidden = m === 'bare'; });
+    nodes.forEach(o => { o.hidden = m === 'bare'; });
+    read.innerHTML = m === 'myelin' ? '有髓鞘：<b class="grn">跳躍傳導</b>，AP 只在蘭氏結產生 → <b>快</b>' : '無髓鞘：<b class="yel">連續傳導</b>，每一小段都要重新產生 AP → <b>慢</b>（示意速度）';
+    UI.$$('[data-m]', st).forEach(b => b.classList.toggle('on', b.dataset.m === m));
+    apT = -1; autoT = 3;
+  }
+  UI.$$('[data-m]', st).forEach(b => b.addEventListener('click', () => setMode(b.dataset.m)));
+  document.getElementById('nb-fire').addEventListener('click', fire);
+  document.getElementById('nb-auto').addEventListener('click', e => { auto = !auto; e.currentTarget.classList.toggle('on', auto); });
+  document.getElementById('nb-trans').addEventListener('click', e => {
+    trans = !trans; e.currentTarget.classList.toggle('on', trans);
+    myel.forEach(o => { o.al = trans ? 0.28 : 0.93; });
+    if (trans) show('axon');
+  });
+  setMode('myelin');
+  const info = document.getElementById('info-neuron');
+  const picker = document.getElementById('pick-neuron');
+  ['dend', 'soma', 'hillock', 'axon', 'myelin', 'node', 'terminal'].forEach(id => {
+    const b = UI.h('button', 'btn sm', INFO[id][0].split(' ')[0]); b.type = 'button'; b.onclick = () => show(id); picker.appendChild(b);
+  });
+  const home = info.innerHTML;
+  function show(id) {
+    const d = INFO[id]; if (!d) return;
+    S.each(o => { o.hl = o.id === id; });
+    info.innerHTML = '<div class="tt">' + d[0] + '</div><ul>' + d[1].map(x => '<li>' + x + '</li>').join('') + '</ul><button class="btn sm mt" type="button" id="nb-back">← 全部部位</button>';
+    document.getElementById('nb-back').onclick = () => { S.each(o => { o.hl = false; }); info.innerHTML = home; rebind(); };
+  }
+  function rebind() { UI.$$('#pick-neuron .btn').forEach((b, i) => { b.onclick = () => show(['dend', 'soma', 'hillock', 'axon', 'myelin', 'node', 'terminal'][i]); }); }
+  S.onPick = o => { if (o) show(o.id); };
+})();
+
+/* ================= Nernst / Goldman ================= */
+(function () {
+  const PRE = [
+    { o: 5, i: 150, z: 1, n: 'K⁺：細胞內高、外低 → 平衡電位為負（講義 −90 mV）' },
+    { o: 145, i: 12, z: 1, n: 'Na⁺：細胞外高 → 平衡電位為正（講義寫 +60 mV，精算約 +66 mV）' },
+    { o: 110, i: 10, z: -1, n: 'Cl⁻（補充）：陰離子 z = −1，數值約 −64 mV' },
+    { o: 2.5, i: 0.1, z: 2, n: 'Ca²⁺（補充）：細胞內極低（實際約 0.0001 mM），z = 2；此處下限 0.1 mM 時約 +43 mV' }
+  ];
+  const o = document.getElementById('n-out'), i = document.getElementById('n-in'), z = document.getElementById('n-z');
+  const ov = document.getElementById('n-out-v'), iv = document.getElementById('n-in-v'), res = document.getElementById('n-res'), note = document.getElementById('n-note');
+  let ni = 0;
+  function calc() {
+    const E = (61 / +z.value) * Math.log10(+o.value / +i.value);
+    ov.textContent = (+o.value).toFixed(1); iv.textContent = (+i.value).toFixed(1);
+    res.textContent = (E > 0 ? '+' : '') + E.toFixed(1);
+    res.style.color = E < 0 ? '#60a5fa' : '#f87171';
+  }
+  function preset(k) {
+    ni = k; const p = PRE[k]; o.value = p.o; i.value = p.i; z.value = String(p.z); note.textContent = p.n;
+    UI.$$('#nern-pre .btn').forEach((b, j) => b.classList.toggle('on', j === k)); calc();
+  }
+  UI.$$('#nern-pre .btn').forEach((b, k) => b.addEventListener('click', () => preset(k)));
+  [o, i, z].forEach(e => e.addEventListener('input', () => { note.textContent = '自訂數值'; calc(); }));
+  preset(0);
+
+  const r = document.getElementById('g-r'), rv = document.getElementById('g-rv'), vm = document.getElementById('g-vm'), cv = document.getElementById('g-plot');
+  function g() {
+    const k = +r.value, V = 61 * Math.log10((5 + k * 145) / (150 + k * 12));
+    rv.textContent = k.toFixed(3); vm.textContent = (V > 0 ? '+' : '') + V.toFixed(1);
+    const ctx = cv.getContext('2d'), w = cv.clientWidth, h = cv.clientHeight, dpr = Math.min(2, devicePixelRatio || 1);
+    cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+    const X = v => 20 + ((v + 100) / 180) * (w - 40);
+    ctx.fillStyle = 'rgba(255,255,255,.05)'; ctx.fillRect(20, h / 2 - 8, w - 40, 16);
+    const grd = ctx.createLinearGradient(20, 0, w - 20, 0); grd.addColorStop(0, '#3b82f6'); grd.addColorStop(.55, '#a78bfa'); grd.addColorStop(1, '#ef4444');
+    ctx.fillStyle = grd; ctx.globalAlpha = .35; ctx.fillRect(20, h / 2 - 8, w - 40, 16); ctx.globalAlpha = 1;
+    ctx.font = '12px ' + Mini3D.FONT; ctx.textAlign = 'center';
+    [[-90, 'E_K −90', '#60a5fa'], [66, 'E_Na +66', '#f87171'], [0, '0', '#94a3b8']].forEach(([v, t, c]) => {
+      ctx.strokeStyle = c; ctx.beginPath(); ctx.moveTo(X(v), h / 2 - 16); ctx.lineTo(X(v), h / 2 + 16); ctx.stroke(); ctx.fillStyle = c; ctx.fillText(t, X(v), h / 2 + 32);
+    });
+    ctx.fillStyle = '#fde047'; ctx.beginPath(); ctx.arc(X(V), h / 2, 9, 0, 6.3); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.fillText('RMP ' + V.toFixed(0) + ' mV', X(V), h / 2 - 22);
+  }
+  r.addEventListener('input', g); addEventListener('resize', g); g();
+})();
+
+/* ================= 動作電位 ================= */
+(function () {
+  const plot = document.getElementById('ap-plot'), mem = document.getElementById('ap-mem');
+  const sl = document.getElementById('ap-t'), tv = document.getElementById('ap-tv'), play = document.getElementById('ap-play');
+  const ss = (a, b, x) => { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); };
+  function Vm(t) {
+    if (t < 1) return -70;
+    if (t < 1.6) return -70 + 15 * ss(1, 1.6, t);
+    if (t < 2.3) return -55 + 85 * ss(1.6, 2.3, t);
+    if (t < 3.5) return 30 - 110 * ss(2.3, 3.5, t);
+    if (t < 6) return -80 + 10 * ss(3.5, 6, t);
+    return -70;
+  }
+  const PH = [
+    ['靜止 Resting', 'VG Na⁺ 與 VG K⁺ 通道都關閉；Na⁺/K⁺ pump 維持濃度梯度，RMP ≈ −70 mV。'],
+    ['去極化到閾值 Threshold', '刺激（例如 EPSP 加總）使膜去極化，到達閾值約 −55 mV。'],
+    ['去極化 Depolarization', '達閾值時 VG Na⁺ 通道打開，Na⁺ 順電化學梯度內流 → 更去極化 → 打開更多通道（正回饋），MP 由 −70 衝到 +30 mV。'],
+    ['再極化 Repolarization', 'VG Na⁺ 通道關閉並失活；VG K⁺ 通道打開，K⁺ 外流使膜回到 RMP。'],
+    ['過極化 Hyperpolarization', 'VG K⁺ 通道關得慢，K⁺ 繼續外流 → 比 RMP 更負（後過極化）。'],
+    ['恢復 Recovery', 'K⁺ 通道關閉；Na⁺/K⁺ pump 把進來的 Na⁺ 排出、K⁺ 收回（AP 本身靠擴散，不需主動運輸）。']
+  ];
+  const phase = t => t < 1 ? 0 : t < 1.6 ? 1 : t < 2.3 ? 2 : t < 3.3 ? 3 : t < 5.2 ? 4 : 5;
+  const naS = t => (t >= 1.6 && t < 2.3) ? 'open' : (t >= 2.3 && t < 3.4) ? 'inact' : 'closed';
+  const kS = t => (t >= 2.2 && t < 5.2) ? 'open' : 'closed';
+  const rf = t => (t >= 1.6 && t < 3.4) ? '絕對' : (t >= 3.4 && t < 5.2) ? '相對' : '—';
+  let t = 0, playing = true;
+  const ions = [];
+  for (let i = 0; i < 46; i++) ions.push({ k: i < 24 ? 'na' : 'k', x: Math.random(), y: Math.random(), f: 0, fx: 0 });
+  function size(cv) { const w = cv.clientWidth, h = cv.clientHeight, dpr = Math.min(2, devicePixelRatio || 1); if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); } const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); return [c, w, h]; }
+  function drawPlot() {
+    const [c, w, h] = size(plot); c.clearRect(0, 0, w, h);
+    const L = 44, Rt = 12, T = 14, B = 30;
+    const X = x => L + (x / 8) * (w - L - Rt), Y = v => T + ((70 - v) / 170) * (h - T - B);
+    c.fillStyle = 'rgba(251,113,133,.10)'; c.fillRect(X(1.6), T, X(3.4) - X(1.6), h - T - B);
+    c.fillStyle = 'rgba(251,191,36,.08)'; c.fillRect(X(3.4), T, X(5.2) - X(3.4), h - T - B);
+    c.font = '11px ' + Mini3D.FONT; c.fillStyle = '#fda4af'; c.textAlign = 'center'; c.fillText('絕對不反應期', (X(1.6) + X(3.4)) / 2, T + 12);
+    c.fillStyle = '#fcd34d'; c.fillText('相對不反應期', (X(3.4) + X(5.2)) / 2, T + 12);
+    c.strokeStyle = 'rgba(255,255,255,.08)'; c.lineWidth = 1; c.textAlign = 'right'; c.fillStyle = '#94a3b8';
+    for (let v = -100; v <= 60; v += 20) { c.beginPath(); c.moveTo(L, Y(v)); c.lineTo(w - Rt, Y(v)); c.stroke(); c.fillText(v, L - 6, Y(v) + 4); }
+    c.textAlign = 'center'; for (let x = 0; x <= 8; x += 1) c.fillText(x, X(x), h - 10);
+    c.fillText('ms', w - 14, h - 24);
+    const dash = (v, col, txt) => { c.setLineDash([5, 5]); c.strokeStyle = col; c.beginPath(); c.moveTo(L, Y(v)); c.lineTo(w - Rt, Y(v)); c.stroke(); c.setLineDash([]); c.fillStyle = col; c.textAlign = 'left'; c.fillText(txt, L + 6, Y(v) - 5); };
+    dash(-55, '#fbbf24', '閾值 −55'); dash(-90, '#60a5fa', 'E_K −90'); dash(60, '#f87171', 'E_Na +60');
+    c.lineWidth = 2; c.strokeStyle = 'rgba(90,209,255,.25)'; c.beginPath();
+    for (let x = 0; x <= 8; x += 0.02) { const y = Y(Vm(x)); x ? c.lineTo(X(x), y) : c.moveTo(X(x), y); } c.stroke();
+    c.lineWidth = 3; c.strokeStyle = '#5ad1ff'; c.shadowColor = '#5ad1ff'; c.shadowBlur = 12; c.beginPath();
+    for (let x = 0; x <= t; x += 0.02) { const y = Y(Vm(x)); x ? c.lineTo(X(x), y) : c.moveTo(X(x), y); } c.stroke(); c.shadowBlur = 0;
+    c.fillStyle = '#fff'; c.beginPath(); c.arc(X(t), Y(Vm(t)), 5, 0, 6.3); c.fill();
+  }
+  function drawMem(dt) {
+    const [c, w, h] = size(mem); c.clearRect(0, 0, w, h);
+    const v = Vm(t), my = h / 2, th = 26, dep = 18;
+    const na = naS(t), k = kS(t);
+    c.font = '12px ' + Mini3D.FONT; c.textAlign = 'left'; c.fillStyle = '#94a3b8';
+    c.fillText('細胞外 Outside', 10, 16); c.fillText('細胞內 Inside', 10, h - 8);
+    // 膜（偽 3D：上表面 + 正面）
+    c.fillStyle = '#1e293b'; c.beginPath(); c.moveTo(0, my - th / 2); c.lineTo(dep, my - th / 2 - dep * 0.6); c.lineTo(w, my - th / 2 - dep * 0.6); c.lineTo(w, my - th / 2); c.closePath(); c.fill();
+    const g = c.createLinearGradient(0, my - th / 2, 0, my + th / 2); g.addColorStop(0, '#334155'); g.addColorStop(.5, '#1e293b'); g.addColorStop(1, '#334155');
+    c.fillStyle = g; c.fillRect(0, my - th / 2, w, th);
+    for (let x = 6; x < w; x += 9) { c.fillStyle = '#64748b'; c.beginPath(); c.arc(x, my - th / 2 + 3, 3, 0, 6.3); c.fill(); c.beginPath(); c.arc(x, my + th / 2 - 3, 3, 0, 6.3); c.fill(); }
+    const cx = [w * 0.34, w * 0.68];
+    function chan(x, open, color, label, inact) {
+      const gap = open ? 9 : 2;
+      [-1, 1].forEach(s => {
+        const gx = x + s * (gap + 9);
+        const gg = c.createLinearGradient(gx - 9, 0, gx + 9, 0); gg.addColorStop(0, color); gg.addColorStop(1, '#0f172a');
+        c.fillStyle = gg; Mini3D.rrect(c, gx - 9, my - th / 2 - 10, 18, th + 20, 7); c.fill();
+      });
+      if (inact) { c.fillStyle = '#fb7185'; c.beginPath(); c.arc(x, my + th / 2 + 4, 7, 0, 6.3); c.fill(); c.fillStyle = '#fff'; c.textAlign = 'center'; c.fillText('失活閘', x, my + th / 2 + 26); }
+      c.fillStyle = color; c.textAlign = 'center'; c.fillText(label, x, my - th / 2 - 18);
+    }
+    chan(cx[0], na === 'open', '#fbbf24', 'VG Na⁺ ' + (na === 'open' ? '開' : na === 'inact' ? '失活' : '關'), na === 'inact');
+    chan(cx[1], k === 'open', '#c084fc', 'VG K⁺ ' + (k === 'open' ? '開' : '關'), false);
+    // 離子
+    ions.forEach(p => {
+      const isNa = p.k === 'na';
+      if (!p.f) {
+        p.x += (Math.random() - .5) * 0.004; p.y += (Math.random() - .5) * 0.01; p.x = (p.x + 1) % 1; p.y = Math.min(1, Math.max(0, p.y));
+        const open = isNa ? na === 'open' : k === 'open';
+        if (open && Math.random() < 0.02 * (dt * 60)) { p.f = 1; p.fx = 0; }
+      } else { p.fx += dt * 1.6; if (p.fx >= 1) p.f = 0; }
+      let x, y;
+      const outside = isNa ? !p.flipped : p.flipped;
+      if (p.f) {
+        const chx = isNa ? cx[0] : cx[1];
+        const y0 = isNa ? my - th / 2 - 22 : my + th / 2 + 22, y1 = isNa ? my + th / 2 + 22 : my - th / 2 - 22;
+        x = chx + (Math.random() - .5) * 2; y = y0 + (y1 - y0) * p.fx;
+        if (p.fx + dt * 1.6 >= 1) p.flipped = !p.flipped;
+      } else {
+        x = p.x * w; const top = outside;
+        y = top ? 22 + p.y * (my - th / 2 - 40) : my + th / 2 + 18 + p.y * (h - my - th / 2 - 34);
+      }
+      c.fillStyle = isNa ? '#fbbf24' : '#c084fc'; c.beginPath(); c.arc(x, y, 4, 0, 6.3); c.fill();
+    });
+    // 電荷
+    const pos = v > 0;
+    c.font = 'bold 15px ' + Mini3D.FONT; c.textAlign = 'center';
+    for (let x = 30; x < w; x += 70) {
+      c.fillStyle = pos ? '#60a5fa' : '#f87171'; c.fillText(pos ? '−' : '+', x + 20, my - th / 2 - 4 - dep * 0.3);
+      c.fillStyle = pos ? '#f87171' : '#60a5fa'; c.fillText(pos ? '+' : '−', x + 20, my + th / 2 + 13);
+    }
+    c.font = '12px ' + Mini3D.FONT; c.textAlign = 'right'; c.fillStyle = '#fbbf24'; c.fillText('● Na⁺', w - 60, 16); c.fillStyle = '#c084fc'; c.fillText('● K⁺', w - 12, 16);
+  }
+  const $ = id => document.getElementById(id);
+  function ui() {
+    const p = phase(t); $('ap-ph').textContent = PH[p][0]; $('ap-desc').textContent = PH[p][1];
+    const v = Vm(t); $('ap-v').textContent = (v > 0 ? '+' : '') + v.toFixed(0);
+    const na = naS(t); $('ap-na').textContent = na === 'open' ? '開啟' : na === 'inact' ? '失活' : '關閉';
+    $('ap-k').textContent = kS(t) === 'open' ? '開啟' : '關閉'; $('ap-rf').textContent = rf(t);
+    sl.value = t; tv.textContent = t.toFixed(1) + ' ms';
+  }
+  sl.addEventListener('input', () => { t = +sl.value; playing = false; play.textContent = '▶'; play.classList.remove('on'); });
+  play.addEventListener('click', () => { playing = !playing; play.textContent = playing ? '⏸' : '▶'; play.classList.toggle('on', playing); });
+  let last = performance.now(), vis = true;
+  new IntersectionObserver(es => { vis = es[0].isIntersecting; }).observe(plot);
+  (function loop(now) {
+    const dt = Math.max(0, Math.min(0.05, (now - last) / 1000)); last = now;
+    if (vis && !document.hidden) { if (playing) { t += dt * 1.15; if (t > 8) t = 0; } drawPlot(); drawMem(dt); ui(); }
+    requestAnimationFrame(loop);
+  })(last);
+
+  /* 刺激強度編碼 */
+  const ic = document.getElementById('int-plot'), is = document.getElementById('int-s'), iv = document.getElementById('int-v');
+  let tt = 0, spikes = [], acc = 0;
+  is.addEventListener('input', () => { iv.textContent = is.value; });
+  (function loop2() {
+    const s = +is.value, rate = s < 30 ? 0 : 3 + (s - 30) * 0.45;
+    tt += 1 / 60; acc += rate / 60; if (acc >= 1) { acc -= 1; spikes.push(tt); }
+    spikes = spikes.filter(x => tt - x < 3);
+    const [c, w, h] = size(ic); c.clearRect(0, 0, w, h);
+    const Y = v => 18 + ((40 - v) / 130) * (h - 50), X = x => w - 10 - ((tt - x) / 3) * (w - 20);
+    c.strokeStyle = '#fbbf24'; c.setLineDash([4, 4]); c.beginPath(); c.moveTo(0, Y(-55)); c.lineTo(w, Y(-55)); c.stroke(); c.setLineDash([]);
+    c.strokeStyle = '#5ad1ff'; c.lineWidth = 2; c.beginPath(); c.moveTo(0, Y(-70)); c.lineTo(w, Y(-70));
+    spikes.forEach(x => { const px = X(x); c.moveTo(px - 2, Y(-70)); c.lineTo(px, Y(30)); c.lineTo(px + 3, Y(-80)); c.lineTo(px + 6, Y(-70)); });
+    c.stroke(); c.lineWidth = 1;
+    const sh = (s / 100) * 22; c.fillStyle = 'rgba(167,139,250,.5)'; c.fillRect(10, h - 10 - sh, w - 20, sh);
+    c.fillStyle = '#94a3b8'; c.font = '11px ' + Mini3D.FONT; c.fillText(s < 30 ? '刺激未達閾值 → 沒有 AP' : '頻率 ≈ ' + rate.toFixed(0) + ' Hz（AP 高度不變）', 12, 14);
+    requestAnimationFrame(loop2);
+  })();
+})();
+
+/* ================= 3D 突觸 ================= */
+(function () {
+  const st = document.getElementById('st-syn');
+  const S = new Mini3D.Scene(st.querySelector('canvas'), { radius: 115, yaw: 0.55, pitch: 0.22, autoRotate: 0.07, target: [0, 22, 0] });
+  Mini3D.controls(S, st);
+  const R = Mini3D.rng(5);
+  const INFO = { pre: '突觸前終扣 Presynaptic bouton', vesicle: '突觸小泡 Synaptic vesicle（內含 NT）', ca: 'VG Ca²⁺ 通道', post: '突觸後膜 Postsynaptic membrane', receptor: '受體 / 化學閘控通道', nt: '神經傳遞物 NT', caion: 'Ca²⁺', naion: 'Na⁺（經受體通道流入 → EPSP）' };
+  const pre = Mini3D.shell(560, [0, 50, 0], [52, 42, 42]).filter(q => q.u[1] < 0.72);
+  const preDots = pre.map(q => S.dot(q.p, 1.8, '#f472b6', { id: 'pre', al: 0.5, y0: q.p[1] }));
+  S.path([[0, 150, 0], [0, 112, 0], [0, 84, 0]], [9, 13], '#f472b6', { id: 'pre', al: 0.75 }, 3);
+  const ves = [];
+  for (let i = 0; i < 16; i++) {
+    const docked = i < 6;
+    let p;
+    if (docked) { const a = (i / 6) * 6.283 + 0.3; p = [Math.cos(a) * 22, 17, Math.sin(a) * 22]; }
+    else p = [(R() - .5) * 60, 30 + R() * 32, (R() - .5) * 60];
+    ves.push(S.sphere(p, 6, '#fbcfe8', { id: 'vesicle', al: 0.9, p0: p.slice(), docked }));
+  }
+  const caCh = []; for (let i = 0; i < 6; i++) { const a = (i / 6) * 6.283; const x = Math.cos(a) * 34, z = Math.sin(a) * 34; caCh.push(S.tube([x, 5, z], [x, 13, z], 2.8, '#4ade80', { id: 'ca' })); }
+  const postDots = [];
+  Mini3D.shell(900, [0, -38, 0], [85, 28, 85]).filter(q => q.u[1] > 0.25).forEach(q => postDots.push(S.dot(q.p, 1.7, '#60a5fa', { id: 'post', al: 0.5 })));
+  const rec = []; for (let i = 0; i < 9; i++) { const a = (i / 9) * 6.283 + 0.2, rr = i % 2 ? 14 : 26; const x = Math.cos(a) * rr, z = Math.sin(a) * rr; rec.push(S.tube([x, -11, z], [x, -4, z], 2.6, '#93c5fd', { id: 'receptor', base: [x, -4, z] })); }
+  S.label([0, 98, 0], '突觸前終扣', { id: 'pre', c: '#f472b6', dx: 60, dy: -10 });
+  S.label([22, 38, 0], '突觸小泡', { id: 'vesicle', c: '#fbcfe8', dx: 70, dy: -6 });
+  S.label([34, 10, 0], 'VG Ca²⁺ 通道', { id: 'ca', c: '#4ade80', dx: 76, dy: 6 });
+  S.label([0, 0, 0], '突觸裂隙', { c: '#cbd5e1', dx: -90, dy: 0 });
+  S.label([26, -6, 0], '受體', { id: 'receptor', c: '#93c5fd', dx: 70, dy: 22 });
+  S.label([0, -24, 40], '突觸後膜', { id: 'post', c: '#60a5fa', dx: -40, dy: 40 });
+  const pool = []; for (let i = 0; i < 220; i++) pool.push(S.sphere([0, 0, 0], 1.6, '#fff', { hidden: true, nopick: true, zb: -3 }));
+  const live = [];
+  function spawn(kind, p, v, life) {
+    const o = pool.find(q => q.hidden); if (!o) return;
+    o.hidden = false; o.p = p.slice(); o.v = v; o.life = life; o.kind = kind; o.bound = null;
+    o.c = kind === 'ca' ? '#4ade80' : kind === 'nt' ? '#fb923c' : '#fde047'; o.r = kind === 'nt' ? 1.6 : 1.9; o.id = kind === 'ca' ? 'caion' : kind === 'nt' ? 'nt' : 'naion'; o.nopick = false;
+    live.push(o);
+  }
+  let step = 0, sT = 0;
+  const pulse = S.sphere([0, 150, 0], 7, '#fef08a', { hidden: true, glow: 1.5, gc: '#fde047', nopick: true, zb: -10 });
+  const CAP = ['靜止：小泡已停靠在釋放位置', '① AP 傳到終扣，使其去極化', '② VG Ca²⁺ 通道打開，Ca²⁺ 流入', '③ Ca²⁺ → calmodulin → 蛋白激酶 → 小泡融合、胞吐 NT', '④ NT 擴散過裂隙，與受體結合 → 化學閘控通道打開', '⑤ Na⁺ 流入 → EPSP（去極化）；若為抑制性 → IPSP'];
+  const cap = document.getElementById('syn-cap');
+  function setStep(i) {
+    step = i; sT = 0; cap.textContent = CAP[i];
+    if (i === 0 || i === 1) { live.forEach(o => { o.hidden = true; }); live.length = 0; ves.forEach(v => { v.p = v.p0.slice(); v.r = 6; v.hidden = false; }); rec.forEach(r => { r.glow = 0; }); }
+  }
+  S.onFrame = dt => {
+    sT += dt;
+    pulse.hidden = true;
+    preDots.forEach(d => { d.glow = 0; }); postDots.forEach(d => { d.glow = 0; });
+    caCh.forEach(c => { c.glow = 0; c.c = '#4ade80'; });
+    if (step === 1) {
+      const y = 150 - Math.min(1, sT / 1.2) * 140; pulse.hidden = false; pulse.p = [0, Math.max(60, y), 0];
+      preDots.forEach(d => { const k = 1 - Math.abs(d.y0 - y) / 18; if (k > 0) d.glow = k; });
+    }
+    if (step === 2) {
+      caCh.forEach(c => { c.glow = 0.8; c.c = '#86efac'; });
+      if (Math.random() < dt * 30) { const c = caCh[(Math.random() * 6) | 0]; spawn('ca', [c.a[0], -2, c.a[2]], [(Math.random() - .5) * 6, 26 + Math.random() * 10, (Math.random() - .5) * 6], 1.6); }
+    }
+    if (step === 3) {
+      ves.forEach(v => {
+        if (!v.docked || v.hidden) return;
+        v.p = V.lerp(v.p, [v.p0[0], 9, v.p0[2]], Math.min(1, dt * 3)); v.r = Math.max(0, v.r - dt * 3);
+        if (v.r < 3.5 && !v.rel) { v.rel = 1; for (let k = 0; k < 16; k++) spawn('nt', [v.p0[0], 5, v.p0[2]], [(Math.random() - .5) * 14, -10 - Math.random() * 8, (Math.random() - .5) * 14], 6); }
+        if (v.r <= 0.4) v.hidden = true;
+      });
+    } else ves.forEach(v => { v.rel = 0; });
+    if (step === 4 || step === 5) {
+      rec.forEach(r => { r.glow = 0.9; });
+      if (step === 5) {
+        postDots.forEach(d => { const k = 1 - Math.hypot(d.p[0], d.p[2]) / 70; if (k > 0) d.glow = k * (0.6 + 0.4 * Math.sin(sT * 5)); });
+        if (Math.random() < dt * 24) { const r = rec[(Math.random() * rec.length) | 0]; spawn('na', [r.b[0], 2, r.b[2]], [(Math.random() - .5) * 4, -22, (Math.random() - .5) * 4], 1.4); }
+      }
+    }
+    for (let i = live.length - 1; i >= 0; i--) {
+      const o = live[i]; o.life -= dt;
+      if (o.kind === 'nt' && !o.bound) {
+        o.v[1] = Math.max(-12, o.v[1] - dt * 4);
+        if (o.p[1] < -2) { const r = rec.reduce((a, b) => (V.dist(b.base, o.p) < V.dist(a.base, o.p) ? b : a)); if (V.dist(r.base, o.p) < 16) { o.bound = r; o.v = [0, 0, 0]; } else { o.v[1] = Math.abs(o.v[1]) * 0.3; } }
+      }
+      if (o.bound) o.p = V.lerp(o.p, V.add(o.bound.base, [(Math.random() - .5) * 2, 1, (Math.random() - .5) * 2]), Math.min(1, dt * 6));
+      else o.p = V.add(o.p, V.mul(o.v, dt));
+      if (o.kind === 'nt' && !o.bound) o.v = V.add(o.v, [(Math.random() - .5) * 20 * dt, 0, (Math.random() - .5) * 20 * dt]);
+      if (o.life <= 0 || o.p[1] < -40) { o.hidden = true; live.splice(i, 1); }
+    }
+  };
+  const box = document.getElementById('syn-steps');
+  UI.stepper(box, [
+    { t: '靜止', d: '小泡停靠在釋放位置（融合複合體），所以 NT 能快速釋放', dur: 2200 },
+    { t: 'AP 抵達終扣', d: 'AP 沿軸突傳下，使終扣去極化', dur: 2600 },
+    { t: 'VG Ca²⁺ 通道打開', d: 'Ca²⁺ 被電化學梯度驅動進入終扣', dur: 3000 },
+    { t: '小泡胞吐', d: 'Ca²⁺ 先活化 calmodulin → 活化蛋白激酶 → 磷酸化調節蛋白 → 促進小泡融合與胞吐', dur: 3400 },
+    { t: 'NT 擴散並與受體結合', d: 'NT（配體）擴散過裂隙，結合突觸後膜受體，打開化學調控離子通道', dur: 3200 },
+    { t: '產生突觸後電位', d: '去極化通道 → EPSP；過極化通道 → IPSP；它們再影響突觸後細胞的 VG 通道', dur: 3600 }
+  ], setStep);
+  S.onPick = o => { if (o && INFO[o.id]) { cap.textContent = '👉 ' + INFO[o.id]; S.each(q => { q.hl = q.id === o.id; }); setTimeout(() => S.each(q => { q.hl = false; }), 1600); } };
+})();
+
+/* ================= 突觸加成模擬 ================= */
+(function () {
+  const cv = document.getElementById('sum-plot');
+  const ev = []; let now = 0, ap = -9, refr = 0;
+  const A = { E1: 9, E2: 9, I: -7 }, tau = 0.07;
+  function fire(k, delay) { ev.push({ k, t: now + (delay || 0) }); }
+  UI.$$('[data-s]').forEach(b => b.addEventListener('click', () => {
+    const s = b.dataset.s;
+    if (s === 'spatial') { fire('E1'); fire('E2'); }
+    else if (s === 'temporal') { fire('E1'); fire('E1', 0.05); fire('E1', 0.1); }
+    else if (s === 'inhib') { fire('E1'); fire('E2'); fire('I'); }
+    else fire(s);
+  }));
+  const hist = [];
+  function vAt(t) {
+    let v = -70;
+    for (const e of ev) { const d = t - e.t; if (d > 0 && d < 1) v += A[e.k] * (d / tau) * Math.exp(1 - d / tau); }
+    return v;
+  }
+  function size() { const w = cv.clientWidth, h = cv.clientHeight, dpr = Math.min(2, devicePixelRatio || 1); if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); } const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); return [c, w, h]; }
+  let last = performance.now(), vis = true;
+  new IntersectionObserver(es => { vis = es[0].isIntersecting; }).observe(cv);
+  (function loop(t) {
+    const dt = Math.max(0, Math.min(0.05, (t - last) / 1000)); last = t;
+    if (vis) {
+      now += dt;
+      let v = vAt(now);
+      if (now - ap < 0.004) v = 30; else if (now - ap < 0.012) v = -80;
+      if (v >= -55 && now > refr) { ap = now; refr = now + 0.25; ev.length = 0; v = 30; }
+      hist.push([now, v]); while (hist.length && now - hist[0][0] > 3) hist.shift();
+      for (let i = ev.length - 1; i >= 0; i--) if (now - ev[i].t > 1) ev.splice(i, 1);
+      const [c, w, h] = size(); c.clearRect(0, 0, w, h);
+      const top = 120;
+      // 神經元示意
+      const sx = w * 0.62, sy = 58;
+      const grd = c.createRadialGradient(sx - 8, sy - 8, 2, sx, sy, 30); grd.addColorStop(0, '#ffe4c4'); grd.addColorStop(1, '#c2410c');
+      c.strokeStyle = '#fdba74'; c.lineWidth = 5; c.lineCap = 'round';
+      c.beginPath(); c.moveTo(sx - 26, sy - 6); c.lineTo(w * 0.18, 22); c.moveTo(sx - 26, sy + 8); c.lineTo(w * 0.18, 98); c.moveTo(sx, sy + 26); c.lineTo(sx - 30, 110); c.stroke();
+      c.lineWidth = 4; c.strokeStyle = '#fde047'; c.beginPath(); c.moveTo(sx + 28, sy); c.lineTo(w - 16, sy); c.stroke();
+      c.fillStyle = grd; c.beginPath(); c.arc(sx, sy, 28, 0, 6.3); c.fill();
+      const flash = k => ev.some(e => e.k === k && now - e.t > 0 && now - e.t < 0.15);
+      [['E1', w * 0.18, 22, '#34d399'], ['E2', w * 0.18, 98, '#34d399'], ['I', sx - 30, 110, '#fb7185']].forEach(([k, x, y, col]) => {
+        c.fillStyle = flash(k) ? '#fff' : col; c.beginPath(); c.arc(x, y, flash(k) ? 11 : 8, 0, 6.3); c.fill();
+        c.fillStyle = '#e2e8f0'; c.font = 'bold 12px ' + Mini3D.FONT; c.textAlign = 'center'; c.fillText(k, x - 20, y + 4);
+      });
+      c.fillStyle = now - ap < 0.4 ? '#fef08a' : '#94a3b8'; c.font = '12px ' + Mini3D.FONT; c.textAlign = 'left'; c.fillText(now - ap < 0.6 ? '⚡ 軸丘產生 AP！' : '軸丘 Axon hillock', sx + 34, sy - 10);
+      if (now - ap < 0.6) { const px = sx + 30 + ((now - ap) / 0.6) * (w - sx - 46); c.fillStyle = '#fde047'; c.shadowColor = '#fde047'; c.shadowBlur = 16; c.beginPath(); c.arc(px, sy, 6, 0, 6.3); c.fill(); c.shadowBlur = 0; }
+      // 曲線
+      const L = 40, B = 24, Y = vv => top + ((35 - vv) / 120) * (h - top - B), X = tt => L + (1 - (now - tt) / 3) * (w - L - 10);
+      c.strokeStyle = 'rgba(255,255,255,.08)'; c.fillStyle = '#94a3b8'; c.textAlign = 'right'; c.font = '11px ' + Mini3D.FONT;
+      [-80, -70, -55, -40, 0, 30].forEach(vv => { c.beginPath(); c.moveTo(L, Y(vv)); c.lineTo(w - 10, Y(vv)); c.stroke(); c.fillText(vv, L - 5, Y(vv) + 4); });
+      c.setLineDash([6, 5]); c.strokeStyle = '#fbbf24'; c.beginPath(); c.moveTo(L, Y(-55)); c.lineTo(w - 10, Y(-55)); c.stroke(); c.setLineDash([]);
+      c.fillStyle = '#fbbf24'; c.textAlign = 'left'; c.fillText('閾值 −55 mV', L + 4, Y(-55) - 5);
+      c.strokeStyle = '#5ad1ff'; c.lineWidth = 2.5; c.beginPath();
+      hist.forEach(([tt, vv], i) => { const x = X(tt), y = Y(vv); i ? c.lineTo(x, y) : c.moveTo(x, y); }); c.stroke(); c.lineWidth = 1;
+    }
+    requestAnimationFrame(loop);
+  })(last);
+})();
+
+/* ================= 快閃卡與測驗 ================= */
+UI.flashcards(document.getElementById('fc'), [
+  { tag: 'NS', f: 'CNS 與 PNS 各包含什麼？', b: '<b>CNS</b>＝腦 + 脊髓<br><b>PNS</b>＝腦神經 + 脊神經' },
+  { tag: '分類', f: '神經元的三種功能分類？', b: '<ul><li>Sensory / afferent：傳入 CNS</li><li>Motor / efferent：傳出 CNS</li><li>Association / interneuron：整合，完全在 CNS 內</li></ul>' },
+  { tag: '分類', f: '假單極、雙極、多極各舉一例', b: '假單極：感覺神經元<br>雙極：視網膜神經元<br>多極：運動神經元' },
+  { tag: '構造', f: 'CNS 與 PNS 中成群的細胞體分別稱為？', b: 'CNS：<b>nuclei</b>（神經核）<br>PNS：<b>ganglia</b>（神經節）' },
+  { tag: '運輸', f: 'Kinesin 與 dynein 的運送方向？', b: '<b>Kinesin</b>：順向（離開細胞體）<br><b>Dynein</b>：逆向（回到細胞體）；病毒、毒素可由此入侵 CNS' },
+  { tag: '運輸', f: 'Axoplasmic flow 與 axonal transport 的差別？', b: 'Axoplasmic flow：靠軸突節律收縮，<b>慢</b>，運送可溶物質<br>Axonal transport：沿微管、<b>快、雙向</b>，運送大型/不可溶物質' },
+  { tag: '膠細胞', f: 'Schwann cell vs oligodendrocyte', b: 'Schwann（PNS）：每個包 1 條軸突約 1 mm<br>Oligodendrocyte（CNS）：一個包多條軸突，並抑制再生' },
+  { tag: '膠細胞', f: 'Astrocyte 的功能？', b: '最多的膠細胞：緩衝 K⁺、回收 NT、調節成人神經新生、釋放傳遞物調節神經元、誘導 BBB' },
+  { tag: '膠細胞', f: '哪種膠細胞似乎是神經幹細胞？', b: '<b>Ependymal cells</b> 室管膜細胞' },
+  { tag: 'BBB', f: '血腦障壁的三層結構？', b: '① 內皮細胞緊密接合 ② 連續基底膜 ③ 85% 管壁被膠細胞終足包圍<br>可通過：O₂、CO₂、glucose' },
+  { tag: '再生', f: '為什麼 PNS 比 CNS 容易再生？', b: 'PNS：Schwann cells 形成再生管、釋放化學物吸引並引導軸突<br>CNS：寡樹突膠細胞產生抑制蛋白＋膠質疤痕' },
+  { tag: 'MP', f: 'E<sub>K</sub> 與 E<sub>Na</sub> 的講義數值？', b: 'E<sub>K</sub> = 61 log(5/150) = <b>−90 mV</b><br>E<sub>Na</sub> = 61 log(145/12) ≈ <b>+60 mV</b>' },
+  { tag: 'MP', f: 'Na⁺/K⁺ pump 對 RMP 的貢獻？', b: '3 Na⁺ 出、2 K⁺ 進 → 生電性（electrogenic），約 <b>−3 mV</b>' },
+  { tag: 'MP', f: '為何 RMP 比 E<sub>K</sub> 正？', b: '有少量 Na⁺ 擴散進入細胞，所以 RMP（−65 ~ −85 mV）沒有 −90 那麼負' },
+  { tag: 'AP', f: 'AP 去極化的機制？', b: '達閾值 → VG Na⁺ 開 → Na⁺ 內流 → 更去極化 → 更多通道開（<b>正回饋</b>）；−70 → +30 mV' },
+  { tag: 'AP', f: 'AP 再極化的機制？', b: 'VG Na⁺ 通道關閉（失活）、VG K⁺ 通道開啟 → K⁺ 外流 → 回到 RMP' },
+  { tag: 'AP', f: '絕對 vs 相對不反應期', b: '絕對：Na⁺ 通道失活，無法再產生 AP<br>相對：VG K⁺ 通道仍開，較難去極化到閾值' },
+  { tag: 'AP', f: '刺激強度如何編碼？', b: '強度↑ → AP <b>頻率</b>↑；AP 大小不變（全有全無）' },
+  { tag: '傳導', f: '跳躍傳導為何快？', b: 'VG Na⁺ 只在蘭氏結；髓鞘下無 AP 且電流不洩漏 → AP 由結跳到結' },
+  { tag: '突觸', f: '電突觸的構造與分布？', b: 'Gap junctions（connexin 蛋白）；見於平滑肌、心肌、腦、膠細胞' },
+  { tag: '突觸', f: 'NT 釋放的步驟？', b: 'AP → 終扣去極化 → VG Ca²⁺ 開 → Ca²⁺ 進入 → calmodulin → 蛋白激酶 → 磷酸化調節蛋白 → 小泡融合胞吐' },
+  { tag: '整合', f: 'EPSP 的五個特性？', b: '分級、無閾值、去極化、可加成、無不反應期' },
+  { tag: '整合', f: '空間加成 vs 時間加成', b: '空間：不同突觸<b>同時</b>的 EPSP 加總<br>時間：同一突觸<b>短時間連續</b>刺激，前一個尚未消退就疊加' },
+  { tag: '整合', f: '突觸前抑制 vs 突觸後抑制', b: '突觸後：GABA、glycine 產生 IPSP<br>突觸前：神經元與另一神經元的軸突/終扣形成突觸，抑制其 NT 釋放' }
+], 'ch07');
+UI.quiz(document.getElementById('qz'), [
+  { q: '哪一種膠細胞負責 PNS 軸突的髓鞘？', o: ['Oligodendrocyte', 'Schwann cell', 'Astrocyte', 'Ependymal cell'], a: 1, e: 'PNS 由 Schwann cell 形成髓鞘；CNS 由 oligodendrocyte。' },
+  { q: '逆向軸突運輸（retrograde）使用的分子馬達是？', o: ['Kinesin', 'Myosin', 'Dynein', 'Actin'], a: 2, e: 'Dynein 負責回到細胞體的逆向運輸，病毒（如狂犬病）可由此入侵。' },
+  { q: '以 Nernst 方程式，[K⁺]out = 5 mM、[K⁺]in = 150 mM，E<sub>K</sub> 約為？', o: ['+60 mV', '−70 mV', '−90 mV', '0 mV'], a: 2, e: '61 × log(5/150) = 61 × (−1.48) ≈ −90 mV。' },
+  { q: 'Na⁺/K⁺ ATPase 每次運送的離子是？', o: ['2 Na⁺ 出、3 K⁺ 進', '3 Na⁺ 出、2 K⁺ 進', '3 Na⁺ 進、2 K⁺ 出', '1 Na⁺ 出、1 K⁺ 進'], a: 1, e: '3 Na⁺ 出、2 K⁺ 進，因此為生電性，約貢獻 −3 mV。' },
+  { q: 'AP 上升支（去極化）主要由什麼造成？', o: ['K⁺ 外流', 'Cl⁻ 內流', 'Na⁺ 內流（正回饋）', 'Na⁺/K⁺ pump'], a: 2, e: '達閾值時 VG Na⁺ 打開，Na⁺ 內流並形成正回饋。' },
+  { q: '絕對不反應期無法再產生 AP 的原因是？', o: ['K⁺ 通道開著', 'Na⁺ 通道失活', 'pump 停止', '膜電位太負'], a: 1, e: 'Na⁺ 通道失活直到再極化；K⁺ 通道開著則是相對不反應期。' },
+  { q: '刺激強度增加時，神經如何編碼？', o: ['AP 振幅變大', 'AP 頻率增加', 'AP 時間變長', '閾值下降'], a: 1, e: 'AP 全有全無，大小不變，以頻率編碼強度。' },
+  { q: '有髓鞘軸突中，VG Na⁺ 通道主要位於？', o: ['髓鞘下方', '蘭氏結', '細胞體', '樹突'], a: 1, e: '只在蘭氏結，所以 AP 由結跳到結（跳躍傳導）。' },
+  { q: '觸發突觸小泡胞吐的離子是？', o: ['Na⁺', 'K⁺', 'Ca²⁺', 'Cl⁻'], a: 2, e: 'VG Ca²⁺ 通道打開，Ca²⁺ 進入終扣，經 calmodulin → 蛋白激酶促進融合。' },
+  { q: '下列何者「不是」EPSP 的特性？', o: ['可加成', '有閾值', '大小分級', '無不反應期'], a: 1, e: 'EPSP 沒有閾值；有閾值、全有全無的是 AP。' },
+  { q: '同一個突觸前神經元短時間連續刺激而加總，稱為？', o: ['空間加成', '時間加成', '突觸前抑制', 'LTP'], a: 1, e: '時間加成；不同突觸同時刺激才是空間加成。' },
+  { q: '產生 IPSP、造成突觸後抑制的 NT 是？', o: ['Glutamate 與 ACh', 'GABA 與 glycine', 'Dopamine 與 NE', 'NO 與 CO'], a: 1, e: 'GABA 與 glycine 產生 IPSP，使突觸後更難達閾值。' },
+  { q: '電突觸的通道由什麼蛋白構成？', o: ['Connexin', 'Kinesin', 'Calmodulin', 'Tubulin'], a: 0, e: 'Gap junction 由 connexin 構成。' },
+  { q: '血腦障壁的形成似乎是由哪種細胞誘導？', o: ['Microglia', 'Schwann cell', 'Astrocyte', 'Satellite cell'], a: 2, e: '腦微血管的特化似乎由 astrocyte 誘導。' }
+]);
+</script>
+</body>
+</html>

@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch2 身體的化學組成 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .phbar{position:relative;height:30px;border-radius:10px;background:linear-gradient(90deg,#ef4444,#f97316,#facc15,#a3e635,#22c55e,#14b8a6,#3b82f6,#6366f1,#8b5cf6);box-shadow:0 8px 0 rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.4);margin:34px 0 34px}
+  .phbar .mk{position:absolute;top:-24px;transform:translateX(-50%);font-size:11px;color:#e2e8f0;white-space:nowrap}
+  .phbar .mk::after{content:"";position:absolute;left:50%;top:18px;width:1px;height:36px;background:rgba(255,255,255,.55)}
+  .phbar .cur{position:absolute;top:-6px;width:4px;height:42px;background:#fff;border-radius:2px;box-shadow:0 0 12px #fff;transform:translateX(-50%);transition:left .15s}
+  .phbar .rng{position:absolute;top:0;bottom:0;border:2px solid #fff;border-radius:6px}
+  .phbar .lb{position:absolute;bottom:-22px;font-size:11px;color:var(--mut)}
+  .eq{font-family:"Cambria Math","Times New Roman",serif;font-size:20px;text-align:center;padding:12px;border-radius:12px;background:#070c18;border:1px solid var(--line);margin:8px 0}
+  .eq .arw{display:inline-block;transition:.4s;color:#fbbf24;font-weight:900;margin:0 8px}
+  .eq .hit{color:#fbbf24;text-shadow:0 0 12px #fbbf24}
+  canvas.beaker{width:100%;height:220px;display:block;border-radius:0 0 40px 40px;border:2px solid #475569;border-top:none;background:#060b17}
+</style>
+</head>
+<body style="--acc:#38bdf8;--acc2:#a3e635">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 2 · Chemical Composition of the Body</div>
+  <h1 class="title3d">身體的化學組成</h1>
+  <p class="sub">從原子與化學鍵開始：可旋轉的 3D 水分子氫鍵網路、NaCl 溶解與水合球、葡萄糖的脫水合成與水解、三酸甘油酯與反式脂肪、磷脂質微胞與雙層膜、類固醇四環、蛋白質一級→四級結構摺疊動畫、DNA 雙螺旋與 RNA。</p>
+  <div class="chips">
+    <a class="chip" href="#bond">化學鍵與水</a><a class="chip" href="#ph">酸鹼 pH</a><a class="chip" href="#carb">醣類</a><a class="chip" href="#lipid">脂質</a><a class="chip" href="#prot">蛋白質</a><a class="chip" href="#dna">核酸</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a>
+  </div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="bond" data-nav="化學鍵與水">
+  <h2><span class="num">01</span>原子、離子與化學鍵</h2>
+  <p class="lead">點選原子或鍵看說明。切換模式：<b>水分子氫鍵網路</b>、<b>NaCl 溶解形成水合球</b>、<b>非極性碳氫鏈（疏水）</b>。</p>
+  <div class="grid2">
+    <div class="stage" id="st-water"><canvas aria-label="3D 水分子與離子"></canvas>
+      <div class="hud">拖曳旋轉 · 點選原子</div><div class="hud2" id="w-cap">水分子：極性共價鍵 + 分子間氫鍵</div>
+      <div class="sbar"><div class="seg" id="wmode"><button class="btn sm" data-v="w" type="button">💧 水與氫鍵</button><button class="btn sm" data-v="n" type="button">🧂 NaCl 溶解</button><button class="btn sm" data-v="o" type="button">🛢 疏水分子</button></div><button class="btn sm" id="w-play" type="button">▶ 重播溶解</button></div>
+    </div>
+    <div class="card info" id="info-water"><div class="tt">點一個原子或鍵</div><p class="empty">紅色＝氧（O），白色＝氫（H），黃色虛線狀細管＝氫鍵；紫色＝Na⁺，綠色＝Cl⁻。</p></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><div class="ic">🔗</div><h3>共價鍵 Covalent bond</h3><ul class="small"><li>原子<b>共用電子</b>，是<b>最強</b>的化學鍵</li><li><b>非極性</b>：平均共用（如 H–H、C–H）</li><li><b>極性</b>：不平均共用 → O、N、P 強烈吸引電子而帶部分負電（δ−）</li><li>水分子 O–H 是極性共價鍵，整個分子有極性</li></ul></div>
+    <div class="card tilt"><div class="ic">⚡</div><h3>離子鍵 Ionic bond</h3><ul class="small"><li>原子<b>轉移電子</b> → 一個帶正電、一個帶負電，互相吸引</li><li>較弱；溶於水時<b>解離</b>成離子（NaCl → Na⁺ + Cl⁻）</li><li>水分子的 δ− 端（O）朝向 Na⁺、δ+ 端（H）朝向 Cl⁻ → 形成<b>水合球</b>，所以可溶</li></ul></div>
+    <div class="card tilt"><div class="ic">🧲</div><h3>氫鍵 Hydrogen bond</h3><ul class="small"><li>與電負度高的原子相連的 H 帶部分正電，被另一個電負度高的原子（O、N）<b>微弱吸引</b></li><li>水分子之間的氫鍵 → 表面張力等性質</li><li>也維持蛋白質二級結構與 DNA 雙股配對</li></ul></div>
+  </div>
+  <div class="grid2 even mt">
+    <div class="card"><h3>親水 vs 疏水</h3><ul class="small"><li><b>親水 hydrophilic</b>：含 O、N、P 的極性共價鍵，可在周圍形成水合球（葡萄糖、胺基酸）</li><li><b>疏水 hydrophobic</b>：主要為非極性鍵（脂肪的碳氫鏈），無法形成水合球，被水「排擠」</li><li><b>兩性 amphipathic</b>：一部分極性、一部分非極性（磷脂質、膽酸）</li></ul></div>
+    <div class="card"><h3>有機分子與立體異構物</h3><ul class="small"><li>有機分子：以共價鍵連接的 <b>C 與 H</b>，可帶 N、O、P、S 等官能基</li><li><b>立體異構物</b>：原子種類與順序相同，空間排列不同 — cis/trans、鏡像（D/L 型）</li><li>人體酵素只能利用 <b>L-胺基酸</b>與 <b>D-單醣</b></li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="ph" data-nav="酸鹼 pH">
+  <h2><span class="num">02</span>酸、鹼與 pH</h2>
+  <p class="lead">拉動 pH，看 [H⁺] 與 [OH⁻] 怎麼變。pH 是 [H⁺] 的<b>負對數</b>：pH 每降 1，[H⁺] 變 <b>10 倍</b>。</p>
+  <div class="grid2">
+    <div class="card">
+      <div class="ctrl"><label for="phs">pH</label><input type="range" id="phs" min="0" max="14" step="0.05" value="7.4"><output id="phs-v">7.40</output></div>
+      <div class="phbar" id="phbar"><div class="cur" id="phcur"></div></div>
+      <div class="kv"><div><small>[H⁺]（mol/L）</small><b id="ph-h"></b></div><div><small>[OH⁻]（mol/L）</small><b id="ph-oh"></b></div><div><small>判斷</small><b id="ph-st" style="font-size:16px"></b></div></div>
+      <p class="small muted mt">中性溶液 [H⁺] = [OH⁻]，pH = 7；酸提高 [H⁺]（pH &lt; 7）；鹼降低 [H⁺]（pH &gt; 7）。</p>
+    </div>
+    <div class="card" style="padding:12px 30px 18px"><div class="small muted" style="text-align:center">燒杯示意（粒子數依 10 倍規則，過多時截斷）</div><canvas class="beaker" id="beaker"></canvas><div class="small" style="text-align:center;margin-top:6px"><span class="red">● H⁺</span>　<span class="blue">● OH⁻</span></div></div>
+  </div>
+  <div class="grid2 even mt">
+    <div class="card"><h3>碳酸氫根緩衝 Bicarbonate buffer</h3>
+      <div class="eq" id="bufeq">HCO₃⁻ + H⁺ <span class="arw" id="buf-ar">⇄</span> H₂CO₃</div>
+      <div class="btns"><button class="btn sm" id="buf-acid" type="button">加入乳酸（H⁺ 增加）</button><button class="btn sm" id="buf-vom" type="button">嚴重嘔吐（失去胃酸）</button><button class="btn sm" id="buf-rs" type="button">重設</button></div>
+      <p class="small" id="buf-t">緩衝系統抵抗 [H⁺] 的變化，使 pH 穩定。碳酸氫根是血液最主要的緩衝。</p>
+    </div>
+    <div class="card"><h3>血液 pH</h3><ul class="small"><li>動脈血 pH <b>7.40 ± 0.05</b>（7.35–7.45）</li><li><b>酸中毒 acidosis</b>：&lt; 7.35（例如 7.20）— 注意：酸中毒的血液<b>不一定是酸性</b>（不一定 &lt; 7）</li><li><b>鹼中毒 alkalosis</b>：&gt; 7.45</li><li>肺（排出 CO₂）與腎（調節 HCO₃⁻）共同維持 → 第 16、17 章</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="carb" data-nav="醣類">
+  <h2><span class="num">03</span>碳水化合物 Carbohydrates</h2>
+  <p class="lead">C : H : O 通常為 <b>1 : 2 : 1</b>。看 3D 葡萄糖（α-D-glucose 椅式），再播放兩個葡萄糖<b>脫水合成</b>為麥芽糖，或反向<b>水解</b>；最後是分支的肝醣。</p>
+  <div class="grid2">
+    <div class="stage" id="st-carb"><canvas aria-label="3D 葡萄糖與肝醣"></canvas>
+      <div class="hud">球棍模型 · 灰 C／紅 O／白 H</div><div class="hud2" id="c-cap">α-D-葡萄糖 C₆H₁₂O₆</div>
+      <div class="sbar"><div class="seg" id="cmode"><button class="btn sm" data-v="glc" type="button">葡萄糖</button><button class="btn sm" data-v="syn" type="button">脫水合成</button><button class="btn sm" data-v="hyd" type="button">水解</button><button class="btn sm" data-v="gly" type="button">肝醣</button></div></div>
+    </div>
+    <div class="card info" id="info-carb"><div class="tt">點選原子或分子</div><p class="empty">C1–C6 為碳的編號；脫水合成時 C1 的 –OH 與另一個葡萄糖 C4 的 –H 結合成水離開。</p></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>單醣 Monosaccharides</h3><ul class="small"><li><b>葡萄糖</b>、果糖、半乳糖（皆 C₆H₁₂O₆，結構異構物）</li><li>六碳單醣（hexose）；核糖、去氧核糖為五碳糖</li></ul></div>
+    <div class="card tilt"><h3>雙醣 Disaccharides</h3><ul class="small"><li><b>蔗糖</b> = 葡萄糖 + 果糖</li><li><b>乳糖</b> = 葡萄糖 + 半乳糖</li><li><b>麥芽糖</b> = 葡萄糖 + 葡萄糖</li></ul></div>
+    <div class="card tilt"><h3>多醣 Polysaccharides</h3><ul class="small"><li><b>肝醣 glycogen</b>：動物儲存（肝、骨骼肌），高度分支</li><li><b>澱粉</b>：植物儲存；<b>纖維素</b>：植物細胞壁，人無法消化</li></ul></div>
+  </div>
+  <div class="note"><b>關鍵反應</b>：<b>脫水合成（縮合）</b>形成共價鍵並釋出 H₂O；<b>水解</b>加入 H₂O 打斷鍵 → 消化就是食物分子的水解（第 18 章）。</div>
+</section>
+
+<section class="sec" id="lipid" data-nav="脂質">
+  <h2><span class="num">04</span>脂質 Lipids</h2>
+  <p class="lead">脂質<b>不溶於極性溶劑（水）</b>。比較三種脂肪酸鏈的形狀，再看磷脂質如何在水中排成<b>微胞</b>與<b>雙層膜</b>，以及類固醇的四環骨架。</p>
+  <div class="grid2">
+    <div class="stage" id="st-lipid"><canvas aria-label="3D 脂質"></canvas>
+      <div class="hud">點選分子部位</div><div class="hud2" id="l-cap">三酸甘油酯</div>
+      <div class="sbar"><div class="seg" id="lmode"><button class="btn sm" data-v="tg" type="button">三酸甘油酯</button><button class="btn sm" data-v="mi" type="button">微胞</button><button class="btn sm" data-v="bl" type="button">雙層膜</button><button class="btn sm" data-v="st" type="button">類固醇</button></div></div>
+    </div>
+    <div class="card info" id="info-lipid"><div class="tt">點選部位</div><p class="empty">三酸甘油酯 = 1 個甘油 + 3 個脂肪酸（以脫水合成連接）。這裡省略碳鏈上的氫原子。</p></div>
+  </div>
+  <div class="grid4 mt">
+    <div class="card tilt"><h3>三酸甘油酯</h3><p class="small">脂肪與油；體內主要能量儲存。<b>飽和</b>脂肪酸無雙鍵；<b>不飽和</b>有雙鍵。</p></div>
+    <div class="card tilt"><h3>酮體 Ketone bodies</h3><p class="small">脂肪酸的較小衍生物（如乙醯乙酸）；腦等器官可作能量來源。過多 → 酮酸中毒。</p></div>
+    <div class="card tilt"><h3>磷脂質</h3><p class="small">含磷酸；<b>卵磷脂 lecithin</b>＝磷酸接膽鹼。兩性分子 → 微胞、細胞膜、<b>表面活性劑</b>（防肺泡塌陷，第 16 章）。</p></div>
+    <div class="card tilt"><h3>類固醇與前列腺素</h3><p class="small"><b>類固醇</b>：特徵四環結構，膽固醇與腎上腺皮質、性腺激素。<b>前列腺素</b>：環狀脂肪酸，局部調節功能。</p></div>
+  </div>
+  <div class="note fix"><b>反式脂肪</b>：部分氫化植物油（人造奶油）產生。反式雙鍵兩側的 H 在對側 → 碳鏈<b>變直</b>，像飽和脂肪；會升高 LDL、降低 HDL、升高三酸甘油酯，促進動脈粥狀硬化。</div>
+</section>
+
+<section class="sec" id="prot" data-nav="蛋白質">
+  <h2><span class="num">05</span>蛋白質：從一級到四級結構</h2>
+  <p class="lead">按步驟看同一條多胜肽鏈「摺疊」：一級（胺基酸序列）→ 二級（α 螺旋、β 摺板，靠氫鍵）→ 三級（立體形狀）→ 四級（多條鏈，如血紅素）。</p>
+  <div class="grid2">
+    <div class="stage" id="st-prot"><canvas aria-label="3D 蛋白質結構"></canvas>
+      <div class="hud">每顆球 = 一個胺基酸</div><div class="hud2" id="p-cap"></div>
+    </div>
+    <div class="card"><div id="p-step"></div></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>胺基酸</h3><p class="small">每個胺基酸含 <b>胺基（–NH₂）</b>、<b>羧基（–COOH）</b> 與一個<b>官能基（R 基）</b>；R 基不同 → 20 多種胺基酸。</p><p class="small"><span style="color:#fbbf24">●</span> 非極性　<span style="color:#34d399">●</span> 極性　<span style="color:#60a5fa">●</span> 帶正電　<span style="color:#f87171">●</span> 帶負電</p></div>
+    <div class="card tilt"><h3>胜肽鍵 Peptide bond</h3><p class="small">一個胺基酸的羧基與下一個的胺基<b>脫水合成</b>形成共價的胜肽鍵。&lt;100 個為多胜肽，更長的稱蛋白質。</p></div>
+    <div class="card tilt"><h3>結合蛋白</h3><ul class="small"><li><b>醣蛋白</b>：接碳水化合物（部分激素、膜蛋白）</li><li><b>脂蛋白</b>：接脂質（膜、血漿）</li><li>接色素：血紅素、細胞色素</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="dna" data-nav="核酸">
+  <h2><span class="num">06</span>核酸：DNA 與 RNA</h2>
+  <p class="lead">核苷酸 = <b>五碳糖 + 磷酸 + 含氮鹼基</b>。點選鹼基看配對規則；切換 RNA 看差異。</p>
+  <div class="grid2">
+    <div class="stage" id="st-dna"><canvas aria-label="3D DNA 雙螺旋"></canvas>
+      <div class="hud">A–T 兩個氫鍵、G–C 三個氫鍵（白點）</div><div class="hud2" id="d-cap">DNA：雙股、去氧核糖、A T G C</div>
+      <div class="sbar"><div class="seg" id="dmode"><button class="btn sm" data-v="dna" type="button">DNA 雙螺旋</button><button class="btn sm" data-v="rna" type="button">RNA 單股</button></div></div>
+    </div>
+    <div class="card info" id="info-dna"><div class="tt">點選鹼基或骨架</div><p class="empty"><span style="color:#f87171">A 腺嘌呤</span>、<span style="color:#fbbf24">T 胸腺嘧啶</span>、<span style="color:#34d399">G 鳥嘌呤</span>、<span style="color:#60a5fa">C 胞嘧啶</span>、<span style="color:#c084fc">U 尿嘧啶</span></p></div>
+  </div>
+  <div class="tbwrap mt"><table class="tb">
+    <tr><th></th><th>DNA</th><th>RNA</th></tr>
+    <tr><td>糖</td><td>去氧核糖 deoxyribose</td><td>核糖 ribose</td></tr>
+    <tr><td>鹼基</td><td>A、G（嘌呤，雙環）＋ C、T（嘧啶，單環）</td><td>A、G、C、<b>U</b>（取代 T）</td></tr>
+    <tr><td>股數</td><td>雙股，氫鍵連結成雙螺旋</td><td>單股</td></tr>
+    <tr><td>配對</td><td>A=T（2 個氫鍵）、G≡C（3 個氫鍵）；嘌呤數 = 嘧啶數</td><td>與 DNA 模板配對時 A–U</td></tr>
+    <tr><td>功能</td><td>遺傳資訊</td><td>多種類型，參與基因表現（第 3 章）</td></tr>
+  </table></div>
+  <p class="small muted">嘌呤核苷酸的其他用途：能量攜帶者（ATP、GTP）、第二傳訊者（cAMP）、輔酶（NAD、FAD）。</p>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">07</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">08</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 2 章整理，僅供個人複習。分子為示意模型（鍵長、角度近似）。 · <a href="index.html">回總覽</a> · <a href="ch03.html">第 3 章 細胞與基因 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$;
+const showMode = (S, m) => S.each(o => { if (o.gs) o.hidden = !o.gs.includes(m); });
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+
+/* ================= 01 水 / NaCl / 疏水 ================= */
+(function () {
+  const S = K.stage('st-water', { radius: 58, yaw: 0.6, pitch: 0.25, autoRotate: 0.1 });
+  const A = 7; // 1 Å
+  function tetra(d0, ph) {
+    d0 = V.norm(d0); const [u, v] = K.basis(d0), out = [d0];
+    for (let k = 0; k < 3; k++) { const f = (ph || 0) + k * 2.0944; out.push(V.add(V.mul(d0, -1 / 3), V.add(V.mul(u, Math.cos(f) * 0.9428), V.mul(v, Math.sin(f) * 0.9428)))); }
+    return out;
+  }
+  function water(O, dirs, hi, x, big) {
+    const o = S.sphere(O, big ? 3.4 : 2.6, '#ef4444', Object.assign({ id: 'O' }, x));
+    const hs = hi.map(i => { const p = V.add(O, V.mul(dirs[i], 0.96 * A)); S.tube(O, p, 1, '#e2e8f0', Object.assign({ id: 'cov' }, x)); return S.sphere(p, big ? 2.1 : 1.7, '#f1f5f9', Object.assign({ id: 'H' }, x)); });
+    return { o, hs };
+  }
+  // 水分子網路（四面體）
+  const W = { gs: 'w' };
+  function grow(O, dirs, hi, back, depth) {
+    water(O, dirs, hi, W, true);
+    if (!depth) return;
+    dirs.forEach((d, i) => {
+      if (back && V.dot(d, back) > 0.9) return;
+      const N = V.add(O, V.mul(d, 2.8 * A)), isH = hi.includes(i);
+      const nd = tetra(V.mul(d, -1), 0.6 + depth);
+      const nh = isH ? [1, 2] : [0, 1];
+      const hp = isH ? V.add(O, V.mul(d, 0.96 * A)) : V.add(N, V.mul(nd[0], 0.96 * A));
+      S.tube(hp, isH ? N : O, 0.5, '#fde047', Object.assign({ flat: 1, al: 0.6, id: 'hb' }, W));
+      grow(N, nd, nh, nd[0], depth - 1);
+    });
+  }
+  grow([0, 0, 0], tetra([0, 1, 0], 0.3), [0, 1], null, 2);
+  const d0 = tetra([0, 1, 0], 0.3);
+  K.lab(S, [0, 0, 0], 'O（δ−）', 'O', '#fca5a5', -34, 26, W);
+  K.lab(S, V.mul(d0[0], 0.96 * A), 'H（δ+）', 'H', '#e2e8f0', 30, -18, W);
+  K.lab(S, V.mul(d0[2], 1.9 * A), '氫鍵', 'hb', '#fde047', 36, 20, W);
+
+  // NaCl 溶解
+  const NA = { gs: 'n' }, ions = [];
+  for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) for (let k = 0; k < 2; k++) {
+    const na = (i + j + k) % 2 === 0;
+    const c0 = [(i - 0.5) * 2.8 * A, (j - 0.5) * 2.8 * A, (k - 0.5) * 2.8 * A];
+    const c1 = V.mul(V.norm(c0), 4.6 * A * 1.7);
+    const ion = S.sphere(c0.slice(), na ? 4.0 : 5.6, na ? '#a78bfa' : '#4ade80', Object.assign({ id: na ? 'na' : 'cl', c0, c1 }, NA));
+    // 6 個水分子（八面體方向）
+    ion.ws = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]].map((d, q) => {
+      const r = (na ? 2.4 : 3.2) * A * 1.15;
+      let hd;
+      if (na) { const [u] = K.basis(d); hd = [V.norm(V.add(d, V.mul(u, 1.2))), V.norm(V.sub(d, V.mul(u, 1.2)))]; }
+      else { const [u] = K.basis(d); hd = [V.mul(d, -1), V.norm(V.add(V.mul(d, 0.35), V.mul(u, 0.94)))]; }
+      const o = S.sphere([0, 0, 0], 2.4, '#ef4444', Object.assign({ id: 'hyd', al: 0 }, NA));
+      const h1 = S.sphere([0, 0, 0], 1.6, '#f1f5f9', Object.assign({ id: 'hyd', al: 0 }, NA));
+      const h2 = S.sphere([0, 0, 0], 1.6, '#f1f5f9', Object.assign({ id: 'hyd', al: 0 }, NA));
+      const t1 = S.tube(o.p, h1.p, 0.8, '#e2e8f0', Object.assign({ id: 'hyd', al: 0 }, NA)), t2 = S.tube(o.p, h2.p, 0.8, '#e2e8f0', Object.assign({ id: 'hyd', al: 0 }, NA));
+      return { d, r, hd, parts: [o, h1, h2, t1, t2], o, h1, h2 };
+    });
+    ions.push(ion);
+  }
+  const lNa = K.lab(S, ions[0].p, 'Na⁺', 'na', '#c4b5fd', -26, -22, NA), lCl = K.lab(S, ions[1].p, 'Cl⁻', 'cl', '#86efac', 26, -22, NA);
+  const lHy = K.lab(S, ions[0].ws[2].o.p, '水合球', 'hyd', '#fca5a5', 30, -26, Object.assign({ hidden: true }, NA));
+  let diss = 0, dissT = 1;
+  S.tick(dt => {
+    diss += Math.sign(dissT - diss) * Math.min(Math.abs(dissT - diss), dt * 0.35);
+    const u = K.sm(0, 1, diss), wv = K.sm(0.45, 1, diss);
+    ions.forEach(ion => {
+      mv(ion.p, V.lerp(ion.c0, ion.c1, u));
+      ion.ws.forEach(w => {
+        const O = V.add(ion.p, V.mul(w.d, w.r));
+        mv(w.o.p, O); mv(w.h1.p, V.add(O, V.mul(w.hd[0], 0.96 * A))); mv(w.h2.p, V.add(O, V.mul(w.hd[1], 0.96 * A)));
+        w.parts.forEach(p => { p.al = wv; });
+      });
+    });
+  });
+  $('w-play').onclick = () => { diss = 0; dissT = 1; };
+
+  // 疏水：碳氫鏈聚集，周圍水分子
+  const OI = { gs: 'o' };
+  for (let c = 0; c < 5; c++) {
+    const start = [(c % 3 - 1) * 9, (c - 2) * 5, ((c * 7) % 3 - 1) * 9], dir = V.norm([1, 0.2 * (c - 2), 0.3]);
+    let prev = null;
+    for (let i = 0; i < 6; i++) {
+      const p = V.add(V.add(start, V.mul(dir, (i - 2.5) * 1.27 * A * 0.75)), [0, (i % 2 ? 0.42 : -0.42) * A, 0]);
+      const at = S.sphere(p, 3, '#9ca3af', Object.assign({ id: 'hc' }, OI));
+      if (prev) S.tube(prev.p, at.p, 1, '#cbd5e1', Object.assign({ id: 'hc' }, OI));
+      prev = at;
+    }
+  }
+  Mini3D.fib(34).forEach((u, i) => {
+    const O = V.mul(u, 46); const [a, b] = K.basis(u);
+    water(O, [V.norm(V.add(a, V.mul(u, 0.2))), V.norm(V.add(V.mul(a, -0.3), V.mul(b, 0.95)))], [0, 1], Object.assign({}, OI, { id: 'cage' }), false);
+  });
+  S.each(o => { if (o.gs === 'o' && o.id !== 'hc') o.id = 'cage'; });
+  K.lab(S, [0, 14, 0], '非極性碳氫鏈', 'hc', '#cbd5e1', 40, -30, OI);
+  K.lab(S, [0, 46, 0], '水分子彼此氫鍵（排擠油）', 'cage', '#93c5fd', 0, -14, OI);
+
+  const INFO = {
+    O: ['氧原子 O（δ−）', ['電負度高，強烈吸引共用電子', '水分子中帶<b>部分負電</b>', '可接受其他分子的 H 形成氫鍵']],
+    H: ['氫原子 H（δ+）', ['與 O 共用的電子被拉向 O → 帶<b>部分正電</b>', '被鄰近水分子的 O 吸引 → 氫鍵']],
+    cov: ['極性共價鍵 O–H', ['共用電子但<b>不平均</b>', '共價鍵是最強的化學鍵', '水分子為彎曲形（約 104.5°），所以整個分子有極性'], '圖中以四面體近似水分子周圍的四個方向（兩個 H、兩對孤對電子）。'],
+    hb: ['氫鍵 Hydrogen bond', ['帶 δ+ 的 H 與另一分子的 δ− 原子（O、N）之間的<b>微弱吸引</b>', '水分子之間大量氫鍵 → 表面張力、高比熱', '單一氫鍵很弱，但數量多時影響很大']],
+    na: ['鈉離子 Na⁺', ['Na 把一個電子轉移給 Cl → 帶正電', '水分子以 <b>O（δ−）端</b>朝向 Na⁺']],
+    cl: ['氯離子 Cl⁻', ['獲得一個電子 → 帶負電', '水分子以 <b>H（δ+）端</b>朝向 Cl⁻']],
+    hyd: ['水合球 Hydration sphere', ['離子周圍一層層被吸引的水分子', '形成水合球的物質就能<b>溶於水</b>', '葡萄糖、胺基酸也因含 O、N 而能形成水合球（親水）']],
+    hc: ['非極性碳氫鏈（疏水）', ['C–H 為非極性鍵，幾乎不帶電', '無法形成水合球 → <b>不溶於水</b>', '例如脂肪的碳氫鏈']],
+    cage: ['周圍的水分子', ['水分子彼此優先形成氫鍵', '把非極性分子「擠」在一起 → 看起來像被水排斥']]
+  };
+  K.info(S, 'info-water', INFO);
+  const CAP = { w: '水分子：極性共價鍵 + 分子間氫鍵', n: 'NaCl 解離：Na⁺、Cl⁻ 被水合球包圍', o: '疏水：碳氫鏈聚在一起，水分子彼此氫鍵' };
+  K.seg('#wmode', m => { showMode(S, m); lHy.hidden = m !== 'n'; $('w-cap').textContent = CAP[m]; $('w-play').style.display = m === 'n' ? '' : 'none'; if (m === 'n') { diss = 0; dissT = 1; } }, 'w');
+})();
+
+/* ================= 02 pH ================= */
+(function () {
+  const bar = $('phbar'), cur = $('phcur');
+  const MK = [[2, '胃液 ≈ 2（胃蛋白酶最適）'], [7, '純水 7'], [9, '胰蛋白酶最適 9']];
+  MK.forEach(([v, t], i) => { const m = UI.h('div', 'mk', t); m.style.left = (v / 14) * 100 + '%'; if (i === 1) m.style.top = '-24px'; bar.appendChild(m); });
+  const rg = UI.h('div', 'rng'); rg.style.left = (7.35 / 14) * 100 + '%'; rg.style.width = (0.1 / 14) * 100 + '%'; bar.appendChild(rg);
+  const lb = UI.h('div', 'lb', '↑ 動脈血 7.35–7.45'); lb.style.left = (7.2 / 14) * 100 + '%'; bar.appendChild(lb);
+  [0, 14].forEach(v => { const l = UI.h('div', 'lb', v === 0 ? '0 強酸' : '強鹼 14'); l.style[v === 0 ? 'left' : 'right'] = '0'; l.style.bottom = '-22px'; if (v) l.style.left = 'auto'; bar.appendChild(l); });
+  const sci = e => { const n = Math.floor(e), m = Math.pow(10, e - n); return m.toFixed(2) + '×10' + String(n).replace('-', '⁻').replace(/\d/g, d => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]); };
+  const cv = $('beaker'); let pH = 7.4; const P = [];
+  for (let i = 0; i < 360; i++) P.push({ x: Math.random(), y: Math.random(), vx: (Math.random() - 0.5) * 0.15, vy: (Math.random() - 0.5) * 0.15 });
+  K.range('phs', v => {
+    pH = v; cur.style.left = (v / 14) * 100 + '%';
+    $('ph-h').textContent = sci(-v); $('ph-oh').textContent = sci(v - 14);
+    let s, c;
+    if (v >= 7.35 && v <= 7.45) { s = '正常動脈血'; c = '#34d399'; }
+    else if (v > 6.8 && v < 7.35) { s = v > 7 ? '酸中毒（但仍偏鹼！）' : '酸中毒'; c = '#fb7185'; }
+    else if (v > 7.45 && v < 7.9) { s = '鹼中毒'; c = '#60a5fa'; }
+    else if (Math.abs(v - 7) < 0.03) { s = '中性'; c = '#e2e8f0'; }
+    else { s = v < 7 ? '酸性' : '鹼性'; c = v < 7 ? '#f87171' : '#818cf8'; }
+    const st = $('ph-st'); st.textContent = s; st.style.color = c;
+  }, v => v.toFixed(2));
+  K.loop(dt => {
+    const [c, w, h] = K.fit(cv); c.clearRect(0, 0, w, h);
+    const g = c.createLinearGradient(0, 0, 0, h); g.addColorStop(0, 'rgba(56,189,248,.05)'); g.addColorStop(1, 'rgba(56,189,248,.16)'); c.fillStyle = g; c.fillRect(0, 12, w, h);
+    const nH = Math.min(180, Math.round(10 * Math.pow(10, 7 - pH))), nO = Math.min(180, Math.round(10 * Math.pow(10, pH - 7)));
+    P.forEach((p, i) => {
+      p.x += p.vx * dt; p.y += p.vy * dt; if (p.x < 0 || p.x > 1) p.vx *= -1; if (p.y < 0.06 || p.y > 1) p.vy *= -1;
+      const isH = i < 180 ? i < nH : false, isO = i >= 180 ? i - 180 < nO : false;
+      if (!isH && !isO) return;
+      c.fillStyle = isH ? '#f87171' : '#60a5fa'; c.beginPath(); c.arc(p.x * w, p.y * (h - 8) + 4, isH ? 3 : 3.4, 0, 6.2832); c.fill();
+    });
+    c.fillStyle = '#cbd5e1'; c.font = '12px ' + Mini3D.FONT; c.fillText('H⁺ ' + (nH >= 180 ? '180+' : nH) + '　OH⁻ ' + (nO >= 180 ? '180+' : nO), 10, 26);
+  }, cv);
+  const ar = $('buf-ar'), t = $('buf-t'), eq = $('bufeq');
+  $('buf-acid').onclick = () => { ar.textContent = '→'; eq.innerHTML = 'HCO₃⁻ + <span class="hit">H⁺</span> <span class="arw">→</span> H₂CO₃'; t.innerHTML = '乳酸等酸釋出 H⁺ → 平衡<b>向右</b>：HCO₃⁻ 與 H⁺ 結合成碳酸，把 H⁺ 移出溶液 → [H⁺] 不會大幅上升，pH 不會大幅下降。'; };
+  $('buf-vom').onclick = () => { eq.innerHTML = 'HCO₃⁻ + <span class="hit">H⁺</span> <span class="arw">←</span> H₂CO₃'; t.innerHTML = '大量嘔吐失去胃酸 → 血中游離 H⁺ 減少 → 平衡<b>向左</b>：碳酸解離釋出 H⁺，防止 pH 上升。HCO₃⁻ 與 H₂CO₃ 為<b>緩衝對</b>。'; };
+  $('buf-rs').onclick = () => { eq.innerHTML = 'HCO₃⁻ + H⁺ <span class="arw">⇄</span> H₂CO₃'; t.innerHTML = '緩衝系統抵抗 [H⁺] 的變化，使 pH 穩定。碳酸氫根是血液最主要的緩衝。'; };
+})();
+
+/* ================= 03 醣類 ================= */
+(function () {
+  const S = K.stage('st-carb', { radius: 62, yaw: 0.25, pitch: 0.42, autoRotate: 0.08 });
+  const SC = 6;
+  function glucose(beta) {
+    const R = 1.45, z0 = 0.25, ang = { C1: 0, C2: -60, C3: -120, C4: 180, C5: 120, O5: 60 }, pk = { C1: 1, C2: -1, C3: 1, C4: -1, C5: 1, O5: -1 };
+    const at = {}, bd = [];
+    const put = (n, e, p) => { at[n] = { e, p }; };
+    for (const k in ang) { const a = (ang[k] * Math.PI) / 180; put(k, k[0], [Math.cos(a) * R, Math.sin(a) * R, pk[k] * z0]); }
+    [['C1', 'C2'], ['C2', 'C3'], ['C3', 'C4'], ['C4', 'C5'], ['C5', 'O5'], ['O5', 'C1']].forEach(b => bd.push(b));
+    const rad = k => { const a = (ang[k] * Math.PI) / 180; return [Math.cos(a), Math.sin(a), 0]; };
+    const sub = { C1: beta ? 1 : -1, C2: -1, C3: 1, C4: -1 };
+    for (const k in sub) {
+      const s = sub[k], r = rad(k), C = at[k].p, n = k[1];
+      const O = V.add(C, V.mul(V.norm(V.add(V.mul(r, 0.55), [0, 0, s * 0.85])), 1.43));
+      put('O' + n, 'O', O); put('HO' + n, 'H', V.add(O, V.mul(V.norm(V.add(r, [0, 0, s * 0.3])), 0.96)));
+      put('H' + n, 'H', V.add(C, V.mul(V.norm(V.add(V.mul(r, 0.55), [0, 0, -s * 0.85])), 1.09)));
+      bd.push([k, 'O' + n], ['O' + n, 'HO' + n], [k, 'H' + n]);
+    }
+    const r5 = rad('C5'), C5 = at.C5.p;
+    const C6 = V.add(C5, V.mul(V.norm(V.add(V.mul(r5, 0.55), [0, 0, 0.85])), 1.52));
+    put('C6', 'C', C6); put('O6', 'O', V.add(C6, V.mul(V.norm(V.add(V.mul(r5, 0.8), [0, 0, 0.6])), 1.43))); put('HO6', 'H', V.add(at.O6.p, [0, 0, 0.96]));
+    put('H5', 'H', V.add(C5, V.mul(V.norm(V.add(V.mul(r5, 0.55), [0, 0, -0.85])), 1.09)));
+    bd.push(['C5', 'C6'], ['C6', 'O6'], ['O6', 'HO6'], ['C5', 'H5']);
+    for (const k in at) at[k].p = V.mul(V.rotX(at[k].p, -Math.PI / 2), SC);
+    return { at, bd };
+  }
+  const ID = e => (e === 'C' ? 'C' : e === 'O' ? 'Oc' : 'Hc');
+  function build(g, off, gs, tag) {
+    const o = {};
+    for (const k in g.at) { const a = g.at[k]; const base = V.add(a.p, off); o[k] = S.sphere(base.slice(), (K.RAD[a.e]) * 0.95, K.CPK[a.e], { id: k === 'O5' ? 'O5' : ID(a.e), gs, base, nm: k }); }
+    o._b = g.bd.map(([a, b]) => S.tube(o[a].p, o[b].p, 0.85, '#cbd5e1', { gs, id: tag, zb: 1, ab: a + '-' + b }));
+    return o;
+  }
+  const gA = glucose(false), gB = glucose(false);
+  // B 的 O4 要放在 A 的 O1 位置
+  const offB = V.sub(gA.at.O1.p, gB.at.O4.p);
+  const shift = V.mul(V.add(offB, [0, 0, 0]), -0.5);
+  const MA = build(gA, shift, 'glc syn hyd', 'bond'), MB = build(gB, V.add(offB, shift), 'syn hyd', 'bond');
+  const glyB = S.tube(MA.C1.p, MB.O4.p, 1.2, '#fbbf24', { gs: 'syn hyd', id: 'glyco', zb: 1, glow: 0.5 });
+  const W0 = V.add(MA.O1.base, [6, -26, 10]);
+  const WT = { O: W0, H1: V.add(W0, [-4.6, 3.3, 0]), H2: V.add(W0, [4.6, 3.3, 0]) };
+  const wb = S.tube(MA.O1.p, MB.HO4.p, 0.85, '#cbd5e1', { gs: 'syn hyd', id: 'water' });
+  const findB = (M, ab) => M._b.find(b => b.ab === ab);
+  const bC1O1 = findB(MA, 'C1-O1'), bO4H = findB(MB, 'O4-HO4');
+  const nums = ['C1', 'C2', 'C3', 'C4', 'C5', 'C6'].map(k => K.lab(S, MA[k].p, k, 'C', '#cbd5e1', 0, -16, { gs: 'glc', size: 11 }));
+  const lGly = K.lab(S, MB.O4.p, 'α(1→4) 糖苷鍵', 'glyco', '#fbbf24', 10, 34, { gs: 'syn hyd' });
+  const lW = K.lab(S, MA.O1.p, 'H₂O', 'water', '#93c5fd', 26, 10, { gs: 'syn hyd' });
+  // 肝醣
+  const rnd = Mini3D.rng(7); let cnt = 0;
+  function chain(p, dir, n, depth) {
+    let prev = null;
+    for (let i = 0; i < n && cnt < 150; i++) {
+      dir = V.norm(V.add(dir, [(rnd() - 0.5) * 0.5, (rnd() - 0.5) * 0.5, (rnd() - 0.5) * 0.5]));
+      p = V.add(p, V.mul(dir, 4.6)); cnt++;
+      const br = i > 1 && i % 5 === 2 && depth > 0;
+      const s = S.sphere(p, 2.4, br ? '#fbbf24' : '#38bdf8', { gs: 'gly', id: br ? 'g16' : 'gly' });
+      if (prev) S.tube(prev, p, 0.7, '#7dd3fc', { gs: 'gly', id: 'gly', flat: 1, al: 0.7 });
+      prev = p;
+      if (br) { const nd = V.norm(V.cross(dir, [rnd() - 0.5, rnd() - 0.5, rnd() - 0.5])); S.tube(p, V.add(p, V.mul(nd, 4.6)), 0.7, '#fbbf24', { gs: 'gly', id: 'g16', flat: 1 }); chain(p, nd, 7 + ((rnd() * 4) | 0), depth - 1); }
+    }
+  }
+  chain([-40, -10, 0], [1, 0.3, 0], 16, 3);
+  { const seen = new Set(), G = S.where(o => o.gs === 'gly'), cen = [0, 0, 0]; let n = 0;
+    G.forEach(o => { if (o.t === 's') { cen[0] += o.p[0]; cen[1] += o.p[1]; cen[2] += o.p[2]; n++; } });
+    const d = V.mul(cen, -1 / n), sh = a => { if (seen.has(a)) return; seen.add(a); a[0] += d[0]; a[1] += d[1]; a[2] += d[2]; };
+    G.forEach(o => { if (o.t === 's') sh(o.p); else if (o.t === 't') { sh(o.a); sh(o.b); } }); }
+  K.lab(S, S.where(o => o.gs === 'gly' && o.t === 's')[0].p, '主鏈 α(1→4)', 'gly', '#7dd3fc', -20, 24, { gs: 'gly' });
+  const fb = S.where(o => o.id === 'g16' && o.t === 's')[0]; if (fb) K.lab(S, fb.p, '分支點 α(1→6)', 'g16', '#fbbf24', 40, -24, { gs: 'gly' });
+  let mode = 'glc', tau = 0, tauT = 0;
+  S.tick(dt => {
+    tau += Math.sign(tauT - tau) * Math.min(Math.abs(tauT - tau), dt * 0.22);
+    if (mode === 'glc' || mode === 'gly') return;
+    const a = K.sm(0, 0.38, tau), u = K.sm(0.32, 0.85, tau);
+    const off = V.mul([18, 0, 0], 1 - a);
+    for (const k in MB) if (k !== '_b' && k !== 'HO4') mv(MB[k].p, V.add(MB[k].base, off));
+    mv(MA.O1.p, V.lerp(MA.O1.base, WT.O, u)); mv(MA.HO1.p, V.lerp(MA.HO1.base, WT.H1, u)); mv(MB.HO4.p, V.lerp(V.add(MB.HO4.base, off), WT.H2, u));
+    bC1O1.hidden = u > 0.08; bO4H.hidden = u > 0.08; wb.hidden = u < 0.65; glyB.hidden = u < 0.3; lGly.hidden = u < 0.3; lW.hidden = u < 0.65;
+    glyB.glow = 0.3 + 0.3 * Math.sin(performance.now() / 300);
+    $('c-cap').textContent = mode === 'syn' ? (u < 0.3 ? '兩個葡萄糖靠近…' : u < 0.95 ? '脫去一分子水 → 形成糖苷鍵' : '麥芽糖 + H₂O') : (u > 0.7 ? '麥芽糖 + H₂O：加水…' : u > 0.05 ? '水分子打斷糖苷鍵' : '兩個葡萄糖');
+  });
+  function reset0() { for (const k in MA) if (k !== '_b') mv(MA[k].p, MA[k].base); }
+  const CAP = { glc: 'α-D-葡萄糖 C₆H₁₂O₆（C1 的 –OH 朝下 = α 型）', gly: '肝醣：葡萄糖以 α(1→4) 相連，約每 8–12 個在 α(1→6) 分支（示意）' };
+  K.seg('#cmode', m => {
+    mode = m; showMode(S, m); reset0();
+    if (m === 'syn' || m === 'hyd') { S.yaw = 0.05; S.pitch = 0.85; S.dist = S.home.dist * 0.78; } else { S.resetView(); }
+    if (m === 'syn') { tau = 0; tauT = 1; } else if (m === 'hyd') { tau = 1; tauT = 0; }
+    if (m === 'glc' || m === 'gly') { $('c-cap').textContent = CAP[m]; bC1O1.hidden = false; }
+  }, 'glc');
+  const INFO = {
+    C: ['碳原子 C', ['葡萄糖有 6 個碳（C1–C6）', 'C1–C5 與一個 O 組成六元環；C6 在環外（–CH₂OH）']],
+    O5: ['環上的氧 O5', ['C1 與 C5 之間的氧，使葡萄糖成為環狀']],
+    Oc: ['氧原子（羥基 –OH）', ['極性官能基 → 葡萄糖<b>可溶於水</b>（形成水合球）']],
+    Hc: ['氫原子 H', ['C:H:O = 1:2:1 → C₆H₁₂O₆']],
+    bond: ['共價鍵', ['原子間共用電子']],
+    glyco: ['糖苷鍵 Glycosidic bond', ['C1 與另一葡萄糖 C4 經 O 相連 → <b>α(1→4)</b>', '由<b>脫水合成</b>形成，<b>水解</b>打斷', '兩個葡萄糖 → 麥芽糖']],
+    water: ['水分子 H₂O', ['脫水合成：C1 的 –OH + 另一個 C4 的 –H → H₂O 離開', '水解：加入 H₂O 打斷鍵（消化）']],
+    gly: ['肝醣 Glycogen', ['動物的儲存多醣，主要在<b>肝臟與骨骼肌</b>', '由大量葡萄糖組成，高度分支', '分解（肝醣分解）可快速提供葡萄糖（第 5 章）']],
+    g16: ['分支點 α(1→6)', ['在分支處，葡萄糖的 C6 與另一條鏈相連', '分支多 → 許多末端可同時被酵素分解']]
+  };
+  K.info(S, 'info-carb', INFO);
+})();
+
+/* ================= 04 脂質 ================= */
+(function () {
+  const S = K.stage('st-lipid', { radius: 70, yaw: 0.3, pitch: 0.2, autoRotate: 0.08 });
+  const A = 6, TG = { gs: 'tg' };
+  const atom = (p, e, id, x, r) => S.sphere(p, r || K.RAD[e], K.CPK[e], Object.assign({ id }, TG, x));
+  const bond = (a, b, id, c, r) => S.tube(a.p, b.p, r || 0.9, c || '#cbd5e1', Object.assign({ id, zb: 1 }, TG));
+  const dbl = (a, b, id, c) => { const d = V.norm(V.sub(b.p, a.p)), off = V.mul(V.norm(V.cross(d, [0, 0, 1])), 0.9); S.tube(V.add(a.p, off), V.add(b.p, off), 0.65, c || '#fde047', Object.assign({ id, zb: 1 }, TG)); S.tube(V.sub(a.p, off), V.sub(b.p, off), 0.65, c || '#fde047', Object.assign({ id, zb: 1 }, TG)); };
+  const X0 = -62;
+  const G = [0, 1, 2].map(i => atom([X0, (1 - i) * 2.6 * A, 0], 'C', 'gly'));
+  bond(G[0], G[1], 'gly'); bond(G[1], G[2], 'gly');
+  const KIND = ['cis', 'sat', 'trans'];
+  G.forEach((g, i) => {
+    const kind = KIND[i];
+    const y = g.p[1];
+    const O = atom([X0 + 1.4 * A, y, 0], 'O', 'ester'); bond(g, O, 'ester');
+    const Cc = atom([X0 + 2.6 * A, y + 0.4 * A, 0], 'C', 'ester'); bond(O, Cc, 'ester');
+    const Od = atom([X0 + 2.8 * A, y + 1.6 * A, 0], 'O', 'ester'); dbl(Cc, Od, 'ester', '#cbd5e1');
+    let p = Cc.p, dir = [1, 0, 0], prev = Cc, sgn = -1, labAt = null;
+    for (let k = 0; k < 15; k++) {
+      if (kind === 'cis' && k === 8) dir = V.norm(V.rotZ(dir, 0.7));
+      const perp = V.norm(V.cross(dir, [0, 0, 1]));
+      const base = V.add(p, V.mul(dir, 1.27 * A));
+      const q = V.add(base, V.mul(perp, sgn * 0.42 * A * (k ? 1 : 0.5)));
+      const c = atom(q, 'C', kind);
+      if ((kind === 'cis' || kind === 'trans') && k === 8) dbl(prev, c, 'dbl'); else bond(prev, c, kind);
+      if (k === 11) labAt = c;
+      prev = c; p = base; sgn = -sgn;
+    }
+    K.lab(S, labAt.p, kind === 'sat' ? '飽和脂肪酸' : kind === 'cis' ? '順式不飽和（彎曲）' : '反式不飽和（直鏈）', kind, kind === 'sat' ? '#e2e8f0' : kind === 'cis' ? '#86efac' : '#fca5a5', 0, kind === 'trans' ? 24 : -22, TG);
+  });
+  K.lab(S, G[0].p, '甘油', 'gly', '#e2e8f0', -30, -18, TG);
+  K.lab(S, [X0 + 2.6 * A, 2.6 * A + 1.6 * A, 0], '酯鍵', 'ester', '#fca5a5', 0, -20, TG);
+  // 磷脂質：微胞與雙層
+  function lipid(head, dirIn, gs, len) {
+    const [u] = K.basis(dirIn), w = 1.6;
+    const P = S.sphere(head, 3.6, '#f59e0b', { gs, id: 'head' });
+    S.sphere(V.add(head, V.mul(dirIn, -3.2)), 2.4, '#60a5fa', { gs, id: 'head' });
+    [-1, 1].forEach(s => {
+      const a = V.add(head, V.add(V.mul(dirIn, 3), V.mul(u, s * w)));
+      const b = V.add(a, V.add(V.mul(dirIn, len * 0.5), V.mul(u, s * 0.6)));
+      const c = V.add(b, V.add(V.mul(dirIn, len * 0.5), V.mul(u, s * (s > 0 ? 1.8 : 0.3))));
+      S.tube(a, b, 1.1, '#fde047', { gs, id: 'tail' }); S.tube(b, c, 1.1, '#fde047', { gs, id: 'tail' });
+    });
+    return P;
+  }
+  Mini3D.fib(70).forEach(u => lipid(V.mul(u, 30), V.mul(u, -1), 'mi', 20));
+  K.lab(S, [0, 31, 0], '親水頭部（朝外，接觸水）', 'head', '#fbbf24', 0, -26, { gs: 'mi' });
+  K.lab(S, [0, 0, 0], '疏水尾部（朝內）', 'tail', '#fde047', 60, 30, { gs: 'mi' });
+  for (let i = 0; i < 9; i++) for (let j = 0; j < 6; j++) {
+    const x = (i - 4) * 8.4, z = (j - 2.5) * 8.4;
+    lipid([x, 22, z], [0, -1, 0], 'bl', 17); lipid([x + 2, -22, z + 2], [0, 1, 0], 'bl', 17);
+  }
+  K.lab(S, [-34, 22, -21], '外層頭部', 'head', '#fbbf24', -20, -22, { gs: 'bl' }); K.lab(S, [0, 0, 0], '疏水核心', 'tail', '#fde047', 60, 0, { gs: 'bl' });
+  K.lab(S, [-34, -22, -21], '內層頭部', 'head', '#fbbf24', -20, 24, { gs: 'bl' });
+  // 類固醇四環
+  const s = 1.4 * A, cA = [-2.5 * s, -0.6 * s, 0];
+  const hexC = c => [0, 1, 2, 3, 4, 5].map(k => V.add(c, [Math.cos(Math.PI / 6 + (k * Math.PI) / 3) * s, Math.sin(Math.PI / 6 + (k * Math.PI) / 3) * s, 0]));
+  const d = Math.sqrt(3) * s;
+  const cB = V.add(cA, [d, 0, 0]), cC = V.add(cB, [d * 0.5, d * 0.866, 0]);
+  const ringsP = [hexC(cA), hexC(cB), hexC(cC)];
+  const e1 = ringsP[2][0], e0 = ringsP[2][5];
+  const mid = V.lerp(e0, e1, 0.5), cD = V.add(mid, [0.6882 * s, 0, 0]), Rp = 0.8507 * s;
+  const pent = [144, 72, 0, -72, -144].map(a => V.add(cD, [Math.cos(a * Math.PI / 180) * Rp, Math.sin(a * Math.PI / 180) * Rp, 0]));
+  ringsP.push(pent);
+  const STC = ['#38bdf8', '#a78bfa', '#f472b6', '#34d399'];
+  ringsP.forEach((R, i) => {
+    const id = 'r' + 'ABCD'[i];
+    S.face(R, STC[i], { gs: 'st', id, al: 0.35 });
+    R.forEach((p, k) => { S.sphere(p, 2.6, '#9ca3af', { gs: 'st', id }); S.tube(p, R[(k + 1) % R.length], 1, STC[i], { gs: 'st', id }); });
+    const c = R.reduce((a, b) => V.add(a, b), [0, 0, 0]).map(v => v / R.length);
+    K.lab(S, c, 'ABCD'[i], id, STC[i], 0, 0, { gs: 'st', size: 14 });
+  });
+  const c3 = ringsP[0][3], oh = V.add(c3, [-1.3 * A, -0.4 * A, 0]);
+  S.sphere(oh, 3.1, '#ef4444', { gs: 'st', id: 'oh' }); S.tube(c3, oh, 1, '#cbd5e1', { gs: 'st', id: 'oh' }); S.sphere(V.add(oh, [-0.9 * A, 0.3 * A, 0]), 2, '#f1f5f9', { gs: 'st', id: 'oh' });
+  K.lab(S, oh, '–OH（膽固醇）', 'oh', '#fca5a5', -20, 24, { gs: 'st' });
+  const top = pent[1]; let pp = top;
+  for (let k = 0; k < 7; k++) { const q = V.add(pp, [0.9 * A * (k % 2 ? 0.6 : 1), (k % 2 ? 1 : 0.6) * A * (k < 2 ? 1 : 0.4), 0]); S.sphere(q, 2.6, '#9ca3af', { gs: 'st', id: 'side' }); S.tube(pp, q, 1, '#cbd5e1', { gs: 'st', id: 'side' }); pp = q; }
+  K.lab(S, pp, '側鏈（膽固醇 C17）', 'side', '#cbd5e1', 20, -16, { gs: 'st' });
+  [ringsP[0][1], ringsP[2][1]].forEach(p => { const q = V.add(p, [0, 0, 1.5 * A]); S.sphere(q, 2.6, '#9ca3af', { gs: 'st', id: 'me' }); S.tube(p, q, 1, '#cbd5e1', { gs: 'st', id: 'me' }); });
+  const INFO = {
+    gly: ['甘油 Glycerol', ['三碳的醇', '三個 –OH 各與一個脂肪酸以<b>脫水合成</b>連接']],
+    ester: ['酯鍵（甘油–脂肪酸）', ['脂肪酸的羧基 –COOH 與甘油的 –OH 脫水形成', '脂肪分解（lipolysis）時被水解 → 甘油 + 脂肪酸']],
+    sat: ['飽和脂肪酸', ['碳之間<b>只有單鍵</b>，碳都「飽和」接滿氫', '鏈是直的 → 可緊密堆疊，室溫下多為固體', '主要來源：肉類、乳製品（牛脂 52%、奶油 66% 飽和）']],
+    cis: ['順式不飽和脂肪酸', ['有雙鍵，雙鍵兩側的 H 在<b>同側（cis）</b>', '鏈在雙鍵處<b>彎曲</b> → 堆疊鬆散，室溫多為液態（油）', '例：油酸 oleic acid']],
+    trans: ['反式不飽和脂肪酸', ['雙鍵兩側的 H 在<b>對側（trans）</b> → 鏈<b>變直</b>', '部分氫化植物油（人造奶油、油炸烘焙食品）', '升高 LDL、降低 HDL → 動脈粥狀硬化']],
+    dbl: ['碳–碳雙鍵 C=C', ['不飽和的位置；cis 雙鍵造成鏈彎曲']],
+    head: ['親水頭部（極性）', ['磷酸（橘）＋含氮基團，如<b>膽鹼</b>（藍）→ 卵磷脂', '可離子化而帶電 → 朝向水']],
+    tail: ['疏水尾部（非極性）', ['兩條脂肪酸鏈', '躲開水 → 在水中自動聚成<b>微胞</b>或<b>雙層</b>'], '膽酸雖不是磷脂質，也是兩性分子，在小腸形成微胞幫助脂肪吸收（第 18 章）。'],
+    rA: ['A 環', ['類固醇特徵：<b>三個六元環 + 一個五元環</b>']], rB: ['B 環', ['六元環']], rC: ['C 環', ['六元環']], rD: ['D 環', ['五元環']],
+    oh: ['C3 的羥基', ['膽固醇在 A 環上的 –OH', '其他類固醇激素由膽固醇衍生']],
+    side: ['側鏈', ['膽固醇在 D 環上的碳氫側鏈；性激素與皮質激素的側鏈被修飾/切除']],
+    me: ['甲基', ['類固醇骨架上的甲基（C18、C19）']]
+  };
+  K.info(S, 'info-lipid', INFO);
+  const CAP = { tg: '三酸甘油酯：甘油 + 3 條脂肪酸（飽和／順式／反式比較）', mi: '微胞 micelle：頭朝外、尾朝內', bl: '雙層膜：細胞膜的基本結構（第 3、6 章）', st: '類固醇：膽固醇的四環骨架' };
+  const VIEW = { tg: [0.15, 0.15, 66], mi: [0.5, 0.3, 66], bl: [0.4, 0.15, 66], st: [0.1, 0.3, 66] };
+  K.seg('#lmode', m => { showMode(S, m); $('l-cap').textContent = CAP[m]; S.yaw = VIEW[m][0]; S.pitch = VIEW[m][1]; }, 'tg');
+})();
+
+/* ================= 05 蛋白質 ================= */
+(function () {
+  const S = K.stage('st-prot', { radius: 60, yaw: 0.3, pitch: 0.18, autoRotate: 0.1 });
+  const N = 40, rnd = Mini3D.rng(11);
+  const TYP = ['#fbbf24', '#34d399', '#60a5fa', '#f87171'];
+  const beads = [], st = {};
+  for (let i = 0; i < N; i++) { const ty = [0, 0, 1, 0, 2, 1, 3, 0, 1, 0][(i * 7) % 10]; beads.push(S.sphere([0, 0, 0], 2.3, TYP[ty], { id: 'aa', ty })); }
+  for (let i = 0; i < N - 1; i++) S.tube(beads[i].p, beads[i + 1].p, 0.9, '#cbd5e1', { id: 'pep', zb: 1 });
+  st[0] = beads.map((_, i) => [-58 + i * 3, 6 * Math.sin(i * 0.45), 4 * Math.cos(i * 0.3)]);
+  st[1] = beads.map((_, i) => { const th = (i * 6.2832) / 3.6; return [-42 + i * 2.15, Math.cos(th) * 8, Math.sin(th) * 8]; });
+  st[2] = beads.map((_, i) => { const s = Math.floor(i / 10), k = i % 10, fw = s % 2 === 0; return [(fw ? k - 4.5 : 4.5 - k) * 5, (s - 1.5) * 10, (k % 2 ? 1.4 : -1.4)]; });
+  st[3] = beads.map((_, i) => { const t = i / (N - 1), th = 0.15 + t * 2.85, ph = t * N * 0.62; return [16 * Math.sin(th) * Math.cos(ph), 16 * Math.cos(th), 16 * Math.sin(th) * Math.sin(ph)]; });
+  st[4] = st[3].map(p => V.add(V.mul(p, 0.8), [-15, 12, 8]));
+  const hbH = [], hbS = [];
+  for (let i = 0; i < N - 4; i++) hbH.push(S.tube(beads[i].p, beads[i + 4].p, 0.35, '#fde047', { flat: 1, al: 0.55, id: 'hb', nopick: false }));
+  for (let sI = 0; sI < 3; sI++) for (let k = 0; k < 10; k += 2) hbS.push(S.tube(beads[sI * 10 + k].p, beads[(sI + 1) * 10 + 9 - k].p, 0.35, '#fde047', { flat: 1, al: 0.55, id: 'hb' }));
+  const ss = S.tube(beads[4].p, beads[29].p, 0.9, '#facc15', { id: 'ss', glow: 0.5 });
+  // 四級：另外 3 個次單元 + heme
+  const subs = [];
+  const SUB = [['a2', '#f87171', [15, 12, -8]], ['b1', '#60a5fa', [-15, -12, -8]], ['b2', '#60a5fa', [15, -12, 8]]];
+  SUB.forEach(([id, c, off]) => {
+    const pts = st[3].map(p => V.add(V.mul(V.rotY(p, off[0] * 0.1), 0.8), off)); const g = [];
+    pts.forEach((p, i) => { g.push(S.sphere(p, 2.1, c, { id, al: 0.9 })); if (i) g.push(S.tube(pts[i - 1], p, 0.8, c, { id, al: 0.7 })); });
+    subs.push(g);
+  });
+  const hemes = [[-15, 12, 8], [15, 12, -8], [-15, -12, -8], [15, -12, 8]].map(c => {
+    const f = S.face(K.ring(V.add(c, [0, 0, 0]), 5, 6, 0), '#dc2626', { id: 'heme', al: 0.9 }), fe = S.sphere(c.slice(), 2, '#fb923c', { id: 'fe', glow: 0.6 });
+    return [f, fe];
+  });
+  const L = {
+    n: K.lab(S, beads[0].p, 'N 端（–NH₂）', 'aa', '#93c5fd', -10, -22), c: K.lab(S, beads[N - 1].p, 'C 端（–COOH）', 'aa', '#fca5a5', 10, -22),
+    hb: K.lab(S, hbH[10].a, '氫鍵', 'hb', '#fde047', 30, -30), ss: K.lab(S, beads[4].p, '雙硫鍵 –S–S–', 'ss', '#facc15', -40, -20),
+    a1: K.lab(S, [-15, 26, 8], 'α 鏈', 'aa', '#fca5a5', 0, -10), a2: K.lab(S, [15, 26, -8], 'α 鏈', 'a2', '#fca5a5', 0, -10), b1: K.lab(S, [-15, -26, -8], 'β 鏈', 'b1', '#93c5fd', 0, 10), b2: K.lab(S, [15, -26, 8], 'β 鏈', 'b2', '#93c5fd', 0, 10),
+    heme: K.lab(S, [15, 12, -8], '血基質 heme（Fe²⁺）', 'heme', '#fb923c', 50, -26)
+  };
+  let cur = 0, from = st[0].map(p => p.slice()), tw = 1;
+  beads.forEach((b, i) => mv(b.p, st[0][i]));
+  function vis(k) {
+    hbH.forEach(o => { o.hidden = k !== 1; }); hbS.forEach(o => { o.hidden = k !== 2; });
+    ss.hidden = k < 3; subs.forEach(g => g.forEach(o => { o.hidden = k !== 4; })); hemes.forEach(h => h.forEach(o => { o.hidden = k !== 4; }));
+    L.n.hidden = L.c.hidden = k > 1; L.hb.hidden = k !== 1 && k !== 2; L.ss.hidden = k !== 3; ['a1', 'a2', 'b1', 'b2', 'heme'].forEach(n => { L[n].hidden = k !== 4; });
+    L.hb.p = k === 2 ? hbS[3].a : hbH[10].a;
+    beads.forEach(b => { b.c = k === 4 ? '#f87171' : TYP[b.ty]; });
+  }
+  S.tick(dt => {
+    if (tw < 1) { tw = Math.min(1, tw + dt / 1.4); const e = K.sm(0, 1, tw); beads.forEach((b, i) => mv(b.p, V.lerp(from[i], st[cur][i], e))); }
+  });
+  const STEPS = [
+    { t: '一級結構 Primary', d: '胺基酸以<b>胜肽鍵</b>相連的<b>序列</b>，由基因決定', cap: '一級：胺基酸序列（顏色＝R 基性質）' },
+    { t: '二級結構：α 螺旋', d: '相鄰胺基酸的 –NH 與 C=O 之間形成<b>氫鍵</b>（第 i 與 i+4 個）', cap: '二級：α 螺旋（黃線＝氫鍵）' },
+    { t: '二級結構：β 摺板', d: '多段鏈並排，鏈間以<b>氫鍵</b>相連成摺板', cap: '二級：β 摺板（鏈間氫鍵）' },
+    { t: '三級結構 Tertiary', d: '整條鏈彎折成特定<b>三度空間形狀</b>：R 基間的作用、<b>雙硫鍵</b>等；形狀決定功能（如酵素活性部位）', cap: '三級：立體形狀（雙硫鍵穩定）' },
+    { t: '四級結構 Quaternary', d: '<b>兩條以上</b>多胜肽鏈結合。血紅素 = 2 條 α + 2 條 β，各含一個 heme（中心 Fe²⁺）；胰島素 = 21 + 30 個胺基酸兩條鏈', cap: '四級：血紅素 α₂β₂ + 4 個 heme' }
+  ];
+  UI.stepper($('p-step'), STEPS, k => { from = beads.map(b => b.p.slice()); cur = k; tw = 0; vis(k); $('p-cap').textContent = STEPS[k].cap; }, { dur: 6000 });
+  S.onPick = o => { if (!o) return; const m = { aa: '胺基酸（點擊：一級結構看 N/C 端）', hb: '氫鍵：維持二級結構', ss: '雙硫鍵：兩個半胱胺酸的 S–S 共價鍵', heme: '血基質：含 Fe²⁺ 的扁平有機環，與 O₂ 結合（第 16 章）', fe: 'Fe²⁺：每個 heme 一個，結合一分子 O₂', a2: 'α 次單元', b1: 'β 次單元', b2: 'β 次單元', pep: '胜肽鍵（共價）' }[o.id]; if (m) $('p-cap').textContent = m; };
+})();
+
+/* ================= 06 DNA / RNA ================= */
+(function () {
+  const S = K.stage('st-dna', { radius: 56, yaw: 0.5, pitch: 0.12, autoRotate: 0.2 });
+  const SEQ = 'ATGCGTACCTAGGCAT', N = SEQ.length, comp = { A: 'T', T: 'A', G: 'C', C: 'G' };
+  const COL = { A: '#f87171', T: '#fbbf24', G: '#34d399', C: '#60a5fa', U: '#c084fc' };
+  const R = 14, rise = 4.6, y0 = -((N - 1) * rise) / 2, off = 2.55;
+  const bases1 = [], strand2 = [];
+  let pPrev1 = null, pPrev2 = null;
+  for (let i = 0; i < N; i++) {
+    const th = i * 0.6283, y = y0 + i * rise;
+    const s1 = [Math.cos(th) * R, y, Math.sin(th) * R], s2 = [Math.cos(th + off) * R, y, Math.sin(th + off) * R];
+    const p1 = [Math.cos(th - 0.3) * (R + 2), y - rise / 2, Math.sin(th - 0.3) * (R + 2)], p2 = [Math.cos(th + off + 0.3) * (R + 2), y + rise / 2, Math.sin(th + off + 0.3) * (R + 2)];
+    const mid = V.lerp(s1, s2, 0.5);
+    const b1 = SEQ[i], b2 = comp[b1];
+    S.sphere(p1, 2.5, '#f59e0b', { id: 'P' }); S.sphere(s1, 2.3, '#e2e8f0', { id: 'sug' }); S.tube(p1, s1, 1, '#94a3b8', { id: 'bb' });
+    if (pPrev1) S.tube(pPrev1, p1, 1, '#94a3b8', { id: 'bb' });
+    pPrev1 = s1;
+    const m1 = V.lerp(s1, s2, 0.47), m2 = V.lerp(s1, s2, 0.53);
+    const t1 = S.tube(s1, m1, 2, COL[b1], { id: b1, base: b1 }); bases1.push(t1);
+    const g = [S.sphere(p2, 2.5, '#f59e0b', { id: 'P' }), S.sphere(s2, 2.3, '#e2e8f0', { id: 'sug' }), S.tube(p2, s2, 1, '#94a3b8', { id: 'bb' }), S.tube(s2, m2, 2, COL[b2], { id: b2 })];
+    if (pPrev2) g.push(S.tube(pPrev2, p2, 1, '#94a3b8', { id: 'bb' }));
+    pPrev2 = s2;
+    const nh = b1 === 'A' || b1 === 'T' ? 2 : 3, dir = V.norm(V.sub(s2, s1)), [u] = K.basis(dir);
+    for (let k = 0; k < nh; k++) g.push(S.sphere(V.add(mid, V.mul([0, 1, 0], (k - (nh - 1) / 2) * 1.2)), 0.7, '#ffffff', { id: 'hb' }));
+    strand2.push(g);
+  }
+  K.lab(S, [Math.cos(0) * R, y0, 0], "5′", 'bb', '#e2e8f0', -18, 14); K.lab(S, [Math.cos((N - 1) * 0.6283) * R, y0 + (N - 1) * rise, Math.sin((N - 1) * 0.6283) * R], "3′", 'bb', '#e2e8f0', -18, -14);
+  K.lab(S, [R + 2, y0 - rise / 2, 0], '磷酸', 'P', '#fbbf24', 40, 10); K.lab(S, [0, y0 + 7 * rise, 0], '氫鍵', 'hb', '#ffffff', 50, -30);
+  const lSug = K.lab(S, [Math.cos(3 * 0.6283) * R, y0 + 3 * rise, Math.sin(3 * 0.6283) * R], '去氧核糖', 'sug', '#e2e8f0', 40, 0);
+  const INFO = {
+    A: ['腺嘌呤 Adenine（A）', ['<b>嘌呤</b>：雙環', 'DNA 中只與 <b>T</b> 配對（2 個氫鍵）；RNA 中與 U 配對']],
+    G: ['鳥嘌呤 Guanine（G）', ['<b>嘌呤</b>：雙環', '只與 <b>C</b> 配對（3 個氫鍵）']],
+    T: ['胸腺嘧啶 Thymine（T）', ['<b>嘧啶</b>：單環', '只存在 DNA；RNA 以 U 取代']],
+    C: ['胞嘧啶 Cytosine（C）', ['<b>嘧啶</b>：單環', '與 G 配對']],
+    U: ['尿嘧啶 Uracil（U）', ['RNA 的嘧啶，取代 DNA 的 T']],
+    P: ['磷酸 Phosphate', ['連接相鄰核苷酸的糖 → 形成糖–磷酸<b>骨架</b>']],
+    sug: ['五碳糖', ['DNA：<b>去氧核糖</b>；RNA：<b>核糖</b>', '一端接磷酸、另一端接鹼基']],
+    bb: ['糖–磷酸骨架', ['核苷酸以<b>脫水合成</b>相連成長鏈（多核苷酸）', '兩股方向相反（5′→3′ 與 3′→5′）']],
+    hb: ['鹼基間的氫鍵', ['A=T 兩個、G≡C 三個', '<b>互補配對</b>：知道一股的序列就能推出另一股 → DNA 複製與基因表現的基礎']]
+  };
+  K.info(S, 'info-dna', INFO);
+  K.seg('#dmode', m => {
+    const rna = m === 'rna';
+    strand2.forEach(g => g.forEach(o => { o.hidden = rna; }));
+    bases1.forEach(t => { const b = rna && t.base === 'T' ? 'U' : t.base; t.c = COL[b]; t.id = b; });
+    lSug.text = rna ? '核糖' : '去氧核糖';
+    $('d-cap').textContent = rna ? 'RNA：單股、核糖、A U G C（U 取代 T）' : 'DNA：雙股、去氧核糖、A T G C';
+  }, 'dna');
+})();
+
+/* ================= 快閃卡 / 測驗 ================= */
+UI.flashcards($('fc'), [
+  { f: '三種化學鍵依強度排列？', b: '<b>共價鍵</b>（共用電子，最強）&gt; <b>離子鍵</b>（轉移電子，溶於水即解離）&gt; <b>氫鍵</b>（δ+ 的 H 與 δ− 原子間的微弱吸引）' },
+  { f: '為什麼 NaCl 能溶於水？', b: 'Na⁺、Cl⁻ 各自吸引極性水分子（O 端朝 Na⁺、H 端朝 Cl⁻），形成<b>水合球</b>。' },
+  { f: 'pH 的定義？pH 5 比 pH 7 的 [H⁺] 多幾倍？', b: 'pH = −log[H⁺]；差 2 個單位 → <b>100 倍</b>。' },
+  { f: '動脈血 pH 範圍？酸中毒、鹼中毒？', b: '<b>7.35–7.45</b>（7.40±0.05）；&lt;7.35 酸中毒（不一定是酸性）、&gt;7.45 鹼中毒。' },
+  { f: '血液最主要的緩衝對？', b: '<b>HCO₃⁻ / H₂CO₃</b>：HCO₃⁻ + H⁺ ⇄ H₂CO₃' },
+  { f: '脫水合成 vs 水解', b: '<b>脫水合成</b>：單體相連並釋出 H₂O；<b>水解</b>：加入 H₂O 打斷鍵（消化）。' },
+  { f: '三種雙醣的組成', b: '蔗糖 = 葡萄糖+果糖；乳糖 = 葡萄糖+半乳糖；麥芽糖 = 葡萄糖+葡萄糖' },
+  { f: '三酸甘油酯的組成？', b: '1 個<b>甘油</b> + 3 個<b>脂肪酸</b>' },
+  { f: '反式脂肪為什麼對健康不好？', b: '碳鏈變直（像飽和脂肪）；↑LDL、↓HDL、↑三酸甘油酯 → 動脈粥狀硬化。' },
+  { f: '何謂兩性分子？舉例', b: '同時有極性與非極性部分，如<b>磷脂質（卵磷脂）</b>、<b>膽酸</b>；在水中形成微胞，也可作表面活性劑。' },
+  { f: '類固醇的結構特徵？', b: '<b>三個六元環 + 一個五元環</b>的四環結構；如膽固醇、腎上腺皮質與性腺激素。' },
+  { f: '蛋白質二級結構靠什麼維持？兩種形式？', b: '<b>氫鍵</b>；α 螺旋與 β 摺板。' },
+  { f: '四級結構的例子？', b: '<b>血紅素</b>：2α + 2β 共 4 條多胜肽鏈，各含一個含 Fe²⁺ 的 heme。' },
+  { f: 'DNA 與 RNA 的三大差異', b: '糖（去氧核糖 vs 核糖）、鹼基（T vs U）、股數（雙股 vs 單股）' },
+  { f: 'A–T、G–C 各有幾個氫鍵？嘌呤有哪些？', b: 'A–T <b>2</b> 個、G–C <b>3</b> 個；嘌呤（雙環）= <b>A、G</b>，嘧啶（單環）= C、T、U' }
+], 'ch02');
+UI.quiz($('qz'), [
+  { q: '下列哪一種化學鍵最強？', o: ['氫鍵', '離子鍵', '共價鍵', '凡得瓦力'], a: 2, e: '共價鍵由共用電子形成，是最強的化學鍵。' },
+  { q: '水分子中的氧原子帶什麼電？', o: ['部分正電 δ+', '部分負電 δ−', '完全帶負電', '不帶電'], a: 1, e: 'O 強烈吸引共用電子 → 部分負電（極性共價鍵）。' },
+  { q: '血液 pH 7.25 應判斷為？', o: ['酸性', '正常', '酸中毒', '鹼中毒'], a: 2, e: '低於 7.35 即為酸中毒，雖然 7.25 &gt; 7 並非酸性。' },
+  { q: '大量嘔吐失去胃酸時，碳酸氫根緩衝反應會？', o: ['向右：HCO₃⁻ 結合 H⁺', '向左：H₂CO₃ 解離釋出 H⁺', '停止', '產生更多 HCO₃⁻ 與 H⁺ 結合'], a: 1, e: '血中 H⁺ 減少 → 平衡左移，碳酸解離補充 H⁺，防止 pH 上升。' },
+  { q: '乳糖由哪兩種單醣組成？', o: ['葡萄糖 + 果糖', '葡萄糖 + 半乳糖', '葡萄糖 + 葡萄糖', '果糖 + 半乳糖'], a: 1, e: '蔗糖=葡萄糖+果糖；麥芽糖=兩個葡萄糖。' },
+  { q: '消化食物分子屬於哪一類反應？', o: ['脫水合成', '水解', '氧化', '磷酸化'], a: 1, e: '消化是酵素催化的水解，把大分子切成單體。' },
+  { q: '反式脂肪酸的特徵為？', o: ['雙鍵兩側 H 在同側，鏈彎曲', '雙鍵兩側 H 在對側，鏈較直', '沒有雙鍵', '含四環結構'], a: 1, e: 'trans 使鏈變直，堆疊方式像飽和脂肪。' },
+  { q: '下列何者為兩性（amphipathic）分子？', o: ['葡萄糖', '三酸甘油酯', '卵磷脂', '膽固醇酯'], a: 2, e: '卵磷脂有極性頭（磷酸＋膽鹼）與非極性脂肪酸尾。' },
+  { q: '蛋白質的 α 螺旋屬於哪一級結構？', o: ['一級', '二級', '三級', '四級'], a: 1, e: '二級結構由氫鍵形成 α 螺旋或 β 摺板。' },
+  { q: 'DNA 中 G 與 C 之間有幾個氫鍵？', o: ['1', '2', '3', '4'], a: 2, e: 'G≡C 三個；A=T 兩個。' },
+  { q: '下列何者只出現在 RNA？', o: ['腺嘌呤', '胸腺嘧啶', '尿嘧啶', '去氧核糖'], a: 2, e: 'RNA 以 U 取代 T，且用核糖。' }
+]);
+</script>
+</body>
+</html>

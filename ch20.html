@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch20 生殖 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>.cyc-k{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr));gap:10px}</style>
+</head>
+<body style="--acc:#f472b6;--acc2:#60a5fa">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 20 · Reproduction</div>
+  <h1 class="title3d">生殖</h1>
+  <p class="sub">性別決定（SRY、AMH、睪固酮、DHT）、下視丘–腦下垂體–性腺軸、3D 曲細精管與精子生成、3D 精子構造、3D 卵巢濾泡發育與排卵、28 天月經週期激素圖（拖曳日期）、3D 受精 → 卵裂 → 囊胚 → 著床、胎盤激素、分娩與泌乳。</p>
+  <div class="chips"><a class="chip" href="#sex">性別決定</a><a class="chip" href="#hpg">HPG 軸</a><a class="chip" href="#male">男性 3D</a><a class="chip" href="#fem">卵巢 3D</a><a class="chip" href="#cyc">月經週期</a><a class="chip" href="#fert">受精著床 3D</a><a class="chip" href="#preg">懷孕分娩泌乳</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="sex" data-nav="性別決定">
+  <h2><span class="num">01</span>性別決定與分化</h2>
+  <p class="lead">受精時帶 X 或 Y 的精子決定性染色體。前 40 天左右胚胎的生殖腺「未分化」。切換看男、女胚胎的發育路徑。</p>
+  <div class="seg" id="sexmode"><button class="btn sm" data-v="xy" type="button">XY</button><button class="btn sm" data-v="xx" type="button">XX</button><button class="btn sm" data-v="ais" type="button">雄性素不敏感（補充）</button><button class="btn sm" data-v="5ar" type="button">5α-還原酶缺乏</button></div>
+  <div class="chain mt" id="sex-chain"></div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>SRY</h3><p class="small">Y 染色體短臂上的<b>性別決定區 SRY</b>（睪丸決定因子 TDF）→ 生殖腺發育成<b>睪丸</b>；沒有 SRY → 卵巢。</p></div>
+    <div class="card tilt"><h3>內生殖器</h3><p class="small">睪丸的 <b>Sertoli 細胞</b>分泌<b>抗穆勒氏管激素（AMH）</b>→ 穆勒氏管退化；<b>Leydig 細胞</b>分泌<b>睪固酮</b>→ 吳氏管發育成副睪、輸精管、精囊、射精管。沒有這兩者 → 穆勒氏管發育成子宮、輸卵管。</p></div>
+    <div class="card tilt"><h3>外生殖器</h3><p class="small">睪固酮在標的細胞經 <b>5α-還原酶</b>轉成 <b>DHT</b> → 男性外生殖器、前列腺；沒有睪固酮 → 女性外生殖器。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="hpg" data-nav="HPG 軸">
+  <h2><span class="num">02</span>生殖的內分泌調控</h2>
+  <div class="grid2">
+    <div class="card"><div class="chain"><div class="nd on">下視丘 <b>GnRH</b><small>脈衝式分泌</small></div><span class="ar">→</span><div class="nd on">前葉 <b>FSH、LH</b></div><span class="ar">→</span><div class="nd on">性腺<small>性類固醇、抑制素</small></div><span class="ar" style="color:#fb7185">⟲</span><div class="nd">負回饋<small>（排卵前雌二醇為正回饋）</small></div></div>
+      <ul class="small mt"><li><b>脈衝式</b> GnRH 才能維持 FSH/LH；持續給 GnRH 類似物 → 受體<b>下調</b>、性腺被抑制（治療子宮內膜異位症、前列腺癌）</li><li>男性：<b>LH</b> 受睪固酮負回饋（經轉成 5α-還原雄性素與雌二醇）；<b>FSH</b> 主要受 Sertoli 細胞的<b>抑制素</b>負回饋 → 分泌相對恆定、非週期性</li><li>青春期：腦部成熟、下視丘對性類固醇負回饋的敏感度降低 → FSH、LH 上升</li><li>松果體褪黑激素在某些動物有抗性腺作用，在人類尚有爭議</li></ul></div>
+    <div class="card"><h3>男性性腺的兩個隔間</h3><div class="tbwrap"><table class="tb" style="min-width:0"><tr><th></th><th>間質（Leydig 細胞）</th><th>曲細精管（Sertoli 細胞）</th></tr><tr><td>受體</td><td><b>LH</b> 受體</td><td><b>FSH</b> 受體（與雄性素受體）</td></tr><tr><td>分泌</td><td>睪固酮</td><td>抑制素、AMH（胚胎）、ABP</td></tr><tr><td>功能</td><td>雄性素作用；同化作用</td><td>支持精子生成、血睪障壁</td></tr></table></div>
+      <p class="small mt">兩個隔間以<b>旁分泌</b>互相調節。青春期：睪固酮是完成減數分裂所必需，FSH 是精子形成（spermiogenesis）所必需。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="male" data-nav="男性 3D">
+  <h2><span class="num">03</span>男性：曲細精管與精子生成（3D）</h2>
+  <p class="lead">精原細胞（2n）在基底膜旁 → 初級精母細胞 → 減數分裂 I → 次級精母細胞 → 減數分裂 II → 4 個<b>精細胞</b>（n）→ <b>精子形成</b>變成精子，往管腔移動。每天至少產生 <b>3 億</b>個精子。</p>
+  <div class="grid2">
+    <div class="stage" id="st-semi"><canvas aria-label="3D 曲細精管"></canvas><div class="hud" id="se-hud"></div><div class="hud2" id="se-cap"></div>
+      <div class="sbar"><div class="seg" id="semode"><button class="btn sm" data-v="tub" type="button">曲細精管橫切</button><button class="btn sm" data-v="sp" type="button">精子構造</button></div></div></div>
+    <div class="card"><div id="se-steps"></div></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>Sertoli 細胞</h3><ul class="small"><li>從基底膜延伸到管腔，包住發育中的生殖細胞</li><li>彼此以<b>緊密接合</b>相連 → <b>血睪障壁</b>（保護減數分裂後的細胞免受免疫攻擊）</li><li>吞噬殘體、分泌液體與抑制素</li></ul></div>
+    <div class="card tilt"><h3>精子的旅程</h3><div class="chain"><div class="nd">曲細精管</div><span class="ar">→</span><div class="nd">副睪（成熟、儲存）</div><span class="ar">→</span><div class="nd">輸精管</div><span class="ar">→</span><div class="nd">射精管</div><span class="ar">→</span><div class="nd">尿道</div></div><p class="small mt">精液 1.5–5 ml：精囊 45–80%、前列腺 15–30%。精子濃度 &lt; 2,000 萬/ml 為寡精症。</p></div>
+    <div class="card tilt"><h3>勃起與射精</h3><p class="small"><b>勃起</b>：副交感神經 → <b>NO</b> → cGMP → 陰莖血管舒張（sildenafil 抑制 cGMP 分解）。<b>射精</b>：交感神經使副性器官蠕動收縮。睪固酮也是<b>同化類固醇</b>，在骨骺閉合前促進生長。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="fem" data-nav="卵巢 3D">
+  <h2><span class="num">04</span>女性：卵巢濾泡的發育（3D）</h2>
+  <p class="lead">出生時約 <b>200 萬</b>個卵母細胞（停在減數分裂 I 前期，在原始濾泡內），青春期剩約 <b>40 萬</b>，一生只排約 <b>400</b> 個。依序看濾泡如何發育、排卵並形成黃體。</p>
+  <div class="grid2">
+    <div class="stage" id="st-ova"><canvas aria-label="3D 卵巢濾泡"></canvas><div class="hud">卵巢剖面（依順時針排列各期）</div><div class="hud2" id="ov-cap"></div></div>
+    <div class="card"><div id="ov-steps"></div></div>
+  </div>
+</section>
+
+<section class="sec" id="cyc" data-nav="月經週期">
+  <h2><span class="num">05</span>月經週期（拖曳日期）</h2>
+  <div class="card"><canvas class="plot" id="cyc-plot" style="--ph:320px"></canvas>
+    <div class="ctrl"><label for="day">第幾天</label><input type="range" id="day" min="1" max="28" value="3"><output id="day-v">3</output></div>
+    <div class="cyc-k"><div class="card" style="padding:10px"><small class="muted">卵巢</small><div id="c-ov" style="font-weight:900"></div></div><div class="card" style="padding:10px"><small class="muted">子宮內膜</small><div id="c-en" style="font-weight:900"></div></div><div class="card" style="padding:10px;grid-column:span 2"><small class="muted">發生什麼事</small><div id="c-tx" class="small"></div></div></div></div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>濾泡期（第 1–13 天）</h3><p class="small"><b>FSH</b> 刺激濾泡生長、分泌<b>雌二醇</b>（濾泡只分泌雌二醇）→ 子宮內膜<b>增生期</b>。</p></div>
+    <div class="card tilt"><h3>排卵（約第 14 天）</h3><p class="small">約第 13 天雌二醇快速上升 → <b>正回饋</b>引發 <b>LH 高峰</b> → 約第 14 天排卵（次級卵母細胞停在中期 II）。</p></div>
+    <div class="card tilt"><h3>黃體期（第 15–28 天）</h3><p class="small">LH 使空濾泡成為<b>黃體</b>，分泌<b>黃體素 + 雌二醇</b>（負回饋抑制 FSH、LH）→ <b>分泌期</b>內膜。未懷孕 → 黃體退化 → 激素下降 → <b>月經</b>。</p></div>
+  </div>
+  <div class="note"><b>口服避孕藥</b>：雌激素 + 黃體素的組合 → 負回饋抑制 FSH、LH → 不排卵。<b>更年期</b>：卵巢失去濾泡 → 雌激素下降、FSH/LH 升高。</div>
+</section>
+
+<section class="sec" id="fert" data-nav="受精著床 3D">
+  <h2><span class="num">06</span>受精、卵裂與著床（3D）</h2>
+  <div class="grid2">
+    <div class="stage" id="st-fert"><canvas aria-label="3D 受精與著床"></canvas><div class="hud">次級卵母細胞（透明帶 + 放射冠）</div><div class="hud2" id="fe-cap"></div></div>
+    <div class="card"><div id="fe-steps"></div></div>
+  </div>
+</section>
+
+<section class="sec" id="preg" data-nav="懷孕分娩泌乳">
+  <h2><span class="num">07</span>胎盤、分娩與泌乳</h2>
+  <div class="grid2">
+    <div class="card"><canvas class="plot" id="preg-plot" style="--ph:250px"></canvas><p class="small">滋養層分泌 <b>hCG</b>（作用像 LH）→ 維持母體<b>黃體</b>約前 10 週（驗孕即測尿中 hCG）；之後由胎盤自己製造大量雌、黃體素。</p></div>
+    <div class="card"><div class="tbwrap"><table class="tb" style="min-width:0"><tr><th>胎盤激素</th><th>作用</th></tr><tr><td><b>hCG</b></td><td>類似 LH（與 TSH）：維持黃體</td></tr><tr><td><b>hCS</b>（絨毛膜體乳激素）</td><td>類似泌乳素與生長激素</td></tr><tr><td><b>雌三醇</b></td><td>主要的胎盤類固醇；胎兒腎上腺的 DHEAS 經胎盤轉成雌激素</td></tr><tr><td>黃體素</td><td>維持子宮內膜、抑制子宮收縮</td></tr></table></div>
+      <p class="small mt">胎盤 = 胎兒的滋養層 + 母體子宮內膜；O₂、養分、廢物以<b>擴散</b>交換（血液不混合）。</p></div>
+  </div>
+  <div class="grid2 even mt">
+    <div class="card"><h3>分娩：正回饋</h3><div class="btns"><button class="btn sm" id="lab-go" type="button">▶ 播放</button></div><div class="chain" id="lab"><div class="nd">胎兒腎上腺 DHEAS</div><span class="ar">→</span><div class="nd">胎盤 → 雌激素↑</div><span class="ar">→</span><div class="nd">子宮催產素受體↑、前列腺素↑</div><span class="ar">→</span><div class="nd">子宮收縮</div><span class="ar">→</span><div class="nd">子宮頸被撐開</div><span class="ar">→</span><div class="nd">神經反射 → 後葉<b>催產素</b>↑</div><span class="ar" style="color:#fb7185">⟲ 更強收縮</span></div></div>
+    <div class="card"><h3>泌乳</h3><ul class="small"><li>懷孕時高雌激素（加上其他激素）使乳腺發育；高黃體素與雌激素<b>阻斷泌乳素</b>作用</li><li>分娩後雌、黃體素下降 → <b>泌乳素</b>刺激製造乳汁</li><li><b>射乳反射</b>：吸吮 → 神經內分泌反射 → <b>催產素</b> → 乳腺管收縮射乳</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">08</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">09</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 20 章整理，僅供個人複習。3D 與激素曲線為示意。 · <a href="index.html">回總覽</a> · <a href="ch18.html">← 第 18 章 消化</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+
+/* ================= 01 性別決定 ================= */
+(function () {
+  const C = {
+    xy: [['XY 合子'], ['SRY → <b>睪丸</b>'], ['Sertoli：AMH → 穆勒氏管<b>退化</b>'], ['Leydig：睪固酮 → 吳氏管 → 副睪、輸精管、精囊'], ['5α-還原酶：睪固酮 → <b>DHT</b> → 男性外生殖器、前列腺']],
+    xx: [['XX 合子'], ['無 SRY → <b>卵巢</b>'], ['無 AMH → 穆勒氏管 → 子宮、輸卵管'], ['無睪固酮 → 吳氏管退化'], ['無 DHT → 女性外生殖器']],
+    ais: [['XY 合子'], ['SRY → 睪丸（正常分泌睪固酮）'], ['AMH → 穆勒氏管退化 → 無子宮'], ['雄性素受體缺陷 → 吳氏管無法發育'], ['外觀為女性（睪丸女性化症候群）']],
+    '5ar': [['XY 合子'], ['SRY → 睪丸'], ['AMH → 穆勒氏管退化'], ['睪固酮 → 吳氏管正常發育'], ['缺 5α-還原酶 → DHT 不足 → 出生時外生殖器偏女性（青春期可能男性化）']]
+  };
+  K.seg('#sexmode', m => { $('sex-chain').innerHTML = C[m].map((x, i) => '<div class="nd on">' + x[0] + '</div>').join('<span class="ar on">→</span>'); }, 'xy');
+})();
+
+/* ================= 03 曲細精管 ================= */
+(function () {
+  const S = K.stage('st-semi', { radius: 50, yaw: 0, pitch: 1.0, autoRotate: 0.03 });
+  const T = { gs: 'tub' }, P = { gs: 'sp' };
+  const RB = 25, NS = 10;
+  K.circle([0, 0, 0], RB, [0, 1, 0], 60).forEach((p, i, a) => S.tube(p, a[(i + 1) % 60], 0.8, '#e2e8f0', Object.assign({ id: 'bm' }, T)));
+  for (let k = 0; k < NS; k++) { const a = (k / NS) * 6.2832, d = [Math.cos(a), 0, Math.sin(a)]; K.sweep(S, [V.mul(d, RB - 1), V.mul(d, 16), V.mul(d, 8)], t => 2.6 - t * 1.2, '#a78bfa', 8, 8, Object.assign({ id: 'sertoli', al: 0.55 }, T)); S.sphere(V.add(V.mul(d, 22), [0, 0, 0]), 1.8, '#4c1d95', Object.assign({ id: 'sertoli' }, T)); }
+  K.circle([0, 0, 0], 20.5, [0, 1, 0], 40).forEach((p, i) => { if (i % 4 === 0) S.sphere(p, 0.9, '#fde047', Object.assign({ id: 'btb', glow: 0.6 }, T)); });
+  const L = [[22.5, 1.5, '#60a5fa', 'sg'], [18.5, 2.3, '#38bdf8', 'ps'], [14.5, 1.8, '#34d399', 'ss'], [11, 1.3, '#a3e635', 'st']];
+  const cells = {};
+  L.forEach(([r, s, c, id]) => { cells[id] = []; for (let k = 0; k < NS * 2; k++) { const a = ((k + 0.5) / (NS * 2)) * 6.2832 + (k % 2 ? 0.08 : -0.08); cells[id].push(S.sphere([Math.cos(a) * r, (k % 3 - 1) * 1.2, Math.sin(a) * r], s, c, Object.assign({ id }, T))); } });
+  const spz = []; for (let k = 0; k < 24; k++) { const a = (k / 24) * 6.2832, h = [Math.cos(a) * 8, 0, Math.sin(a) * 8], tl = [Math.cos(a + 0.3) * 2, (k % 2 ? 1 : -1), Math.sin(a + 0.3) * 2]; spz.push(S.sphere(h, 0.9, '#f8fafc', Object.assign({ id: 'spz' }, T)), S.tube(h, tl, 0.25, '#f8fafc', Object.assign({ id: 'spz', flat: 1 }, T))); }
+  for (let k = 0; k < 8; k++) { const a = (k / 8) * 6.2832 + 0.2, c = [Math.cos(a) * 33, 0, Math.sin(a) * 33]; S.sphere(c, 3, '#fb923c', Object.assign({ id: 'leydig' }, T)); S.sphere(V.add(c, [2.4, 1, 2]), 2.2, '#fb923c', Object.assign({ id: 'leydig' }, T)); }
+  K.circle([0, 0, 0], 38, [0, 1, 0], 40).forEach((p, i, a) => { if (i % 2 === 0) S.tube(p, a[(i + 1) % 40], 0.7, '#ef4444', Object.assign({ id: 'capi', al: 0.6 }, T)); });
+  const hl = S.sphere([0, 0, 0], 3.2, '#fef9c3', Object.assign({ glow: 1.4, gc: '#fde047', nopick: true, al: 0.25 }, T));
+  [['sertoli', [Math.cos(0) * 16, 0, 0], 'Sertoli 細胞'], ['sg', [22.5, 0, 3], '精原細胞（2n）'], ['ps', [0, 0, 18.5], '初級精母細胞'], ['ss', [-14.5, 0, 0], '次級精母細胞（n）'], ['st', [0, 0, -11], '精細胞（n）'], ['spz', [0, 0, 0], '精子（管腔）'], ['leydig', [Math.cos(0.2) * 33, 0, Math.sin(0.2) * 33], 'Leydig 細胞（睪固酮）'], ['btb', [0, 0, 20.5], '緊密接合（血睪障壁）'], ['bm', [-RB, 0, 0], '基底膜']].forEach(([id, p, t], i) => K.lab(S, p, t, id, '#e2e8f0', [30, 30, 0, -40, 0, 0, 30, 30, -30][i], [-10, 10, 24, 0, -24, 0, 0, 30, 10][i], Object.assign({ size: 11 }, T)));
+  // 精子
+  const head = K.ellipsoid(S, [-20, 0, 0], [6, 4, 2], '#e2e8f0', 14, 8, Object.assign({ id: 'head' }, P));
+  K.ellipsoid(S, [-22.5, 0, 0], [3.6, 4.2, 2.2], '#f472b6', 12, 7, Object.assign({ id: 'acro', al: 0.7 }, P), { u0: 0.25, u1: 0.75 });
+  K.ellipsoid(S, [-19.5, 0, 0], [3.2, 2.6, 1.2], '#7c3aed', 10, 6, Object.assign({ id: 'nuc', al: 0.8 }, P));
+  K.helixPts([-14, 0, 0], [-2, 0, 0], 1.6, 9, 60).forEach(p => S.sphere(p, 0.8, '#fb923c', Object.assign({ id: 'mito' }, P)));
+  S.tube([-14, 0, 0], [-2, 0, 0], 0.8, '#94a3b8', Object.assign({ id: 'mito' }, P));
+  const tailPts = []; for (let i = 0; i <= 30; i++) tailPts.push([-2 + i * 1.4, 0, 0]);
+  const tailT = []; for (let i = 0; i < 30; i++) tailT.push(S.tube(tailPts[i], tailPts[i + 1], 0.6 - i * 0.012, '#cbd5e1', Object.assign({ id: 'tail' }, P)));
+  K.lab(S, [-24, 3, 0], '頂體（酵素）', 'acro', '#f9a8d4', -30, -20, P); K.lab(S, [-19, 0, 1], '頭部：細胞核（n）', 'nuc', '#c4b5fd', 0, 30, P); K.lab(S, [-8, 1.6, 0], '中段：粒線體', 'mito', '#fdba74', 0, -24, P); K.lab(S, [20, 0, 0], '尾部（鞭毛 9+2）', 'tail', '#e2e8f0', 0, -20, P);
+  let step = 0, t = 0;
+  const STEPS = [
+    { t: '① 精原細胞有絲分裂', d: '基底膜旁的<b>精原細胞</b>（2n）分裂：一個留作幹細胞，一個成為初級精母細胞', id: 'sg' },
+    { t: '② 初級精母細胞', d: '穿過 Sertoli 細胞間的緊密接合（血睪障壁）往管腔方向移動', id: 'ps' },
+    { t: '③ 減數分裂 I', d: '→ 2 個<b>次級精母細胞</b>（n，每條染色體仍有兩分體）', id: 'ss' },
+    { t: '④ 減數分裂 II', d: '→ 4 個<b>精細胞</b>（n），細胞質仍互相連通', id: 'st' },
+    { t: '⑤ 精子形成 spermiogenesis', d: '精細胞變形：形成頂體、鞭毛，丟掉多餘細胞質（殘體被 Sertoli 吞噬）；組蛋白換成魚精蛋白 → 精子釋入管腔', id: 'spz' }
+  ];
+  let mode = 'tub';
+  S.tick(dt => {
+    t += dt;
+    const s = STEPS[step], pick = s.id === 'spz' ? [0, 0, 8] : cells[s.id] ? cells[s.id][3].p : [0, 0, 0];
+    mv(hl.p, pick); hl.r = 3.2 + Math.sin(t * 4) * 0.6;
+    if (mode === 'sp') tailPts.forEach((p, i) => { p[1] = Math.sin(t * 8 - i * 0.45) * i * 0.18; p[2] = Math.cos(t * 6 - i * 0.4) * i * 0.06; });
+  });
+  UI.stepper($('se-steps'), STEPS, i => { step = i; $('se-cap').innerHTML = STEPS[i].t + '：' + STEPS[i].d; }, { dur: 4000 });
+  K.seg('#semode', m => { mode = m; S.each(o => { if (o.gs) o.hidden = o.gs !== m; }); $('se-hud').textContent = m === 'tub' ? '由上往下看曲細精管橫切面' : '精子：頭部、中段、尾部'; S.pitch = m === 'tub' ? 1.0 : 0.25; S.dist = S.home.dist * (m === 'tub' ? 1 : 0.8); }, 'tub');
+  S.onPick = o => { if (!o) return; const tt = { sertoli: 'Sertoli 細胞：支持、血睪障壁、抑制素、FSH 受體', sg: '精原細胞（2n）', ps: '初級精母細胞（2n，減數分裂 I）', ss: '次級精母細胞（n）', st: '精細胞（n）', spz: '精子', leydig: 'Leydig 細胞：LH → 睪固酮', btb: '血睪障壁（Sertoli 間緊密接合）', bm: '基底膜', capi: '間質微血管', head: '精子頭部', acro: '頂體：含消化酵素，頂體反應時釋放', nuc: '高度濃縮的單倍體細胞核', mito: '中段：螺旋排列的粒線體提供 ATP', tail: '尾部：鞭毛（9+2 微管）' }[o.id]; if (tt) $('se-cap').textContent = '👉 ' + tt; };
+})();
+
+/* ================= 04 卵巢 ================= */
+(function () {
+  const S = K.stage('st-ova', { radius: 46, yaw: 0, pitch: 0.6, autoRotate: 0 });
+  K.ellipsoid(S, [0, 0, 0], [40, 10, 26], '#fbcfe8', 22, 8, { id: 'ovary', al: 0.15 });
+  const pos = [0, 1, 2, 3, 4, 5, 6].map(k => { const a = Math.PI - k * (Math.PI * 2 / 7.5) - 0.3; return [Math.cos(a) * 26, 0, Math.sin(a) * 15]; });
+  const G = [];
+  const oo = (c, r, col) => S.sphere(c, r, col || '#fde68a', { id: 'oocyte' });
+  const ringCells = (c, r, n, s, col, id) => K.circle(c, r, [0, 1, 0], n).map(p => S.sphere(p, s, col, { id }));
+  G.push([oo(pos[0], 1.6), ...ringCells(pos[0], 2.6, 8, 0.6, '#f1f5f9', 'gran')]);
+  G.push([oo(pos[1], 2), ...ringCells(pos[1], 3.4, 10, 1.1, '#fb923c', 'gran')]);
+  const sec = [oo(pos[2], 2.2), ...ringCells(pos[2], 3.8, 12, 1.1, '#fb923c', 'gran'), ...ringCells(pos[2], 5.6, 16, 1.1, '#fb923c', 'gran'), ...[0, 1, 2].map(k => S.sphere(V.add(pos[2], [Math.cos(k * 2) * 4.6, 1.5, Math.sin(k * 2) * 4.6]), 1, '#7dd3fc', { id: 'antrum', al: 0.7 }))]; G.push(sec);
+  const gc = pos[3];
+  const graaf = [...K.ellipsoid(S, gc, [9, 6, 9], '#7dd3fc', 16, 8, { id: 'antrum', al: 0.35 }), ...ringCells(gc, 9.6, 26, 1.1, '#fb923c', 'gran'), ...ringCells(gc, 11, 30, 0.8, '#f97316', 'theca'), oo(V.add(gc, [-4.5, 1, 0]), 2.4), ...ringCells(V.add(gc, [-4.5, 1, 0]), 3.4, 10, 0.7, '#fbbf24', 'corona')];
+  G.push(graaf);
+  const ovP = pos[4], ovu = [oo(V.add(ovP, [0, 2, 0]), 2.4), ...ringCells(V.add(ovP, [0, 2, 0]), 3.4, 10, 0.7, '#fbbf24', 'corona')]; G.push(ovu);
+  const cl = K.ellipsoid(S, pos[5], [7, 5, 7], '#facc15', 14, 8, { id: 'cl' }); G.push(cl);
+  const ca = K.ellipsoid(S, pos[6], [4, 3, 4], '#f8fafc', 10, 6, { id: 'ca' }); G.push(ca);
+  const ovuBase = ovu.map(o => o.p.slice());
+  const hl = S.sphere([0, 0, 0], 4, '#fef9c3', { glow: 0.45, gc: '#fde047', nopick: true, al: 0.1 });
+  const N = ['原始濾泡', '初級濾泡', '次級濾泡', '成熟（葛氏）濾泡', '排卵', '黃體', '白體'];
+  pos.forEach((p, i) => K.lab(S, p, N[i], 'st' + i, '#e2e8f0', i === 2 ? -22 : i === 3 ? 26 : 0, i === 3 ? -60 : -28, { size: 11 }));
+  const STEPS = [
+    { t: '原始濾泡', d: '<b>初級卵母細胞</b>停在減數分裂 I 前期，外圍一層扁平細胞；出生時約 200 萬' },
+    { t: '初級濾泡', d: '青春期後部分濾泡的細胞變成立方形的<b>顆粒細胞</b>；卵母細胞外形成透明帶' },
+    { t: '次級濾泡', d: '顆粒細胞增生多層，出現充滿液體的小腔；FSH 刺激生長與分泌雌二醇' },
+    { t: '成熟（葛氏）濾泡', d: '大腔（<b>濾泡腔</b>）；<b>卵丘</b>托住卵母細胞；外圍有<b>放射冠</b>與<b>透明帶</b>；排卵前完成減數分裂 I → <b>次級卵母細胞</b> + 第一極體（停在中期 II）' },
+    { t: '排卵', d: '<b>LH 高峰</b> → 約第 14 天濾泡破裂，釋出次級卵母細胞（帶透明帶與放射冠）；未受精則數天內退化' },
+    { t: '黃體', d: 'LH 使空濾泡變成<b>黃體</b>：分泌<b>黃體素 + 雌二醇</b>；懷孕時由 hCG 維持' },
+    { t: '白體', d: '未懷孕 → 黃體約 10–14 天後退化成疤痕狀的白體 → 激素下降 → 月經' }
+  ];
+  let step = 0, tw = 0;
+  S.tick(dt => {
+    tw = Math.min(1, tw + dt / 1.6);
+    mv(hl.p, pos[step]); hl.r = [3, 4, 6, 9, 5, 7, 4.5][step];
+    G.forEach((g, i) => g.forEach(o => { o.al = i === step ? (o.al0 != null ? o.al0 : 1) : 0.35; }));
+    const out = step === 4 ? sm(0, 1, tw) : step > 4 ? 1 : 0;
+    ovu.forEach((o, i) => mv(o.p, V.add(ovuBase[i], [0, 12 * out, -10 * out])));
+    S.target = V.lerp(S.target, V.mul(pos[step], 0.6), Math.min(1, dt * 2));
+  });
+  G.forEach(g => g.forEach(o => { o.al0 = o.al; }));
+  UI.stepper($('ov-steps'), STEPS, i => { step = i; tw = 0; $('ov-cap').innerHTML = STEPS[i].t + '：' + STEPS[i].d; }, { dur: 4200 });
+  S.onPick = o => { if (!o) return; const t = { oocyte: '卵母細胞', gran: '顆粒細胞：分泌雌二醇（FSH 刺激）', theca: '卵泡膜細胞：製造雄性素前驅物（LH 刺激），由顆粒細胞轉成雌二醇', antrum: '濾泡腔（液體）', corona: '放射冠', cl: '黃體：黃體素 + 雌二醇', ca: '白體', ovary: '卵巢' }[o.id]; if (t) $('ov-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 05 月經週期 ================= */
+(function () {
+  const g = (x, m, s) => Math.exp(-(((x - m) / s) ** 2));
+  const FSH = d => 30 + 22 * g(d, 3, 3.5) + 18 * g(d, 13.8, 0.9) - 10 * g(d, 21, 5) + 14 * g(d, 28.5, 2.5);
+  const LH = d => 18 + 95 * g(d, 13.8, 0.85) + 4 * g(d, 20, 5);
+  const E2 = d => 18 + 70 * g(d, 12.6, 2.3) + 38 * g(d, 21, 3.6);
+  const P4 = d => 4 + 82 * g(d, 21.5, 3.6);
+  const EN = d => d <= 5 ? 22 - (d - 1) * 3.5 : d <= 14 ? 8 + (d - 5) * 3.6 : d <= 26 ? 40 + (d - 14) * 1.4 : 56 - (d - 26) * 16;
+  function draw(day) {
+    const r = K.plot($('cyc-plot'), { x: [1, 28], y: [0, 120], xt: [1, 5, 10, 14, 20, 24, 28], yt: [], xl: '月經週期（天）', yl: '相對濃度', padB: 64, bands: [{ x0: 1, x1: 13.5, c: 'rgba(56,189,248,.06)', t: '濾泡期' }, { x0: 13.5, x1: 14.5, c: 'rgba(251,191,36,.15)', t: '排卵' }, { x0: 14.5, x1: 28, c: 'rgba(250,204,21,.06)', t: '黃體期' }], series: [{ f: FSH, c: '#60a5fa', w: 2.4, label: 'FSH' }, { f: LH, c: '#f472b6', w: 2.4, label: 'LH' }, { f: E2, c: '#34d399', w: 2.4, label: '雌二醇' }, { f: P4, c: '#fbbf24', w: 2.4, label: '黃體素' }], vl: [{ x: day, c: '#fff' }], legX: 300 });
+    const c = r.c, y0 = r.h - 36;
+    for (let d = 1; d < 28; d += 0.25) { const x = r.X(d), th = EN(d) * 0.42; c.fillStyle = d <= 5 ? '#b91c1c' : d <= 14 ? '#f472b6' : '#db2777'; c.fillRect(x, y0 - th, r.X(d + 0.25) - x + 0.5, th); }
+    c.fillStyle = '#cbd5e1'; c.font = '11px ' + Mini3D.FONT; c.fillText('子宮內膜厚度', r.L + 4, y0 - 26);
+    const ov = day <= 13 ? (day < 6 ? '濾泡開始發育（FSH）' : '主導濾泡生長 → 葛氏濾泡') : day === 14 ? '排卵！' : day < 26 ? '黃體（黃體素 + 雌二醇）' : '黃體退化';
+    const en = day <= 5 ? '月經期（剝落）' : day <= 14 ? '增生期' : '分泌期';
+    const tx = day <= 5 ? '雌、黃體素最低 → 內膜剝落；FSH 開始上升刺激新一批濾泡' : day <= 12 ? '雌二醇隨濾泡生長而上升 → 內膜增生；中期 FSH 因負回饋與抑制素而稍降' : day <= 14 ? '雌二醇快速上升 → <b>正回饋</b> → <b>LH 高峰</b>（FSH 小高峰）→ 約第 14 天排卵' : day <= 24 ? '黃體分泌大量黃體素 + 雌二醇 → 內膜分泌期（腺體分泌、血管螺旋）；<b>負回饋</b>抑制 FSH、LH' : '無 hCG → 黃體退化 → 雌、黃體素驟降 → 螺旋動脈收縮 → 月經；FSH 開始回升';
+    $('c-ov').textContent = ov; $('c-en').textContent = en; $('c-tx').innerHTML = tx;
+  }
+  let d0 = 3; K.range('day', d => { d0 = d; draw(d); }); addEventListener('resize', () => draw(d0));
+})();
+
+/* ================= 06 受精到著床 ================= */
+(function () {
+  const S = K.stage('st-fert', { radius: 46, yaw: 0.3, pitch: 0.25, autoRotate: 0 });
+  const oocyte = K.mover(K.ellipsoid(S, [0, 0, 0], [11, 11, 11], '#fde68a', 18, 10, { id: 'oocyte', al: 0.55 }));
+  const zona = K.mover(K.ellipsoid(S, [0, 0, 0], [13.5, 13.5, 13.5], '#e0f2fe', 20, 10, { id: 'zona', al: 0.18 }));
+  const corona = Mini3D.fib(60).map(u => S.sphere(V.mul(u, 16.5), 1.3, '#fbbf24', { id: 'corona', al: 0.85 }));
+  const pb1 = S.sphere([0, 12.4, 2], 1.6, '#fde68a', { id: 'pb' }); const pb2 = S.sphere([4, 11.6, -2], 1.5, '#fde68a', { id: 'pb', hidden: true });
+  const sperms = []; for (let i = 0; i < 7; i++) { const d = V.norm([Math.cos(i * 0.9) * 1.2, Math.sin(i * 1.7) * 0.6 + 0.3, Math.sin(i * 0.9)]), h = S.sphere([0, 0, 0], 1.3, '#f8fafc', { id: 'sperm' }), ac = S.sphere([0, 0, 0], 0.8, '#f472b6', { id: 'acro' }), tl = S.tube([0, 0, 0], [0, 0, 0], 0.3, '#e2e8f0', { id: 'sperm', flat: 1 }); sperms.push({ d, h, ac, tl }); }
+  const pn = [S.sphere([0, 0, 0], 2.4, '#60a5fa', { id: 'pn' }), S.sphere([0, 0, 0], 2.4, '#f472b6', { id: 'pn' })];
+  const blast = []; for (let i = 0; i < 42; i++) blast.push(S.sphere([0, 0, 0], 2.2, '#fda4af', { id: 'cleave', hidden: true }));
+  const icm = []; for (let i = 0; i < 8; i++) icm.push(S.sphere([0, 0, 0], 2.4, '#a78bfa', { id: 'icm', hidden: true }));
+  const endo = K.sheet(S, [-40, -26, -30], [80, 0, 0], [0, 0, 60], 10, 8, '#db2777', { id: 'endo', al: 0.6, hidden: true });
+  const villi = []; for (let i = 0; i < 10; i++) villi.push(S.tube([0, 0, 0], [0, 0, 0], 0.9, '#fb7185', { id: 'troph', hidden: true }));
+  const hcg = []; for (let i = 0; i < 12; i++) hcg.push(S.sphere([0, 0, 0], 0.8, '#34d399', { id: 'hcg', hidden: true, glow: 0.6 }));
+  const lab = K.lab(S, [0, 0, 0], '', 'x', '#e2e8f0', 30, -20, { hidden: true });
+  const STEPS = [
+    { t: '① 精子接近', d: '排出的<b>次級卵母細胞</b>停在中期 II，外有<b>透明帶</b>與<b>放射冠</b>；精子需先在女性生殖道<b>獲能</b>' },
+    { t: '② 頂體反應', d: '精子穿過放射冠，結合透明帶 → <b>頂體</b>釋放酵素，消化出通道' },
+    { t: '③ 融合與皮質反應', d: '一個精子與卵細胞膜融合 → 皮質顆粒釋出 → 透明帶變硬，<b>阻止多精入卵</b>' },
+    { t: '④ 完成減數分裂 II', d: '卵完成第二次減數分裂 → <b>第二極體</b>（退化）；雌雄原核 → <b>合子</b>（2n）' },
+    { t: '⑤ 卵裂', d: '有絲分裂但細胞不變大：2 → 4 → 8 細胞（8 細胞前具全能性）' },
+    { t: '⑥ 桑葚胚', d: '約 16 細胞以上的實心球，在輸卵管中往子宮移動' },
+    { t: '⑦ 囊胚', d: '中空球：<b>內細胞團</b>（將成為胚胎）+ <b>滋養層</b>（形成胎盤的胎兒部分）' },
+    { t: '⑧ 著床（受精後第 6 天起）', d: '內細胞團一側貼上子宮內膜，滋養層侵入；分泌 <b>hCG</b> → 維持黃體' }
+  ];
+  let step = 0, tw = 0, T = 0;
+  function cluster(n, r) { if (n === 2) return [[-r, 0, 0], [r, 0, 0]]; if (n === 4) return [[r, r, r], [-r, -r, r], [-r, r, -r], [r, -r, -r]].map(p => V.mul(p, 0.6)); if (n === 8) { const o = []; for (let i = 0; i < 8; i++) o.push([(i & 1 ? 1 : -1) * r * 0.6, (i & 2 ? 1 : -1) * r * 0.6, (i & 4 ? 1 : -1) * r * 0.6]); return o; } return Mini3D.fib(n).map(u => V.mul(u, r)); }
+  S.tick(dt => {
+    T += dt; tw = Math.min(1, tw + dt / 2.4); const e = sm(0, 1, tw);
+    const early = step <= 3;
+    oocyte.hide(!early); zona.hide(step > 6 || (step >= 5 && false)); corona.forEach(c => { c.hidden = step > 2; c.al = step === 2 ? 0.85 * (1 - e) : 0.85; });
+    zona.set([0, step >= 7 ? -14 * e - 0 : 0, 0], 1, step === 2 ? 0.18 + 0.4 * Math.sin(e * 3.14) : step >= 6 ? 0.08 : 0.18);
+    zona.F.forEach(f => { f.c = step >= 2 && step <= 4 ? '#93c5fd' : '#e0f2fe'; });
+    pb1.hidden = step > 4; pb2.hidden = !(step === 3 || step === 4);
+    sperms.forEach((s, i) => {
+      const win = i === 0, far = V.mul(s.d, 40), zonaP = V.mul(s.d, 14.5), inside = V.mul(s.d, 6);
+      let p;
+      if (step === 0) p = V.lerp(far, V.mul(s.d, 19), e); else if (step === 1) p = V.lerp(V.mul(s.d, 19), zonaP, e); else if (step === 2) p = win ? V.lerp(zonaP, inside, e) : V.add(zonaP, V.mul(s.d, e * 8)); else p = win ? inside : V.mul(s.d, 24);
+      const hide = step > 3 || (step === 3 && win);
+      s.h.hidden = s.ac.hidden = s.tl.hidden = hide;
+      mv(s.h.p, p); mv(s.ac.p, V.sub(p, V.mul(s.d, 1.2))); s.tl.a = V.add(p, V.mul(s.d, 1)); s.tl.b = V.add(p, V.add(V.mul(s.d, 9), [Math.sin(T * 12 + i) * 1.4, Math.cos(T * 10 + i) * 1.4, 0]));
+      s.ac.hidden = hide || step >= 2 || (step === 1 && e > 0.6); s.ac.glow = step === 1 ? 1.2 : 0;
+    });
+    pn.forEach((p, i) => { p.hidden = step !== 3; mv(p.p, V.lerp([i ? 5 : -5, 0, 0], [i ? 1.6 : -1.6, 0, 0], e)); });
+    const n = step === 4 ? (e < 0.33 ? 2 : e < 0.66 ? 4 : 8) : step === 5 ? 16 : step >= 6 ? 34 : 0, rr = step === 4 ? 5 : step === 5 ? 7 : 12;
+    const pts = n ? cluster(n, rr) : [], yOff = step === 7 ? -14 * e : 0;
+    blast.forEach((b, i) => { b.hidden = i >= n; if (i < n) { mv(b.p, V.add(pts[i], [0, yOff, 0])); b.r = step === 4 ? (n === 2 ? 6.5 : n === 4 ? 5 : 4) : step === 5 ? 3 : 2.2; b.c = step >= 6 ? '#fb7185' : '#fda4af'; } });
+    icm.forEach((c, i) => { c.hidden = step < 6; mv(c.p, V.add([Math.cos(i) * 3, -8 + (i % 3), Math.sin(i) * 3], [0, yOff, 0])); });
+    endo.forEach(f => { f.hidden = step < 7; });
+    villi.forEach((v, i) => { v.hidden = step < 7; const a = i * 0.628, b0 = [Math.cos(a) * 8, -22 + yOff * 0, Math.sin(a) * 8]; v.a = V.add(b0, [0, 0, 0]); v.b = V.add(b0, [Math.cos(a) * 3, -6 * e, Math.sin(a) * 3]); });
+    hcg.forEach((h, i) => { h.hidden = step < 7 || e < 0.5; mv(h.p, [Math.cos(i) * 10, -24 + ((T * 6 + i * 3) % 30), Math.sin(i) * 10]); });
+  });
+  UI.stepper($('fe-steps'), STEPS, i => { step = i; tw = 0; $('fe-cap').innerHTML = STEPS[i].t + '：' + STEPS[i].d; }, { dur: 4400 });
+  S.onPick = o => { if (!o) return; const t = { oocyte: '次級卵母細胞', zona: '透明帶（醣蛋白）', corona: '放射冠（顆粒細胞）', pb: '極體（退化）', sperm: '精子', acro: '頂體', pn: '原核', cleave: '卵裂球／滋養層細胞', icm: '內細胞團 → 胚胎', endo: '子宮內膜（分泌期）', troph: '滋養層侵入內膜 → 胎盤', hcg: 'hCG' }[o.id]; if (t) $('fe-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 07 懷孕激素 / 分娩 ================= */
+(function () {
+  const hcg = w => w < 2 ? 0 : 100 * Math.exp(-(((w - 9.5) / 3.6) ** 2)) + (w > 14 ? 14 : 0);
+  const est = w => 3 + 95 * Math.pow(w / 40, 2.2), prog = w => 6 + 80 * Math.pow(w / 40, 1.6);
+  function draw() { K.plot($('preg-plot'), { x: [0, 40], y: [0, 110], xt: [0, 10, 20, 30, 40], yt: [], xl: '懷孕週數', yl: '相對濃度', series: [{ f: hcg, c: '#34d399', w: 2.6, label: 'hCG' }, { f: est, c: '#f472b6', w: 2.2, label: '雌激素（胎盤）' }, { f: prog, c: '#fbbf24', w: 2.2, label: '黃體素' }], vl: [{ x: 10, c: '#94a3b8', t: '黃體 → 胎盤接手' }], legX: 360 }); }
+  draw(); addEventListener('resize', draw);
+  let tmr = 0; $('lab-go').onclick = () => { clearInterval(tmr); let i = 0; K.chain('lab', 0); tmr = setInterval(() => { i++; if (i > 5) { i = 3; } K.chain('lab', i); }, 900); setTimeout(() => clearInterval(tmr), 9000); };
+})();
+
+/* ================= 快閃卡 / 測驗 ================= */
+UI.flashcards($('fc'), [
+  { f: '決定睪丸發育的基因', b: 'Y 染色體上的 <b>SRY</b>（睪丸決定因子）。' },
+  { f: 'AMH 與睪固酮的作用', b: 'AMH（Sertoli）使穆勒氏管退化；睪固酮（Leydig）使吳氏管發育成副睪、輸精管、精囊。' },
+  { f: 'DHT 的來源與作用', b: '睪固酮經 5α-還原酶轉成 DHT → 男性外生殖器與前列腺。' },
+  { f: '男性 FSH 與 LH 的負回饋', b: 'LH：睪固酮（轉成雌二醇等）；FSH：抑制素。' },
+  { f: 'LH 與 FSH 在睪丸的標的', b: 'LH → Leydig 細胞（睪固酮）；FSH → Sertoli 細胞。' },
+  { f: '精子生成順序', b: '精原細胞（2n）→ 初級精母（2n）→ 減數 I → 次級精母（n）→ 減數 II → 精細胞（n）→ 精子形成 → 精子。' },
+  { f: '血睪障壁', b: 'Sertoli 細胞間的緊密接合，保護減數分裂後的細胞不受免疫攻擊。' },
+  { f: '勃起與射精的神經控制', b: '勃起：副交感（NO）；射精：交感。' },
+  { f: '卵母細胞數量變化', b: '胎兒 5 個月約 600–700 萬 → 出生 200 萬 → 青春期 40 萬 → 一生排約 400 個。' },
+  { f: '排卵時釋出的細胞處於？', b: '<b>次級卵母細胞</b>，停在減數分裂 II 中期；受精才完成。' },
+  { f: '濾泡與黃體分泌什麼？', b: '濾泡：只分泌雌二醇；黃體：黃體素 + 雌二醇。' },
+  { f: 'LH 高峰的原因', b: '約第 13 天雌二醇快速上升 → <b>正回饋</b> → LH 高峰 → 約第 14 天排卵。' },
+  { f: '增生期 vs 分泌期', b: '增生期：濾泡期雌二醇使內膜增厚；分泌期：黃體期黃體素使內膜分泌、準備著床。' },
+  { f: '月經的原因', b: '黃體退化 → 雌、黃體素下降 → 內膜剝落。' },
+  { f: '阻止多精入卵的機制', b: '皮質反應：皮質顆粒釋出使透明帶改變。' },
+  { f: '囊胚的兩部分', b: '內細胞團（胚胎）+ 滋養層（胎盤胎兒部分，分泌 hCG）。' },
+  { f: 'hCG 的功能', b: '類似 LH，維持黃體約前 10 週；驗孕測 hCG。' },
+  { f: '分娩的正回饋', b: '子宮頸被撐開 → 催產素↑ → 更強收縮；前列腺素與雌激素提高子宮敏感度。' },
+  { f: '泌乳 vs 射乳', b: '泌乳素：製造乳汁（分娩後）；催產素：射乳反射（吸吮）。' }
+], 'ch20');
+UI.quiz($('qz'), [
+  { q: '使穆勒氏管退化的是？', o: ['睪固酮', 'DHT', '抗穆勒氏管激素 AMH', '雌二醇'], a: 2, e: 'Sertoli 細胞分泌的 AMH。' },
+  { q: '男性外生殖器的分化需要？', o: ['睪固酮本身', 'DHT', 'AMH', 'FSH'], a: 1, e: '睪固酮經 5α-還原酶轉成 DHT。' },
+  { q: '男性 FSH 分泌主要受何者負回饋？', o: ['睪固酮', '抑制素', '雌二醇', '泌乳素'], a: 1, e: 'Sertoli 細胞分泌抑制素。' },
+  { q: 'Leydig 細胞受哪一種激素刺激？', o: ['FSH', 'LH', 'GnRH', '抑制素'], a: 1, e: 'LH → 睪固酮。' },
+  { q: '完成減數分裂 II 後產生的是？', o: ['初級精母細胞', '次級精母細胞', '精細胞', '精原細胞'], a: 2, e: '4 個精細胞再經精子形成變成精子。' },
+  { q: '排卵主要由何者觸發？', o: ['FSH 下降', 'LH 高峰', '黃體素上升', 'hCG'], a: 1, e: '雌二醇正回饋引起 LH 高峰。' },
+  { q: '黃體期子宮內膜處於？', o: ['月經期', '增生期', '分泌期', '萎縮期'], a: 2, e: '黃體素使內膜進入分泌期。' },
+  { q: '排出的次級卵母細胞停在？', o: ['減數分裂 I 前期', '減數分裂 II 中期', '間期', '已完成減數分裂'], a: 1, e: '受精後才完成減數分裂 II。' },
+  { q: '懷孕前 10 週維持黃體的是？', o: ['LH', 'hCG', 'hCS', '催產素'], a: 1, e: '滋養層分泌 hCG。' },
+  { q: '囊胚中將發育成胚胎的是？', o: ['滋養層', '內細胞團', '透明帶', '放射冠'], a: 1, e: '滋養層形成胎盤胎兒部分。' },
+  { q: '射乳反射由何者介導？', o: ['泌乳素', '催產素', '雌激素', '黃體素'], a: 1, e: '吸吮 → 催產素 → 乳腺管收縮。' },
+  { q: '口服避孕藥避孕的主要原理是？', o: ['殺死精子', '負回饋抑制 FSH、LH → 不排卵', '阻止著床的 hCG', '增加 LH 高峰'], a: 1, e: '雌激素 + 黃體素抑制促性腺激素。' }
+]);
+</script>
+</body>
+</html>

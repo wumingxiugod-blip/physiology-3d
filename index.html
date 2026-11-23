@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>生理 3D 互動複習</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .lst{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:14px}
+  .lst a{text-decoration:none;color:inherit;display:block}
+  .lst .card{height:100%;border-left:4px solid var(--c)}
+  .chcard{text-align:left;min-height:200px;display:flex;flex-direction:column;gap:6px;border-top:3px solid var(--c)!important}
+  .chcard .n{font-size:12px;font-weight:900;letter-spacing:.12em;color:var(--c)}.chcard .t{font-size:20px;font-weight:900;color:#fff}.chcard .ic{font-size:30px}.chcard .go{margin-top:auto;font-size:13px;color:var(--c);font-weight:800}
+</style>
+</head>
+<body style="--acc:#5ad1ff;--acc2:#f472b6">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <div class="kicker">大二 生理學 · Fox Human Physiology 16e</div>
+  <h1 class="title3d">生理 3D 互動複習</h1>
+  <p class="sub">第 2–20 章與兩份補充（杭丁頓氏症、骨骼與關節），全部放在這個資料夾、同一套格式：可旋轉、點選、拉桿試算的 3D 模型，加上快閃卡與自我測驗。雙擊開啟即可，不需網路。</p>
+  <div class="chips"><a class="chip" href="#ring">3D 章節選單</a><a class="chip" href="#all">全部章節</a><a class="chip" href="#how">使用方式</a></div>
+</header>
+<main>
+  <section class="sec" id="ring" style="padding-top:10px"><h2><span class="num">3D</span>章節選單</h2><p class="lead">拖曳或按箭頭轉動，點正面的卡片進入。</p><div class="card" style="padding:0;overflow:hidden"><div id="chring"></div></div></section>
+  <section class="sec" id="all"><h2><span class="num">ALL</span>全部章節</h2><div class="lst" id="lst"></div>
+    <div class="note mt"><b>未製作</b>第 1 章（身體功能研究：恆定、回饋、組織）與第 19 章（代謝調節）內容以概念與流程為主，較不適合 3D；相關內容可在第 5、11 章（胰島素、升糖素、甲狀腺、腎上腺）與「骨骼與關節」找到。</div></section>
+  <section class="sec" id="how"><h2><span class="num">?</span>使用方式</h2><div class="grid3">
+    <div class="card"><h3>3D 模型</h3><ul class="small"><li>拖曳旋轉；先點一下畫面再用滾輪縮放</li><li>右上角：放大、縮小、重設、標籤、自動旋轉、全螢幕</li><li>點選部位 → 右側顯示重點</li></ul></div>
+    <div class="card"><h3>快閃卡與測驗</h3><ul class="small"><li>每章底部有快閃卡（點擊翻面）</li><li>「標記為已熟」記在這台電腦的瀏覽器</li></ul></div>
+    <div class="card"><h3>說明</h3><ul class="small"><li>內容依 Fox《Human Physiology》16e 各章整理；第 7、8、13、14 章與杭丁頓氏症依課程講義整理</li><li>標「補充」者為課本以外的一般知識</li><li>3D 與曲線為示意，比例非真實</li></ul></div></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 整理，僅供個人複習使用。</footer>
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+'use strict';
+UI.boot();
+const CH = [
+  ['ch02.html', 'CHAPTER 2', '身體的化學組成', '⚗️', '#38bdf8', '水分子氫鍵、NaCl 水合球、葡萄糖脫水合成、脂肪酸與磷脂雙層、蛋白質摺疊、DNA/RNA'],
+  ['ch03.html', 'CHAPTER 3', '細胞構造與基因控制', '🧫', '#a78bfa', '剖面 3D 細胞、胞吞胞吐、核小體、複製/轉錄/轉譯、密碼子、有絲 vs 減數分裂'],
+  ['ch04.html', 'CHAPTER 4', '酵素與能量', '🔑', '#fbbf24', '3D 酵素與異位抑制、活化能、溫度/pH/受質、代謝缺陷模擬、3D ATP'],
+  ['ch05.html', 'CHAPTER 5', '細胞呼吸與代謝', '🔋', '#fb923c', '糖解碳骨架、粒線體、克氏循環、電子傳遞鏈與 ATP 合成酶、ATP 收支、β-氧化'],
+  ['ch06.html', 'CHAPTER 6', '細胞膜運輸', '🫧', '#2dd4bf', '磷脂雙層與膜蛋白、鈉鉀幫浦、上皮運輸、滲透、胞吞胞吐、細胞訊號、細胞外基質'],
+  ['ch07.html', 'CHAPTER 7', '神經元與突觸', '🧠', '#5ad1ff', '3D 神經元、膠細胞、膜電位、動作電位、軸突傳導、突觸傳遞與整合'],
+  ['ch08.html', 'CHAPTER 8', '中樞神經系統', '🧩', '#818cf8', '3D 大腦、側化與語言、學習與記憶、晝夜節律、脊髓與反射、腦神經與脊神經'],
+  ['huntington.html', '補充', '杭丁頓氏症', '🧬', '#34d399', '3D DNA 與 CAG 重複、疾病重點、致病機轉、遺傳、歷史時間軸'],
+  ['ch09.html', 'CHAPTER 9', '自主神經系統', '⚡', '#f87171', '神經路徑比較、3D 交感/副交感解剖、戰或逃、受體藥物模擬器'],
+  ['ch10.html', 'CHAPTER 10', '感覺生理', '👁️', '#22d3ee', '體感覺路徑、半規管、耳蝸行進波、眼睛光學與近視遠視、視覺路徑病灶'],
+  ['ch11.html', 'CHAPTER 11', '內分泌腺', '🧪', '#c084fc', '腺體地圖、激素機制動畫、下視丘–垂體門脈、回饋軸、腎上腺、甲狀腺濾泡'],
+  ['ch12.html', 'CHAPTER 12', '肌肉', '💪', '#fb7185', '槓桿、肌節、橫橋循環、神經肌肉接合、興奮–收縮偶聯、肌梭、肌纖維類型'],
+  ['bone.html', '補充', '骨骼與關節', '🦴', '#e2e8f0', '股骨剖面、骨元、軟骨內骨化與骺板、周邊生長、膝關節屈伸、可動關節六型、不動與微動關節'],
+  ['ch13.html', 'CHAPTER 13', '血液、心臟與循環', '❤️', '#ef4444', '血液 3D、造血、血型、凝血、3D 心臟、心電生理、血管、免疫淋巴'],
+  ['ch14.html', 'CHAPTER 14', '心輸出量與血壓', '🩺', '#f59e0b', 'CO 計算、Frank–Starling、血壓調控與計算、微血管交換、胎兒循環、腦血流、失血'],
+  ['ch15.html', 'CHAPTER 15', '免疫系統', '🛡️', '#34d399', '發炎與血球滲出、抗體結構、補體 MAC、抗原呈現與 T 細胞、株選擇'],
+  ['ch16.html', 'CHAPTER 16', '呼吸生理', '🫁', '#7dd3fc', '氣管樹與肺泡、呼吸力學與氣胸、肺量計、Laplace、氧解離曲線、氯離子轉移'],
+  ['ch17.html', 'CHAPTER 17', '腎臟生理', '🫘', '#fde047', '腎臟與腎元、GFR 試算、逆流倍增、ADH 水通道、清除率與 Tm、RAAS'],
+  ['ch18.html', 'CHAPTER 18', '消化系統', '🍽️', '#fdba74', '消化道全貌、管壁蠕動、壁細胞胃酸、絨毛吸收、肝小葉、脂質消化'],
+  ['ch20.html', 'CHAPTER 20', '生殖', '🧬', '#f472b6', '性別決定、曲細精管、卵巢濾泡、月經週期圖、受精到著床、分娩泌乳']
+];
+const lst = document.getElementById('lst');
+CH.forEach(c => { const a = UI.h('a', '', '<div class="card tilt" style="--c:' + c[4] + '"><div style="display:flex;gap:12px;align-items:center"><span style="font-size:30px">' + c[3] + '</span><div><div class="small" style="color:' + c[4] + ';font-weight:900;letter-spacing:.1em">' + c[1] + '</div><h3 style="margin:0">' + c[2] + '</h3></div></div><p class="small muted">' + c[5] + '</p></div>'); a.href = c[0]; lst.appendChild(a); });
+UI.tilt(document);
+let ring;
+ring = UI.ring(document.getElementById('chring'), CH, { w: 240, gap: 30, auto: 0.08,
+  render: c => '<div class="chcard" style="--c:' + c[4] + '"><div class="ic">' + c[3] + '</div><div class="n">' + c[1] + '</div><div class="t">' + c[2] + '</div><small class="muted">' + c[5].slice(0, 40) + '…</small><div class="go">進入 →</div></div>',
+  onSelect: (c, i) => { if (ring && ring.front() === i) location.href = c[0]; } });
+UI.$$('#chring .ring-item').forEach((el, i) => el.addEventListener('dblclick', () => { location.href = CH[i][0]; }));
+</script>
+</body>
+</html>

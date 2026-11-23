@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch14 心血管補充 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  #fetal{width:100%;height:auto;display:block}
+  #fetal .fv{fill:none;stroke:var(--c);stroke-width:var(--w,9);stroke-linecap:round;stroke-linejoin:round;transition:stroke .6s,opacity .6s;cursor:pointer}
+  #fetal .fl{fill:none;stroke:rgba(255,255,255,.75);stroke-width:2.2;stroke-dasharray:3 14;stroke-linecap:round;animation:dash 1.1s linear infinite;pointer-events:none;transition:opacity .6s}
+  @keyframes dash{to{stroke-dashoffset:-17}}
+  #fetal .org{stroke:rgba(255,255,255,.25);stroke-width:1.5;cursor:pointer;transition:fill .6s,opacity .6s}
+  #fetal text{fill:#e2e8f0;font-size:13px;font-family:"Segoe UI","Microsoft JhengHei",sans-serif;pointer-events:none;paint-order:stroke;stroke:#05080f;stroke-width:3px}
+  @media (max-width:640px){#fetal text{font-size:17px}}
+  #fetal .lig{opacity:0;transition:opacity .6s} #fetal.born .lig{opacity:1}
+  #fetal.born .fv{stroke:var(--cb,var(--c))}
+  #fetal.born .shunt{stroke:#475569;stroke-dasharray:4 6;opacity:.8}
+  #fetal.born .shunt+.fl,#fetal.born .gone+.fl{opacity:0}
+  #fetal.born .gone{opacity:.15}
+  #fetal .fo{fill:#a855f7} #fetal.born .fo{fill:#475569}
+  .gauge{position:relative;width:200px;height:110px;margin:0 auto;overflow:hidden}
+  .gauge .arc{position:absolute;inset:0 0 -100px 0;border-radius:50%;background:conic-gradient(from 270deg,#60a5fa 0 60deg,#34d399 60deg 120deg,#f87171 120deg 180deg,transparent 180deg)}
+  .gauge .arc::after{content:"";position:absolute;inset:22px;border-radius:50%;background:#0b1222}
+  .gauge .ndl{position:absolute;left:50%;bottom:0;width:4px;height:88px;margin-left:-2px;background:#fff;border-radius:4px;transform-origin:50% 100%;transition:transform 1s cubic-bezier(.3,1.4,.5,1);box-shadow:0 0 10px #fff}
+  .body{width:90px;height:200px;margin:0 auto;border-radius:45px 45px 20px 20px;border:2px solid #cbd5e1;position:relative;overflow:hidden;background:#0b1222}
+  .body i{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,#ef4444,#7f1d1d);transition:height .5s}
+  .vbar{display:grid;grid-template-columns:70px 1fr 1fr;gap:8px;align-items:center;font-size:13px;margin:6px 0}
+  .vbar .b{height:14px;border-radius:5px;background:linear-gradient(90deg,var(--c),color-mix(in srgb,var(--c) 40%,#000));box-shadow:0 3px 8px rgba(0,0,0,.4)}
+</style>
+</head>
+<body style="--acc:#f59e0b;--acc2:#ef4444">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 14 · Cardiovascular System 補充教材</div>
+  <h1 class="title3d">心血管補充：CO、血壓與微循環</h1>
+  <p class="sub">心輸出量與每搏量的調節、Frank–Starling 定律、自主神經與壓力接受器反射、血壓計算、微血管 Starling 力、胎兒循環、腦血流與失血代償。所有公式都能直接拉桿試算。</p>
+  <div class="chips">
+    <a class="chip" href="#co">CO 計算</a><a class="chip" href="#fs">Frank–Starling</a><a class="chip" href="#baro">血壓調控</a><a class="chip" href="#bp">血壓計算</a><a class="chip" href="#cap">微血管交換</a><a class="chip" href="#fetal-s">胎兒循環</a><a class="chip" href="#brain">腦血流</a><a class="chip" href="#loss">失血</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a>
+  </div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="co" data-nav="CO 計算">
+  <h2><span class="num">01</span>心輸出量 Cardiac output</h2>
+  <p class="lead">CO＝每分鐘左心室送入主動脈的血量＝<b>SV × HR</b>；SV＝<b>EDV − ESV</b>。拉桿或按下方「情境」看各因子如何改變 SV 與 CO。</p>
+  <div class="grid2">
+    <div class="stage short" id="st-lv"><canvas aria-label="3D 左心室容積"></canvas><div class="hud">3D 左心室：依 EDV ↔ ESV 收縮</div><div class="hud2" id="lv-vol">容積</div></div>
+    <div class="card glow">
+      <div class="formula">CO = SV × HR　｜　SV = EDV − ESV</div>
+      <div class="ctrl"><label for="edv">EDV 舒張末容積</label><input type="range" id="edv" min="70" max="220" value="130"><output id="edv-v">130</output></div>
+      <div class="ctrl"><label for="esv">ESV 收縮末容積</label><input type="range" id="esv" min="15" max="120" value="50"><output id="esv-v">50</output></div>
+      <div class="ctrl"><label for="hr">HR 心率</label><input type="range" id="hr" min="40" max="200" value="70"><output id="hr-v">70</output></div>
+      <div class="kv"><div><small>SV 每搏量</small><b id="sv">80</b> mL</div><div><small>CO 心輸出量</small><b id="co-v">5600</b> mL/min</div><div><small>射出分率 EF（補充）</small><b id="ef">62</b>%</div></div>
+      <p class="small muted">講義例：80 mL × 70 次/min = 5600 mL/min；EDV ~130、ESV ~50、SV ~80 mL。</p>
+    </div>
+  </div>
+  <h4>情境</h4>
+  <div class="btns" id="scen"><button class="btn sm" data-s="sym" type="button">交感神經興奮</button><button class="btn sm" data-s="para" type="button">副交感神經興奮</button><button class="btn sm" data-s="vr" type="button">靜脈壓 / 回流 ↑</button><button class="btn sm" data-s="ap" type="button">動脈壓 ↑</button><button class="btn sm" data-s="tachy" type="button">心率過快</button><button class="btn sm" data-s="reset" type="button">重設</button></div>
+  <div class="card mt"><div class="chain" id="scen-chain"><div class="nd">選一個情境</div></div></div>
+  <div class="grid2 even mt">
+    <div class="card tilt"><h3>影響 EDV 的因子</h3><ul class="small"><li><b>心室舒張期長短</b>：HR↑ → 舒張期↓ → EDV↓</li><li><b>靜脈壓力</b>：靜脈壓↑ → 血容量↑ → EDV↑</li></ul></div>
+    <div class="card tilt"><h3>影響 ESV 的因子</h3><ul class="small"><li><b>動脈壓力</b>：動脈壓↑ → 阻力↑ → ESV↑</li><li><b>心室收縮力</b>：回流血液↑ → 心肌纖維伸張↑ → 收縮力↑ → ESV↓</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="fs" data-nav="Frank–Starling">
+  <h2><span class="num">02</span>Frank–Starling 定律</h2>
+  <div class="grid2">
+    <div class="card" style="padding:12px"><canvas class="plot" id="fsc" style="--ph:300px" aria-label="Frank-Starling 曲線"></canvas>
+      <div class="ctrl"><label for="fs-edv">EDV（前負荷）</label><input type="range" id="fs-edv" min="60" max="220" value="130"><output id="fs-v">130</output></div>
+      <div class="btns"><button class="btn sm on" data-c="n" type="button">正常收縮力</button><button class="btn sm" data-c="s" type="button">交感（收縮力↑）</button></div></div>
+    <div class="card"><h3>更多進入 → 更多輸出</h3><p>心室收縮強度隨 <b>EDV</b> 而變：EDV 越大，心肌被拉得越長，收縮越強，SV 越大（在生理範圍內）。</p>
+      <ul class="small"><li>這是心臟<b>內在</b>的調節：讓左右心室輸出量保持一致</li><li><b>交感神經</b>（NE / E）：HR↑、收縮力↑ → ESV↓ → SV↑（整條曲線往上移）</li><li><b>副交感神經</b>：收縮力↓ → ESV↑ → SV↓</li></ul>
+      <p class="small muted">曲線形狀為示意。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="baro" data-nav="血壓調控">
+  <h2><span class="num">03</span>自主神經與血壓調控</h2>
+  <div class="grid2">
+    <div class="card">
+      <div class="btns"><button class="btn" data-b="up" type="button">⬆ 血壓突然上升</button><button class="btn" data-b="down" type="button">⬇ 血壓突然下降</button><button class="btn" data-b="bain" type="button">靜脈壓↑（Bainbridge）</button></div>
+      <div class="gauge mt"><div class="arc"></div><div class="ndl" id="ndl"></div></div>
+      <p class="small" style="text-align:center" id="bp-now">平均血壓 正常</p>
+      <div class="chain mt" id="baro-chain"></div>
+    </div>
+    <div class="card">
+      <h3>延腦的心臟中樞</h3><ul class="small"><li><b>心速中樞 CAC</b>（cardioacceleratory）→ 心率↑、收縮力↑</li><li><b>心抑中樞 CIC</b>（cardioinhibitory）→ 心率↓、收縮力↓</li></ul>
+      <h3 class="mt">血壓控制的五個機制</h3><ol class="small"><li>血管運動中樞</li><li>壓力接受器 Baroreceptor</li><li>化學接受器 Chemoreceptor</li><li>腦部高級中樞</li><li>化學物質（激素）</li></ol><p class="small muted">1–4 屬<b>神經機制</b>。</p>
+      <h3 class="mt">壓力接受器的三個反射</h3><ol class="small"><li><b>頸動脈竇反射</b> carotid sinus reflex</li><li><b>主動脈反射</b> aortic reflex</li><li><b>右心房反射（Bainbridge）</b>：靜脈壓↑ → 刺激 CAC → HR↑</li></ol>
+      <p class="small muted">補充：頸動脈竇與主動脈弓的壓力接受器感受血壓↑ → 延腦使副交感↑、交感↓ → HR↓、血管舒張 → 血壓回降（負回饋）。</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="bp" data-nav="血壓計算">
+  <h2><span class="num">04</span>血壓、脈搏與血流</h2>
+  <div class="grid2">
+    <div class="card" style="padding:12px"><canvas class="plot" id="bpc" style="--ph:240px" aria-label="動脈壓波形"></canvas>
+      <div class="ctrl"><label for="sbp">收縮壓 SBP</label><input type="range" id="sbp" min="80" max="200" value="120"><output id="sbp-v">120</output></div>
+      <div class="ctrl"><label for="dbp">舒張壓 DBP</label><input type="range" id="dbp" min="40" max="130" value="80"><output id="dbp-v">80</output></div>
+    </div>
+    <div class="card glow">
+      <div class="formula">脈搏壓 = 收縮壓 − 舒張壓</div>
+      <div class="formula">平均血壓 MAP = 舒張壓 + ⅓ 脈搏壓</div>
+      <div class="kv"><div><small>脈搏壓 PP</small><b id="pp">40</b> mmHg</div><div><small>平均血壓 MAP</small><b id="map">93</b> mmHg</div><div><small>判讀</small><b id="cls" style="font-size:16px">正常</b></div></div>
+      <ul class="small mt"><li>臨床的血壓＝左心室收縮時動脈內的壓力</li><li><b>收縮壓</b>：心室收縮時血液作用在動脈壁的力量；<b>舒張壓</b>：心室舒張時</li><li><b>脈搏</b>：動脈擴張與回彈交替產生的搏動；脈搏速率＝心跳速率 70–90 次/min</li><li>正常 120/80 → 脈搏壓 40、平均血壓約 93；<b>&gt;140/90 為高血壓</b></li></ul>
+    </div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>循環力學</h3><div class="formula" style="font-size:16px">F（流量）= P（壓力）/ R（阻力）</div><div class="formula" style="font-size:16px">CO = AP / PR</div><p class="small">AP＝動脈壓，PR＝周邊阻力 → 動脈壓 = CO × 周邊阻力。</p></div>
+    <div class="card tilt"><h3>影響動脈血壓的因素</h3><ol class="small"><li><b>心輸出量</b></li><li><b>血液容積</b></li><li><b>周邊阻力</b>（血液與管壁的摩擦）<ul><li>血管直徑</li><li>血液黏稠度：RBC 數目、血漿蛋白含量、血比容</li></ul></li></ol></div>
+    <div class="card tilt"><h3>影響靜脈回流的因素</h3><ol class="small"><li><b>肌肉幫浦 + 靜脈瓣</b></li><li><b>胸腹幫浦</b>：吸氣時橫膈下移，胸壓↓、腹壓↑ → 血液由腹部靜脈進入胸部靜脈；呼氣時靜脈瓣關閉防止逆流，胸部靜脈 → 右心房</li></ol></div>
+  </div>
+  <div class="card mt"><h3>流速與總截面積成反比</h3><p class="small">流速 ∝ 1 / 總截面積。截面積：<b>微血管 &gt; 小靜脈 &gt; 小動脈</b> → 微血管的血流<b>最慢</b>，正好方便物質交換。</p><div id="vel"></div><p class="small muted">數值為教科書常見的示意值（補充）。</p></div>
+</section>
+
+<section class="sec" id="cap" data-nav="微血管交換">
+  <h2><span class="num">05</span>微血管物質交換：Starling 力（3D）</h2>
+  <p class="lead">動脈端淨過濾壓為正 → 液體濾出；靜脈端為負 → 液體再吸收；剩下的由<b>淋巴管</b>帶走。小分子靠擴散、大分子靠胞飲作用。</p>
+  <div class="grid2">
+    <div class="stage short" id="st-cap"><canvas aria-label="3D 微血管液體交換"></canvas><div class="hud">紅＝動脈端　藍＝靜脈端　綠＝微淋巴管</div><div class="hud2" id="cap-cap"></div></div>
+    <div class="card glow">
+      <div class="formula" style="font-size:16px">P<sub>eff</sub> = (BHP + IFOP) − (IFHP + BOP)</div>
+      <div class="ctrl"><label for="bhpa">BHP 動脈端</label><input type="range" id="bhpa" min="10" max="50" value="30"><output id="bhpa-v">30</output></div>
+      <div class="ctrl"><label for="bhpv">BHP 靜脈端</label><input type="range" id="bhpv" min="0" max="40" value="15"><output id="bhpv-v">15</output></div>
+      <div class="ctrl"><label for="bop">BOP 血液滲透壓</label><input type="range" id="bop" min="5" max="40" value="28"><output id="bop-v">28</output></div>
+      <div class="ctrl"><label for="ifop">IFOP 組織液滲透壓</label><input type="range" id="ifop" min="0" max="20" value="6"><output id="ifop-v">6</output></div>
+      <div class="ctrl"><label for="ifhp">IFHP 組織液靜水壓</label><input type="range" id="ifhp" min="0" max="10" value="0"><output id="ifhp-v">0</output></div>
+      <div class="kv"><div><small>動脈端 P<sub>eff</sub></small><b id="pa">+8</b></div><div><small>靜脈端 P<sub>eff</sub></small><b id="pv">−7</b></div><div><small>組織間液量</small><div class="meter"><i id="edema" style="width:20%;background:linear-gradient(90deg,#22d3ee,#f87171)"></i></div></div></div>
+      <div class="btns"><button class="btn sm" data-p="n" type="button">正常</button><button class="btn sm" data-p="lp" type="button">低血漿蛋白</button><button class="btn sm" data-p="vh" type="button">靜脈壓升高</button><button class="btn sm" data-p="inf" type="button">發炎（蛋白漏出）</button></div>
+      <p class="small muted">講義：動脈端 (30+6)−(0+28)=8 mmHg；靜脈端 (15+6)−(0+28)=−7 mmHg。動脈端過濾的液體＝靜脈端再吸收＋淋巴管帶回。</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="fetal-s" data-nav="胎兒循環">
+  <h2><span class="num">06</span>胎兒循環與出生後的改變</h2>
+  <p class="lead">胎兒的肺、肝、消化道還不具功能 → 用<b>三個分流</b>繞過它們。線條顏色代表含氧量（紅＝高、紫＝混合、藍＝低）；點選構造看說明。</p>
+  <div class="btns"><span class="seg"><button class="btn on" id="fb0" type="button">出生前</button><button class="btn" id="fb1" type="button">出生後</button></span></div>
+  <div class="grid2">
+    <div class="card" style="padding:8px">
+      <svg id="fetal" viewBox="0 0 640 560" role="img" aria-label="胎兒循環示意圖">
+        <ellipse class="org" data-i="lung" cx="185" cy="150" rx="70" ry="52" fill="#7f1d1d55"/><ellipse class="org" data-i="lung" cx="555" cy="150" rx="62" ry="52" fill="#7f1d1d55"/>
+        <text x="150" y="120">右肺</text><text x="530" y="120">左肺</text>
+        <ellipse class="org" data-i="liver" cx="215" cy="385" rx="95" ry="52" fill="#78350f88"/><text x="160" y="400">肝臟</text>
+        <ellipse class="org gone" data-i="placenta" cx="110" cy="505" rx="80" ry="34" fill="#9d174d"/><text x="70" y="510">胎盤</text>
+        <path class="fv" data-i="uv" style="--c:#ef4444;--cb:#334155;--w:8" d="M150 495 C 210 470, 240 440, 260 420"/><path class="fl" d="M150 495 C 210 470, 240 440, 260 420"/>
+        <path class="fv shunt" data-i="dv" style="--c:#f43f5e;--w:7" d="M260 420 C 290 405, 310 395, 330 385"/><path class="fl" d="M260 420 C 290 405, 310 395, 330 385"/>
+        <path class="fv" data-i="ivc" style="--c:#c026d3;--cb:#3b82f6" d="M330 470 L 330 270"/><path class="fl" d="M330 470 L 330 270"/>
+        <path class="fv" data-i="svc" style="--c:#3b82f6" d="M330 60 L 330 200"/><path class="fl" d="M330 60 L 330 200"/>
+        <path class="fv" data-i="pt" style="--c:#7c3aed;--cb:#3b82f6" d="M352 290 C 360 240, 372 190, 385 150"/><path class="fl" d="M352 290 C 360 240, 372 190, 385 150"/>
+        <path class="fv" data-i="pa" style="--c:#7c3aed;--cb:#3b82f6;--w:4" d="M385 150 C 330 140, 270 145, 230 150"/><path class="fl" d="M385 150 C 330 140, 270 145, 230 150"/>
+        <path class="fv" data-i="pa" style="--c:#7c3aed;--cb:#3b82f6;--w:4" d="M385 150 C 430 145, 470 148, 505 150"/><path class="fl" d="M385 150 C 430 145, 470 148, 505 150"/>
+        <path class="fv" data-i="pvn" style="--c:#f8717199;--cb:#ef4444;--w:3" d="M520 175 C 490 190, 470 195, 455 200"/><path class="fl" d="M520 175 C 490 190, 470 195, 455 200"/>
+        <path class="fv shunt" data-i="da" style="--c:#7c3aed;--w:7" d="M385 150 C 400 125, 420 112, 440 108"/><path class="fl" d="M385 150 C 400 125, 420 112, 440 108"/>
+        <path class="fv" data-i="ao" style="--c:#a855f7;--cb:#ef4444" d="M440 260 C 445 200, 440 140, 450 105 C 465 70, 505 70, 520 105 L 520 455"/><path class="fl" d="M440 260 C 445 200, 440 140, 450 105 C 465 70, 505 70, 520 105 L 520 455"/>
+        <path class="fv" data-i="head" style="--c:#c026d3;--cb:#ef4444;--w:5" d="M468 82 L 470 30"/><path class="fl" d="M468 82 L 470 30"/>
+        <path class="fv" data-i="ua" style="--c:#6366f1;--cb:#334155;--w:6" d="M520 455 C 470 520, 300 535, 185 515"/><path class="fl" d="M520 455 C 470 520, 300 535, 185 515"/>
+        <circle class="org" data-i="ra" cx="330" cy="235" r="33" fill="#7c3aed"/><circle class="org" data-i="la" cx="432" cy="205" r="28" fill="#9333ea"/>
+        <circle class="org" data-i="rv" cx="352" cy="305" r="35" fill="#6d28d9"/><circle class="org" data-i="lv" cx="440" cy="292" r="37" fill="#a21caf"/>
+        <path class="fv shunt" data-i="fo" style="--c:#e879f9;--w:6" d="M358 225 L 406 210"/><path class="fl" d="M358 225 L 406 210"/>
+        <text x="312" y="240">RA</text><text x="420" y="210">LA</text><text x="338" y="310">RV</text><text x="428" y="297">LV</text>
+        <text x="170" y="470">臍靜脈</text><text x="262" y="440" class="ftxt">靜脈導管</text><text x="338" y="455">下腔靜脈</text><text x="338" y="74">上腔靜脈</text>
+        <text x="345" y="194">卵圓孔</text><text x="380" y="100">動脈導管</text><text x="530" y="300">主動脈</text><text x="300" y="545">臍動脈</text><text x="478" y="30">頭部</text><text x="250" y="140">肺動脈</text>
+        <g class="lig"><text x="236" y="470" style="fill:#94a3b8">→ 靜脈韌帶</text><text x="360" y="128" style="fill:#94a3b8">→ 動脈韌帶</text><text x="352" y="168" style="fill:#94a3b8">→ 卵圓窩</text><text x="160" y="499" style="fill:#94a3b8">→ 韌帶</text><text x="380" y="530" style="fill:#94a3b8">→ 韌帶</text></g>
+      </svg>
+    </div>
+    <div class="card info" id="f-info"><div class="tt">胎兒循環路徑</div>
+      <ol class="small"><li>胎盤（母體子宮絨毛交換）→ <b>臍靜脈</b>（含 O₂、養分最多）</li><li>→ <b>靜脈導管</b>（大部分繞過肝臟）→ 下腔靜脈 → 右心房</li><li>右心房 → <b>卵圓孔</b> → 左心房 → 左心室 → 主動脈 → 全身</li><li>上腔靜脈血 → 右心室 → 肺動脈 → <b>動脈導管</b>（繞過肺）→ 主動脈</li><li>→ 腹下（髂內）動脈 → <b>臍動脈</b>（O₂ 低）→ 胎盤</li></ol>
+      <h4>出生後</h4><p class="small">開始肺呼吸 → 肺血管擴張 → 動脈導管平滑肌收縮 → 卵圓孔關閉（成為<b>卵圓窩</b>）。臍動脈、臍靜脈及動、靜脈導管 → 形成<b>韌帶</b>。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="brain" data-nav="腦血流">
+  <h2><span class="num">07</span>體循環的特殊區域</h2>
+  <div class="grid3">
+    <div class="card"><h3>腦部血流</h3>
+      <svg viewBox="0 0 220 200" width="100%" role="img" aria-label="Willis 環示意">
+        <g fill="none" stroke-linecap="round"><path d="M75 60 L145 60 L170 100 L145 140 L75 140 L50 100 Z" stroke="#ef4444" stroke-width="6"/><path d="M50 100 L20 100 M170 100 L200 100" stroke="#f87171" stroke-width="7"/><path d="M95 140 L105 175 M125 140 L115 175 M110 175 L110 195" stroke="#fb7185" stroke-width="6"/><path d="M90 60 L80 20 M130 60 L140 20 M75 140 L40 175 M145 140 L180 175" stroke="#fca5a5" stroke-width="4"/></g>
+        <g font-size="10" fill="#e2e8f0" text-anchor="middle" font-family="sans-serif"><text x="22" y="92">內頸動脈</text><text x="198" y="92">內頸動脈</text><text x="110" y="198" dy="-2">椎動脈 → 基底動脈</text><text x="110" y="100" fill="#fbbf24">Willis 環</text></g>
+      </svg>
+      <ul class="small"><li>內頸動脈與椎動脈兩系統形成 <b>circle of Willis</b></li><li>腦約佔體重 <b>2%</b>，但用掉約 <b>20%</b> 的氧</li><li>缺氧 <b>&gt;4 分鐘</b> → 永久腦死</li><li>主要能源：<b>葡萄糖</b>，其他物質嚴格管制</li></ul></div>
+    <div class="card tilt"><h3>血腦障壁 BBB</h3><p class="small">腦部微血管<b>內皮細胞</b>、<b>基底膜</b>及<b>神經膠細胞</b>排列緊密，形成選擇性障壁，保護腦細胞免受傷害。</p><p class="small muted">→ 第 7 章 BBB 三層結構</p>
+      <h3 class="mt">吻合 Anastomosis</h3><p class="small">分布到身體同一區域的 2 條以上血管相接合 → 提供替代路徑。</p></div>
+    <div class="card tilt"><h3>肝門脈循環</h3><p class="small">消化道與脾的靜脈血先經<b>肝門靜脈</b>送到肝臟處理，再經肝靜脈回下腔靜脈。</p>
+      <div class="chain mt"><div class="nd">消化道 / 脾</div><span class="ar">→</span><div class="nd">肝門靜脈</div><span class="ar">→</span><div class="nd">肝臟</div><span class="ar">→</span><div class="nd">肝靜脈</div><span class="ar">→</span><div class="nd">下腔靜脈</div></div></div>
+  </div>
+</section>
+
+<section class="sec" id="loss" data-nav="失血">
+  <h2><span class="num">08</span>失血的代償</h2>
+  <div class="grid2">
+    <div class="card"><div class="ctrl"><label for="bl">失血量</label><input type="range" id="bl" min="0" max="50" value="0"><output id="bl-v">0%</output></div>
+      <div class="grid2 even" style="align-items:center"><div class="body"><i id="bl-fill" style="height:100%"></i></div><div><div class="tt" id="bl-t" style="font-size:18px;font-weight:900"></div><p class="small" id="bl-d"></p></div></div></div>
+    <div class="card"><h3>講義重點</h3><ul class="small"><li><b>靜脈代償作用</b>：失血約 <b>15–20%</b></li><li><b>最後防線</b>：失血 <b>≥30%</b>：中樞缺血反應 → 頸動脈竇反射 → 周邊收縮 → 周邊再擴張 → 循環崩潰 → 死亡</li></ul><p class="small muted">補充：靜脈系統是主要的血液儲存處，靜脈收縮可把儲存的血液推回循環；交感神經使心率加快、小動脈收縮以維持血壓。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">09</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="自我測驗"><h2><span class="num">10</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>整理自課程講義 CHPT14（CVS: Cardiovascular System 補充教材），僅供個人複習使用。 · <a href="index.html">回總覽</a> · <a href="ch13.html">← 第 13 章 血液與心臟</a> · <a href="ch15.html">第 15 章 免疫 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const sm = (a, b, x) => { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); };
+function fit(cv) { const w = cv.clientWidth, h = cv.clientHeight, d = Math.min(2, devicePixelRatio || 1); if (cv.width !== Math.round(w * d) || cv.height !== Math.round(h * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); } const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return [c, w, h]; }
+function onScreen(el) { const s = { v: true }; new IntersectionObserver(es => { s.v = es[0].isIntersecting; }).observe(el); return s; }
+function loopDt(fn) { let last = performance.now(); (function L(now) { const dt = Math.max(0, Math.min(0.05, (now - last) / 1000)); last = now; fn(dt); requestAnimationFrame(L); })(last); }
+
+/* ================= CO + 3D 左心室 ================= */
+const st8 = { edv: 130, esv: 50, hr: 70, symp: false };
+(function () {
+  const ids = ['edv', 'esv', 'hr'];
+  const $ = id => document.getElementById(id);
+  function sync() {
+    if (st8.esv > st8.edv - 10) st8.esv = st8.edv - 10;
+    ids.forEach(k => { $(k).value = st8[k]; $(k + '-v').textContent = st8[k]; });
+    const sv = st8.edv - st8.esv, co = sv * st8.hr;
+    $('sv').textContent = sv; $('co-v').textContent = co.toLocaleString(); $('ef').textContent = Math.round(sv / st8.edv * 100);
+    $('co-v').style.color = co > 7000 ? '#f87171' : co < 4000 ? '#60a5fa' : '';
+    document.getElementById('fs-edv').value = st8.edv; document.getElementById('fs-v').textContent = st8.edv;
+  }
+  window.coSync = sync;
+  ids.forEach(k => $(k).addEventListener('input', () => { st8[k] = +$(k).value; sync(); }));
+  const SC = {
+    sym: [{ hr: 110, esv: 30, symp: true }, ['交感神經', 'NE / E ↑', 'HR↑ 與 收縮力↑', 'ESV↓', 'SV↑、CO↑']],
+    para: [{ hr: 55, esv: 65, symp: false }, ['副交感神經', 'ACh', '收縮力↓（HR↓）', 'ESV↑', 'SV↓、CO↓']],
+    vr: [{ edv: 165, esv: 50 }, ['靜脈壓↑', '血容量↑', 'EDV↑', '心肌伸張↑ → 收縮力↑（Frank–Starling）', 'SV↑']],
+    ap: [{ esv: 72 }, ['動脈壓↑', '射血阻力↑', 'ESV↑', 'SV↓']],
+    tachy: [{ hr: 180, edv: 95 }, ['HR 過快', '舒張期縮短', 'EDV↓', 'SV↓（CO 不一定增加）']],
+    reset: [{ edv: 130, esv: 50, hr: 70, symp: false }, ['正常', 'EDV 130', 'ESV 50', 'SV 80 mL', 'CO 5600 mL/min']]
+  };
+  const chain = document.getElementById('scen-chain');
+  UI.$$('#scen .btn').forEach(b => b.addEventListener('click', () => {
+    const [set, steps] = SC[b.dataset.s];
+    if (b.dataset.s !== 'reset' && b.dataset.s !== 'sym' && b.dataset.s !== 'para') Object.assign(st8, { edv: 130, esv: 50, hr: 70 });
+    Object.assign(st8, set); sync();
+    UI.$$('#scen .btn').forEach(x => x.classList.toggle('on', x === b && b.dataset.s !== 'reset'));
+    chain.innerHTML = steps.map((s, i) => '<div class="nd">' + s + '</div>' + (i < steps.length - 1 ? '<span class="ar">→</span>' : '')).join('');
+    const nd = UI.$$('.nd', chain), ar = UI.$$('.ar', chain);
+    nd.forEach((n, i) => setTimeout(() => { n.classList.add('on'); if (ar[i]) ar[i].classList.add('on'); }, 250 * i));
+    UI.$$('[data-c]').forEach(x => x.classList.toggle('on', (x.dataset.c === 's') === !!st8.symp));
+  }));
+  sync();
+  const stg = document.getElementById('st-lv');
+  const S = new Mini3D.Scene(stg.querySelector('canvas'), { radius: 64, yaw: 0.4, pitch: 0.2, autoRotate: 0.12, target: [0, 12, 0] });
+  Mini3D.controls(S, stg);
+  const dots = Mini3D.shell(560, [0, 0, 0], [24, 36, 24]).map(q => S.dot(q.p, 2, '#ef4444', { id: 'lv', u: q.p.slice(), al: 0.7 }));
+  const blood = S.sphere([0, -2, 0], 20, '#991b1b', { al: 0.45, nopick: true });
+  S.path([[8, 30, 2], [10, 52, 0], [4, 72, -6]], 6, '#dc2626', { id: 'ao' }, 4);
+  S.path([[-14, 50, 8], [-12, 36, 6]], 5, '#f87171', { id: 'mi' }, 3);
+  S.label([4, 72, -6], '→ 主動脈', { c: '#fca5a5', dx: 40 }); S.label([-14, 50, 8], '左心房 →', { c: '#fca5a5', dx: -40 });
+  const out = document.getElementById('lv-vol');
+  let cum = 0;
+  S.onFrame = dt => {
+    cum += dt * st8.hr / 60; const t = ((cum % 1) + 1) % 1;
+    const ej = sm(0.24, 0.48, t), fill = sm(0.55, 0.9, t) * 0.8 + sm(0.06, 0.16, t) * 0.2;
+    let vol;
+    if (t < 0.24) vol = st8.esv + (st8.edv - st8.esv) * (0.8 + 0.2 * sm(0.06, 0.16, t));
+    else if (t < 0.55) vol = st8.edv - (st8.edv - st8.esv) * ej;
+    else vol = st8.esv + (st8.edv - st8.esv) * sm(0.55, 0.9, t) * 0.8;
+    void fill;
+    const k = Math.cbrt(vol / 130);
+    dots.forEach(d => { d.p = V.mul(d.u, k); });
+    blood.r = 20 * k; blood.p = [0, -2 * k, 0];
+    out.innerHTML = '目前容積 <b>' + Math.round(vol) + '</b> mL　' + (t >= 0.24 && t < 0.48 ? '<span class="red">射血中</span>' : t >= 0.55 || t < 0.06 ? '<span class="blue">充血中</span>' : '');
+  };
+})();
+
+/* ================= Frank–Starling ================= */
+(function () {
+  const cv = document.getElementById('fsc'), vis = onScreen(cv), sl = document.getElementById('fs-edv'), sv = document.getElementById('fs-v');
+  const curve = (e, s) => (s ? 150 : 115) * (1 - Math.exp(-(e - 45) / (s ? 55 : 65)));
+  sl.addEventListener('input', () => { st8.edv = +sl.value; sv.textContent = sl.value; window.coSync(); });
+  UI.$$('[data-c]').forEach(b => b.addEventListener('click', () => { st8.symp = b.dataset.c === 's'; UI.$$('[data-c]').forEach(x => x.classList.toggle('on', x === b)); }));
+  loopDt(() => {
+    if (!vis.v) return;
+    const [c, w, h] = fit(cv); c.clearRect(0, 0, w, h);
+    const L = 46, B = 34, X = e => L + ((e - 50) / 180) * (w - L - 14), Y = v => h - B - (v / 160) * (h - B - 14);
+    c.strokeStyle = 'rgba(255,255,255,.08)'; c.fillStyle = '#94a3b8'; c.font = '11px ' + Mini3D.FONT; c.textAlign = 'right';
+    for (let v = 0; v <= 160; v += 40) { c.beginPath(); c.moveTo(L, Y(v)); c.lineTo(w - 10, Y(v)); c.stroke(); c.fillText(v, L - 6, Y(v) + 4); }
+    c.textAlign = 'center'; for (let e = 60; e <= 220; e += 40) c.fillText(e, X(e), h - B + 16);
+    c.fillText('EDV（mL）→ 心肌伸張', (L + w) / 2, h - 4); c.save(); c.translate(12, h / 2); c.rotate(-Math.PI / 2); c.fillText('SV / 收縮強度', 0, 0); c.restore();
+    [[false, '#5ad1ff', '正常'], [true, '#f59e0b', '交感：收縮力↑']].forEach(([s, col, n]) => {
+      c.strokeStyle = col; c.lineWidth = s === st8.symp ? 3 : 1.5; c.globalAlpha = s === st8.symp ? 1 : 0.45; c.beginPath();
+      for (let e = 50; e <= 230; e += 2) { const x = X(e), y = Y(curve(e, s)); e === 50 ? c.moveTo(x, y) : c.lineTo(x, y); } c.stroke();
+      c.fillStyle = col; c.textAlign = 'left'; c.fillText(n, X(200), Y(curve(200, s)) - 8); c.globalAlpha = 1;
+    });
+    const e = st8.edv, v = curve(e, st8.symp);
+    c.setLineDash([4, 4]); c.strokeStyle = 'rgba(255,255,255,.4)'; c.beginPath(); c.moveTo(X(e), h - B); c.lineTo(X(e), Y(v)); c.lineTo(L, Y(v)); c.stroke(); c.setLineDash([]);
+    c.fillStyle = '#fff'; c.beginPath(); c.arc(X(e), Y(v), 6, 0, 6.3); c.fill();
+    c.textAlign = 'left'; c.font = 'bold 12px ' + Mini3D.FONT; c.fillText('SV ≈ ' + Math.round(v), X(e) + 10, Y(v) - 8);
+  });
+})();
+
+/* ================= 壓力接受器反射 ================= */
+(function () {
+  const ndl = document.getElementById('ndl'), txt = document.getElementById('bp-now'), chain = document.getElementById('baro-chain');
+  const set = deg => { ndl.style.transform = 'rotate(' + deg + 'deg)'; };
+  const SC = {
+    up: [55, '血壓 ↑', ['血壓 ↑', '頸動脈竇 / 主動脈弓 壓力接受器放電 ↑', '延腦：CIC ↑、CAC ↓、血管運動中樞 ↓', '副交感 ↑ / 交感 ↓', 'HR ↓、收縮力 ↓、血管舒張', '血壓回降']],
+    down: [-55, '血壓 ↓', ['血壓 ↓', '壓力接受器放電 ↓', '延腦：CAC ↑、CIC ↓、血管運動中樞 ↑', '交感 ↑ / 副交感 ↓', 'HR ↑、收縮力 ↑、血管收縮', '血壓回升']],
+    bain: [0, '靜脈壓 ↑', ['靜脈壓 ↑（回流增加）', '右心房伸張接受器', '刺激 CAC', 'HR ↑', '把多回來的血送出去']]
+  };
+  let tm = [];
+  UI.$$('[data-b]').forEach(b => b.addEventListener('click', () => {
+    tm.forEach(clearTimeout); tm = [];
+    const [deg, label, steps] = SC[b.dataset.b];
+    UI.$$('[data-b]').forEach(x => x.classList.toggle('on', x === b));
+    set(deg); txt.textContent = label;
+    chain.innerHTML = steps.map((s, i) => '<div class="nd">' + s + '</div>' + (i < steps.length - 1 ? '<span class="ar">→</span>' : '')).join('');
+    const nd = UI.$$('.nd', chain), ar = UI.$$('.ar', chain);
+    nd.forEach((n, i) => tm.push(setTimeout(() => { n.classList.add('on'); if (ar[i]) ar[i].classList.add('on'); }, 450 * i)));
+    tm.push(setTimeout(() => { set(0); txt.textContent = b.dataset.b === 'bain' ? '心率上升，處理增加的回流' : '負回饋 → 血壓回到正常'; }, 450 * steps.length + 300));
+  }));
+  set(0);
+})();
+
+/* ================= 血壓計算 ================= */
+(function () {
+  const s = document.getElementById('sbp'), d = document.getElementById('dbp'), cv = document.getElementById('bpc'), vis = onScreen(cv);
+  const $ = id => document.getElementById(id);
+  function upd(src) {
+    let S = +s.value, D = +d.value;
+    if (D >= S - 10) { if (src === 's') { D = S - 10; d.value = D; } else { S = D + 10; s.value = S; } }
+    const pp = S - D, map = D + pp / 3;
+    $('sbp-v').textContent = S; $('dbp-v').textContent = D; $('pp').textContent = pp; $('map').textContent = map.toFixed(0);
+    const hyp = S > 140 || D > 90, low = S < 90;
+    $('cls').textContent = hyp ? '高血壓（>140/90）' : low ? '偏低' : '正常範圍'; $('cls').style.color = hyp ? '#f87171' : low ? '#60a5fa' : '#34d399';
+  }
+  s.addEventListener('input', () => upd('s')); d.addEventListener('input', () => upd('d')); upd('s');
+  let t = 0;
+  const wave = p => { p %= 1; if (p < 0.12) return sm(0, 0.12, p); if (p < 0.38) return 1 - 0.55 * sm(0.12, 0.38, p); if (p < 0.42) return 0.45 - 0.07 * sm(0.38, 0.42, p); if (p < 0.48) return 0.38 + 0.1 * sm(0.42, 0.48, p); return 0.48 * (1 - sm(0.48, 1, p)); };
+  loopDt(dt => {
+    if (!vis.v) return; t += dt;
+    const S = +s.value, D = +d.value, map = D + (S - D) / 3;
+    const [c, w, h] = fit(cv); c.clearRect(0, 0, w, h);
+    const Y = v => h - 22 - ((v - 30) / 190) * (h - 34), L = 40;
+    c.font = '11px ' + Mini3D.FONT; c.fillStyle = '#94a3b8'; c.textAlign = 'right';
+    [40, 80, 120, 160, 200].forEach(v => { c.strokeStyle = 'rgba(255,255,255,.07)'; c.beginPath(); c.moveTo(L, Y(v)); c.lineTo(w - 8, Y(v)); c.stroke(); c.fillText(v, L - 6, Y(v) + 4); });
+    const lines = [[S, '#f87171', '收縮壓 ' + S], [D, '#60a5fa', '舒張壓 ' + D], [map, '#fbbf24', 'MAP ' + map.toFixed(0)]];
+    lines.forEach(([v, col, n]) => { c.setLineDash([5, 5]); c.strokeStyle = col; c.beginPath(); c.moveTo(L, Y(v)); c.lineTo(w - 8, Y(v)); c.stroke(); c.setLineDash([]); c.fillStyle = col; c.textAlign = 'left'; c.fillText(n, w - 92, Y(v) - 4); });
+    c.strokeStyle = '#fb7185'; c.lineWidth = 2.5; c.beginPath();
+    for (let x = L; x < w - 8; x += 2) { const p = (x - L) / 150 - t * 1.2; const v = D + (S - D) * wave(((p % 1) + 1) % 1); x === L ? c.moveTo(x, Y(v)) : c.lineTo(x, Y(v)); }
+    c.stroke(); c.lineWidth = 1;
+    c.fillStyle = 'rgba(251,191,36,.15)'; c.fillRect(L, Y(S), 6, Y(D) - Y(S));
+    c.fillStyle = '#e2e8f0'; c.fillText('脈搏壓 ' + (S - D), L + 10, (Y(S) + Y(D)) / 2);
+  });
+  const VEL = [['主動脈', 4.5], ['動脈', 20], ['小動脈', 40], ['微血管', 2500], ['小靜脈', 250], ['靜脈', 80], ['腔靜脈', 18]];
+  const box = document.getElementById('vel'), lg = v => Math.log10(v) / Math.log10(2500) * 100;
+  box.appendChild(UI.h('div', 'vbar', '<b></b><small class="muted">總截面積（對數）</small><small class="muted">流速（相對）</small>'));
+  VEL.forEach(([n, a]) => { const vel = 1 / a, vmax = 1 / 4.5; box.appendChild(UI.h('div', 'vbar', '<span>' + n + '</span><div class="b" style="--c:#a78bfa;width:' + Math.max(4, lg(a)) + '%"></div><div class="b" style="--c:#fb7185;width:' + Math.max(2, Math.sqrt(vel / vmax) * 100) + '%"></div>')); });
+})();
+
+/* ================= 微血管 Starling 3D ================= */
+(function () {
+  const stg = document.getElementById('st-cap');
+  const S = new Mini3D.Scene(stg.querySelector('canvas'), { radius: 105, yaw: 0.18, pitch: 0.42, autoRotate: 0 });
+  Mini3D.controls(S, stg);
+  const RR = 14;
+  for (let x = -110; x <= 110; x += 6) for (let a = 0; a < 6.283; a += 0.32) { const f = (x + 110) / 220; S.dot([x, Math.sin(a) * RR, Math.cos(a) * RR], 1.6, Mini3D.mix('#ef4444', '#3b82f6', f), { id: 'cap', al: 0.5 }); }
+  S.path([[-70, 46, 0], [0, 48, 0], [80, 46, 0], [120, 52, 0]], 7, '#86efac', { id: 'lymph', al: 0.4 }, 6);
+  S.sphere([-70, 46, 0], 7, '#86efac', { id: 'lymph', al: 0.5 });
+  for (let i = 0; i < 26; i++) { const x = -100 + Math.random() * 200, y = (Math.random() - .5) * 80, z = (Math.random() - .5) * 80; if (Math.hypot(y, z) < 26) continue; S.sphere([x, y, z], 6, '#334155', { id: 'tissue', al: 0.35 }); }
+  const lA = S.label([-110, 26, 0], '動脈端', { c: '#fca5a5', force: 1 }), lV = S.label([110, 26, 0], '靜脈端', { c: '#93c5fd', force: 1 });
+  S.label([0, 48, 0], '微淋巴管', { c: '#86efac', dy: -18 });
+  const pool = []; for (let i = 0; i < 300; i++) pool.push(S.sphere([0, 0, 0], 1.8, '#67e8f9', { hidden: true, nopick: true, zb: -2 }));
+  const P = { bhpa: 30, bhpv: 15, bop: 28, ifop: 6, ifhp: 0 };
+  const $ = id => document.getElementById(id);
+  const keys = Object.keys(P);
+  const pa = () => (P.bhpa + P.ifop) - (P.ifhp + P.bop), pv = () => (P.bhpv + P.ifop) - (P.ifhp + P.bop);
+  const peff = x => pa() + (pv() - pa()) * ((x + 110) / 220);
+  function sync() {
+    keys.forEach(k => { $(k).value = P[k]; $(k + '-v').textContent = P[k]; });
+    const a = pa(), v = pv();
+    $('pa').textContent = (a > 0 ? '+' : '') + a; $('pa').style.color = a > 0 ? '#f87171' : '#60a5fa';
+    $('pv').textContent = (v > 0 ? '+' : '') + v; $('pv').style.color = v > 0 ? '#f87171' : '#60a5fa';
+    lA.text = '動脈端 ' + (a > 0 ? '+' : '') + a + (a > 0 ? ' 過濾' : ' 再吸收'); lV.text = '靜脈端 ' + (v > 0 ? '+' : '') + v + (v > 0 ? ' 過濾' : ' 再吸收');
+  }
+  keys.forEach(k => $(k).addEventListener('input', () => { P[k] = +$(k).value; sync(); }));
+  const PR = { n: { bhpa: 30, bhpv: 15, bop: 28, ifop: 6, ifhp: 0 }, lp: { bop: 16 }, vh: { bhpv: 30 }, inf: { ifop: 14 } };
+  const PT = { n: '正常：動脈端過濾、靜脈端再吸收，多出的由淋巴帶走。', lp: '低血漿蛋白（如營養不良、肝病）：BOP↓ → 再吸收不足 → 組織間液堆積（水腫）。', vh: '靜脈壓升高（如心衰竭）：靜脈端 BHP↑ → 無法再吸收 → 水腫。', inf: '發炎：微血管通透性↑、蛋白漏到組織 → IFOP↑ → 過濾增加。' };
+  const cap = $('cap-cap');
+  UI.$$('[data-p]').forEach(b => b.addEventListener('click', () => { Object.assign(P, PR.n, PR[b.dataset.p]); sync(); cap.textContent = PT[b.dataset.p]; UI.$$('[data-p]').forEach(x => x.classList.toggle('on', x === b)); }));
+  sync(); cap.textContent = PT.n;
+  let acc = 0;
+  S.onFrame = dt => {
+    let fil = 0; for (let x = -105; x <= 105; x += 10) { const p = peff(x); if (p > 0) fil += p; }
+    acc += fil * dt * 0.16;
+    while (acc >= 1) {
+      acc -= 1; const o = pool.find(q => q.hidden); if (!o) break;
+      let x; for (let k = 0; k < 20; k++) { x = -105 + Math.random() * 210; if (peff(x) > Math.random() * Math.max(1, pa(), pv())) break; }
+      const a = Math.random() * 6.283; o.hidden = false; o.st = 'out'; o.p = [x, Math.sin(a) * RR, Math.cos(a) * RR]; o.v = [(Math.random() - .5) * 6, Math.sin(a) * 14, Math.cos(a) * 14]; o.c = '#67e8f9';
+    }
+    let outN = 0;
+    pool.forEach(o => {
+      if (o.hidden) return;
+      if (o.st === 'out') {
+        outN++;
+        o.v = V.mul(o.v, 0.96); o.v = V.add(o.v, [(Math.random() - .5) * 8 * dt, (Math.random() - .5) * 8 * dt, (Math.random() - .5) * 8 * dt]);
+        o.p = V.add(o.p, V.mul(o.v, dt));
+        const r = Math.hypot(o.p[1], o.p[2]); if (r > 46) { o.p[1] *= 46 / r; o.p[2] *= 46 / r; }
+        if (Math.abs(o.p[0]) > 112) o.p[0] = Math.sign(o.p[0]) * 112;
+        const pe = peff(o.p[0]);
+        if (pe < 0 && Math.random() < -pe * 0.012 * dt * 10) { o.st = 'in'; o.c = '#a5b4fc'; }
+        else if (Math.random() < 0.03 * dt) { o.st = 'ly'; o.c = '#86efac'; }
+      } else if (o.st === 'in') {
+        const tgt = [o.p[0], 0, 0]; o.p = V.lerp(o.p, tgt, Math.min(1, dt * 2.5)); if (Math.hypot(o.p[1], o.p[2]) < 4) o.hidden = true;
+      } else if (o.st === 'ly') {
+        const tgt = [Math.max(-70, Math.min(110, o.p[0])), 47, 0]; o.p = V.lerp(o.p, tgt, Math.min(1, dt * 1.6)); if (V.dist(o.p, tgt) < 3) o.hidden = true;
+      }
+    });
+    $('edema').style.width = Math.min(100, outN / 2.2) + '%';
+  };
+})();
+
+/* ================= 胎兒循環 ================= */
+(function () {
+  const svg = document.getElementById('fetal'), info = document.getElementById('f-info'), home = info.innerHTML;
+  const FI = {
+    uv: ['臍靜脈 Umbilical vein', '由胎盤帶來 <b>O₂ 與養分最多</b>的血；出生後 → 韌帶（肝圓韌帶）。'],
+    dv: ['靜脈導管 Ductus venosus', '分流①：讓臍靜脈血<b>繞過肝臟</b>直接進入下腔靜脈；出生後 → 靜脈韌帶。'],
+    ivc: ['下腔靜脈', '胎兒時含混合血（臍靜脈血 + 下半身回流）。'], svc: ['上腔靜脈', '上半身回流的低氧血 → 右心房 → 右心室。'],
+    fo: ['卵圓孔 Foramen ovale', '分流②：右心房 → 左心房，<b>繞過肺</b>；出生後關閉 → <b>卵圓窩</b>。'],
+    da: ['動脈導管 Ductus arteriosus', '分流③：肺動脈 → 主動脈，<b>繞過肺</b>；出生後平滑肌收縮關閉 → 動脈韌帶。'],
+    pt: ['肺動脈幹', '胎兒肺未擴張、阻力大 → 大部分血經動脈導管走掉。'], pa: ['肺動脈', '胎兒時流量很少；出生後肺血管擴張，流量大增。'], pvn: ['肺靜脈', '出生後把肺的充氧血送回左心房。'],
+    ao: ['主動脈', '送血到全身；胎兒時為混合血。'], head: ['頭部分支', '主動脈弓的分支，供應頭部。'],
+    ua: ['臍動脈 Umbilical arteries', '由腹下（髂內）動脈分出，把<b>低 O₂</b> 的血送回胎盤；出生後 → 韌帶。'],
+    placenta: ['胎盤 Placenta', '母體子宮絨毛 ↔ 胎盤 ↔ 臍帶：氣體與養分交換處（取代肺、消化道）。'], liver: ['肝臟', '胎兒時大多被靜脈導管繞過。'], lung: ['肺', '胎兒時不具呼吸功能；出生後開始肺呼吸。'],
+    ra: ['右心房', '接收下、上腔靜脈血；部分經卵圓孔到左心房。'], la: ['左心房', '胎兒時主要接收經卵圓孔來的血。'], rv: ['右心室', '送血到肺動脈幹（多數再經動脈導管）。'], lv: ['左心室', '送血到主動脈。']
+  };
+  svg.addEventListener('click', e => { const el = e.target.closest('[data-i]'); if (!el) return; const d = FI[el.dataset.i]; if (!d) return; info.innerHTML = '<div class="tt">' + d[0] + '</div><p>' + d[1] + '</p><button class="btn sm" type="button" id="f-back">← 路徑總覽</button>'; document.getElementById('f-back').onclick = () => { info.innerHTML = home; }; });
+  const b0 = document.getElementById('fb0'), b1 = document.getElementById('fb1');
+  const born = v => { svg.classList.toggle('born', v); b0.classList.toggle('on', !v); b1.classList.toggle('on', v); UI.$$('.org[data-i=ra],.org[data-i=rv]', svg).forEach(o => o.setAttribute('fill', v ? '#1d4ed8' : (o.dataset.i === 'ra' ? '#7c3aed' : '#6d28d9'))); UI.$$('.org[data-i=la],.org[data-i=lv]', svg).forEach(o => o.setAttribute('fill', v ? '#dc2626' : (o.dataset.i === 'la' ? '#9333ea' : '#a21caf'))); UI.$$('[data-i=uv],[data-i=ua]', svg).forEach(p => p.classList.toggle('gone', v)); };
+  b0.onclick = () => born(false); b1.onclick = () => born(true);
+})();
+
+/* ================= 失血 ================= */
+(function () {
+  const r = document.getElementById('bl'), v = document.getElementById('bl-v'), f = document.getElementById('bl-fill'), t = document.getElementById('bl-t'), d = document.getElementById('bl-d');
+  function u() {
+    const x = +r.value; v.textContent = x + '%'; f.style.height = (100 - x) + '%';
+    let T, D, c;
+    if (x < 15) { T = '可耐受'; D = '少量失血，身體可經一般調節維持血壓（補充）。'; c = '#34d399'; }
+    else if (x <= 20) { T = '靜脈代償作用（講義：15–20%）'; D = '靜脈收縮把儲存的血液推回循環，維持回流與心輸出量。'; c = '#fbbf24'; }
+    else if (x < 30) { T = '代償加強（補充）'; D = '交感神經強烈興奮：HR↑、小動脈收縮，盡力維持血壓。'; c = '#fb923c'; }
+    else { T = '最後防線（講義：≥30%）'; D = '中樞缺血反應 → 頸動脈竇反射 → 周邊收縮 → 周邊再擴張 → 循環崩潰 → 死亡。'; c = '#f87171'; }
+    t.textContent = T; t.style.color = c; d.textContent = D;
+  }
+  r.addEventListener('input', u); u();
+})();
+
+/* ================= 快閃卡與測驗 ================= */
+UI.flashcards(document.getElementById('fc'), [
+  { tag: 'CO', f: 'CO 的定義與公式？', b: '每分鐘左心室送入主動脈的血量；CO = SV × HR（例：80 × 70 = 5600 mL/min）' },
+  { tag: 'SV', f: 'SV 與 EDV、ESV 的關係？', b: 'SV = EDV − ESV（約 80 = 130 − 50 mL）<br>EDV：左心室總容積；ESV：收縮後剩餘容積' },
+  { tag: 'EDV', f: '影響 EDV 的兩個因子？', b: '心室舒張期長短（HR↑ → 舒張期↓ → EDV↓）；靜脈壓（↑ → 血容量↑ → EDV↑）' },
+  { tag: 'ESV', f: '影響 ESV 的兩個因子？', b: '動脈壓（↑ → 阻力↑ → ESV↑）；心室收縮力（↑ → ESV↓）' },
+  { tag: 'F-S', f: 'Frank–Starling 定律？', b: '心室收縮強度隨 EDV 而變：更多進入 → 更多輸出（心肌被拉長的程度）' },
+  { tag: '自主', f: '交感 vs 副交感對 SV 的影響？', b: '交感：NE/E↑ → HR 與收縮力↑ → ESV↓ → SV↑<br>副交感：收縮力↓ → ESV↑ → SV↓' },
+  { tag: '延腦', f: 'CAC 與 CIC？', b: 'CAC 心速中樞：HR↑、收縮力↑<br>CIC 心抑中樞：HR↓、收縮力↓' },
+  { tag: '血壓', f: '血壓控制的五個機制？', b: '血管運動中樞、壓力接受器、化學接受器、腦部高級中樞（以上神經機制）、化學物質（激素）' },
+  { tag: '反射', f: '壓力接受器的三個反射？', b: '頸動脈竇反射、主動脈反射、右心房反射（Bainbridge：靜脈壓↑ → CAC → HR↑）' },
+  { tag: '計算', f: '脈搏壓與平均血壓公式？', b: '脈搏壓 = 收縮壓 − 舒張壓<br>MAP = 舒張壓 + ⅓ 脈搏壓（120/80 → 40、約 93）' },
+  { tag: '力學', f: 'F、P、R 的關係？', b: 'F = P / R；CO = AP / PR' },
+  { tag: '血壓', f: '影響動脈血壓的三因素？', b: '心輸出量、血液容積、周邊阻力（血管直徑、血液黏稠度：RBC 數、血漿蛋白、血比容）' },
+  { tag: '回流', f: '影響靜脈回流的兩個幫浦？', b: '肌肉幫浦＋靜脈瓣；胸腹幫浦（吸氣：橫膈下移，胸壓↓腹壓↑）' },
+  { tag: '流速', f: '哪裡血流最慢？為什麼？', b: '微血管；流速 ∝ 1/總截面積，微血管總截面積最大 → 方便物質交換' },
+  { tag: 'Starling', f: 'Peff 公式與動脈端、靜脈端數值？', b: 'Peff = (BHP + IFOP) − (IFHP + BOP)<br>動脈端 (30+6)−(0+28) = +8；靜脈端 (15+6)−(0+28) = −7' },
+  { tag: 'Starling', f: '動脈端過濾的液體去哪裡？', b: '＝ 靜脈端再吸收 ＋ 淋巴管帶回' },
+  { tag: '胎兒', f: '胎兒循環的三個分流？', b: '靜脈導管（繞過肝）、卵圓孔（RA → LA，繞過肺）、動脈導管（肺動脈 → 主動脈，繞過肺）' },
+  { tag: '胎兒', f: '出生後的改變？', b: '肺呼吸 → 肺血管擴張 → 動脈導管收縮 → 卵圓孔關閉（卵圓窩）；臍動靜脈與動、靜脈導管 → 韌帶' },
+  { tag: '腦', f: '腦的氧需求與缺氧耐受？', b: '腦約佔體重 2%、用掉約 20% 的氧；缺氧 >4 分鐘 → 永久腦死；主要能源葡萄糖' },
+  { tag: '失血', f: '失血 15–20% 與 ≥30% 的反應？', b: '15–20%：靜脈代償作用<br>≥30%：最後防線：中樞缺血反應 → 頸動脈竇反射 → 周邊收縮 → 再擴張 → 崩潰 → 死亡' }
+], 'ch14');
+UI.quiz(document.getElementById('qz'), [
+  { q: 'EDV = 140 mL、ESV = 60 mL、HR = 75，CO 為？', o: ['4500 mL/min', '6000 mL/min', '10500 mL/min', '5250 mL/min'], a: 1, e: 'SV = 80，80 × 75 = 6000 mL/min。' },
+  { q: '心率過快時 EDV 會？', o: ['增加', '減少', '不變', '先增後減'], a: 1, e: '舒張期縮短 → 充血時間不足 → EDV↓。' },
+  { q: '動脈壓升高會使？', o: ['ESV↓', 'ESV↑', 'EDV↑', 'HR↑'], a: 1, e: '射血阻力增加 → 心室內剩較多血 → ESV↑。' },
+  { q: '血壓 130/85 的平均血壓約為？', o: ['100 mmHg', '107.5 mmHg', '45 mmHg', '115 mmHg'], a: 0, e: '85 + 45/3 = 100。' },
+  { q: 'Bainbridge 反射的效果是？', o: ['靜脈壓↑ → HR↓', '靜脈壓↑ → HR↑', '動脈壓↑ → HR↑', '動脈壓↓ → HR↓'], a: 1, e: '右心房反射：靜脈壓↑ → 刺激 CAC → HR↑。' },
+  { q: '依講義數值，微血管靜脈端的淨過濾壓為？', o: ['+8 mmHg', '−7 mmHg', '+15 mmHg', '0'], a: 1, e: '(15 + 6) − (0 + 28) = −7 → 再吸收。' },
+  { q: '血漿蛋白過低造成水腫，主要因為？', o: ['BHP↑', 'BOP↓', 'IFHP↑', 'IFOP↓'], a: 1, e: '血液膠體滲透壓下降 → 靜脈端再吸收不足。' },
+  { q: '讓血液由右心房直接到左心房的胎兒構造是？', o: ['動脈導管', '靜脈導管', '卵圓孔', '臍動脈'], a: 2, e: '卵圓孔，出生後成為卵圓窩。' },
+  { q: '胎兒血液中含氧量最高的血管是？', o: ['臍動脈', '臍靜脈', '主動脈', '肺動脈'], a: 1, e: '臍靜脈直接從胎盤帶來充氧血。' },
+  { q: '血流速度最慢的血管是？', o: ['主動脈', '小動脈', '微血管', '腔靜脈'], a: 2, e: '總截面積最大。' },
+  { q: '下列何者「不是」影響周邊阻力的因素？', o: ['血管直徑', '血比容', '血漿蛋白含量', '心率'], a: 3, e: '周邊阻力取決於血管直徑與血液黏稠度。' },
+  { q: '交感神經興奮對每搏量的影響路徑是？', o: ['收縮力↓ → ESV↑ → SV↓', 'HR↑、收縮力↑ → ESV↓ → SV↑', 'EDV↓ → SV↓', '不影響 SV'], a: 1, e: 'NE/E 增加收縮力，使 ESV 減少。' }
+]);
+</script>
+</body>
+</html>

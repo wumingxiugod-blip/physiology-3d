@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch6 細胞與細胞外環境 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body style="--acc:#2dd4bf;--acc2:#fbbf24">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 6 · Interactions Between Cells and the Extracellular Environment</div>
+  <h1 class="title3d">細胞膜運輸與細胞外環境</h1>
+  <p class="sub">流體鑲嵌的細胞膜與跨膜運輸、Na⁺/K⁺ 幫浦與協同運輸、小腸上皮的跨上皮運輸、滲透與張力（U 形管、紅血球）、胞吞胞吐、G 蛋白與 cAMP 訊息傳遞、細胞外基質與膠原蛋白組裝。</p>
+  <div class="chips"><a class="chip" href="#s1">① 細胞膜與運輸</a><a class="chip" href="#s2">② 幫浦</a><a class="chip" href="#s3">③ 跨上皮</a><a class="chip" href="#s4">④ 滲透</a><a class="chip" href="#s5">⑤ 胞吞胞吐</a><a class="chip" href="#s6">⑥ 訊息傳遞</a><a class="chip" href="#s7">⑦ 細胞外基質</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="s1" data-nav="細胞膜與運輸">
+  <h2><span class="num">01</span>細胞膜（流體鑲嵌模型）與跨膜運輸的種類</h2>
+  <div class="grid2">
+    <div class="stage" id="st-bil"><canvas aria-label="3D 細胞膜"></canvas><div class="hud">上＝細胞外液　下＝細胞質</div><div class="hud2" id="bil-cap">點選膜的成分或運輸的分子</div></div>
+    <div class="card info"><div id="info-bil"><div class="tt">點選部位</div></div><div class="picker" id="pk-bil"></div></div>
+  </div>
+  <div class="card mt"> <p class="small">細胞膜具<b>選擇通透性</b>：一般不讓蛋白質、核酸等大分子通過；離子、養分、廢物則可經特定方式通過。</p> <div class="tbwrap mt"><table class="tb"> <tr><th colspan="2">非載體媒介（被動）</th></tr> <tr><td>脂溶性分子的簡單擴散</td><td>O₂、CO₂、類固醇激素直接穿過磷脂層</td></tr> <tr><td>離子經通道的簡單擴散</td><td>經<b>通道蛋白</b>（有些常開、有些有閘門）</td></tr> <tr><td>水的簡單擴散＝<b>滲透</b></td><td>主要經<b>水通道蛋白</b>（aquaporin）</td></tr> <tr><th colspan="2">載體媒介</th></tr> <tr><td><b>促進性擴散</b>（被動）</td><td>載體改變構形運送；順濃度梯度、不耗 ATP。例：<b>GLUT</b> 葡萄糖轉運子</td></tr> <tr><td><b>主動運輸</b></td><td>逆濃度梯度、需 ATP（幫浦），見②</td></tr> </table></div> <p class="small"><b>擴散速率</b>取決於：濃度差大小、膜對該分子的通透性、溶液溫度、膜表面積（微絨毛可增加）。</p> <p class="small"><b>載體媒介運輸</b>的特性：<b>專一性</b>、<b>競爭</b>、<b>飽和</b>（所有載體都被佔滿時達最大運輸速率 Tm）。</p> <p class="small muted">上方＝細胞外液，下方＝細胞質。</p></div>
+</section>
+
+<section class="sec" id="s2" data-nav="幫浦">
+  <h2><span class="num">02</span>主動運輸：Na⁺/K⁺ 幫浦與二次主動運輸</h2>
+  <div class="grid2">
+    <div class="stage" id="st-pump"><canvas aria-label="3D 鈉鉀幫浦"></canvas><div class="hud">藍＝Na⁺　紫＝K⁺　黃＝葡萄糖　白＝Ca²⁺</div><div class="hud2" id="pump-cap"></div></div>
+    <div class="card"><div id="pump-steps"></div><div class="info mt" id="info-pump"></div><div class="picker" id="pk-pump"></div></div>
+  </div>
+  <div class="card mt"> <p class="small"><b>主動運輸</b>：由低濃度往高濃度（逆濃度梯度）運送，需消耗 ATP；這類載體常稱為<b>幫浦</b>，以 ATP 的 Pi 使其<b>磷酸化</b>而活化。</p> <p class="small"><b>Na⁺/K⁺ 幫浦</b>（Na⁺/K⁺-ATPase）：存在於<b>所有</b>體細胞，每次把 <b>3 Na⁺ 送出、2 K⁺ 送入</b>，兩者都是逆梯度。功能：① 建立 Na⁺ 梯度，供其他分子的<b>協同運輸</b>使用 ② 神經與肌肉細胞產生電化學衝動 ③ 維持滲透濃度（細胞體積）。</p> <p class="small"><b>Ca²⁺ 幫浦</b>：位於所有細胞的細胞膜及肌細胞的內質網膜，把 Ca²⁺ 移出細胞質，使細胞內 Ca²⁺ 比細胞外低 1,000–10,000 倍。</p> <p class="small"><b>二次主動運輸</b>（協同運輸 coupled transport）：利用 Na⁺ 順梯度流<b>入</b>的能量，帶動另一分子逆梯度移動；因 Na⁺ 梯度靠 Na⁺/K⁺ 幫浦（耗 ATP）維持，所以也算主動運輸。</p> <ul class="small"><li><b>同向運輸</b>（cotransport）：與 Na⁺ 同方向，如 Na⁺-葡萄糖（SGLT；小腸 SGLT1 為 2 Na⁺:1 葡萄糖，腎臟 SGLT2 為 1:1）。</li> <li><b>反向運輸</b>（countertransport）：與 Na⁺ 反方向，如 Na⁺ 流入換 Ca²⁺ 送出。</li></ul> <p class="small muted">背景小球：藍＝Na⁺（細胞外多）、紫＝K⁺（細胞內多）。</p></div>
+</section>
+
+<section class="sec" id="s3" data-nav="跨上皮">
+  <h2><span class="num">03</span>跨上皮運輸：小腸上皮吸收葡萄糖</h2>
+  <div class="grid2">
+    <div class="stage" id="st-epi"><canvas aria-label="3D 小腸上皮"></canvas><div class="hud">上＝管腔　下＝組織液與微血管</div><div class="hud2" id="epi-cap">黃＝葡萄糖　藍＝Na⁺</div></div>
+    <div class="card info"><div id="info-epi"><div class="tt">點選部位</div></div><div class="picker" id="pk-epi"></div></div>
+  </div>
+  <div class="card mt"> <p class="small">小腸與腎小管的上皮細胞把葡萄糖由管腔（濃度低）運到血液（濃度高）：</p> <ol class="small"> <li><b>基底側膜</b>的 <b>Na⁺/K⁺ 幫浦</b>（初級主動運輸，耗 ATP）維持細胞內低 Na⁺。</li> <li><b>頂端膜</b>的 <b>SGLT</b> 利用 Na⁺ 順梯度流入，把葡萄糖逆梯度帶入細胞（二次主動運輸）。</li> <li>細胞內葡萄糖濃度升高，經基底側膜的 <b>GLUT</b> 以<b>促進性擴散</b>出細胞，進入微血管。</li> </ol> <p class="small">穿過細胞質的路徑＝<b>經細胞運輸</b>（transcellular）；經細胞之間微小間隙＝<b>細胞旁運輸</b>（paracellular），受<b>連接複合體</b>限制：</p> <div class="tbwrap mt"><table class="tb"> <tr><td><b>緊密連接</b><br>zonula occludens</td><td>環繞細胞頂端一圈，相鄰細胞膜間隙被封住；有些較「漏」、可選擇性讓離子通過</td></tr> <tr><td><b>帶狀胞橋小體</b><br>zonula adherens</td><td>環狀，以穿膜蛋白連結兩細胞的細胞骨架</td></tr> <tr><td><b>胞橋小體</b><br>macula adherens</td><td>點狀「鈕扣」般扣住兩細胞</td></tr> </table></div> <p class="small muted">腦部微血管內皮以緊密連接防止過濾＝血腦障壁的一部分。</p></div>
+</section>
+
+<section class="sec" id="s4" data-nav="滲透">
+  <h2><span class="num">04</span>滲透、滲透壓與溶液的張力</h2>
+  <div class="grid2">
+    <div class="stage" id="st-osm"><canvas aria-label="3D 滲透"></canvas><div class="hud">左：U 形管　右：燒杯中的紅血球</div><div class="hud2" id="osm-cap"></div></div>
+    <div class="card"><div class="ctrl"><label for="osm">外液濃度</label><input type="range" id="osm" min="50" max="600" step="10" value="300"><output id="osm-v">300</output></div>
+      <div class="btns"><button class="btn sm" data-o="300" type="button">0.9% NaCl（等張）</button><button class="btn sm" data-o="100" type="button">低張</button><button class="btn sm" data-o="500" type="button">高張</button><button class="btn sm" data-o="u" type="button">0.3 m 尿素</button></div>
+      <div class="info mt" id="info-osm"></div><div class="picker" id="pk-osm"></div></div>
+  </div>
+  <div class="card mt"> <p class="small"><b>滲透</b>（osmosis）＝水（溶劑）通過膜的淨擴散。條件：① 膜兩側溶質濃度不同、膜可讓水通過；② 膜對溶質<b>不通透</b>（否則濃度差會消失）。不能通過膜、因而能造成滲透的溶質稱<b>具滲透活性</b>。</p> <p class="small"><b>滲透壓</b>：為了<b>阻止</b>滲透所需施加的力；溶質濃度越高，滲透壓越大。</p> <p class="small"><b>莫耳</b>：1 mole ＝ 6.02×10²³ 個分子。<b>重量莫耳濃度</b>（molality, m）：1 mole 溶質溶於 1 kg 水；<b>滲透莫耳濃度</b>（osmolality）＝所有溶質粒子的總濃度：</p> <ul class="small"><li>2 m 葡萄糖 ＝ 1 m 葡萄糖＋1 m 果糖 ＝ <b>2 Osm</b></li><li>1 m NaCl 解離成 Na⁺ 與 Cl⁻ → <b>2 Osm</b></li></ul> <p class="small">血漿 ≈ 0.3 m 葡萄糖（5% dextrose）≈ 0.15 m NaCl（生理食鹽水 0.9%）＝ <b>300 mOsm</b> → <b>等滲</b>。</p> <p class="small"><b>張力</b>（tonicity）：溶液對細胞滲透（水移動）的效應。低張 → 細胞吸水，紅血球<b>溶血</b>；高張 → 失水<b>皺縮</b>。0.3 m 尿素雖與血漿<b>等滲</b>，但尿素能進入細胞，所以是<b>低張</b>。</p> <p class="small"><b>血液滲透濃度的調節</b>：脫水使血漿滲透濃度升高 → 下視丘<b>滲透壓受器</b>受刺激 → 口渴、後葉釋放 <b>ADH</b> 使尿量減少；反之則排出較多水。</p></div>
+</section>
+
+<section class="sec" id="s5" data-nav="胞吞胞吐">
+  <h2><span class="num">05</span>大分子運輸（bulk transport）：受體媒介的胞吞與胞吐</h2>
+  <div class="grid2">
+    <div class="stage" id="st-bulk"><canvas aria-label="3D 胞吞胞吐"></canvas><div class="hud">左：受體媒介胞吞　右：胞吐</div><div class="hud2" id="bulk-cap"></div></div>
+    <div class="card info"><div id="info-bulk"><div class="tt">點選部位</div></div><div class="picker" id="pk-bulk"></div></div>
+  </div>
+  <div class="card mt"> <p class="small">蛋白質、激素、神經傳遞物質等大分子無法經載體通過細胞膜，需靠膜本身包裹運送（皆需消耗能量）。</p> <p class="small"><b>胞吐</b>（exocytosis）：細胞內的<b>分泌小泡</b>與細胞膜<b>融合</b>，把內容物釋出到細胞外；需 ATP。例：分泌蛋白質類激素、神經元釋放神經傳遞物質。</p> <p class="small"><b>胞吞</b>（endocytosis）：細胞膜內陷包住細胞外物質形成小泡帶入細胞。<b>受體媒介的胞吞</b>：特定分子（如攜帶<b>膽固醇</b>的 LDL）先與細胞膜上的<b>受體</b>結合，受體聚集處內陷成<b>被覆凹陷</b>，再脫離成小泡進入細胞。</p> <p class="small muted">課本：通常是運送蛋白與細胞膜上的蛋白交互作用而觸發胞吞（例：膽固醇隨 LDL 進入細胞）。</p></div>
+</section>
+
+<section class="sec" id="s6" data-nav="訊息傳遞">
+  <h2><span class="num">06</span>細胞訊息傳遞：G 蛋白與第二傳訊者 cAMP</h2>
+  <div class="grid2">
+    <div class="stage" id="st-sig"><canvas aria-label="3D G 蛋白訊息傳遞"></canvas><div class="hud">左：膜受體與 cAMP　右：類固醇激素</div><div class="hud2" id="sig-cap"></div></div>
+    <div class="card"><div id="sig-steps"></div><div class="info mt" id="info-sig"></div><div class="picker" id="pk-sig"></div></div>
+  </div>
+  <div class="card mt"> <p class="small">細胞以化學訊號溝通：</p> <div class="tbwrap mt"><table class="tb"> <tr><td><b>隙型連結</b></td><td>相鄰細胞之間的通道，離子與調節分子直接通過</td></tr> <tr><td><b>旁分泌</b></td><td>器官內細胞分泌分子、經細胞外液擴散到鄰近細胞（局部傳訊）</td></tr> <tr><td><b>突觸傳訊</b></td><td>神經元在突觸釋放神經傳遞物質到標的細胞</td></tr> <tr><td><b>內分泌</b></td><td>腺體分泌激素入血，可到達多處標的細胞</td></tr> </table></div> <p class="small">標的細胞因具有專一的<b>受體蛋白</b>而能接收訊號：<b>非極性</b>分子（如類固醇激素）穿過細胞膜，與細胞內受體結合，於細胞核中影響基因表現；<b>極性或大型</b>分子則與細胞膜表面的受體結合，再由<b>第二傳訊者</b>把訊息帶入細胞。</p> <p class="small"><b>G 蛋白</b>由 α、β、γ 三個次單元組成，在受體與效應蛋白（酵素或離子通道）之間<b>穿梭</b>傳遞訊息。人體約有 400–500 種 G 蛋白偶聯受體（另有數百種負責嗅覺與味覺）。</p></div>
+</section>
+
+<section class="sec" id="s7" data-nav="細胞外基質">
+  <h2><span class="num">07</span>細胞外基質（ECM）、膠原蛋白與組織工程</h2>
+  <div class="grid2">
+    <div class="stage" id="st-ecm"><canvas aria-label="3D 細胞外基質"></canvas><div class="hud" id="ecm-hud"></div><div class="hud2" id="ecm-cap">點選部位</div>
+      <div class="sbar"><div class="seg" id="ecmmode"><button class="btn sm" data-v="ecm" type="button">細胞外基質</button><button class="btn sm" data-v="col" type="button">膠原蛋白組裝</button><button class="btn sm" data-v="ela" type="button">彈力蛋白</button><button class="btn sm" data-v="te" type="button">組織工程</button></div></div></div>
+    <div class="card info"><div id="info-ecm"><div class="tt">點選部位</div></div><div class="picker" id="pk-ecm"></div></div>
+  </div>
+  <div class="card mt"> <p class="small"><b>體液</b>：約 67% 在細胞內，33% 在細胞外；細胞外液中約 20% 是血漿、80% 是<b>組織液</b>（間質液）。</p> <p class="small"><b>細胞外基質</b>（ECM）＝蛋白質纖維＋膠狀<b>基質</b>：</p> <ul class="small"><li><b>膠原蛋白</b>纖維（像鋼筋，提供強度）與<b>彈力蛋白</b>纖維（提供彈性）。</li> <li>膠狀基質含<b>醣蛋白</b>（蛋白質＋醣）與<b>蛋白聚醣</b>（以多醣為主），親水、保有水分並耐壓。</li> <li><b>整合素</b>（integrin）：自細胞骨架穿過細胞膜、結合 ECM 的醣蛋白，作為黏附分子並在細胞內外<b>傳遞訊號</b>，影響細胞極性、移動與增生。</li></ul> <p class="small"><b>膠原蛋白的組裝</b>（補充）：① 三條多胜肽鏈纏成三股螺旋的<b>膠原蛋白分子</b> → ② 多個分子平行錯位排成<b>微纖維</b> → ③ 微纖維聚成<b>細纖維</b> → ④ 細纖維束成<b>膠原纖維</b>。第一型膠原蛋白約佔全身膠原蛋白的 90%。</p> <p class="small"><b>彈力蛋白</b>：多胜肽鏈以共價鍵<b>交聯</b>成網，可拉伸與回縮。</p> <p class="small"><b>組織工程三要素</b>（補充）：<b>人工細胞外基質（支架）</b>：可分解的多孔性高分子材料，模擬 ECM 讓細胞附著生長；<b>細胞</b>：自體、同種、異種、幹細胞或基因改造細胞；<b>生長訊號</b>：生長因子等。</p></div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">08</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">09</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 6 章與原「細胞膜運輸 3D」內容整理，僅供個人複習。3D 為示意。 · <a href="index.html">回總覽</a> · <a href="ch05.html">← 第 5 章 細胞呼吸</a> · <a href="ch07.html">第 7 章 神經元與突觸 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+/* 磷脂雙層：holes = [[x, z, r]] */
+function bilayer(S, w, d, holes, x, step) {
+  step = step || 3.4; const out = { heads: [], tails: [] };
+  for (let i = -w; i <= w; i += step) for (let j = -d; j <= d; j += step) {
+    if ((holes || []).some(h => Math.hypot(i - h[0], j - h[1]) < h[2])) continue;
+    [1, -1].forEach(s => { out.heads.push(S.sphere([i, s * 5, j], 1.5, s > 0 ? '#f59e0b' : '#fb923c', Object.assign({ id: '親水性頭部' }, x))); [-0.6, 0.6].forEach(o => out.tails.push(S.tube([i + o, s * 3.6, j], [i + o * 1.3, s * 0.6, j + o * 0.5], 0.45, '#fde68a', Object.assign({ id: '疏水性尾部', flat: 1 }, x)))); });
+  }
+  return out;
+}
+const capOf = (S, id) => o => { if (o) $(id).textContent = '👉 ' + (o.id || ''); };
+
+/* ========== ① 細胞膜與運輸 ========== */
+(function () {
+  const INFO = {"親水性頭部": {"t": "親水性頭部", "en": "Hydrophilic heads　〔磷脂雙層〕", "p": "磷脂的極性（含磷酸）頭部，朝向膜兩側的水溶液（細胞外液與細胞質）。"}, "疏水性尾部": {"t": "疏水性尾部", "en": "Hydrophobic tails　〔磷脂雙層〕", "p": "脂肪酸尾部朝向膜內部，形成疏水的障壁：脂溶性分子可通過，離子與大的極性分子不易通過。"}, "膽固醇": {"t": "膽固醇", "en": "Cholesterol　〔磷脂雙層〕", "p": "嵌在磷脂尾部之間的類固醇，調節膜的流動性。"}, "離子通道": {"t": "離子通道", "en": "Ion channel　〔膜蛋白〕", "p": "跨膜蛋白圍成的<b>選擇性</b>孔道，讓特定離子順濃度梯度擴散。有些常開，有些具<b>閘門</b>，受電壓或化學物質控制開關。"}, "水通道蛋白（aquaporin）": {"t": "水通道蛋白（aquaporin）", "en": "Aquaporin　〔膜蛋白〕", "p": "讓水分子快速通過的通道；有些細胞常駐，有些（如腎臟）受調節才插入細胞膜。"}, "載體蛋白（GLUT）": {"t": "載體蛋白（GLUT）", "en": "Carrier protein (GLUT)　〔膜蛋白〕", "p": "與葡萄糖專一結合後<b>改變構形</b>，把它釋放到膜的另一側＝<b>促進性擴散</b>：順濃度梯度、不耗 ATP。肌肉的 GLUT4 平時在細胞內小泡中，運動與胰島素使其插入細胞膜。"}, "醣蛋白（含醣鏈）": {"t": "醣蛋白（含醣鏈）", "en": "Glycoprotein　〔膜蛋白〕", "p": "帶有醣鏈的膜蛋白，醣鏈朝細胞外，參與細胞辨識與黏附（如 integrin）。"}, "周邊蛋白": {"t": "周邊蛋白", "en": "Peripheral protein　〔膜蛋白〕", "p": "附著在膜內面（不穿過膜）的蛋白，常與細胞骨架相連。"}, "O₂（簡單擴散）": {"t": "O₂（簡單擴散）", "en": "O₂ – simple diffusion　〔運輸的分子〕", "p": "非極性、脂溶性的小分子，<b>直接穿過磷脂雙層</b>。組織中 O₂ 淨擴散進入細胞（肺中方向相反）。"}, "CO₂（簡單擴散）": {"t": "CO₂（簡單擴散）", "en": "CO₂ – simple diffusion　〔運輸的分子〕", "p": "代謝產生的 CO₂ 順濃度梯度擴散<b>出</b>細胞。"}, "Na⁺（經通道）": {"t": "Na⁺（經通道）", "en": "Na⁺ through channel　〔運輸的分子〕", "p": "帶電離子不能穿過脂質，須經離子通道；Na⁺ 在細胞外濃度較高，順梯度流入。"}, "水（滲透）": {"t": "水（滲透）", "en": "Water – osmosis　〔運輸的分子〕", "p": "水分子經水通道蛋白（及少量直接穿過雙層）的淨擴散＝<b>滲透</b>。"}, "葡萄糖（促進性擴散）": {"t": "葡萄糖（促進性擴散）", "en": "Glucose – facilitated diffusion　〔運輸的分子〕", "p": "大而極性的分子，必須靠載體。"}};
+  const S = K.stage('st-bil', { radius: 37, yaw: 0.35, pitch: 0.3, autoRotate: 0 });
+  const CH = [-12, 0], AQ = [-3, 6], GL = [7, -2], GP = [15, 6];
+  bilayer(S, 26, 14, [[CH[0], CH[1], 3.6], [AQ[0], AQ[1], 3.4], [GL[0], GL[1], 4.6], [GP[0], GP[1], 2.6]]);
+  for (let k = 0; k < 18; k++) { const x = -24 + ((k * 13) % 48), z = -12 + ((k * 7) % 24); if (Math.hypot(x - CH[0], z - CH[1]) < 5 || Math.hypot(x - GL[0], z - GL[1]) < 6) continue; S.sphere([x + 1.2, (k % 2 ? 1 : -1) * 1.8, z + 1.2], 0.9, '#fef08a', { id: '膽固醇' }); }
+  K.circle([CH[0], 0, CH[1]], 2.2, [0, 1, 0], 6).forEach(p => S.tube(V.add(p, [0, -6.5, 0]), V.add(p, [0, 6.5, 0]), 1.1, '#38bdf8', { id: '離子通道' }));
+  K.circle([AQ[0], 0, AQ[1]], 1.9, [0, 1, 0], 6).forEach(p => S.tube(V.add(p, [0, -6.2, 0]), V.add(p, [0, 6.2, 0]), 0.9, '#22d3ee', { id: '水通道蛋白（aquaporin）' }));
+  const glut = K.mover(K.ellipsoid(S, [0, 0, 0], [3.6, 7, 3.6], '#34d399', 12, 8, { id: '載體蛋白（GLUT）', al: 0.85 }), [0, 0, 0]);
+  K.ellipsoid(S, [GP[0], 0, GP[1]], [2.2, 6.5, 2.2], '#a78bfa', 10, 6, { id: '醣蛋白（含醣鏈）' });
+  let pp = [GP[0], 6.5, GP[1]]; for (let k = 0; k < 6; k++) { const q = V.add(pp, [(k % 2 ? 1.2 : -1.2), 1.6, 0.4]); S.sphere(q, 0.9, '#f472b6', { id: '醣蛋白（含醣鏈）' }); S.tube(pp, q, 0.3, '#f9a8d4', { id: '醣蛋白（含醣鏈）' }); pp = q; }
+  K.ellipsoid(S, [-2, -7.6, -6], [5, 1.8, 3], '#818cf8', 12, 6, { id: '周邊蛋白' });
+  const mk = (id, col, r) => S.sphere([0, 0, 0], r || 1.2, col, { id });
+  const M = [];
+  for (let i = 0; i < 4; i++) { const a = mk('O₂（簡單擴散）', '#ef4444', 1.1), b = mk('O₂（簡單擴散）', '#ef4444', 1.1); M.push({ o: [a, b], path: [[-22 + i * 1.5, 18, -8 + i * 3], [-22 + i * 1.5, -16, -8 + i * 3]], u: i / 4, sp: 0.18 }); }
+  for (let i = 0; i < 3; i++) { const c = mk('CO₂（簡單擴散）', '#9ca3af', 1.2), o1 = mk('CO₂（簡單擴散）', '#ef4444', 0.9), o2 = mk('CO₂（簡單擴散）', '#ef4444', 0.9); M.push({ o: [c, o1, o2], path: [[-18 + i * 1.5, -16, 6 + i * 2], [-18 + i * 1.5, 18, 6 + i * 2]], u: i / 3, sp: 0.16, tri: 1 }); }
+  for (let i = 0; i < 4; i++) M.push({ o: [mk('Na⁺（經通道）', '#60a5fa', 1.3)], path: [[CH[0] + 3, 16, CH[1]], [CH[0], 7, CH[1]], [CH[0], -7, CH[1]], [CH[0] - 3, -15, CH[1] + 2]], u: i / 4, sp: 0.2 });
+  for (let i = 0; i < 5; i++) M.push({ o: [mk('水（滲透）', '#93c5fd', 0.9)], path: [[AQ[0] + 2, 15, AQ[1]], [AQ[0], 6, AQ[1]], [AQ[0], -6, AQ[1]], [AQ[0] + 2, -15, AQ[1] - 2]], u: i / 5, sp: 0.25 });
+  const glc = []; for (let i = 0; i < 3; i++) glc.push(mk('葡萄糖（促進性擴散）', '#fde047', 1.5));
+  const lab = (p, t, id, c, dx, dy) => K.lab(S, p, t, id, c, dx, dy, { size: 11 });
+  lab([-24, 5, 12], '親水性頭部', '親水性頭部', '#fdba74', -20, -20); lab([-25, 0, 13], '疏水性尾部', '疏水性尾部', '#fde68a', -40, 10); lab([CH[0], 7, CH[1]], '離子通道', '離子通道', '#7dd3fc', -20, -28); lab([AQ[0], 7, AQ[1]], '水通道蛋白', '水通道蛋白（aquaporin）', '#67e8f9', 0, -34); lab([GL[0], 7, GL[1]], '載體（GLUT）', '載體蛋白（GLUT）', '#86efac', 20, -28); lab([GP[0], 14, GP[1]], '醣蛋白', '醣蛋白（含醣鏈）', '#f9a8d4', 20, -10); lab([-2, -8, -6], '周邊蛋白', '周邊蛋白', '#a5b4fc', -30, 20); lab([-22, 16, -8], 'O₂', 'O₂（簡單擴散）', '#fca5a5', 0, -14); lab([-18, -14, 6], 'CO₂', 'CO₂（簡單擴散）', '#cbd5e1', -20, 14);
+  let T = 0;
+  S.tick(dt => {
+    T += dt;
+    M.forEach(m => { m.u = (m.u + dt * m.sp) % 1; const P = m.P || (m.P = new Mini3D.Path(m.path, 4)); const p = P.at(m.u); mv(m.o[0].p, p); if (m.o[1]) mv(m.o[1].p, V.add(p, m.tri ? [-1.6, 0, 0] : [1.4, 0.4, 0])); if (m.o[2]) mv(m.o[2].p, V.add(p, [1.6, 0, 0])); });
+    const ph = (T * 0.35) % 1, open = ph < 0.5 ? 1 : -1;
+    glut.set([GL[0], 0, GL[1]], [1 + 0.15 * Math.sin(T * 2.2), 1, 1 - 0.15 * Math.sin(T * 2.2)]);
+    glc.forEach((g, i) => { const u = (ph + i / 3) % 1; mv(g.p, u < 0.35 ? V.lerp([GL[0] + 5, 16, GL[1]], [GL[0], 4, GL[1]], u / 0.35) : u < 0.65 ? V.lerp([GL[0], 4, GL[1]], [GL[0], -4, GL[1]], (u - 0.35) / 0.3) : V.lerp([GL[0], -4, GL[1]], [GL[0] - 4, -16, GL[1] + 3], (u - 0.65) / 0.35)); });
+  });
+  K.info(S, 'info-bil', INFO, { picker: 'pk-bil', hl: false, on: id => { $('bil-cap').textContent = '👉 ' + id; } });
+})();
+
+/* ========== ② 幫浦與協同運輸 ========== */
+(function () {
+  const INFO = {"磷脂雙層": {"t": "磷脂雙層", "en": "Phospholipid bilayer　〔細胞膜〕", "p": "離子與葡萄糖都無法直接穿過，必須靠膜蛋白。"}, "Na⁺/K⁺ 幫浦（ATPase）": {"t": "Na⁺/K⁺ 幫浦（ATPase）", "en": "Na⁺/K⁺ pump　〔膜蛋白〕", "p": "本身就是 ATPase 酵素：水解 ATP、以 Pi 磷酸化自己而改變構形，3 Na⁺ 出、2 K⁺ 入（皆逆梯度）。紅血球約 200 個、白血球約 35,000 個、某些腎小管細胞數百萬個。"}, "Na⁺-葡萄糖同向運輸蛋白（SGLT）": {"t": "Na⁺-葡萄糖同向運輸蛋白（SGLT）", "en": "Na⁺-glucose cotransporter　〔膜蛋白〕", "p": "Na⁺ 先與載體結合，提高葡萄糖的親和力；載體改變構形，把 Na⁺（順梯度）與葡萄糖（<b>逆</b>梯度）一起送入細胞。"}, "Na⁺/Ca²⁺ 反向運輸蛋白": {"t": "Na⁺/Ca²⁺ 反向運輸蛋白", "en": "Na⁺/Ca²⁺ exchanger　〔膜蛋白〕", "p": "Na⁺ 順梯度流入的能量，把 Ca²⁺ 逆梯度送<b>出</b>細胞（反向運輸）。不直接使用 ATP，但需持續耗能維持 Na⁺ 梯度。"}, "Na⁺（細胞外高）": {"t": "Na⁺（細胞外高）", "en": "Na⁺ gradient　〔離子濃度〕", "p": "細胞外 Na⁺ 濃度高、細胞內低——由 Na⁺/K⁺ 幫浦維持。"}, "K⁺（細胞內高）": {"t": "K⁺（細胞內高）", "en": "K⁺ gradient　〔離子濃度〕", "p": "細胞內 K⁺ 濃度高、細胞外低。"}};
+  const S = K.stage('st-pump', { radius: 46, yaw: 0.25, pitch: 0.22, autoRotate: 0 });
+  bilayer(S, 26, 10, [[-12, 0, 6.5], [6, 0, 4.4], [17, 0, 4]], { id: '磷脂雙層' }, 4);
+  S.each(o => { if (o.id === '親水性頭部' || o.id === '疏水性尾部') o.id = '磷脂雙層'; });
+  const pumpF = K.ellipsoid(S, [0, 0, 0], [5.6, 8, 5.6], '#38bdf8', 16, 10, { id: 'Na⁺/K⁺ 幫浦（ATPase）', al: 0.7 }); const pump = K.mover(pumpF);
+  const sglt = K.ellipsoid(S, [6, 0, 0], [3.6, 7, 3.6], '#34d399', 12, 8, { id: 'Na⁺-葡萄糖同向運輸蛋白（SGLT）', al: 0.8 });
+  const ncx = K.ellipsoid(S, [17, 0, 0], [3.4, 7, 3.4], '#fb923c', 12, 8, { id: 'Na⁺/Ca²⁺ 反向運輸蛋白', al: 0.8 });
+  const rnd = Mini3D.rng(3);
+  for (let i = 0; i < 26; i++) S.sphere([-26 + rnd() * 52, 9 + rnd() * 9, -10 + rnd() * 20], 0.9, '#60a5fa', { id: 'Na⁺（細胞外高）', al: 0.6 });
+  for (let i = 0; i < 6; i++) S.sphere([-26 + rnd() * 52, -9 - rnd() * 9, -10 + rnd() * 20], 0.9, '#60a5fa', { id: 'Na⁺（細胞外高）', al: 0.6 });
+  for (let i = 0; i < 24; i++) S.sphere([-26 + rnd() * 52, -9 - rnd() * 9, -10 + rnd() * 20], 0.9, '#a78bfa', { id: 'K⁺（細胞內高）', al: 0.6 });
+  for (let i = 0; i < 5; i++) S.sphere([-26 + rnd() * 52, 9 + rnd() * 9, -10 + rnd() * 20], 0.9, '#a78bfa', { id: 'K⁺（細胞內高）', al: 0.6 });
+  const PC = [-12, 0, 0];
+  const na = [0, 1, 2].map(() => S.sphere([0, 0, 0], 1.3, '#3b82f6', { id: 'Na⁺/K⁺ 幫浦（ATPase）' })), k = [0, 1].map(() => S.sphere([0, 0, 0], 1.4, '#8b5cf6', { id: 'Na⁺/K⁺ 幫浦（ATPase）' }));
+  const atp = S.sphere([0, 0, 0], 1.6, '#fde047', { id: 'Na⁺/K⁺ 幫浦（ATPase）', glow: 0.6 }), pi = S.sphere([0, 0, 0], 1.1, '#f59e0b', { id: 'Na⁺/K⁺ 幫浦（ATPase）', glow: 0.8 });
+  const lAtp = K.lab(S, atp.p, 'ATP', 'x', '#fde68a', -20, 10, { size: 10 }), lPi = K.lab(S, pi.p, 'Pi', 'x', '#fbbf24', 16, 8, { size: 10 });
+  const sNa = [0, 1].map(() => S.sphere([0, 0, 0], 1.2, '#3b82f6', { id: 'Na⁺-葡萄糖同向運輸蛋白（SGLT）' })), sG = S.sphere([0, 0, 0], 1.6, '#fde047', { id: 'Na⁺-葡萄糖同向運輸蛋白（SGLT）' });
+  const xNa = [0, 1, 2].map(() => S.sphere([0, 0, 0], 1.2, '#3b82f6', { id: 'Na⁺/Ca²⁺ 反向運輸蛋白' })), xCa = S.sphere([0, 0, 0], 1.3, '#f8fafc', { id: 'Na⁺/Ca²⁺ 反向運輸蛋白' });
+  K.lab(S, [-12, 9, 0], 'Na⁺/K⁺ 幫浦', 'Na⁺/K⁺ 幫浦（ATPase）', '#7dd3fc', -20, -20); K.lab(S, [6, 8, 0], 'SGLT 同向', 'Na⁺-葡萄糖同向運輸蛋白（SGLT）', '#86efac', 0, -20); K.lab(S, [17, 8, 0], 'Na⁺/Ca²⁺ 反向', 'Na⁺/Ca²⁺ 反向運輸蛋白', '#fdba74', 20, -20);
+  K.lab(S, [-24, 15, 8], '細胞外：Na⁺ 高', 'Na⁺（細胞外高）', '#93c5fd', 0, 0); K.lab(S, [-24, -15, 8], '細胞內：K⁺ 高', 'K⁺（細胞內高）', '#c4b5fd', 0, 0);
+  let step = 0, tw = 0, T = 0;
+  const STEPS = [
+    { t: '① 3 個 Na⁺ 結合', d: '細胞質中的 <b>3 個 Na⁺</b> 進入幫浦並與結合位結合' },
+    { t: '② ATP → ADP + Pi', d: '活化 ATPase：<b>ATP → ADP + Pi</b>，Pi 結合幫浦（磷酸化），兩側出口暫時關閉' },
+    { t: '③ 構形改變、Na⁺ 釋出', d: 'ADP 釋出 → 幫浦<b>構形改變</b>、向外開啟 → 3 Na⁺ 釋出到細胞外' },
+    { t: '④ 2 個 K⁺ 結合', d: '細胞外的 <b>2 個 K⁺</b> 與幫浦結合' },
+    { t: '⑤ Pi 釋出、K⁺ 入細胞', d: '<b>Pi 釋出</b> → 幫浦回到原構形（向內開）→ 2 K⁺ 釋入細胞質' }
+  ];
+  S.tick(dt => {
+    T += dt; tw = Math.min(1, tw + dt / 1.8); const e = sm(0, 1, tw);
+    const outOpen = step === 2 || step === 3 || (step === 4 && e < 0.3);
+    pump.set(V.add(PC, [0, outOpen ? 1 : -1, 0]), outOpen ? [0.9, 1.05, 0.9] : [1.05, 0.95, 1.05]);
+    na.forEach((n, i) => { const site = V.add(PC, [(i - 1) * 2, -2, 1.5]); let p; if (step === 0) p = V.lerp(V.add(PC, [(i - 1) * 6, -16, 4]), site, e); else if (step === 1) p = site; else p = V.lerp(V.add(PC, [(i - 1) * 2, 3, 1.5]), V.add(PC, [(i - 1) * 6, 16, 4]), step === 2 ? e : 1); n.hidden = step > 3 && false; mv(n.p, p); n.al = step >= 3 ? 0.5 : 1; });
+    k.forEach((n, i) => { const site = V.add(PC, [(i - 0.5) * 2.4, 2, -1.5]); let p; if (step < 3) p = V.add(PC, [(i - 0.5) * 7, 15, -4]); else if (step === 3) p = V.lerp(V.add(PC, [(i - 0.5) * 7, 15, -4]), site, e); else p = V.lerp(site, V.add(PC, [(i - 0.5) * 7, -15, -4]), e); mv(n.p, p); });
+    atp.hidden = step !== 1 || e > 0.6; mv(atp.p, V.lerp(V.add(PC, [-6, -12, 0]), V.add(PC, [-4, -4, 0]), e)); lAtp.hidden = atp.hidden; lAtp.p = atp.p;
+    pi.hidden = !(step >= 1 && step <= 4) || (step === 4 && e > 0.8); mv(pi.p, step === 4 ? V.lerp(V.add(PC, [-5, -2, 0]), V.add(PC, [-8, -14, 0]), e) : V.add(PC, [-5, -2, 0])); lPi.hidden = pi.hidden; lPi.p = pi.p; pi.glow = 0.6 + 0.4 * Math.sin(T * 6);
+    const u = (T * 0.3) % 1, sp = (a, b) => V.lerp(a, b, sm(0, 1, u));
+    sNa.forEach((n, i) => mv(n.p, sp([6 + (i ? 3 : -3), 15, 2], [6 + (i ? 3 : -3), -15, 2])));
+    mv(sG.p, sp([6, 12, -3], [6, -16, -3]));
+    xNa.forEach((n, i) => mv(n.p, sp([17 + (i - 1) * 2.5, 15, 2], [17 + (i - 1) * 2.5, -15, 2])));
+    mv(xCa.p, sp([17, -14, -2], [17, 15, -2]));
+  });
+  UI.stepper($('pump-steps'), STEPS, i => { step = i; tw = 0; $('pump-cap').innerHTML = STEPS[i].t + '：' + STEPS[i].d; }, { dur: 3600 });
+  K.info(S, 'info-pump', INFO, { picker: 'pk-pump', hl: false });
+})();
+
+/* ========== ③ 跨上皮運輸 ========== */
+(function () {
+  const INFO = {"柱狀上皮細胞": {"t": "柱狀上皮細胞", "en": "Columnar epithelial cells　〔上皮細胞〕", "p": "單層柱狀上皮：細胞極性明顯，頂端與基底側膜上的運輸蛋白不同。"}, "細胞核": {"t": "細胞核", "en": "Nucleus　〔上皮細胞〕", "p": "（見左側說明）"}, "微絨毛（刷狀緣）": {"t": "微絨毛（刷狀緣）", "en": "Microvilli　〔上皮細胞〕", "p": "頂端膜的指狀突起，大幅增加吸收的<b>表面積</b>（提高擴散速率）。"}, "頂端膜": {"t": "頂端膜", "en": "Apical membrane　〔膜區〕", "p": "面向管腔的細胞膜，含 SGLT。"}, "基底側膜": {"t": "基底側膜", "en": "Basolateral membrane　〔膜區〕", "p": "面向組織液與血管的細胞膜，含 Na⁺/K⁺ 幫浦與 GLUT。"}, "基底膜": {"t": "基底膜", "en": "Basement membrane　〔膜區〕", "p": "上皮與其下結締組織之間的薄層，上皮靠下方結締組織的血管提供養分。"}, "微血管": {"t": "微血管", "en": "Capillary　〔膜區〕", "p": "吸收的葡萄糖最後進入血液。"}, "緊密連接": {"t": "緊密連接", "en": "Tight junction (zonula occludens)　〔連接複合體〕", "p": "在細胞頂端環繞一圈，相鄰細胞膜緊密貼合、以蛋白質股封住間隙，限制<b>細胞旁運輸</b>。"}, "帶狀胞橋小體": {"t": "帶狀胞橋小體", "en": "Belt desmosome (zonula adherens)　〔連接複合體〕", "p": "緊密連接下方的環狀連接，穿膜蛋白連到兩側細胞的細胞骨架。"}, "胞橋小體": {"t": "胞橋小體", "en": "Desmosome (macula adherens)　〔連接複合體〕", "p": "點狀的連接，像鈕扣把兩細胞扣在一起。"}, "SGLT（頂端膜）": {"t": "SGLT（頂端膜）", "en": "Na⁺-glucose cotransporter　〔運輸蛋白〕", "p": "Na⁺ 順梯度進入的能量帶動葡萄糖<b>逆梯度</b>進入細胞（二次主動運輸）。小腸為 SGLT1（2 Na⁺:1 葡萄糖）。"}, "GLUT（基底側膜）": {"t": "GLUT（基底側膜）", "en": "GLUT (facilitated diffusion)　〔運輸蛋白〕", "p": "細胞內葡萄糖濃度高，經 GLUT 順梯度<b>促進性擴散</b>出細胞到組織液、再進入血液。"}, "Na⁺/K⁺ 幫浦（基底側膜）": {"t": "Na⁺/K⁺ 幫浦（基底側膜）", "en": "Na⁺/K⁺ pump　〔運輸蛋白〕", "p": "把進入細胞的 Na⁺ 送到組織液，維持細胞內低 Na⁺（初級主動運輸）。"}, "經細胞運輸路徑": {"t": "經細胞運輸路徑", "en": "Transcellular route　〔路徑〕", "p": "經過細胞質：頂端膜 → 細胞質 → 基底側膜。"}, "細胞旁路徑": {"t": "細胞旁路徑", "en": "Paracellular route　〔路徑〕", "p": "經相鄰細胞之間的間隙，受緊密連接限制。"}};
+  const S = K.stage('st-epi', { radius: 52, yaw: 0.45, pitch: 0.2, autoRotate: 0 });
+  const X = [-16, 0, 16];
+  X.forEach((x, i) => { K.box(S, [x, 0, 0], [15, 30, 14], '#f9a8d4', { id: '柱狀上皮細胞', al: 0.3 }); K.ellipsoid(S, [x, -6, 0], [3, 4, 3], '#7c3aed', 10, 6, { id: '細胞核' }); for (let a = -6; a <= 6; a += 3) for (let b = -5; b <= 5; b += 5) S.tube([x + a, 15, b], [x + a, 19, b], 0.7, '#fbcfe8', { id: '微絨毛（刷狀緣）' }); });
+  K.sheet(S, [-24, 14.9, -7], [48, 0, 0], [0, 0, 14], 6, 2, '#f472b6', { id: '頂端膜', al: 0.5 });
+  K.sheet(S, [-24, -15.6, -9], [48, 0, 0], [0, 0, 18], 6, 2, '#a3e635', { id: '基底膜', al: 0.5 });
+  [-8, 8].forEach(x => { K.circle([x, 12, 0], 1.2, [1, 0, 0], 8).forEach((p, i, a) => S.tube(V.add(p, [0, 0, -7]), V.add(p, [0, 0, 7]), 0.6, '#fde047', { id: '緊密連接' })); S.tube([x, 9, -7], [x, 9, 7], 0.9, '#fb923c', { id: '帶狀胞橋小體' }); [-4, 3].forEach(z => S.sphere([x, 2, z], 1.3, '#e2e8f0', { id: '胞橋小體' })); S.sheet; });
+  K.sweep(S, [[-26, -24, 0], [0, -26, 2], [26, -24, 0]], 3, '#ef4444', 16, 10, { id: '微血管', al: 0.6 });
+  X.forEach(x => { S.sphere([x - 3, 14.6, 3], 1.4, '#34d399', { id: 'SGLT（頂端膜）' }); S.sphere([x + 7.4, -8, -3], 1.4, '#22d3ee', { id: 'GLUT（基底側膜）' }); S.sphere([x - 7.4, -10, 3], 1.5, '#38bdf8', { id: 'Na⁺/K⁺ 幫浦（基底側膜）' }); });
+  K.sheet(S, [7.4, -15, -7], [0, 30, 0], [0, 0, 14], 1, 2, '#fda4af', { id: '基底側膜', al: 0.25 });
+  const P1 = new Mini3D.Path([[0, 24, 2], [-3, 15, 3], [-1, 2, 0], [7.4, -8, -3], [9, -18, -2], [4, -25, 2]], 6);
+  const P2 = new Mini3D.Path([[-8, 24, 1], [-8, 14, 0], [-8, 6, 0], [-8, -14, 0], [-8, -20, 0]], 4);
+  const f1 = K.flow(S, P1, 6, 1.4, '#fde047', 0.12, { id: '經細胞運輸路徑', glow: 0.5 }), f2 = K.flow(S, [[3, 24, 3], [-3, 15, 3], [-7.4, -10, 3], [-12, -18, 3]], 5, 1.2, '#60a5fa', 0.14, { id: 'SGLT（頂端膜）' });
+  const para = []; for (let i = 0; i < 4; i++) para.push({ o: S.sphere([0, 0, 0], 1, '#94a3b8', { id: '細胞旁路徑' }), u: i / 4 });
+  [['頂端膜', [20, 15, 6], '頂端膜（SGLT）', '#f9a8d4', 30, -16], ['緊密連接', [8, 12, 7], '緊密連接', '#fde047', 30, -12], ['帶狀胞橋小體', [8, 9, 7], '帶狀胞橋小體', '#fdba74', 40, 4], ['胞橋小體', [8, 2, 3], '胞橋小體', '#e2e8f0', 40, 14], ['基底膜', [20, -16, 8], '基底膜', '#bef264', 30, 10], ['微血管', [20, -25, 2], '微血管', '#fca5a5', 30, 10], ['基底側膜', [7.4, -12, 7], '基底側膜（GLUT、幫浦）', '#fda4af', -20, 30], ['微絨毛（刷狀緣）', [-16, 19, 5], '微絨毛', '#fbcfe8', -30, -14], ['細胞核', [-16, -6, 3], '細胞核', '#c4b5fd', -40, 10]].forEach(([id, p, t, c, dx, dy]) => K.lab(S, p, t, id, c, dx, dy, { size: 11 }));
+  S.tick(dt => { para.forEach(p => { p.u = (p.u + dt * 0.2) % 1; mv(p.o.p, [-8, 24 - p.u * 10, -6 + p.u]); p.o.al = 1 - p.u; }); });
+  K.info(S, 'info-epi', INFO, { picker: 'pk-epi', hl: false, on: id => { $('epi-cap').textContent = '👉 ' + id; } });
+})();
+
+/* ========== ④ 滲透 ========== */
+(function () {
+  const INFO = {"玻璃管": {"t": "玻璃管", "en": "U-tube　〔U 形管〕", "p": "左右兩管底部相通，中間以半透膜隔開。"}, "純水（左）": {"t": "純水（左）", "en": "Pure water　〔U 形管〕", "p": "水分子由水濃度高（溶質濃度低）的一側往另一側淨移動。"}, "溶液（右）": {"t": "溶液（右）", "en": "Solution　〔U 形管〕", "p": "含不能通過膜的溶質：水滲入使液面升高，直到液柱的壓力抵銷滲透。"}, "半透膜": {"t": "半透膜", "en": "Semipermeable membrane　〔U 形管〕", "p": "讓水通過、不讓溶質通過的膜。若膜對溶質也通透，溶質會擴散到兩側，濃度差消失，就不會有滲透。"}, "溶質": {"t": "溶質", "en": "Solute　〔U 形管〕", "p": "具滲透活性的溶質（不能通過膜）。"}, "滲透壓（示意）": {"t": "滲透壓（示意）", "en": "Osmotic pressure　〔U 形管〕", "p": "若要讓右側液面不升高，必須在右側施加的壓力＝<b>滲透壓</b>。"}, "紅血球": {"t": "紅血球", "en": "Red blood cell　〔紅血球〕", "p": "正常為<b>雙凹圓盤</b>。細胞內溶質不能隨意出入，所以外液的張力決定水往哪個方向移動。"}, "溶血後的細胞膜（血影）": {"t": "溶血後的細胞膜（血影）", "en": "Ruptured RBC (ghost)　〔紅血球〕", "p": "低張溶液中紅血球吸水過多而破裂＝<b>溶血</b>，血紅素流出，只剩細胞膜碎片。"}, "燒杯（外液）": {"t": "燒杯（外液）", "en": "Bathing solution　〔紅血球〕", "p": "改變右側滑桿，即改變外液的滲透濃度。"}};
+  const S = K.stage('st-osm', { radius: 52, yaw: 0.2, pitch: 0.15, autoRotate: 0 });
+  const Lx = -30, Rx = -10;
+  [Lx, Rx].forEach(x => K.sweep(S, [[x, 20, 0], [x, -10, 0]], 4.2, '#e2e8f0', 6, 14, { id: '玻璃管', al: 0.18 }));
+  K.sweep(S, [[Lx, -10, 0], [Lx, -16, 0], [(Lx + Rx) / 2, -18, 0], [Rx, -16, 0], [Rx, -10, 0]], 4.2, '#e2e8f0', 16, 14, { id: '玻璃管', al: 0.18 });
+  S.face(K.circle([(Lx + Rx) / 2, -18, 0], 4, [1, 0, 0], 16), '#fbbf24', { id: '半透膜', al: 0.8 });
+  const lvL = K.mover(K.ellipsoid(S, [0, 0, 0], [3.9, 0.2, 3.9], '#38bdf8', 14, 3, { id: '純水（左）', al: 0.7 })), lvR = K.mover(K.ellipsoid(S, [0, 0, 0], [3.9, 0.2, 3.9], '#6366f1', 14, 3, { id: '溶液（右）', al: 0.7 }));
+  const colL = S.tube([Lx, -16, 0], [Lx, 0, 0], 3.6, '#38bdf8', { id: '純水（左）', al: 0.25 }), colR = S.tube([Rx, -16, 0], [Rx, 0, 0], 3.6, '#6366f1', { id: '溶液（右）', al: 0.25 });
+  const sol = []; for (let i = 0; i < 12; i++) sol.push({ o: S.sphere([0, 0, 0], 1, '#c084fc', { id: '溶質' }), a: i * 0.9, y: -14 + i * 1.6 });
+  const wat = []; for (let i = 0; i < 6; i++) wat.push({ o: S.sphere([0, 0, 0], 0.8, '#7dd3fc', { id: '純水（左）' }), u: i / 6 });
+  const press = S.sphere([Rx, 18, 0], 2, '#f87171', { id: '滲透壓（示意）', hidden: true });
+  K.lab(S, [Lx, 22, 0], '純水', '純水（左）', '#7dd3fc', 0, -10); K.lab(S, [Rx, 22, 0], '溶液', '溶液（右）', '#a5b4fc', 0, -10); K.lab(S, [(Lx + Rx) / 2, -18, 0], '半透膜', '半透膜', '#fde047', 0, 26);
+  K.sweep(S, [[22, 8, 0], [22, -16, 0]], 12, '#94a3b8', 4, 18, { id: '燒杯（外液）', al: 0.12 });
+  const rbcF = K.ellipsoid(S, [0, 0, 0], [6, 2.4, 6], '#ef4444', 18, 10, { id: '紅血球' }, { noise: (th, ph) => 1 - 0.45 * Math.exp(-(((ph - Math.PI / 2) / 1) ** 2)) * 0 + (Math.abs(Math.cos(ph)) > 0.8 ? -0.2 : 0) });
+  const rbc = K.mover(rbcF);
+  const ghost = K.circle([22, -4, 0], 6, [0, 1, 0.3], 14).map((p, i, a) => S.tube(p, V.add(a[(i + 1) % 14], [0, (i % 3) - 1, 0]), 0.35, '#fca5a5', { id: '溶血後的細胞膜（血影）', hidden: true }));
+  K.lab(S, [22, 6, 0], '紅血球', '紅血球', '#fca5a5', 30, -20); K.lab(S, [22, -16, 10], '燒杯（外液）', '燒杯（外液）', '#cbd5e1', 30, 10);
+  let ext = 300, urea = false, rise = 0, vol = 1, T = 0;
+  S.tick(dt => {
+    T += dt; rise = Math.min(1, rise + dt * 0.08); if (rise >= 1 && T % 14 < 0.02) rise = 0;
+    const h = 6 * sm(0, 1, rise);
+    lvL.set([Lx, -h, 0], 1); lvR.set([Rx, h, 0], 1); colL.b = [Lx, -h, 0]; colR.b = [Rx, h, 0];
+    sol.forEach(s => mv(s.o.p, [Rx + Math.cos(s.a + T) * 2.2, Math.min(h - 1, s.y + Math.sin(T + s.a) * 0.5), Math.sin(s.a + T) * 2.2]));
+    wat.forEach(w => { w.u = (w.u + dt * 0.3) % 1; mv(w.o.p, new Mini3D.Path([[Lx, -h - 2, 0], [Lx, -16, 0], [(Lx + Rx) / 2, -18, 0], [Rx, -16, 0], [Rx, h - 2, 0]], 3).at(w.u)); });
+    press.hidden = rise < 0.95;
+    const eff = urea ? 50 : ext, target = K.clamp(300 / eff, 0.55, 1.8);
+    vol += (target - vol) * Math.min(1, dt * 1.5);
+    const lysed = vol > 1.55;
+    rbc.hide(lysed); ghost.forEach(g => { g.hidden = !lysed; });
+    const sh = vol, flat = sh < 1 ? 0.6 + 0.4 * sh : 1 + (sh - 1) * 1.4;
+    rbc.set([22, -4, 0], [Math.pow(sh, 0.3), flat, Math.pow(sh, 0.3)]);
+    rbcF.forEach(f => { f.c = sh < 0.85 ? '#b91c1c' : '#ef4444'; });
+    $('osm-cap').innerHTML = urea ? '0.3 m 尿素：與血漿<b>等滲</b>，但尿素能進入細胞 → 實際為<b>低張</b> → 吸水、溶血' : eff < 270 ? '低張：水進入紅血球 → 膨脹' + (lysed ? '、<b>溶血</b>' : '') : eff > 330 ? '高張：水離開紅血球 → <b>皺縮</b>' : '等張（約 300 mOsm）：紅血球維持雙凹圓盤';
+  });
+  const r = K.range('osm', v => { ext = v; urea = false; }, v => v + ' mOsm');
+  UI.$$('[data-o]').forEach(b => b.onclick = () => { if (b.dataset.o === 'u') { urea = true; } else { r.set(+b.dataset.o); } });
+  K.info(S, 'info-osm', INFO, { picker: 'pk-osm', hl: false });
+})();
+
+/* ========== ⑤ 胞吞與胞吐 ========== */
+(function () {
+  const INFO = {"細胞膜（磷脂雙層）": {"t": "細胞膜（磷脂雙層）", "en": "Plasma membrane　〔細胞膜〕", "p": "胞吞與胞吐時，膜可以彎曲、斷開並重新融合。"}, "被覆凹陷 → 小泡": {"t": "被覆凹陷 → 小泡", "en": "Coated pit → vesicle　〔胞吞〕", "p": "受體聚集處的細胞膜<b>內陷</b>，最後斷開成小泡進入細胞質。"}, "分泌小泡": {"t": "分泌小泡", "en": "Secretory vesicle　〔胞吐〕", "p": "由高基氏體送出、內含分泌物的小泡；與細胞膜融合後打開。"}, "網格蛋白被覆（clathrin）": {"t": "網格蛋白被覆（clathrin）", "en": "Clathrin coat　〔胞吞〕", "p": "在細胞質側組裝於凹陷外圍的蛋白籠，幫助膜內陷；小泡形成後脫落。"}, "LDL（攜帶膽固醇）": {"t": "LDL（攜帶膽固醇）", "en": "LDL – cholesterol　〔胞吞〕", "p": "血中運送膽固醇的低密度脂蛋白，與細胞膜上的 LDL 受體結合後被吞入。"}, "LDL 受體": {"t": "LDL 受體", "en": "LDL receptor　〔胞吞〕", "p": "細胞膜上專一結合 LDL 的受體蛋白。"}, "分泌物（激素、神經傳遞物質）": {"t": "分泌物（激素、神經傳遞物質）", "en": "Secreted molecules　〔胞吐〕", "p": "胞吐釋出的蛋白質類激素或神經傳遞物質。"}};
+  const S = K.stage('st-bulk', { radius: 50, yaw: 0.3, pitch: 0.3, autoRotate: 0 });
+  const SH = K.sheet(S, [-40, 0, -22], [80, 0, 0], [0, 0, 44], 32, 18, '#f59e0b', { id: '細胞膜（磷脂雙層）', al: 0.9, st: '#fde68a', sa: 0.15 });
+  const G = SH.grid, base = G.map(r => r.map(p => [p[0], p[2]]));
+  const PL = [-16, 0], PR = [18, 0];
+  const gauss = (r, w) => Math.exp(-(r * r) / (w * w));
+  const ves = K.mover(K.ellipsoid(S, [0, 0, 0], [7, 7, 7], '#fbbf24', 12, 8, { id: '被覆凹陷 → 小泡', al: 0.5 }));
+  const sec = K.mover(K.ellipsoid(S, [0, 0, 0], [6, 6, 6], '#a78bfa', 12, 8, { id: '分泌小泡', al: 0.55 }));
+  const recs = [], ldl = [], cl = [], cargo = [];
+  for (let i = 0; i < 8; i++) { const a = i * 0.785; recs.push({ o: S.sphere([0, 0, 0], 1.3, '#f472b6', { id: 'LDL 受體' }), a }); ldl.push({ o: S.sphere([0, 0, 0], 1.7, '#fde047', { id: 'LDL（攜帶膽固醇）' }), a }); }
+  for (let i = 0; i < 12; i++) cl.push({ o: S.sphere([0, 0, 0], 0.9, '#22d3ee', { id: '網格蛋白被覆（clathrin）' }), a: i * 0.52 });
+  for (let i = 0; i < 8; i++) cargo.push({ o: S.sphere([0, 0, 0], 1.1, '#f0abfc', { id: '分泌物（激素、神經傳遞物質）' }), a: i * 0.785 });
+  K.lab(S, [-36, 0, 20], '細胞膜', '細胞膜（磷脂雙層）', '#fde68a', 0, -14); K.lab(S, [-36, 18, 0], '細胞外', 'x', '#93c5fd', 0, 0); K.lab(S, [-36, -18, 0], '細胞質', 'x', '#fcd34d', 0, 0);
+  const lV = K.lab(S, [PL[0], -10, 0], '被覆凹陷 → 小泡', '被覆凹陷 → 小泡', '#fde68a', -40, 20), lS = K.lab(S, [PR[0], -10, 0], '分泌小泡', '分泌小泡', '#c4b5fd', 40, 20);
+  let T = 0;
+  S.tick(dt => {
+    T = (T + dt / 8) % 1.1; const t = Math.min(1, T);
+    const D = 20 * sm(0.15, 0.55, t) * (1 - sm(0.6, 0.72, t)), vy = -20 - 16 * sm(0.6, 1, t);
+    const De = 12 * sm(0.4, 0.55, t) * (1 - sm(0.7, 0.95, t)), sy = -36 + 26 * sm(0, 0.4, t);
+    G.forEach((row, i) => row.forEach((p, j) => { const [x, z] = base[i][j]; p[1] = -D * gauss(Math.hypot(x - PL[0], z - PL[1]), 8) - De * gauss(Math.hypot(x - PR[0], z - PR[1]), 7); }));
+    ves.hide(t < 0.58); ves.set([PL[0], vy, PL[1]], 1); lV.p = t < 0.58 ? [PL[0], -D, 0] : [PL[0], vy, 0];
+    recs.forEach(r => { const cl2 = sm(0.05, 0.2, t), rr = 16 * (1 - 0.7 * cl2), x = PL[0] + Math.cos(r.a) * rr, z = Math.sin(r.a) * rr; mv(r.o.p, t < 0.58 ? [x, -D * gauss(rr, 8) + 1, z] : [PL[0] + Math.cos(r.a) * 4.5, vy + 2 + Math.sin(r.a * 2), Math.sin(r.a) * 4.5]); });
+    ldl.forEach((l, i) => mv(l.o.p, t < 0.12 ? V.lerp([PL[0] + Math.cos(l.a) * 18, 18, Math.sin(l.a) * 18], V.add(recs[i].o.p, [0, 2.4, 0]), sm(0, 0.12, t)) : V.add(recs[i].o.p, [0, 2.4, 0])));
+    cl.forEach(c => { c.o.hidden = t < 0.2; const yy = t < 0.58 ? -D - 2.2 : vy - 7.6, rr = t < 0.58 ? 3 + D * 0.2 : 6; mv(c.o.p, [PL[0] + Math.cos(c.a) * rr, yy + Math.sin(c.a * 3), Math.sin(c.a) * rr]); });
+    sec.hide(t > 0.55); sec.set([PR[0], Math.min(sy, -7), 0], 1 - 0.4 * sm(0.42, 0.55, t)); lS.p = [PR[0], Math.min(sy, -7), 0];
+    cargo.forEach(c => { const y = t < 0.55 ? Math.min(sy, -7) : -6 + 26 * sm(0.55, 1, t), spr = t < 0.55 ? 3 : 3 + 14 * sm(0.55, 1, t); mv(c.o.p, [PR[0] + Math.cos(c.a) * spr, y, Math.sin(c.a) * spr]); });
+    $('bulk-cap').textContent = t < 0.2 ? 'LDL 結合受體、受體聚集；分泌小泡移向細胞膜' : t < 0.58 ? '膜內陷成被覆凹陷（網格蛋白）；分泌小泡與膜融合' : '凹陷斷開成小泡進入細胞；分泌物釋出到細胞外';
+  });
+  K.info(S, 'info-bulk', INFO, { picker: 'pk-bulk', hl: false });
+})();
+
+/* ========== ⑥ 訊息傳遞 ========== */
+(function () {
+  const INFO = {"細胞膜": {"t": "細胞膜", "en": "Plasma membrane　〔細胞膜〕", "p": "（見左側說明）"}, "G 蛋白偶聯受體": {"t": "G 蛋白偶聯受體", "en": "G-protein-coupled receptor　〔膜蛋白〕", "p": "穿膜七次的受體蛋白；訊息分子在細胞外與它結合後改變構形，活化細胞內側的 G 蛋白。"}, "腺苷酸環化酶（效應蛋白）": {"t": "腺苷酸環化酶（效應蛋白）", "en": "Adenylate cyclase　〔膜蛋白〕", "p": "膜上的酵素：被 G 蛋白 α 次單元活化後，把 ATP 轉成<b>環腺苷酸 cAMP</b>。"}, "激素（極性訊息分子）": {"t": "激素（極性訊息分子）", "en": "Polar regulatory molecule　〔訊息分子〕", "p": "如腎上腺素：不能穿過細胞膜，結合在膜表面受體上；其效應實際上由細胞內的 cAMP 產生。"}, "G 蛋白 α 次單元": {"t": "G 蛋白 α 次單元", "en": "G-protein α subunit　〔G 蛋白〕", "p": "結合 GDP 時與 βγ 在一起（不活化）；換成 GTP 後與 βγ 分離，去活化效應蛋白；把 GTP 水解成 GDP 後回到 βγ。"}, "G 蛋白 β、γ 次單元": {"t": "G 蛋白 β、γ 次單元", "en": "G-protein βγ subunits　〔G 蛋白〕", "p": "β 與 γ 始終連在一起，錨定在膜內側。"}, "cAMP": {"t": "cAMP", "en": "Cyclic AMP　〔第二傳訊者〕", "p": "由 ATP 產生的<b>第二傳訊者</b>，在細胞質中擴散並活化蛋白激酶。"}, "蛋白激酶（被 cAMP 活化）": {"t": "蛋白激酶（被 cAMP 活化）", "en": "Protein kinase　〔第二傳訊者〕", "p": "原本不活化的酵素；cAMP 結合其調節次單元後，催化次單元被釋放而活化，進而磷酸化其他蛋白、改變細胞活性。"}, "細胞核": {"t": "細胞核", "en": "Nucleus　〔類固醇激素〕", "p": "激素-受體複合物進入核內，結合 DNA，刺激特定 mRNA 合成 → 影響基因表現。"}, "類固醇激素（非極性）": {"t": "類固醇激素（非極性）", "en": "Steroid hormone　〔類固醇激素〕", "p": "脂溶性，可直接穿過細胞膜。"}, "細胞內受體": {"t": "細胞內受體", "en": "Intracellular receptor　〔類固醇激素〕", "p": "位於細胞質或核內的受體蛋白。"}};
+  const S = K.stage('st-sig', { radius: 50, yaw: 0.2, pitch: 0.22, autoRotate: 0 });
+  K.sheet(S, [-40, 5, -16], [80, 0, 0], [0, 0, 32], 16, 6, '#f59e0b', { id: '細胞膜', al: 0.45 }); K.sheet(S, [-40, -5, -16], [80, 0, 0], [0, 0, 32], 16, 6, '#f59e0b', { id: '細胞膜', al: 0.45 });
+  const RX = -22; K.circle([RX, 0, 0], 2.6, [0, 1, 0], 7).forEach(p => S.tube(V.add(p, [0, -7, 0]), V.add(p, [0, 7, 0]), 0.9, '#4a8cff', { id: 'G 蛋白偶聯受體' }));
+  const AC = [2, 0, 0]; K.ellipsoid(S, AC, [4, 7.5, 4], '#38bdf8', 12, 8, { id: '腺苷酸環化酶（效應蛋白）', al: 0.8 });
+  const hor = S.sphere([0, 0, 0], 2.2, '#f472b6', { id: '激素（極性訊息分子）' });
+  const ga = S.sphere([0, 0, 0], 2, '#f87171', { id: 'G 蛋白 α 次單元' }), gb = S.sphere([RX + 4, -7.2, 2], 1.7, '#fda4af', { id: 'G 蛋白 β、γ 次單元' }), gg = S.sphere([RX + 5.6, -7.2, 0], 1.4, '#fecdd3', { id: 'G 蛋白 β、γ 次單元' });
+  const gdp = K.lab(S, ga.p, 'GDP', 'G 蛋白 α 次單元', '#fde68a', 0, 14, { size: 10 });
+  const camp = []; for (let i = 0; i < 12; i++) camp.push(S.sphere([0, 0, 0], 0.9, '#fde047', { id: 'cAMP', glow: 0.4 }));
+  const pkR = S.sphere([-6, -18, 4], 2.2, '#94a3b8', { id: '蛋白激酶（被 cAMP 活化）' }), pkC = S.sphere([0, 0, 0], 2.2, '#22d3ee', { id: '蛋白激酶（被 cAMP 活化）' });
+  const NUC = [26, -20, 0]; K.ellipsoid(S, NUC, [9, 6, 8], '#a78bfa', 14, 8, { id: '細胞核', al: 0.3 });
+  const ster = S.sphere([0, 0, 0], 1.6, '#fbbf24', { id: '類固醇激素（非極性）' }), irec = S.sphere([0, 0, 0], 2, '#c084fc', { id: '細胞內受體' });
+  K.lab(S, [RX, 8, 0], 'G 蛋白偶聯受體', 'G 蛋白偶聯受體', '#93c5fd', -20, -20); K.lab(S, [2, 8, 0], '腺苷酸環化酶', '腺苷酸環化酶（效應蛋白）', '#7dd3fc', 20, -24); K.lab(S, NUC, '細胞核', '細胞核', '#c4b5fd', 30, 20); K.lab(S, [RX + 5, -8, 2], 'βγ', 'G 蛋白 β、γ 次單元', '#fda4af', 20, 14, { size: 10 });
+  const lS = K.lab(S, ster.p, '類固醇', '類固醇激素（非極性）', '#fde68a', 20, -12, { size: 10 }), lH = K.lab(S, hor.p, '激素', '激素（極性訊息分子）', '#f9a8d4', -20, -12, { size: 10 }), lC = K.lab(S, camp[0].p, 'cAMP', 'cAMP', '#fde047', 20, -8, { size: 10 }), lK = K.lab(S, pkC.p, '蛋白激酶', '蛋白激酶（被 cAMP 活化）', '#67e8f9', 20, 10, { size: 10 });
+  const STEPS = [
+    { t: '① 訊息分子結合受體', d: '極性訊息分子（如腎上腺素）與細胞膜上的<b>受體</b>結合（訊息分子本身不進入細胞）' },
+    { t: '② GDP → GTP', d: 'α 次單元釋出 <b>GDP</b>、結合 <b>GTP</b>，與 βγ 分離' },
+    { t: '③ α 活化效應蛋白', d: 'α 次單元在膜上移動，與<b>效應蛋白</b>（腺苷酸環化酶）結合並活化之' },
+    { t: '④ ATP → cAMP', d: '酵素把 <b>ATP 轉成 cAMP</b>（第二傳訊者），cAMP 濃度上升' },
+    { t: '⑤ 蛋白激酶活化', d: 'cAMP 活化原本不活化的酵素（蛋白激酶），改變細胞活性' },
+    { t: '⑥ 訊號關閉', d: 'α 把 GTP 水解成 GDP + Pi，回到 βγ 重組，訊號關閉' }
+  ];
+  let step = 0, tw = 0, T = 0;
+  S.tick(dt => {
+    T += dt; tw = Math.min(1, tw + dt / 1.8); const e = sm(0, 1, tw);
+    mv(hor.p, step === 0 ? V.lerp([RX, 22, 0], [RX, 8.5, 0], e) : step >= 5 ? V.lerp([RX, 8.5, 0], [RX - 6, 22, 0], e) : [RX, 8.5, 0]); lH.p = hor.p;
+    const gHome = [RX + 3, -7.4, -2], gAC = [AC[0] - 3, -7.4, -2];
+    mv(ga.p, step <= 1 ? gHome : step === 2 ? V.lerp(gHome, gAC, e) : step === 5 ? V.lerp(gAC, gHome, e) : gAC); gdp.p = ga.p; gdp.text = step === 0 || step === 5 ? 'GDP' : 'GTP'; ga.glow = step >= 2 && step <= 4 ? 0.8 : 0;
+    camp.forEach((c, i) => { c.hidden = step < 3 || step === 5 && e > 0.7; const a = i * 0.9, r = 3 + i * 0.8, p = [AC[0] + Math.cos(a) * r, -9 - (i % 4) * 2, Math.sin(a) * r]; mv(c.p, step === 3 ? V.lerp([AC[0], -6, 0], p, Math.min(1, e * 1.4 - i * 0.03)) : step === 4 && i < 4 ? V.lerp(p, V.add(pkR.p, [(i - 1.5) * 1.6, 2, 0]), e) : p); });
+    lC.p = camp[6].p; lC.hidden = step < 3;
+    mv(pkC.p, step === 4 ? V.lerp([-6, -18, 1], [8, -22, 6], e) : step === 5 ? [8, -22, 6] : [-6, -18, 1]); pkC.glow = step === 4 ? 1 : 0; lK.p = pkC.p;
+    const u = (T * 0.12) % 1;
+    mv(ster.p, u < 0.3 ? V.lerp([22, 22, 6], [24, -8, 4], u / 0.3) : u < 0.55 ? V.lerp([24, -8, 4], [20, -12, 4], (u - 0.3) / 0.25) : V.lerp([20, -12, 4], [25, -19, 2], (u - 0.55) / 0.45)); lS.p = ster.p;
+    mv(irec.p, u < 0.55 ? [20, -11, 4] : V.lerp([20, -11, 4], [25, -18, 1], (u - 0.55) / 0.45));
+  });
+  UI.stepper($('sig-steps'), STEPS, i => { step = i; tw = 0; $('sig-cap').innerHTML = STEPS[i].t + '：' + STEPS[i].d; }, { dur: 3800 });
+  K.info(S, 'info-sig', INFO, { picker: 'pk-sig', hl: false });
+})();
+
+/* ========== ⑦ 細胞外基質 ========== */
+(function () {
+  const INFO = {"基質（膠狀）": {"t": "基質（膠狀）", "en": "Ground substance　〔細胞外基質〕", "p": "含醣蛋白與蛋白聚醣的親水膠體，填在纖維與細胞之間。"}, "膠原纖維": {"t": "膠原纖維", "en": "Collagen fibers　〔細胞外基質〕", "p": "最多的 ECM 蛋白，具高<b>抗張強度</b>（像鋼筋）；由膠原細纖維束成（見中間）。"}, "彈性纖維": {"t": "彈性纖維", "en": "Elastic fibers　〔細胞外基質〕", "p": "由彈力蛋白構成、可拉長並回彈的細纖維。"}, "蛋白聚醣": {"t": "蛋白聚醣", "en": "Proteoglycans　〔細胞外基質〕", "p": "核心蛋白上接許多多醣（醣胺聚醣）側鏈，像試管刷；吸水，使基質耐壓。"}, "纖維母細胞": {"t": "纖維母細胞", "en": "Fibroblast　〔細胞〕", "p": "分泌膠原蛋白、彈力蛋白與基質成分的細胞。"}, "整合素": {"t": "整合素", "en": "Integrins　〔細胞〕", "p": "<b>穿膜醣蛋白</b>：細胞內連細胞骨架、細胞外結合 ECM 成分，作為黏附分子並把訊號在細胞內外之間傳遞（integrate）。"}, "醣蛋白（如纖連蛋白）": {"t": "醣蛋白（如纖連蛋白）", "en": "Glycoproteins (e.g., fibronectin)　〔細胞〕", "p": "ECM 中的醣蛋白，連接整合素與膠原纖維；也能結合生長因子並遞送到細胞表面受體。"}, "細胞骨架（肌動蛋白絲）": {"t": "細胞骨架（肌動蛋白絲）", "en": "Cytoskeleton　〔細胞〕", "p": "細胞內的蛋白纖維；經整合素與細胞外基質相連。"}, "① 膠原蛋白分子（三股螺旋）": {"t": "① 膠原蛋白分子（三股螺旋）", "en": "Collagen molecule (triple helix)　〔膠原蛋白組裝〕", "p": "三條多胜肽鏈（α 鏈）互相纏繞成穩定的<b>三股螺旋</b>（分子在細胞外切除兩端非螺旋部分後形成）。補充資料：分子量約 28 萬、長約 280 nm、直徑約 1.5 nm。"}, "② 膠原蛋白微纖維": {"t": "② 膠原蛋白微纖維", "en": "Microfibril　〔膠原蛋白組裝〕", "p": "多個膠原蛋白分子<b>平行、彼此錯開</b>排列並交聯（錯位排列造成細纖維上的橫紋）。"}, "③ 膠原蛋白細纖維": {"t": "③ 膠原蛋白細纖維", "en": "Fibril　〔膠原蛋白組裝〕", "p": "微纖維聚集成的細纖維，電子顯微鏡下有規則的<b>橫紋</b>。"}, "④ 膠原纖維": {"t": "④ 膠原纖維", "en": "Collagen fiber　〔膠原蛋白組裝〕", "p": "許多細纖維束成肉眼可見的膠原纖維；具向性的膠原纖維抗拉強度很高。"}, "彈力蛋白分子": {"t": "彈力蛋白分子", "en": "Elastin molecules　〔彈力蛋白〕", "p": "捲曲的多胜肽鏈；被拉伸時伸直，放開後回縮。"}, "交聯": {"t": "交聯", "en": "Cross-links　〔彈力蛋白〕", "p": "彈力蛋白分子之間的共價交聯，使網路在拉伸後能回到原狀。"}, "人工細胞外基質（多孔支架）": {"t": "人工細胞外基質（多孔支架）", "en": "Scaffold　〔組織工程〕", "p": "以可分解的天然或合成高分子製成、具<b>多孔性</b>的支架，模擬體內 ECM，讓細胞附著、遷入並增生；之後被酵素或水分解，組織逐漸再生。"}, "植入的細胞": {"t": "植入的細胞", "en": "Seeded cells　〔組織工程〕", "p": "細胞來源：自體、同種、異種細胞、幹細胞或基因改造細胞。"}, "生長因子（生長訊號）": {"t": "生長因子（生長訊號）", "en": "Growth factors　〔組織工程〕", "p": "促進細胞分裂、遷移與分化的訊號分子，可接在支架材料上釋放。"}};
+  const S = K.stage('st-ecm', { radius: 52, yaw: 0.3, pitch: 0.25, autoRotate: 0 });
+  const E = { gs: 'ecm' }, C = { gs: 'col' }, L = { gs: 'ela' }, TE = { gs: 'te' };
+  K.box(S, [0, 0, 0], [70, 40, 34], '#7dd3fc', Object.assign({ id: '基質（膠狀）', al: 0.06 }, E));
+  for (let i = 0; i < 5; i++) { const z = -12 + i * 6, y = -12 + (i % 3) * 7; K.sweep(S, [[-34, y, z], [0, y + 3, z + 2], [34, y - 2, z]], 1.8, '#f8fafc', 16, 8, Object.assign({ id: '膠原纖維' }, E)); }
+  for (let i = 0; i < 4; i++) { const pts = []; for (let k = 0; k <= 20; k++) pts.push([-30 + k * 3, 14 - i * 3 + Math.sin(k * 1.3 + i) * 2, -14 + i * 9 + Math.cos(k) * 2]); K.sweep(S, pts, 0.6, '#fbbf24', 40, 5, Object.assign({ id: '彈性纖維' }, E), { smooth: 2 }); }
+  for (let i = 0; i < 4; i++) { const c = [-24 + i * 14, -4, 12]; S.tube(V.add(c, [-4, 0, 0]), V.add(c, [4, 0, 0]), 0.5, '#a3e635', Object.assign({ id: '蛋白聚醣' }, E)); for (let k = -3; k <= 3; k++) [-1, 1].forEach(s => S.tube(V.add(c, [k, 0, 0]), V.add(c, [k, s * 2.6, s * 0.8]), 0.25, '#bef264', Object.assign({ id: '蛋白聚醣', flat: 1 }, E))); }
+  const cell = [6, 6, -2]; K.ellipsoid(S, cell, [10, 6, 7], '#f472b6', 14, 8, Object.assign({ id: '纖維母細胞', al: 0.55 }, E));
+  for (let k = 0; k < 6; k++) { const a = k * 1.05, inn = V.add(cell, [Math.cos(a) * 6, -4, Math.sin(a) * 4]), out = V.add(inn, [Math.cos(a) * 2, -4, Math.sin(a) * 2]); S.tube(inn, out, 0.6, '#22d3ee', Object.assign({ id: '整合素' }, E)); S.sphere(V.add(out, [0, -1.4, 0]), 1.1, '#fb923c', Object.assign({ id: '醣蛋白（如纖連蛋白）' }, E)); S.tube(inn, V.add(cell, [Math.cos(a) * 2, 1, Math.sin(a) * 2]), 0.3, '#e879f9', Object.assign({ id: '細胞骨架（肌動蛋白絲）', flat: 1 }, E)); }
+  [['基質（膠狀）', [-30, 18, 16], '基質（膠狀）', '#7dd3fc', 0, -14], ['膠原纖維', [30, -12, -12], '膠原纖維', '#f8fafc', 30, 10], ['彈性纖維', [30, 14, -14], '彈性纖維', '#fde047', 30, -10], ['蛋白聚醣', [-24, -4, 12], '蛋白聚醣', '#bef264', -30, 16], ['纖維母細胞', cell, '纖維母細胞', '#f9a8d4', 30, -20], ['整合素', V.add(cell, [6, -6, 0]), '整合素', '#67e8f9', 40, 10], ['醣蛋白（如纖連蛋白）', V.add(cell, [8, -10, 0]), '纖連蛋白', '#fdba74', 40, 20]].forEach(([id, p, t, c, dx, dy]) => K.lab(S, p, t, id, c, dx, dy, Object.assign({ size: 11 }, E)));
+  // 膠原組裝 ①→④
+  const X0 = [-30, -10, 10, 30];
+  [0, 1, 2].forEach(k => { const pts = K.helixPts([X0[0], -16, 0], [X0[0], 16, 0], 1.2, 5, 60, k * 2.09); pts.slice(0, -1).forEach((p, i) => S.tube(p, pts[i + 1], 0.45, ['#f87171', '#60a5fa', '#34d399'][k], Object.assign({ id: '① 膠原蛋白分子（三股螺旋）' }, C))); });
+  for (let r = 0; r < 5; r++) for (let c = 0; c < 2; c++) S.tube([X0[1] + (c - 0.5) * 2.4, -16 + r * 7 + c * 3, (r % 2) - 0.5], [X0[1] + (c - 0.5) * 2.4, -16 + r * 7 + c * 3 + 5.6, (r % 2) - 0.5], 0.7, '#e2e8f0', Object.assign({ id: '② 膠原蛋白微纖維' }, C));
+  K.sweep(S, [[X0[2], -16, 0], [X0[2], 16, 0]], 3, (u) => Math.floor(u * 10) % 2 ? '#cbd5e1' : '#f8fafc', 10, 10, Object.assign({ id: '③ 膠原蛋白細纖維' }, C));
+  K.circle([X0[3], 0, 0], 3.6, [0, 1, 0], 7).concat([[X0[3], 0, 0]]).forEach(p => S.tube(V.add(p, [0, -16, 0]), V.add(p, [0, 16, 0]), 1.6, '#f1f5f9', Object.assign({ id: '④ 膠原纖維' }, C)));
+  ['①', '②', '③', '④'].forEach((n, i) => K.lab(S, [X0[i], 18, 0], n + ['三股螺旋分子', '微纖維', '細纖維（橫紋）', '膠原纖維'][i], ['① 膠原蛋白分子（三股螺旋）', '② 膠原蛋白微纖維', '③ 膠原蛋白細纖維', '④ 膠原纖維'][i], '#e2e8f0', 0, -12, Object.assign({ size: 11 }, C)));
+  // 彈力蛋白網
+  const N = 7, el = []; for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) el.push({ i, j, p: [0, 0, 0] });
+  const nodes = el.map(n => S.sphere(n.p, 1.1, '#fde047', Object.assign({ id: '交聯' }, L)));
+  const links = []; el.forEach((n, k) => { if (n.i < N - 1) links.push(S.tube(n.p, el[k + N].p, 0.5, '#fbbf24', Object.assign({ id: '彈力蛋白分子' }, L))); if (n.j < N - 1) links.push(S.tube(n.p, el[k + 1].p, 0.5, '#fbbf24', Object.assign({ id: '彈力蛋白分子' }, L))); });
+  K.lab(S, [0, 20, 0], '拉伸 ↔ 回縮', '彈力蛋白分子', '#fde68a', 0, -10, L);
+  // 組織工程支架
+  for (let i = 0; i < 6; i++) for (let j = 0; j < 6; j++) { S.tube([-20 + i * 8, -16, -20 + j * 8], [-20 + i * 8, 16, -20 + j * 8], 0.6, '#94a3b8', Object.assign({ id: '人工細胞外基質（多孔支架）', al: 0.6 }, TE)); }
+  for (let y = -16; y <= 16; y += 8) for (let i = 0; i < 6; i++) { S.tube([-20, y, -20 + i * 8], [20, y, -20 + i * 8], 0.5, '#94a3b8', Object.assign({ id: '人工細胞外基質（多孔支架）', al: 0.5 }, TE)); S.tube([-20 + i * 8, y, -20], [-20 + i * 8, y, 20], 0.5, '#94a3b8', Object.assign({ id: '人工細胞外基質（多孔支架）', al: 0.5 }, TE)); }
+  const seeds = []; for (let i = 0; i < 14; i++) seeds.push(S.sphere([-18 + (i * 7) % 36, -14 + (i * 5) % 28, -16 + (i * 11) % 32], 2, '#f472b6', Object.assign({ id: '植入的細胞' }, TE)));
+  const gfs = []; for (let i = 0; i < 16; i++) gfs.push(S.sphere([0, 0, 0], 0.8, '#34d399', Object.assign({ id: '生長因子（生長訊號）', glow: 0.6 }, TE)));
+  K.lab(S, [20, 16, 20], '多孔支架', '人工細胞外基質（多孔支架）', '#cbd5e1', 30, -10, TE); K.lab(S, seeds[3].p, '植入的細胞', '植入的細胞', '#f9a8d4', -30, -16, TE); K.lab(S, [10, 6, 10], '生長因子', '生長因子（生長訊號）', '#86efac', 30, 10, TE);
+  let mode = 'ecm', T = 0;
+  S.tick(dt => {
+    T += dt;
+    if (mode === 'ela') { const st = 1 + 0.45 * (0.5 + 0.5 * Math.sin(T * 1.4)); el.forEach(n => mv(n.p, [(n.i - 3) * 5 * st + Math.sin(n.j * 1.7) * (1.5 / st), (n.j - 3) * 4.5 + Math.cos(n.i * 1.3) * (2 / st), Math.sin(n.i + n.j) * 3 / st])); }
+    if (mode === 'te') { gfs.forEach((g, i) => mv(g.p, [Math.cos(T + i) * 14, ((T * 3 + i * 4) % 32) - 16, Math.sin(T * 0.7 + i) * 14])); seeds.forEach((s, i) => { s.r = 2 + 0.4 * Math.sin(T * 2 + i); }); }
+  });
+  K.seg('#ecmmode', m => { mode = m; S.each(o => { if (o.gs) o.hidden = o.gs !== m; }); $('ecm-hud').textContent = { ecm: '細胞外基質：纖維 + 膠狀基質 + 細胞', col: '膠原蛋白由小到大組裝（補充）', ela: '彈力蛋白：交聯網可拉伸與回縮', te: '組織工程三要素（補充）' }[m]; }, 'ecm');
+  K.info(S, 'info-ecm', INFO, { picker: 'pk-ecm', hl: false, on: id => { $('ecm-cap').textContent = '👉 ' + id; } });
+})();
+
+/* ========== 快閃卡 / 測驗 ========== */
+UI.flashcards($('fc'), [
+  { f: '非載體媒介的運輸有哪些？', b: '脂溶性分子的簡單擴散（O₂、CO₂、類固醇）、離子經通道擴散、水經水通道蛋白的<b>滲透</b>。' },
+  { f: '促進性擴散 vs 主動運輸', b: '促進性擴散：載體、順濃度梯度、不耗 ATP（GLUT）；主動運輸：逆梯度、需 ATP（幫浦）。' },
+  { f: '載體媒介運輸的三特性', b: '<b>專一性、競爭、飽和</b>（達最大運輸速率 Tm）。' },
+  { f: 'Na⁺/K⁺ 幫浦每次運送', b: '<b>3 Na⁺ 出、2 K⁺ 入</b>，皆逆梯度，消耗 1 ATP。' },
+  { f: 'Na⁺/K⁺ 幫浦的三個功能', b: '建立 Na⁺ 梯度供協同運輸；神經肌肉的電化學衝動；維持細胞體積（滲透濃度）。' },
+  { f: '同向運輸 vs 反向運輸', b: '同向：與 Na⁺ 同方向（SGLT）；反向：與 Na⁺ 反方向（Na⁺ 入、Ca²⁺ 出）。皆為二次主動運輸。' },
+  { f: '小腸上皮吸收葡萄糖的三步', b: '基底側 Na⁺/K⁺ 幫浦維持低 Na⁺ → 頂端 SGLT 帶葡萄糖逆梯度進入 → 基底側 GLUT 促進性擴散出細胞。' },
+  { f: '三種連接複合體', b: '緊密連接（封住間隙）、帶狀胞橋小體（環狀連細胞骨架）、胞橋小體（點狀鈕扣）。' },
+  { f: '滲透發生的兩條件', b: '膜兩側溶質濃度不同且水可通過；膜對溶質<b>不通透</b>。' },
+  { f: '1 m NaCl 是多少 Osm？', b: '<b>2 Osm</b>（解離成 Na⁺ 與 Cl⁻）。血漿約 300 mOsm。' },
+  { f: '0.3 m 尿素對紅血球？', b: '與血漿等滲，但尿素能進入細胞 → 實為<b>低張</b> → 溶血。' },
+  { f: '受體媒介胞吞的例子', b: 'LDL（攜帶膽固醇）與 LDL 受體結合 → 被覆凹陷（網格蛋白）→ 小泡。' },
+  { f: 'G 蛋白訊號傳遞順序', b: '訊息分子結合受體 → α 換成 GTP 與 βγ 分離 → 活化腺苷酸環化酶 → cAMP → 蛋白激酶 → 細胞反應。' },
+  { f: '整合素的功能', b: '穿膜醣蛋白：連接細胞骨架與 ECM，作為黏附分子並在細胞內外傳遞訊號。' },
+  { f: '體液分布', b: '約 67% 細胞內、33% 細胞外；細胞外液約 20% 血漿、80% 組織液。' }
+], 'ch06');
+UI.quiz($('qz'), [
+  { q: '下列何者可直接穿過磷脂雙層？', o: ['Na⁺', '葡萄糖', 'O₂', '蛋白質'], a: 2, e: '非極性小分子可簡單擴散。' },
+  { q: 'GLUT 運送葡萄糖屬於？', o: ['簡單擴散', '促進性擴散', '初級主動運輸', '胞吞'], a: 1, e: '順梯度、需載體、不耗 ATP。' },
+  { q: 'Na⁺/K⁺ 幫浦每水解一個 ATP？', o: ['2 Na⁺ 出、3 K⁺ 入', '3 Na⁺ 出、2 K⁺ 入', '3 Na⁺ 入、2 K⁺ 出', '1 Na⁺ 出、1 K⁺ 入'], a: 1, e: '3 出 2 入。' },
+  { q: 'SGLT 帶葡萄糖逆梯度進入細胞的能量來自？', o: ['直接水解 ATP', 'Na⁺ 順梯度流入', 'K⁺ 流出', '光能'], a: 1, e: '二次主動運輸。' },
+  { q: '限制細胞旁運輸的主要構造是？', o: ['胞橋小體', '緊密連接', '隙型連結', '微絨毛'], a: 1, e: '緊密連接封住細胞間隙頂端。' },
+  { q: '紅血球放入低張溶液會？', o: ['皺縮', '不變', '吸水膨脹甚至溶血', '失去 K⁺ 但體積不變'], a: 2, e: '水進入細胞。' },
+  { q: '0.9% NaCl 對紅血球而言是？', o: ['低張', '等張', '高張', '無法判斷'], a: 1, e: '約 300 mOsm。' },
+  { q: 'LDL 進入細胞的方式是？', o: ['吞噬作用', '受體媒介胞吞', '簡單擴散', '胞吐'], a: 1, e: '需 LDL 受體。' },
+  { q: 'G 蛋白 α 次單元活化時結合？', o: ['GDP', 'GTP', 'cAMP', 'ATP'], a: 1, e: 'GDP 換成 GTP 後與 βγ 分離。' },
+  { q: '提供 ECM 抗張強度、像鋼筋的是？', o: ['彈力蛋白', '膠原纖維', '蛋白聚醣', '整合素'], a: 1, e: '彈力蛋白提供彈性。' }
+]);
+</script>
+</body>
+</html>

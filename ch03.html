@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch3 細胞構造與基因控制 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .cyc{width:220px;height:220px;border-radius:50%;margin:8px auto;position:relative;background:conic-gradient(#38bdf8 0 40%,#a78bfa 40% 72%,#34d399 72% 88%,#f472b6 88% 100%);box-shadow:0 18px 0 rgba(0,0,0,.35),0 30px 50px rgba(0,0,0,.4);transform:rotateX(38deg);transform-style:preserve-3d}
+  .cyc::after{content:"";position:absolute;inset:46px;border-radius:50%;background:#0b1222;box-shadow:inset 0 6px 14px rgba(0,0,0,.6)}
+  .cyc span{position:absolute;font-weight:900;font-size:15px;color:#04111d;z-index:2}
+  .codon{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .codon div{border:1px solid var(--line);border-radius:10px;padding:6px 8px;text-align:center;min-width:64px;background:linear-gradient(160deg,#17223d,#0b1222);box-shadow:0 5px 0 #050913}
+  .codon b{display:block;font-family:Consolas,monospace;font-size:15px;letter-spacing:.08em}
+  .codon small{display:block;color:var(--mut);font-size:11px}
+  .codon .stop{border-color:var(--bad)}
+  .codon .start{border-color:var(--ok)}
+  input.seq{font:15px Consolas,monospace;letter-spacing:.06em;width:100%;color:var(--tx);background:#0b1222;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+</style>
+</head>
+<body style="--acc:#a78bfa;--acc2:#22d3ee">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 3 · Cell Structure and Genetic Control</div>
+  <h1 class="title3d">細胞構造與基因控制</h1>
+  <p class="sub">剖面 3D 細胞（點選胞器，播放分泌路徑）、會變形的細胞膜（吞噬、胞飲、受體媒介胞吞、胞吐）、核小體與染色質、DNA 複製／轉錄／轉譯 3D 動畫與密碼子轉換器，以及有絲分裂 vs 減數分裂的 3D 染色體。</p>
+  <div class="chips"><a class="chip" href="#cell">3D 細胞</a><a class="chip" href="#endo">胞吞胞吐</a><a class="chip" href="#chrom">染色質</a><a class="chip" href="#gene">基因表現</a><a class="chip" href="#code">密碼子</a><a class="chip" href="#cycle">細胞週期</a><a class="chip" href="#mit">分裂 3D</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="cell" data-nav="3D 細胞">
+  <h2><span class="num">01</span>細胞與胞器（剖面 3D）</h2>
+  <p class="lead">細胞膜的前方切開一角，可看到內部胞器。點選任何結構看功能；按「分泌路徑」看分泌型蛋白質從粗糙內質網 → 高基氏體 → 分泌囊泡 → 胞吐。</p>
+  <div class="grid2">
+    <div class="stage" id="st-cell"><canvas aria-label="3D 剖面細胞"></canvas>
+      <div class="hud">拖曳旋轉 · 點選胞器</div><div class="hud2" id="cell-cap">動物細胞（示意，比例非真實）</div>
+      <div class="sbar"><button class="btn sm" id="sec-btn" type="button">▶ 分泌路徑</button><button class="btn sm" id="mt-btn" type="button">細胞骨架</button></div>
+    </div>
+    <div class="card info"><div id="info-cell"><div class="tt">點一個胞器</div><p class="empty">或用下方按鈕直接選取。</p></div><div class="picker" id="pk-cell"></div></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>細胞膜相關構造</h3><ul class="small"><li><b>流體鑲嵌模型</b>：磷脂雙層 + 蛋白質（多數貫穿膜）</li><li><b>纖毛／鞭毛</b>：微管「9 + 2」排列；鞭毛只有精子有</li><li><b>微絨毛</b>：增加表面積（小腸、腎小管）</li><li>偽足：細胞移動、吞噬</li></ul></div>
+    <div class="card tilt"><h3>細胞骨架</h3><ul class="small"><li><b>微絲</b>（肌動蛋白）與<b>微管</b>（微管蛋白）</li><li>像細胞的「骨骼與肌肉」：支撐形狀並移動胞器</li><li>中心體含一對<b>中心粒</b>，組織紡錘絲</li></ul></div>
+    <div class="card tilt"><h3>蛋白質的分解</h3><ul class="small"><li>溶體內的蛋白酶消化多種蛋白</li><li>調節蛋白：先接上 <b>泛素 ubiquitin</b> 作為標記</li><li>再由<b>蛋白酶體 proteasome</b> 分解 → 控制調節蛋白濃度</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="endo" data-nav="胞吞胞吐">
+  <h2><span class="num">02</span>胞吞作用與胞吐作用</h2>
+  <p class="lead">上方是細胞外、下方是細胞質。選一種方式看細胞膜怎麼凹陷、包裹、斷開成囊泡（或反向融合釋出）。</p>
+  <div class="grid2">
+    <div class="stage" id="st-endo"><canvas aria-label="3D 細胞膜胞吞胞吐"></canvas>
+      <div class="hud">上：細胞外　下：細胞質</div><div class="hud2" id="endo-cap"></div>
+      <div class="sbar"><div class="seg" id="emode"><button class="btn sm" data-v="pha" type="button">吞噬</button><button class="btn sm" data-v="pin" type="button">胞飲</button><button class="btn sm" data-v="rme" type="button">受體媒介</button><button class="btn sm" data-v="exo" type="button">胞吐</button></div></div>
+    </div>
+    <div class="card" id="endo-info"></div>
+  </div>
+</section>
+
+<section class="sec" id="chrom" data-nav="染色質">
+  <h2><span class="num">03</span>細胞核、染色質與核小體</h2>
+  <p class="lead">DNA 纏繞在帶正電的<b>組蛋白</b>上形成<b>核小體</b>（像串珠）。<b>乙醯化</b>使染色質鬆開 → 基因可被轉錄（常染色質）；<b>去乙醯化</b>使其緊縮 → 基因沉默（異染色質）。</p>
+  <div class="grid2">
+    <div class="stage short" id="st-chrom"><canvas aria-label="3D 核小體"></canvas>
+      <div class="hud">組蛋白八聚體 + 纏繞的 DNA</div><div class="hud2" id="ch-cap"></div>
+      <div class="sbar"><div class="seg" id="chmode"><button class="btn sm" data-v="eu" type="button">乙醯化（常染色質）</button><button class="btn sm" data-v="het" type="button">去乙醯化（異染色質）</button><button class="btn sm" data-v="chr" type="button">分裂期染色體</button></div></div>
+    </div>
+    <div class="card info" id="info-chrom"><div class="tt">點選組蛋白或 DNA</div><p class="empty">每個核小體 = 8 個組蛋白（H2A、H2B、H3、H4 各兩個）+ 纏繞約 1.65 圈的 DNA。</p></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>細胞核</h3><ul class="small"><li><b>雙層核膜</b>，兩層在<b>核孔複合體</b>處相連，控制分子進出</li><li><b>核仁</b>：製造核糖體 RNA（rRNA）</li></ul></div>
+    <div class="card tilt"><h3>基因組 vs 蛋白質組</h3><ul class="small"><li>人類約 <b>20,000</b> 個編碼蛋白質的基因（章末摘要寫約 25,000）</li><li>卻能產生 &gt;100,000 種蛋白質 → <b>選擇性剪接</b></li><li>一個細胞只有約 300 個基因活躍（分化）</li></ul></div>
+    <div class="card tilt"><h3>表觀遺傳</h3><p class="small">基因沉默（如 DNA 甲基化、組蛋白修飾）由配子或早期胚胎傳下，經細胞分裂帶到全身細胞 — 不改變 DNA 序列。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="gene" data-nav="基因表現">
+  <h2><span class="num">04</span>DNA 複製、轉錄與轉譯（3D 動畫）</h2>
+  <p class="lead">切換三個過程。複製：舊股（藍）各配一條新股（橘）→ <b>半保留</b>；轉錄：RNA 聚合酶沿模板股合成 mRNA；轉譯：tRNA 依密碼子把胺基酸帶到核糖體。</p>
+  <div class="grid2">
+    <div class="stage" id="st-gene"><canvas aria-label="3D 基因表現"></canvas>
+      <div class="hud" id="g-hud">複製</div><div class="hud2" id="g-cap"></div>
+      <div class="sbar"><div class="seg" id="gmode"><button class="btn sm" data-v="rep" type="button">DNA 複製</button><button class="btn sm" data-v="tx" type="button">轉錄</button><button class="btn sm" data-v="tl" type="button">轉譯</button></div><button class="btn sm" id="g-slow" type="button">🐢 慢速</button></div>
+    </div>
+    <div class="card info" id="g-info"></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>RNA 的種類</h3><ul class="small"><li><b>mRNA</b>：攜帶密碼子到核糖體</li><li><b>tRNA</b>：三葉草形，反密碼子 + 特定胺基酸</li><li><b>rRNA</b>：核糖體的組成（4 個 rRNA + 82 個蛋白，大小兩個次單元）</li><li><b>pre-mRNA</b>：剪去<b>內含子</b>、接合<b>外顯子</b> → mRNA（snRNPs 組成剪接體）</li></ul></div>
+    <div class="card tilt"><h3>RNA 干擾</h3><ul class="small"><li><b>siRNA</b>、microRNA 與部分互補的 mRNA 結合 → 使其沉默或分解</li><li>屬於基因表現的調控方式</li></ul></div>
+    <div class="card tilt"><h3>分泌型蛋白</h3><ul class="small"><li>在<b>粗糙內質網</b>上的核糖體合成，進入<b>池（cisternae）</b></li><li>→ 高基氏體修飾、分類、包裝 → 分泌囊泡 → <b>胞吐</b></li><li>細胞內使用的蛋白多由游離的<b>多核糖體</b>合成</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="code" data-nav="密碼子">
+  <h2><span class="num">05</span>密碼子轉換器</h2>
+  <p class="lead">輸入 DNA <b>模板股</b>的鹼基三聯體 → 轉錄成 mRNA 密碼子 → tRNA 反密碼子 → 胺基酸。共 64 個密碼子：61 個對應 20 種胺基酸、3 個終止密碼子；AUG = 起始（甲硫胺酸）。</p>
+  <div class="card">
+    <label class="small muted" for="seq">DNA 模板股（只接受 A T G C）</label>
+    <input class="seq" id="seq" value="TACCGAAAGTTTCCGACCATT" spellcheck="false" autocomplete="off">
+    <div class="btns"><button class="btn sm" data-ex="TACCGAAAGTTTCCGACCATT" type="button">範例 1（同 3D 動畫）</button><button class="btn sm" data-ex="TACAAACCGGGTTCAATTACT" type="button">範例 2</button><button class="btn sm" data-ex="TACGGGATCCTT" type="button">範例 3（提早終止）</button></div>
+    <div id="code-out"></div>
+  </div>
+</section>
+
+<section class="sec" id="cycle" data-nav="細胞週期">
+  <h2><span class="num">06</span>細胞週期與細胞凋亡</h2>
+  <div class="grid3">
+    <div class="card"><div class="cyc" aria-label="細胞週期"><span style="left:150px;top:40px">G₁</span><span style="left:118px;top:168px">S</span><span style="left:22px;top:118px">G₂</span><span style="left:40px;top:40px">M</span></div>
+      <p class="small muted" style="text-align:center">示意比例（G₁ 最長、長度依細胞而異）</p></div>
+    <div class="card tilt"><h3>各期</h3><ul class="small"><li><b>G₁</b>：DNA 指揮 RNA 與蛋白質合成，細胞生長</li><li><b>S</b>：DNA <b>複製</b>（半保留）</li><li><b>G₂</b>：短暫間隔，準備分裂</li><li><b>M</b>：有絲分裂 + 胞質分裂</li><li><b>G₀</b>：不再分裂的細胞</li></ul></div>
+    <div class="card tilt"><h3>調控與癌症</h3><ul class="small"><li><b>週期蛋白 cyclins</b>（與 cdk）推動細胞週期；在癌症中表現異常</li><li><b>p53</b>：抑癌基因，DNA 受損時使週期停止或啟動凋亡</li><li>致癌基因促進癌症；抑癌基因抑制癌症</li></ul></div>
+  </div>
+  <div class="grid2 even mt">
+    <div class="card"><h3>細胞凋亡 Apoptosis（計畫性死亡）</h3><ul class="small"><li><b>外在途徑</b>：「死亡配體」（如 FAS ligand、TNF）與膜上死亡受體結合 → 活化 <b>caspases</b></li><li><b>內在途徑</b>：粒線體釋出<b>細胞色素 c</b> 到細胞質 → 活化 caspases</li><li>細胞縮小、DNA 斷裂、被吞噬細胞清除；<b>不引起發炎</b>（與壞死不同）</li></ul></div>
+    <div class="card"><h3>自噬 Autophagy</h3><ul class="small"><li>自噬體包住部分胞器 → 與<b>溶體</b>融合消化</li><li>飢餓時回收分子；也選擇性清除受損的粒線體、過氧化體</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="mit" data-nav="分裂 3D">
+  <h2><span class="num">07</span>有絲分裂 vs 減數分裂（3D 染色體）</h2>
+  <p class="lead">以 2n = 4 為例：<span class="red">紅色</span>＝來自母親、<span class="blue">藍色</span>＝來自父親，深淺代表兩對不同的同源染色體。每條複製後的染色體有兩條<b>姊妹染色分體</b>。</p>
+  <div class="grid2">
+    <div class="stage" id="st-mit"><canvas aria-label="3D 細胞分裂"></canvas>
+      <div class="hud" id="m-hud"></div><div class="hud2" id="m-cap"></div>
+      <div class="sbar"><div class="seg" id="mmode"><button class="btn sm" data-v="mit" type="button">有絲分裂 Mitosis</button><button class="btn sm" data-v="mei" type="button">減數分裂 Meiosis</button></div></div>
+    </div>
+    <div class="card"><div id="st-mit-steps"></div><div id="st-mei-steps" style="display:none"></div></div>
+  </div>
+  <div class="tbwrap mt"><table class="tb">
+    <tr><th></th><th>有絲分裂</th><th>減數分裂</th></tr>
+    <tr><td>發生位置</td><td>體細胞（生長、修補）</td><td>性腺，產生配子</td></tr>
+    <tr><td>同源染色體</td><td>單獨排成一列，各自分開姊妹染色分體</td><td>第一次分裂<b>並排配對</b>（聯會、互換），每對只有一條到一極</td></tr>
+    <tr><td>結果</td><td>2 個子細胞，各 46 條（2n）</td><td>第一次後各 23 條（已複製）；第二次分開染色分體 → 4 個單倍體細胞</td></tr>
+    <tr><td>遺傳變異</td><td>與親代相同</td><td>互換 + 獨立分配 → 多樣性</td></tr>
+  </table></div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">08</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">09</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 3 章整理，僅供個人複習。3D 模型為示意，比例非真實。 · <a href="index.html">回總覽</a> · <a href="ch02.html">← 第 2 章 化學組成</a> · <a href="ch04.html">第 4 章 酵素與能量 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+const showMode = (S, m) => S.each(o => { if (o.gs) o.hidden = !o.gs.split(' ').includes(m); });
+
+/* ================= 01 3D 細胞 ================= */
+(function () {
+  const S = K.stage('st-cell', { radius: 72, yaw: 0.5, pitch: 0.38, autoRotate: 0 });
+  const CR = [62, 44, 50], CUT = { u0: -0.044, u1: 0.706 };
+  const onCell = d => { d = V.norm(d); const k = 1 / Math.sqrt((d[0] / CR[0]) ** 2 + (d[1] / CR[1]) ** 2 + (d[2] / CR[2]) ** 2); return V.mul(d, k); };
+  K.ellipsoid(S, [0, 0, 0], CR, '#38bdf8', 36, 18, { id: 'pm', al: 0.13, st: '#7dd3fc', sa: 0.25, zb: 6 }, CUT);
+  // 微絨毛
+  Mini3D.fib(260).filter(u => u[1] > 0.82).forEach(u => { const b = onCell(u), n = V.norm([u[0] / CR[0] ** 2, u[1] / CR[1] ** 2, u[2] / CR[2] ** 2]); S.tube(b, V.add(b, V.mul(n, 9)), 1.5, '#38bdf8', { id: 'mv', al: 0.85 }); S.sphere(V.add(b, V.mul(n, 9)), 1.5, '#7dd3fc', { id: 'mv' }); });
+  // 細胞核（雙層核膜）
+  const NC = [-12, 2, 0];
+  K.ellipsoid(S, NC, [19, 17, 18], '#a78bfa', 24, 12, { id: 'nuc', al: 0.5, st: '#c4b5fd', sa: 0.3 }, CUT);
+  K.ellipsoid(S, NC, [17.4, 15.4, 16.4], '#7c3aed', 20, 10, { id: 'nuc', al: 0.32 }, CUT);
+  Mini3D.fib(70).forEach(u => { const th = (Math.atan2(u[2], u[0]) / 6.2832 + 1) % 1; if (th > 0.7 && th < 0.96) return; S.sphere(V.add(NC, [u[0] * 19.3, u[1] * 17.3, u[2] * 18.3]), 1.3, '#f5d0fe', { id: 'pore' }); });
+  S.sphere(V.add(NC, [3, 3, 2]), 6, '#581c87', { id: 'nucleolus' });
+  const rnd = Mini3D.rng(5);
+  for (let i = 0; i < 90; i++) { const u = Mini3D.fib(90)[i]; S.dot(V.add(NC, V.mul([u[0] * 13, u[1] * 11, u[2] * 12], 0.4 + rnd() * 0.6)), 1.1, '#e9d5ff', { id: 'chromatin', al: 0.7 }); }
+  // 粗糙內質網
+  [0, 1, 2].forEach(i => {
+    const r = [24 + i * 3.6, 21 + i * 3.4, 23 + i * 3.6];
+    K.ellipsoid(S, NC, r, '#60a5fa', 10, 5, { id: 'rer', al: 0.55, st: '#bfdbfe', sa: 0.25 }, { u0: 0.19, u1: 0.56, v0: 0.22, v1: 0.78 });
+    for (let k = 0; k < 40; k++) { const th = (0.19 + rnd() * 0.37) * 6.2832, ph = (0.22 + rnd() * 0.56) * Math.PI; S.dot(V.add(NC, [Math.cos(th) * Math.sin(ph) * (r[0] + 0.8), Math.cos(ph) * (r[1] + 0.8), Math.sin(th) * Math.sin(ph) * (r[2] + 0.8)]), 1, '#1d4ed8', { id: 'ribo' }); }
+  });
+  // 平滑內質網
+  [[[-48, -14, -6], [-40, -24, 2], [-30, -20, 12], [-22, -30, 20], [-12, -26, 28]], [[-44, -26, 14], [-36, -16, 22], [-28, -26, 30]], [[-50, -4, 10], [-42, -10, 20], [-36, -2, 28]]].forEach(p => K.sweep(S, p, 1.9, '#2dd4bf', 16, 6, { id: 'ser' }));
+  // 高基氏體
+  const GC = [28, 6, 16];
+  for (let i = 0; i < 5; i++) K.ellipsoid(S, V.add(GC, [0, i * 3.4, 0]), [13 - i * 1.1, 1.3, 8 - i * 0.6], i === 0 ? '#f9a8d4' : i === 4 ? '#db2777' : '#f472b6', 16, 5, { id: 'golgi' }, { rz: 0.12 });
+  [[22, 24, 12], [34, 24, 20], [38, 22, 10], [28, 27, 22]].forEach(p => S.sphere(p, 2.1, '#f9a8d4', { id: 'vesicle' }));
+  // 粒線體
+  const MITO = [[-40, -22, -10, 0.4, 0.2], [16, -24, 22, -0.3, 1], [42, -10, -2, 0.2, 2], [-28, 24, 18, 0.7, 0.4], [6, 24, -22, -0.5, 1.4]];
+  MITO.forEach(([x, y, z, rz, ry]) => {
+    K.ellipsoid(S, [x, y, z], [9, 4.2, 4.2], '#fb923c', 14, 7, { id: 'mito', al: 0.85 }, { rz, ry });
+    for (let k = -2; k <= 2; k++) { const a = V.add([x, y, z], K.rot([k * 2.8, -3.2, 0], { rz, ry })), b = V.add([x, y, z], K.rot([k * 2.8, 2.2, 0], { rz, ry })); S.tube(a, b, 0.7, '#fed7aa', { id: 'mito', zb: -2 }); }
+  });
+  [[24, -26, -14], [-20, -30, 22], [46, 6, 22]].forEach(p => S.sphere(p, 3.6, '#a3e635', { id: 'lyso' }));
+  [[-42, 8, 24], [12, -32, -4]].forEach(p => { S.sphere(p, 3, '#facc15', { id: 'perox' }); });
+  // 中心體與微管
+  const CS = [16, -8, -8];
+  S.tube(V.add(CS, [-3, 0, 0]), V.add(CS, [3, 0, 0]), 1.8, '#e879f9', { id: 'cent' }); S.tube(V.add(CS, [0, -3, 2]), V.add(CS, [0, 3, 2]), 1.8, '#e879f9', { id: 'cent' });
+  const MT = Mini3D.fib(22).map(u => S.tube(CS, V.mul(onCell(V.add(V.mul(u, 50), CS)), 0.96), 0.45, '#f0abfc', { id: 'mt', flat: 1, al: 0.3 }));
+  for (let i = 0; i < 70; i++) { const p = [(rnd() - 0.5) * 100, (rnd() - 0.5) * 70, (rnd() - 0.5) * 80]; if ((p[0] / 58) ** 2 + (p[1] / 40) ** 2 + (p[2] / 46) ** 2 > 1 || V.dist(p, NC) < 30) continue; S.dot(p, 1, '#93c5fd', { id: 'ribo', al: 0.8 }); }
+  // 分泌路徑
+  const secPath = [V.add(NC, [-6, 8, 26]), [8, 4, 28], V.add(GC, [-6, -1, 0]), V.add(GC, [0, 2, 0]), V.add(GC, [2, 9, 0]), V.add(GC, [6, 16, 4]), [38, 26, 14], V.mul(onCell([0.55, 0.7, 0.3]), 1.0), V.mul(onCell([0.55, 0.7, 0.3]), 1.25)];
+  const flow = K.flow(S, secPath, 6, 2.3, '#f0abfc', 0.07, { glow: 0.8, gc: '#f0abfc' }); flow.show(false);
+  const L = (p, t, id, c, dx, dy) => K.lab(S, p, t, id, c, dx, dy);
+  L(onCell([0.3, 0.9, -0.3]), '細胞膜', 'pm', '#7dd3fc', -60, -20); L(V.add(NC, [-14, 10, -8]), '細胞核', 'nuc', '#c4b5fd', -50, -20); L(V.add(NC, [3, 3, 2]), '核仁', 'nucleolus', '#d8b4fe', -10, 30);
+  L(V.add(NC, [-10, 14, 22]), '粗糙內質網', 'rer', '#93c5fd', -50, -30); L([-30, -20, 12], '平滑內質網', 'ser', '#5eead4', -40, 26); L(V.add(GC, [0, 8, 0]), '高基氏體', 'golgi', '#f9a8d4', 44, -20);
+  L([42, -10, -2], '粒線體', 'mito', '#fdba74', 40, 10); L([24, -26, -14], '溶體', 'lyso', '#bef264', 30, 20); L([12, -32, -4], '過氧化體', 'perox', '#fde047', -40, 24); L(CS, '中心體', 'cent', '#f0abfc', 36, 24); L(onCell([0.1, 1, 0]), '微絨毛', 'mv', '#7dd3fc', 40, -16);
+  const INFO = {
+    pm: ['細胞膜 Plasma membrane', ['<b>流體鑲嵌模型</b>：磷脂雙層 + 鑲嵌的蛋白質', '選擇性通透；胞吞、胞吐在此發生', '膜外的醣蛋白/醣脂形成醣盞（glycocalyx）']],
+    mv: ['微絨毛 Microvilli', ['細胞膜的指狀突起，增加吸收表面積', '例：小腸上皮的刷狀緣、腎近曲小管']],
+    nuc: ['細胞核 Nucleus', ['<b>雙層核膜</b>包圍，含染色質（DNA + 蛋白）', '轉錄在此發生，mRNA 經核孔出核']],
+    pore: ['核孔複合體 Nuclear pore complex', ['內外兩層核膜在此融合', '控制 RNA、蛋白質等分子進出細胞核']],
+    nucleolus: ['核仁 Nucleolus', ['製造<b>核糖體 RNA（rRNA）</b>的區域', '無膜包圍']],
+    chromatin: ['染色質 Chromatin', ['DNA 與組蛋白結合的絲狀物質', '常染色質（活躍）vs 異染色質（緊縮、不活躍）']],
+    rer: ['粗糙內質網 Rough ER', ['表面附著<b>核糖體</b> → 合成<b>分泌型蛋白</b>與膜蛋白', '蛋白進入其內部空間「池」（cisternae）後送往高基氏體']],
+    ribo: ['核糖體 Ribosome', ['蛋白質工廠：4 個 rRNA + 82 個蛋白，大小兩個次單元', '附著在 RER（分泌蛋白）或游離（細胞內使用的蛋白，多核糖體）']],
+    ser: ['平滑內質網 Smooth ER', ['無核糖體；多種酵素反應的場所（如類固醇合成、肝臟解毒）', '骨骼肌中稱<b>肌漿網</b>，儲存 <b>Ca²⁺</b>']],
+    golgi: ['高基氏體 Golgi complex', ['一疊扁平囊（像疊鬆餅），內有池', '接收 ER 的產物 → <b>修飾、分類、包裝</b>成囊泡']],
+    vesicle: ['分泌囊泡 Secretory vesicle', ['由高基氏體形成，移到細胞膜', '與細胞膜融合 → <b>胞吐</b>釋出產物']],
+    mito: ['粒線體 Mitochondria', ['細胞的主要<b>能量（ATP）</b>生產場所', '外膜平滑；內膜向內摺成<b>嵴（cristae）</b>', '有自己的環狀 DNA；可融合與分裂（運動訓練使分裂增加）'], '粒線體 DNA 被認為源自共生細菌；也會產生超氧自由基造成氧化壓力。'],
+    lyso: ['溶體 Lysosome', ['含消化酵素的膜囊', '消化吞噬來的物質、清除老舊胞器（自噬）']],
+    perox: ['過氧化體 Peroxisome', ['含<b>氧化酶</b>，從有機分子移除氫並交給 O₂ → H₂O₂', '<b>過氧化氫酶 catalase</b>：2H₂O₂ → 2H₂O + O₂（作用最快的酵素之一）', '肝臟中特別大且活躍']],
+    cent: ['中心體 Centrosome', ['含一對互相垂直的<b>中心粒</b>', '細胞分裂時組織紡錘絲（微管）']],
+    mt: ['微管 Microtubules', ['由微管蛋白組成的中空圓柱', '細胞骨架的一部分；胞器運輸的軌道；纖毛、鞭毛、紡錘絲的成分']]
+  };
+  K.info(S, 'info-cell', INFO, { picker: 'pk-cell' });
+  $('sec-btn').onclick = e => { const on = !flow.on; flow.show(on); e.currentTarget.classList.toggle('on', on); $('cell-cap').textContent = on ? '分泌路徑：RER → 高基氏體（cis→trans）→ 分泌囊泡 → 胞吐' : '動物細胞（示意，比例非真實）'; };
+  let mtOn = false; $('mt-btn').onclick = e => { mtOn = !mtOn; MT.forEach(t => { t.al = mtOn ? 0.75 : 0.3; t.glow = mtOn ? 0.4 : 0; }); e.currentTarget.classList.toggle('on', mtOn); };
+})();
+
+/* ================= 02 胞吞 / 胞吐 ================= */
+(function () {
+  const S = K.stage('st-endo', { radius: 56, yaw: 0.35, pitch: 0.32, autoRotate: 0.05 });
+  const SH = K.sheet(S, [-50, 0, -50], [100, 0, 0], [0, 0, 100], 30, 30, (u, v) => '#f59e0b', { id: 'mem', al: 0.92, st: '#fde68a', sa: 0.16 });
+  const G = SH.grid, base = G.map(r => r.map(p => [p[0], p[2]]));
+  const setH = fn => G.forEach((r, i) => r.forEach((p, j) => { const [x, z] = base[i][j]; p[1] = fn(x, z, Math.hypot(x, z)); }));
+  const ves = K.mover(K.ellipsoid(S, [0, 0, 0], [9, 9, 9], '#fbbf24', 14, 8, { id: 'ves', al: 0.55 }));
+  const vac = K.mover(K.ellipsoid(S, [0, 0, 0], [15, 13, 15], '#fbbf24', 16, 9, { id: 'vac', al: 0.45 }));
+  const bact = K.mover(K.ellipsoid(S, [0, 0, 0], [9, 4.5, 4.5], '#22c55e', 12, 7, { id: 'bact' }));
+  const fluid = []; const rnd = Mini3D.rng(3);
+  for (let i = 0; i < 46; i++) { const p0 = [(rnd() - 0.5) * 80, 6 + rnd() * 26, (rnd() - 0.5) * 80]; if (i < 8) { const a = i * 0.785; p0[0] = Math.cos(a) * 4; p0[2] = Math.sin(a) * 4; p0[1] = 5 + (i % 3) * 3; } fluid.push(S.sphere(p0.slice(), 1.3, '#7dd3fc', { id: 'fluid', p0, cap: i < 8 })); }
+  const recs = [], ligs = [], clat = [];
+  for (let i = 0; i < 10; i++) { const a = i * 0.628, r0 = 18 + (i % 3) * 7; recs.push(S.sphere([0, 0, 0], 1.9, '#f472b6', { id: 'rec', a, r0 })); ligs.push(S.sphere([0, 0, 0], 1.7, '#4ade80', { id: 'lig', a, r0, f: [Math.cos(a) * (r0 + 8), 22 + (i % 4) * 4, Math.sin(a) * (r0 + 8)] })); }
+  for (let i = 0; i < 14; i++) clat.push(S.sphere([0, 0, 0], 1.2, '#facc15', { id: 'clat', a: i * 0.449 }));
+  const lys = [0, 1, 2].map(i => S.sphere([0, 0, 0], 3, '#a3e635', { id: 'lyso', a: i * 2.09 }));
+  const cargo = []; for (let i = 0; i < 7; i++) cargo.push(S.sphere([0, 0, 0], 1.4, '#e879f9', { id: 'cargo', a: i * 0.9, r: 3 + (i % 3) * 1.4 }));
+  const lOut = K.lab(S, [-40, 30, -40], '細胞外液', 'ext', '#93c5fd', 0, 0, { force: 0 }), lIn = K.lab(S, [-40, -30, -40], '細胞質', 'cyt', '#fcd34d', 0, 0);
+  const lMem = K.lab(S, [36, 0, -30], '細胞膜', 'mem', '#fde68a', 30, -10);
+  const gauss = (r, w) => Math.exp(-(r * r) / (w * w));
+  let mode = 'pha', T = 0;
+  const DUR = 8;
+  const DESC = {
+    pha: { t: '吞噬作用 Phagocytosis', li: ['細胞伸出<b>偽足</b>包圍大顆粒（如細菌）', '偽足融合 → 形成<b>食泡</b>（吞噬體）', '與<b>溶體</b>融合，酵素消化內容物', '例：嗜中性球、巨噬細胞'] },
+    pin: { t: '胞飲作用 Pinocytosis', li: ['細胞膜形成<b>狹窄的凹溝</b>，最後融合封閉', '把細胞外液（含溶質）以小囊泡帶入', '非特異性的「喝」'] },
+    rme: { t: '受體媒介胞吞 Receptor-mediated', li: ['細胞外的特定分子（配體）與膜上<b>特定受體</b>結合', '受體聚集處凹陷（凹窩下有網格蛋白 clathrin 包被）', '形成囊泡帶入細胞 → 有<b>專一性</b>', '例：膽固醇（LDL）的攝取'] },
+    exo: { t: '胞吐作用 Exocytosis', li: ['胞吞的<b>反向</b>過程', '分泌囊泡移到細胞膜並<b>融合</b>', '內容物釋放到細胞外（如激素、神經傳遞物、消化酵素）', '囊泡膜成為細胞膜的一部分'] }
+  };
+  function capOf(t) {
+    if (mode === 'pha') return t < 0.15 ? '細菌靠近細胞' : t < 0.55 ? '偽足伸出包圍細菌' : t < 0.75 ? '偽足融合 → 食泡' : '溶體與食泡融合 → 消化';
+    if (mode === 'pin') return t < 0.5 ? '細胞膜凹陷，包住細胞外液' : t < 0.65 ? '凹溝封閉' : '胞飲囊泡進入細胞質';
+    if (mode === 'rme') return t < 0.2 ? '配體與受體結合' : t < 0.5 ? '受體聚集、凹陷（網格蛋白包被）' : t < 0.65 ? '囊泡斷開' : '受體–配體囊泡進入細胞';
+    return t < 0.4 ? '分泌囊泡移向細胞膜' : t < 0.6 ? '囊泡與細胞膜融合' : '內容物釋放到細胞外';
+  }
+  function upd(t) {
+    ves.hide(true); vac.hide(true); bact.hide(true); K.hideAll(fluid, mode !== 'pin'); K.hideAll(recs, mode !== 'rme'); K.hideAll(ligs, mode !== 'rme'); K.hideAll(clat, true); K.hideAll(lys, true); K.hideAll(cargo, mode !== 'exo');
+    if (mode === 'pin' || mode === 'rme') {
+      const D = 26 * sm(0, 0.5, t) * (1 - sm(0.55, 0.7, t)), w = mode === 'rme' ? 11 : 9;
+      setH((x, z, r) => -D * gauss(r, w) * (1 + 0.25 * sm(0.3, 0.55, t) * (1 - gauss(r, 5))));
+      const vy = -26 - 22 * sm(0.55, 1, t);
+      if (t > 0.5) { ves.hide(false); ves.set([0, vy, 0], 1); }
+      if (mode === 'pin') fluid.forEach(f => { if (!f.cap) return; const k = sm(0.05, 0.5, t); const inside = [Math.cos(f.p0[0]) * 0, 0, 0]; mv(f.p, t < 0.5 ? V.lerp(f.p0, [f.p0[0] * 0.6, -D + 3 + (f.p0[1] - 5) * 0.6, f.p0[2] * 0.6], k) : [f.p0[0] * 0.6, vy + (f.p0[1] - 8) * 0.6, f.p0[2] * 0.6]); });
+      if (mode === 'rme') {
+        const cl = sm(0.18, 0.4, t);
+        recs.forEach(o => { const r = o.r0 * (1 - 0.72 * cl), x = Math.cos(o.a) * r, z = Math.sin(o.a) * r; const y = t < 0.55 ? -D * gauss(r, w) * (1 + 0.25 * sm(0.3, 0.55, t)) + 1.2 : vy + Math.sin(o.a) * 4 + 3; mv(o.p, t < 0.55 ? [x, y, z] : [Math.cos(o.a) * 5, y, Math.sin(o.a) * 5]); });
+        ligs.forEach((o, i) => { const b = sm(0, 0.18, t); mv(o.p, V.lerp(o.f, V.add(recs[i].p, [0, 2.6, 0]), b)); });
+        if (t > 0.3) clat.forEach(o => { o.hidden = false; const yy = t < 0.55 ? -D * 0.85 - 2.4 : vy - 9.5; const rr = t < 0.55 ? 6 * (D / 26) + 2 : 8; mv(o.p, [Math.cos(o.a) * rr, yy + Math.sin(o.a * 3) * 2, Math.sin(o.a) * rr]); });
+      }
+    } else if (mode === 'pha') {
+      const H = 24 * sm(0.12, 0.55, t) * (1 - sm(0.6, 0.72, t)), D = 10 * sm(0.12, 0.5, t) * (1 - sm(0.6, 0.72, t)), R0 = 15 - 4 * sm(0.3, 0.55, t);
+      setH((x, z, r) => H * gauss(r - R0, 5) - D * gauss(r, 10));
+      bact.hide(false);
+      const by = t < 0.6 ? 30 - 22 * sm(0, 0.45, t) : 8 - 52 * sm(0.6, 0.85, t);
+      bact.set([0, by, 0], 1);
+      if (t > 0.58) { vac.hide(false); vac.set([0, by, 0], 1, 0.45); }
+      if (t > 0.78) lys.forEach(o => { o.hidden = false; const k = sm(0.78, 0.95, t); mv(o.p, V.lerp([Math.cos(o.a) * 34, -50, Math.sin(o.a) * 34], [Math.cos(o.a) * 12, by, Math.sin(o.a) * 12], k)); });
+    } else {
+      const vy = -46 + 34 * sm(0, 0.4, t), D = 16 * sm(0.38, 0.55, t) * (1 - sm(0.7, 0.95, t));
+      setH((x, z, r) => -D * gauss(r, 9));
+      if (t < 0.52) { ves.hide(false); ves.set([0, Math.min(vy, -10), 0], 1 - 0.5 * sm(0.4, 0.52, t)); }
+      cargo.forEach(o => { const c = t < 0.55 ? [0, Math.min(vy, -10), 0] : [0, -8 + 40 * sm(0.55, 1, t), 0]; const spread = t < 0.55 ? o.r : o.r + 18 * sm(0.55, 1, t); mv(o.p, V.add(c, [Math.cos(o.a) * spread, Math.sin(o.a * 2) * 2, Math.sin(o.a) * spread])); });
+    }
+    $('endo-cap').textContent = capOf(t);
+  }
+  S.tick(dt => { T = (T + dt / DUR) % 1.12; upd(Math.min(1, T)); });
+  K.seg('#emode', m => { mode = m; T = 0; const d = DESC[m]; $('endo-info').innerHTML = '<div class="info"><div class="tt">' + d.t + '</div></div><ul class="small">' + d.li.map(x => '<li>' + x + '</li>').join('') + '</ul><p class="small muted">動畫循環播放；拖曳可從下方（細胞質側）觀察囊泡。</p>'; }, 'pha');
+  S.onPick = o => { if (!o) return; const m = { mem: '細胞膜（磷脂雙層）', ves: '囊泡 vesicle', vac: '食泡（吞噬體）', bact: '細菌', rec: '膜受體', lig: '配體（如 LDL）', clat: '網格蛋白 clathrin 包被', lyso: '溶體（含消化酵素）', fluid: '細胞外液中的溶質', cargo: '分泌產物' }[o.id]; if (m) $('endo-cap').textContent = '👉 ' + m; };
+})();
+
+/* ================= 03 核小體 ================= */
+(function () {
+  const S = K.stage('st-chrom', { radius: 56, yaw: 0.3, pitch: 0.25, autoRotate: 0.12 });
+  const N = 8, HC = ['#f472b6', '#fb923c', '#60a5fa', '#a3e635'], HN = ['h2a', 'h2b', 'h3', 'h4'];
+  const nucs = [];
+  for (let n = 0; n < N; n++) {
+    const loc = [], objs = [];
+    for (let l = 0; l < 2; l++) for (let k = 0; k < 4; k++) { const a = Math.PI / 4 + (k * Math.PI) / 2; loc.push([Math.cos(a) * 3, l ? 1.8 : -1.8, Math.sin(a) * 3]); objs.push(S.sphere([0, 0, 0], 3.1, HC[k], { id: HN[k] })); }
+    const wl = [], wo = [];
+    for (let i = 0; i <= 26; i++) { const t = i / 26, th = 0.3 + t * 1.65 * 6.2832; wl.push([Math.cos(th) * 7.4, -3.6 + 7.2 * t, Math.sin(th) * 7.4]); wo.push([0, 0, 0]); }
+    const tubes = []; for (let i = 0; i < 26; i++) tubes.push(S.tube(wo[i], wo[i + 1], 1.2, '#e2e8f0', { id: 'dna' }));
+    const ac = [0, 1, 2, 3].map(k => { loc.push([Math.cos(k * 1.57) * 6, (k % 2 ? 4.6 : -4.6), Math.sin(k * 1.57) * 6]); const o = S.sphere([0, 0, 0], 1.1, '#4ade80', { id: 'ac' }); objs.push(o); return o; });
+    nucs.push({ loc, objs, wl, wo, tubes, ac, c: [0, 0, 0], rz: 0, ry: 0 });
+  }
+  const links = [];
+  for (let n = 0; n < N - 1; n++) { const m = [0, 0, 0]; links.push({ m, t: [S.tube(nucs[n].wo[26], m, 1.2, '#e2e8f0', { id: 'dna' }), S.tube(m, nucs[n + 1].wo[0], 1.2, '#e2e8f0', { id: 'dna' })] }); }
+  const pol = S.sphere([0, 0, 0], 5, '#e879f9', { id: 'pol', al: 0.8 });
+  const ST = {
+    eu: n => ({ c: [-56 + n * 16, n % 2 ? 6 : -6, (n % 3 - 1) * 4], rz: Math.PI / 2 + n * 0.3, ry: n * 0.7 }),
+    het: n => ({ c: [Math.cos(n * 1.05) * 10, n * 4.2 - 15, Math.sin(n * 1.05) * 10], rz: Math.PI / 2, ry: -n * 1.05 })
+  };
+  let mode = 'eu', tw = 1, from = null;
+  const tf = (q, p) => V.add(q.c, V.rotY(V.rotZ(p, q.rz), q.ry));
+  function place(e) {
+    nucs.forEach((n, i) => {
+      const A = from[i], B = ST[mode === 'chr' ? 'het' : mode](i), q = { c: V.lerp(A.c, B.c, e), rz: K.lerp(A.rz, B.rz, e), ry: K.lerp(A.ry, B.ry, e) };
+      n.c = q.c; n.rz = q.rz; n.ry = q.ry;
+      n.objs.forEach((o, k) => mv(o.p, tf(q, n.loc[k])));
+      n.wl.forEach((p, k) => mv(n.wo[k], tf(q, p)));
+    });
+    links.forEach((l, i) => mv(l.m, V.add(V.lerp(nucs[i].wo[26], nucs[i + 1].wo[0], 0.5), [0, mode === 'eu' ? 4 : 0, 0])));
+    mv(pol.p, V.add(links[3].m, [0, 6, 0]));
+  }
+  // 染色體（X）
+  const chrObjs = [];
+  [[-1, '#c084fc'], [1, '#a78bfa']].forEach(([s, c]) => {
+    [[[0, 0, 0], [s * 4, 10, 0], [s * 7, 24, 0], [s * 8, 32, 0]], [[0, 0, 0], [s * 4, -8, 0], [s * 7, -18, 0], [s * 8, -24, 0]]].forEach(p => {
+      K.sweep(S, p.map(q => V.add(q, [s * 2.2, 0, 0])), t => 4.6 * (0.55 + 0.45 * Math.sin(Math.min(1, t * 1.15) * Math.PI * 0.5 + 0.2)), c, 18, 10, { id: 'sis' }).forEach(f => chrObjs.push(f));
+    });
+  });
+  chrObjs.push(S.sphere([0, 0, 0], 3.4, '#f0abfc', { id: 'cen' }));
+  const lC = [K.lab(S, [0, 0, 0], '著絲點', 'cen', '#f0abfc', -50, 0), K.lab(S, [-10, 30, 0], '姊妹染色分體', 'sis', '#d8b4fe', -40, -10), K.lab(S, [10, -24, 0], '姊妹染色分體', 'sis', '#d8b4fe', 40, 10)];
+  const lN = [K.lab(S, [0, 0, 0], '核小體', 'h3', '#93c5fd', 0, -34), K.lab(S, [0, 0, 0], '連接 DNA', 'dna', '#e2e8f0', 0, 30), K.lab(S, [0, 0, 0], 'RNA 聚合酶可結合', 'pol', '#f0abfc', 0, -24)];
+  S.tick(dt => {
+    if (tw < 1) { tw = Math.min(1, tw + dt / 1.6); place(sm(0, 1, tw)); }
+    lN[0].p = nucs[2].c; lN[1].p = links[4].m; lN[2].p = pol.p;
+  });
+  from = nucs.map((_, i) => ST.eu(i)); place(1);
+  const CAP = { eu: '乙醯化 → 鬆散的常染色質：轉錄因子與 RNA 聚合酶可接近基因', het: '去乙醯化 → 緊縮（約 30 nm 纖維）：基因沉默', chr: '分裂期染色體：染色質高度濃縮；兩條姊妹染色分體由著絲點相連' };
+  K.seg('#chmode', m => {
+    from = nucs.map(n => ({ c: n.c.slice(), rz: n.rz, ry: n.ry })); mode = m; tw = 0;
+    const chr = m === 'chr';
+    nucs.forEach(n => { n.objs.forEach(o => { o.hidden = chr; }); n.tubes.forEach(o => { o.hidden = chr; }); n.ac.forEach(o => { o.hidden = chr || m !== 'eu'; }); });
+    links.forEach(l => l.t.forEach(o => { o.hidden = chr; })); pol.hidden = m !== 'eu';
+    chrObjs.forEach(o => { o.hidden = !chr; }); lC.forEach(l => { l.hidden = !chr; }); lN.forEach((l, i) => { l.hidden = chr || (i === 2 && m !== 'eu'); });
+    $('ch-cap').textContent = CAP[m];
+  }, 'eu');
+  K.info(S, 'info-chrom', {
+    h2a: ['組蛋白 H2A', ['帶正電的蛋白，與帶負電的 DNA 結合', '八聚體 = (H2A, H2B, H3, H4) × 2']], h2b: ['組蛋白 H2B', ['八聚體成員']], h3: ['組蛋白 H3（核小體）', ['八聚體成員；尾部可被<b>乙醯化</b>或甲基化']], h4: ['組蛋白 H4', ['八聚體成員']],
+    dna: ['DNA', ['纏繞在組蛋白八聚體外約 1.65 圈', '核小體之間以連接 DNA 相連（串珠狀）']],
+    ac: ['乙醯基 Acetyl group', ['在組蛋白上加入二碳的乙醯基', '使染色質結構<b>開放</b> → 基因可被轉錄', '去乙醯化 → 緊縮、基因沉默']],
+    pol: ['RNA 聚合酶 / 轉錄因子', ['只有在染色質開放（常染色質）時才能接觸到基因']],
+    sis: ['姊妹染色分體', ['S 期 DNA 複製後的兩條相同 DNA', '有絲分裂後期分開到兩個子細胞']], cen: ['著絲點 Centromere', ['連接兩條姊妹染色分體；紡錘絲附著處']]
+  }, { hl: false });
+})();
+
+/* ================= 04 複製 / 轉錄 / 轉譯 ================= */
+const GCODE = (() => { const B = 'UCAG', A = 'FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG', m = {}; for (let i = 0; i < 64; i++) m[B[i >> 4] + B[(i >> 2) & 3] + B[i & 3]] = A[i]; return m; })();
+const AAN = { F: ['Phe', '苯丙胺酸'], L: ['Leu', '白胺酸'], S: ['Ser', '絲胺酸'], Y: ['Tyr', '酪胺酸'], C: ['Cys', '半胱胺酸'], W: ['Trp', '色胺酸'], P: ['Pro', '脯胺酸'], H: ['His', '組胺酸'], Q: ['Gln', '麩醯胺酸'], R: ['Arg', '精胺酸'], I: ['Ile', '異白胺酸'], M: ['Met', '甲硫胺酸'], T: ['Thr', '蘇胺酸'], N: ['Asn', '天門冬醯胺'], K: ['Lys', '離胺酸'], V: ['Val', '纈胺酸'], A: ['Ala', '丙胺酸'], D: ['Asp', '天門冬胺酸'], E: ['Glu', '麩胺酸'], G: ['Gly', '甘胺酸'], '*': ['Stop', '終止'] };
+const BC = { A: '#f87171', T: '#fbbf24', U: '#c084fc', G: '#34d399', C: '#60a5fa' };
+(function () {
+  const S = K.stage('st-gene', { radius: 64, yaw: 0.12, pitch: 0.2, autoRotate: 0 });
+  const comp = { A: 'T', T: 'A', G: 'C', C: 'G' }, rcomp = { A: 'U', T: 'A', G: 'C', C: 'G' };
+  const rnd = Mini3D.rng(21), NB = 26, X0 = -65, DX = 5.2;
+  const seq = Array.from({ length: NB }, () => 'ATGC'[(rnd() * 4) | 0]);
+  // ---------- 複製 ----------
+  const R = { gs: 'rep' };
+  const strand = (col, id, bases) => { const b = bases.map(() => S.sphere([0, 0, 0], 1.6, col, Object.assign({ id }, R))); const t = b.slice(1).map((o, i) => S.tube(b[i].p, o.p, 0.8, col, Object.assign({ id }, R))); const stub = b.map((o, i) => { const e = [0, 0, 0]; return { e, t: S.tube(o.p, e, 1.5, BC[bases[i]], Object.assign({ id: 'bp' }, R)) }; }); return { b, t, stub, bases }; };
+  const top = strand('#60a5fa', 'old', seq), bot = strand('#60a5fa', 'old', seq.map(c => comp[c]));
+  const ntop = strand('#fb923c', 'new', seq), nbot = strand('#fb923c', 'new', seq.map(c => comp[c]));
+  const heli = S.sphere([0, 0, 0], 4.2, '#facc15', Object.assign({ id: 'heli', glow: 0.5 }, R));
+  const pols = [S.sphere([0, 0, 0], 3.6, '#22d3ee', Object.assign({ id: 'dpol', al: 0.85 }, R)), S.sphere([0, 0, 0], 3.6, '#22d3ee', Object.assign({ id: 'dpol', al: 0.85 }, R))];
+  const lr = [K.lab(S, heli.p, '解旋酶（複製叉）', 'heli', '#fde047', 30, -34, R), K.lab(S, pols[0].p, 'DNA 聚合酶', 'dpol', '#67e8f9', -40, -24, R), K.lab(S, [X0, 18, 0], '舊股＋新股', 'new', '#fdba74', 0, -18, R), K.lab(S, [X0, -18, 0], '舊股＋新股', 'new', '#fdba74', 0, 18, R), K.lab(S, [60, 4, 0], '親代雙股', 'old', '#93c5fd', 0, -18, R)];
+  function rep(xf) {
+    for (let i = 0; i < NB; i++) {
+      const x = X0 + i * DX, s = sm(xf - 8, xf, x), sep = 1 - s; // sep=1 已分開
+      const ty = 3.5 + 14.5 * sep, by = -3.5 - 14.5 * sep;
+      mv(top.b[i].p, [x, ty, 0]); mv(bot.b[i].p, [x, by, 0]);
+      const nv = x < xf - 5;
+      mv(nbot.b[i].p, [x, ty - 7, 0]); mv(ntop.b[i].p, [x, by + 7, 0]);
+      nbot.b[i].hidden = ntop.b[i].hidden = !nv; nbot.stub[i].t.hidden = ntop.stub[i].t.hidden = !nv;
+      if (i) { nbot.t[i - 1].hidden = ntop.t[i - 1].hidden = !(nv && x - DX < xf - 5); }
+      const pT = nv ? nbot.b[i].p : bot.b[i].p, pB = nv ? ntop.b[i].p : top.b[i].p;
+      mv(top.stub[i].e, V.lerp(top.b[i].p, pT, sep > 0.5 && !nv ? 0.2 : 0.47)); mv(bot.stub[i].e, V.lerp(bot.b[i].p, pB, sep > 0.5 && !nv ? 0.2 : 0.47));
+      mv(nbot.stub[i].e, V.lerp(nbot.b[i].p, top.b[i].p, 0.53)); mv(ntop.stub[i].e, V.lerp(ntop.b[i].p, bot.b[i].p, 0.53));
+    }
+    mv(heli.p, [xf + 1, 0, 0]); mv(pols[0].p, [xf - 9, 11, 0]); mv(pols[1].p, [xf - 9, -11, 0]);
+    lr[2].p = [Math.min(xf - 20, 0), 18, 0]; lr[3].p = [Math.min(xf - 20, 0), -18, 0];
+  }
+  // ---------- 轉錄 ----------
+  const TX = { gs: 'tx' };
+  const tTop = strand('#60a5fa', 'coding', seq), tBot = strand('#818cf8', 'template', seq.map(c => comp[c]));
+  [tTop, tBot].forEach(s => { s.b.forEach(o => { o.gs = 'tx'; }); s.t.forEach(o => { o.gs = 'tx'; }); s.stub.forEach(o => { o.t.gs = 'tx'; }); });
+  const rnaB = seq.map(c => S.sphere([0, 0, 0], 1.8, BC[c === 'T' ? 'U' : c], Object.assign({ id: 'rna' }, TX)));
+  const rnaT = rnaB.slice(1).map((o, i) => S.tube(rnaB[i].p, o.p, 0.9, '#e879f9', Object.assign({ id: 'rna' }, TX)));
+  const rpol = K.mover(K.ellipsoid(S, [0, 0, 0], [11, 10, 9], '#e879f9', 16, 9, Object.assign({ id: 'rpol', al: 0.28 }, TX)));
+  const lt = [K.lab(S, [50, 5, 0], '編碼股', 'coding', '#93c5fd', 0, -18, TX), K.lab(S, [50, -5, 0], '模板股', 'template', '#a5b4fc', 0, 18, TX), K.lab(S, [0, 0, 0], 'RNA 聚合酶', 'rpol', '#f0abfc', 0, -40, TX), K.lab(S, [0, 0, 0], 'mRNA（前驅 mRNA）', 'rna', '#f0abfc', -20, 26, TX)];
+  function tx(xp) {
+    for (let i = 0; i < NB; i++) {
+      const x = X0 + i * DX, s = Math.exp(-(((x - xp + 3) / 8) ** 2));
+      mv(tTop.b[i].p, [x, 3.5 + 8 * s, 0]); mv(tBot.b[i].p, [x, -3.5 - 8 * s, 0]);
+      mv(tTop.stub[i].e, V.lerp(tTop.b[i].p, tBot.b[i].p, s > 0.5 ? 0.18 : 0.47)); mv(tBot.stub[i].e, V.lerp(tBot.b[i].p, tTop.b[i].p, s > 0.5 ? 0.25 : 0.47));
+      const vis = x < xp, d = xp - 10 - x;
+      rnaB[i].hidden = !vis;
+      if (vis) mv(rnaB[i].p, d < 0 ? [x, -3.5 - 8 * s + 5, 0] : [x + d * 0.15, -6 - d * 0.55, -d * 0.7]);
+      if (i) rnaT[i - 1].hidden = !vis;
+    }
+    rpol.set([xp - 2, -2, 0], 1); lt[2].p = [xp - 2, 8, 0]; const k = Math.max(0, Math.min(NB - 1, Math.floor((xp - X0) / DX) - 6)); lt[3].p = rnaB[k].p;
+  }
+  // ---------- 轉譯 ----------
+  const TL = { gs: 'tl' };
+  const MR = 'AUGGCUUUCAAAGGCUGGUAA', NC = MR.length / 3, W = 15, CX = j => -45 + j * W;
+  const mB = [];
+  for (let i = 0; i < MR.length; i++) { const x = CX(Math.floor(i / 3)) + ((i % 3) - 1) * 5; mB.push(S.sphere([x, 0, 0], 1.9, BC[MR[i]], Object.assign({ id: 'mrna' }, TL))); if (i) S.tube(mB[i - 1].p, mB[i].p, 0.8, '#94a3b8', Object.assign({ id: 'mrna' }, TL)); S.tube([x, 0, 0], [x, 2.6, 0], 1.3, BC[MR[i]], Object.assign({ id: 'mrna' }, TL)); }
+  const small = K.mover(K.ellipsoid(S, [0, 0, 0], [22, 7, 13], '#93c5fd', 18, 8, Object.assign({ id: 'rib', al: 0.3 }, TL)));
+  const large = K.mover(K.ellipsoid(S, [0, 0, 0], [24, 13, 15], '#60a5fa', 18, 9, Object.assign({ id: 'rib', al: 0.22 }, TL)));
+  const siteL = ['E', 'P', 'A'].map((t, i) => K.lab(S, [0, 0, 0], t + ' 位', 'site', '#bfdbfe', 0, 0, Object.assign({ size: 11 }, TL)));
+  const AC = '#e2e8f0';
+  const trna = [];
+  for (let j = 0; j < NC; j++) {
+    const cod = MR.substr(j * 3, 3), aa = GCODE[cod];
+    if (aa === '*') { trna.push(null); continue; }
+    const pos = [0, 0, 0], parts = [], acB = [];
+    for (let k = 0; k < 3; k++) { const b = { A: 'U', U: 'A', G: 'C', C: 'G' }[cod[k]]; const p = [0, 0, 0]; acB.push(p); parts.push(S.sphere(p, 1.7, BC[b], Object.assign({ id: 'trna' }, TL))); }
+    const top = [0, 0, 0], arm = [0, 0, 0];
+    parts.push(S.tube(acB[1], top, 1.4, '#a5b4fc', Object.assign({ id: 'trna' }, TL)), S.tube(top, arm, 1.4, '#a5b4fc', Object.assign({ id: 'trna' }, TL)));
+    const aaS = S.sphere([0, 0, 0], 3.2, ['#fbbf24', '#34d399', '#f472b6', '#60a5fa', '#a3e635', '#fb923c'][j % 6], Object.assign({ id: 'aa' }, TL));
+    const lab = K.lab(S, aaS.p, AAN[aa][0], 'aa', '#fde68a', 16, -8, Object.assign({ size: 11 }, TL));
+    trna.push({ j, cod, aa, pos, parts, acB, top, arm, aaS, lab, al: 1 });
+  }
+  const pepT = []; for (let j = 0; j < NC; j++) pepT.push(S.tube([0, 0, 0], [0, 0, 0], 1, '#fde68a', Object.assign({ id: 'pep' }, TL)));
+  const rf = S.sphere([0, 0, 0], 5, '#f87171', Object.assign({ id: 'rf' }, TL));
+  const lrf = K.lab(S, rf.p, '釋放因子', 'rf', '#fca5a5', 30, -10, TL);
+  const setT = (t, p, al) => {
+    t.pos = p;
+    t.acB.forEach((q, k) => mv(q, V.add(p, [(k - 1) * 5, 5.5, 0])));
+    mv(t.top, V.add(p, [0, 20, 0])); mv(t.arm, V.add(p, [-6, 24, 0]));
+    t.parts.forEach(o => { o.al = al; o.hidden = al < 0.03; });
+  };
+  const aaHome = t => V.add(t.pos, [0, 24, 0]);
+  const trail = m => [-3.4 * m, 3.8 * m + 2 * Math.sin(m), 1.8 * Math.cos(m * 1.3)];
+  let T = 0, ribX = 0;
+  function tl(tt) {
+    // 時間軸：每個密碼子 1 單位；0=起始，1..NC-2 延長，NC-1 終止
+    const k = Math.floor(tt), ph = tt - k;
+    const stop = NC - 1;
+    let P = CX(Math.min(k, stop) - 1);
+    let showRib = true, rel = 0, sub = 0;
+    if (k === 0) { P = CX(0); sub = 1 - sm(0, 0.6, ph); }
+    else if (k <= stop - 1) P = CX(k - 1) + W * sm(0.5, 0.85, ph);
+    else if (k === stop) { P = CX(stop - 1); rel = sm(0.3, 1, ph); }
+    else { P = CX(stop - 1); rel = 1; sub = sm(0, 1, ph); }
+    ribX = P;
+    small.set([P, -6 - sub * 14, 0], 1, 0.3 * (1 - sub * 0.6)); large.set([P, 13 + sub * 22, 0], 1, 0.22 * (1 - sub * 0.6));
+    siteL.forEach((l, i) => { l.p = [P + (i - 1) * W, -15 - sub * 14, 0]; });
+    trna.forEach((t, j) => {
+      if (!t) return;
+      let p = [CX(j), 0, 0], al = 1;
+      if (j > k) { al = 0; }
+      else if (j === k && k > 0) { const a = sm(0, 0.35, ph); p = V.lerp([CX(j) + 28, 46, 10], [CX(j), 0, 0], a); al = a; }
+      else if (j < k - 1 || (j === k - 1 && k > 0 && k <= stop && ph > 0.85)) { const lv = j === k - 1 ? sm(0.85, 1, ph) : 1; p = V.lerp([CX(j), 0, 0], [CX(j) - 20, 40, -10], lv); al = 1 - lv; }
+      if (j === 0 && k === 0) { al = 1; }
+      if (k > stop && j === stop - 1) { al = 1 - sub; }
+      setT(t, p, al);
+      t.lab.hidden = al < 0.3 && j > k;
+    });
+    // 胜肽鏈
+    const last = Math.min(k, stop - 1), anchorFrom = trna[Math.max(0, last - 1)], anchorTo = trna[last];
+    const tr = k === 0 ? 1 : k <= stop - 1 ? sm(0.35, 0.5, ph) : 1;
+    for (let j = 0; j <= stop - 1; j++) {
+      const t = trna[j]; if (!t) continue;
+      if (j > last || (j === last && k > 0 && k <= stop - 1 && ph < 0.12)) { if (j > last) t.aaS.hidden = true; if (j === last) { t.aaS.hidden = false; mv(t.aaS.p, aaHome(t)); } continue; }
+      t.aaS.hidden = false;
+      let p;
+      if (j === last) p = aaHome(t);
+      else { const fromP = V.add(aaHome(anchorFrom), trail(last - 1 - j)), toP = V.add(aaHome(anchorTo), trail(last - j)); p = k === 0 ? toP : V.lerp(fromP, toP, tr); }
+      if (rel > 0) p = V.add(p, [-rel * 10, rel * 28, rel * 6]);
+      mv(t.aaS.p, p);
+    }
+    for (let j = 0; j < pepT.length; j++) { const a = trna[j], b = trna[j + 1]; const ok = a && b && !a.aaS.hidden && !b.aaS.hidden && j + 1 <= last; pepT[j].hidden = !ok; if (ok) { pepT[j].a = a.aaS.p; pepT[j].b = b.aaS.p; pepT[j].glow = (j + 1 === last && ph > 0.35 && ph < 0.55 && k <= stop - 1) ? 1 : 0; } }
+    rf.hidden = k < stop; lrf.hidden = rf.hidden; if (!rf.hidden) mv(rf.p, V.lerp([CX(stop) + 26, 40, 0], [CX(stop), 16, 0], sm(0, 0.3, ph)));
+    const cod = MR.substr(Math.min(k, stop) * 3, 3);
+    $('g-cap').innerHTML = k === 0 ? '起始：小次單元 + 起始 tRNA（反密碼子 UAC）結合 <b>AUG</b>，大次單元加入' : k < stop ? '密碼子 <b>' + cod + '</b> ← 反密碼子 ' + cod.replace(/./g, c => ({ A: 'U', U: 'A', G: 'C', C: 'G' })[c]) + ' 攜帶 <b>' + AAN[GCODE[cod]][0] + '（' + AAN[GCODE[cod]][1] + '）</b>' + (ph > 0.35 && ph < 0.55 ? ' → 形成胜肽鍵' : ph > 0.5 && ph < 0.85 ? ' → 核糖體移位' : '') : k === stop ? '終止密碼子 <b>' + cod + '</b>：釋放因子進入 A 位，多胜肽釋放' : '核糖體次單元分離';
+  }
+  let mode = 'rep', speed = 1, xf = -75;
+  S.tick(dt => {
+    const d = dt * speed;
+    if (mode === 'rep') { xf += d * 11; if (xf > 80) xf = -75; rep(xf); $('g-cap').textContent = xf < 70 ? '解旋酶打開雙股；兩條舊股各自當模板，DNA 聚合酶依互補配對合成新股' : '完成：兩個 DNA 分子，各含一條舊股與一條新股（半保留）'; }
+    else if (mode === 'tx') { xf += d * 9; if (xf > 80) xf = -70; tx(xf); $('g-cap').textContent = 'RNA 聚合酶使 DNA 局部分開，以<模板股>互補配對合成 RNA（A→U、T→A、G→C、C→G）'.replace('<模板股>', '模板股'); }
+    else { T += d * 0.32; if (T > NC + 0.9) T = 0; tl(Math.min(T, NC + 0.6)); }
+    const tg = mode === 'tl' ? [small.F[0].pts[0][0] * 0 + ribX, 8, 0] : [0, 0, 0];
+    S.target = V.lerp(S.target, tg, Math.min(1, dt * 3));
+  });
+  const INFO = {
+    rep: { t: 'DNA 複製（S 期）', li: ['解旋酶分開雙股（打斷鹼基間氫鍵）', '每條舊股作為<b>模板</b>，DNA 聚合酶依互補配對加入新核苷酸', '結果：每個 DNA 分子含<b>一條舊股 + 一條新股</b> → <b>半保留複製</b>'] },
+    tx: { t: '轉錄 Transcription（細胞核）', li: ['RNA 聚合酶結合在基因的起始處（啟動子），使 DNA 兩股分開', '只用其中一股（<b>模板股</b>）互補配對合成 RNA', 'RNA 鹼基：A 對 T、<b>U 對 A</b>、G 對 C、C 對 G', '產物是 <b>pre-mRNA</b>，需剪去內含子才成為 mRNA'] },
+    tl: { t: '轉譯 Translation（細胞質）', li: ['mRNA 附著核糖體；每 3 個鹼基 = 1 個<b>密碼子</b>', 'tRNA 以<b>反密碼子</b>與密碼子互補配對，帶來特定胺基酸（由胺醯-tRNA 合成酶接上）', '相鄰胺基酸形成<b>胜肽鍵</b>，核糖體向 3′ 端移動一個密碼子', '遇到<b>終止密碼子</b>（UAA、UAG、UGA）→ 釋放多胜肽'] }
+  };
+  K.seg('#gmode', m => {
+    mode = m; showMode(S, m); xf = -75; T = 0;
+    const d = INFO[m]; $('g-info').innerHTML = '<div class="tt">' + d.t + '</div><ul>' + d.li.map(x => '<li>' + x + '</li>').join('') + '</ul>';
+    $('g-hud').textContent = { rep: '藍＝舊股　橘＝新股', tx: '紫＝模板股　粉＝RNA', tl: 'mRNA 密碼子 → tRNA → 胺基酸鏈' }[m];
+    S.dist = S.home.dist * (m === 'tl' ? 0.95 : 1);
+  }, 'rep');
+  $('g-slow').onclick = e => { speed = speed === 1 ? 0.35 : 1; e.currentTarget.classList.toggle('on', speed !== 1); };
+  S.onPick = o => { if (!o) return; const m = { old: '舊（親代）股', new: '新合成的子股', bp: '互補鹼基對', heli: '解旋酶：打開雙股', dpol: 'DNA 聚合酶：合成新股', coding: '編碼股（序列與 mRNA 相同，T→U）', template: '模板股：被 RNA 聚合酶「讀取」', rna: 'RNA 鏈', rpol: 'RNA 聚合酶', mrna: 'mRNA 密碼子', rib: '核糖體（大、小次單元）', trna: 'tRNA：反密碼子 + 胺基酸', aa: '胺基酸', pep: '胜肽鍵', rf: '釋放因子（辨認終止密碼子）', site: 'E 位（離開）、P 位（胜肽）、A 位（胺醯 tRNA 進入）' }[o.id]; if (m) $('g-cap').textContent = '👉 ' + m; };
+})();
+
+/* ================= 05 密碼子轉換器 ================= */
+(function () {
+  const inp = $('seq'), out = $('code-out');
+  const dna2m = { A: 'U', T: 'A', G: 'C', C: 'G' }, m2a = { A: 'U', U: 'A', G: 'C', C: 'G' };
+  function run() {
+    const s = inp.value.toUpperCase().replace(/[^ATGC]/g, '');
+    let html = '<div class="codon">', stopped = false;
+    for (let i = 0; i + 3 <= s.length; i += 3) {
+      const tri = s.substr(i, 3), cod = tri.replace(/./g, c => dna2m[c]), an = cod.replace(/./g, c => m2a[c]), aa = GCODE[cod];
+      const cls = aa === '*' ? 'stop' : cod === 'AUG' ? 'start' : '';
+      html += '<div class="' + cls + '" style="' + (stopped ? 'opacity:.35' : '') + '"><small>DNA ' + tri + '</small><b style="color:#f0abfc">' + cod + '</b><small>反密碼子 ' + an + '</small><b style="font-size:13px;color:' + (aa === '*' ? '#fb7185' : '#fde68a') + '">' + AAN[aa][0] + '</b><small>' + AAN[aa][1] + '</small></div>';
+      if (aa === '*') stopped = true;
+    }
+    html += '</div>';
+    if (s.length % 3) html += '<p class="small muted">最後 ' + (s.length % 3) + ' 個鹼基不足一個三聯體，略過。</p>';
+    out.innerHTML = html + '<p class="small muted">mRNA 與模板股互補；tRNA 反密碼子與 mRNA 互補（因此與 DNA 模板股序列相同，只是 T 換成 U）。終止後的密碼子不會被轉譯（變淡）。</p>';
+  }
+  inp.addEventListener('input', run);
+  UI.$$('[data-ex]').forEach(b => b.onclick = () => { inp.value = b.dataset.ex; run(); });
+  run();
+})();
+
+/* ================= 07 有絲分裂 / 減數分裂 ================= */
+(function () {
+  const S = K.stage('st-mit', { radius: 58, yaw: 0.35, pitch: 0.3, autoRotate: 0.06 });
+  const CH = [{ pair: 0, m: 1, col: '#f87171', h: 9 }, { pair: 0, m: 0, col: '#60a5fa', h: 9 }, { pair: 1, m: 1, col: '#fecaca', h: 5.5 }, { pair: 1, m: 0, col: '#bfdbfe', h: 5.5 }];
+  const sis = [];
+  CH.forEach((ch, q) => [0, 1].forEach(s => {
+    const c = [0, 0, 0], t = [0, 0, 0], b = [0, 0, 0];
+    const tt = S.tube(c, t, 2.3, ch.col, { id: 'chr' }), tb = S.tube(c, b, 2.3, ch.col, { id: 'chr' });
+    const cs = S.sphere(c, 2.1, '#f0abfc', { id: 'cen' });
+    sis.push({ q, s, ch, c, t, b, tt, tb, cs, d: [0, 1, 0], from: [0, 0, 0], fd: [0, 1, 0], to: [0, 0, 0], td: [0, 1, 0], al: 0, fal: 0, tal: 0 });
+  }));
+  const NDOT = 420, cellDots = Mini3D.fib(NDOT).map((u, i) => S.dot([0, 0, 0], 0.85, '#38bdf8', { id: 'cellm', al: 0.4, u, from: [0, 0, 0], to: [0, 0, 0] }));
+  const nucs = [0, 1, 2, 3].map(() => K.mover(K.ellipsoid(S, [0, 0, 0], [1, 1, 1], '#a78bfa', 16, 8, { id: 'nenv', al: 0.25 })));
+  const nucSt = nucs.map(() => ({ c: [0, 0, 0], r: 0, fc: [0, 0, 0], fr: 0, tc: [0, 0, 0], tr: 0 }));
+  const chromatin = []; const rnd = Mini3D.rng(9);
+  for (let i = 0; i < 140; i++) { const u = Mini3D.fib(140)[i], k = 0.3 + rnd() * 0.65; chromatin.push(S.dot([u[0] * 18 * k, u[1] * 16 * k, u[2] * 16 * k], 1.2, CH[i % 4].col, { id: 'chromatin', al: 0 })); }
+  const poles = [0, 1, 2, 3].map(() => S.sphere([0, 0, 0], 2.6, '#facc15', { id: 'pole', glow: 0.6, hidden: true }));
+  const poleSt = poles.map(() => ({ from: [0, 0, 0], to: [0, 0, 0] }));
+  const fib = sis.map(s => S.tube([0, 0, 0], s.c, 0.4, '#fde68a', { id: 'spindle', flat: 1, al: 0.5, hidden: true }));
+  const capL = K.lab(S, [0, 0, 0], '', 'chr', '#e2e8f0', 0, 0, { hidden: true });
+  const Y = [0, 1, 0], Z = [0, 0, 1];
+  const SIDE = [-1, 1, 1, -1];
+  // 各期：{pos(q,s) → [centromere, dir, alpha], cells:[[c,r]], nuc:[[c,r]], poles:[...], fib:(s)→pole index or -1, chromatin}
+  const P1 = [[-8, 4, -6], [6, -6, 4], [-4, -8, 8], [8, 6, -4]];
+  const MIT = [
+    { pos: (q, s) => [V.add(P1[q], [s ? 1.8 : -1.8, 0, 0]), Y, 0], cells: [[[0, 0, 0], [40, 32, 32]]], nuc: [[[0, 0, 0], [20, 18, 18]]], poles: [], chromatin: 1 },
+    { pos: (q, s) => [V.add(P1[q], [s ? 1.8 : -1.8, 0, 0]), Y, 1], cells: [[[0, 0, 0], [40, 32, 32]]], nuc: [[[0, 0, 0], [21, 19, 19]]], nal: 0.1, poles: [[-22, 0, 0], [22, 0, 0]] },
+    { pos: (q, s) => [[s ? 1.8 : -1.8, 0, [-18, -6, 6, 18][q]], Y, 1], cells: [[[0, 0, 0], [42, 32, 32]]], nuc: [], poles: [[-38, 0, 0], [38, 0, 0]], fib: s => s.s },
+    { pos: (q, s) => [[s ? 30 : -30, 0, [-18, -6, 6, 18][q]], Y, 1], cells: [[[0, 0, 0], [50, 28, 30]]], nuc: [], poles: [[-40, 0, 0], [40, 0, 0]], fib: s => s.s },
+    { pos: (q, s) => [[s ? 28 : -28, 0, [-18, -6, 6, 18][q] * 0.45], Y, 1], cells: [[[-27, 0, 0], [25, 27, 27]], [[27, 0, 0], [25, 27, 27]]], nuc: [[[-28, 0, 0], [12, 12, 12]], [[28, 0, 0], [12, 12, 12]]], poles: [] }
+  ];
+  const so = s => (s ? 1.6 : -1.6);
+  const MEI = [
+    MIT[0],
+    { pos: (q, s) => [[(CH[q].m ? -4 : 4) + so(s), CH[q].pair ? -2 : 4, CH[q].pair ? 10 : -10], Y, 1], cells: [[[0, 0, 0], [40, 32, 32]]], nuc: [[[0, 0, 0], [21, 19, 19]]], nal: 0.1, poles: [[-22, 0, 0], [22, 0, 0]], xover: 1 },
+    { pos: (q, s) => [[SIDE[q] * 5 + so(s), 0, CH[q].pair ? 10 : -10], Y, 1], cells: [[[0, 0, 0], [42, 32, 32]]], nuc: [], poles: [[-38, 0, 0], [38, 0, 0]], fib: s => (SIDE[s.q] < 0 ? 0 : 1), xover: 1 },
+    { pos: (q, s) => [[SIDE[q] * 30 + so(s), 0, CH[q].pair ? 10 : -10], Y, 1], cells: [[[0, 0, 0], [50, 28, 30]]], nuc: [], poles: [[-40, 0, 0], [40, 0, 0]], fib: s => (SIDE[s.q] < 0 ? 0 : 1), xover: 1 },
+    { pos: (q, s) => [[SIDE[q] * 28 + so(s), 0, (CH[q].pair ? 10 : -10) * 0.6], Y, 1], cells: [[[-27, 0, 0], [25, 27, 27]], [[27, 0, 0], [25, 27, 27]]], nuc: [[[-28, 0, 0], [12, 12, 12]], [[28, 0, 0], [12, 12, 12]]], nal: 0.15, poles: [], xover: 1 },
+    { pos: (q, s) => [[SIDE[q] * 27, s ? -1.8 : 1.8, CH[q].pair ? 8 : -8], [1, 0, 0], 1], cells: [[[-27, 0, 0], [25, 27, 27]], [[27, 0, 0], [25, 27, 27]]], nuc: [], poles: [[-27, 30, 0], [-27, -30, 0], [27, 30, 0], [27, -30, 0]], fib: s => (SIDE[s.q] < 0 ? 0 : 2) + s.s, xover: 1 },
+    { pos: (q, s) => [[SIDE[q] * 27, s ? -24 : 24, CH[q].pair ? 8 : -8], [1, 0, 0], 1], cells: [[[-27, 0, 0], [24, 34, 26]], [[27, 0, 0], [24, 34, 26]]], nuc: [], poles: [[-27, 33, 0], [-27, -33, 0], [27, 33, 0], [27, -33, 0]], fib: s => (SIDE[s.q] < 0 ? 0 : 2) + s.s, xover: 1 },
+    { pos: (q, s) => [[SIDE[q] * 27, s ? -19 : 19, (CH[q].pair ? 6 : -6)], [1, 0, 0], 1], cells: [[[-27, 18, 0], [22, 16, 22]], [[-27, -18, 0], [22, 16, 22]], [[27, 18, 0], [22, 16, 22]], [[27, -18, 0], [22, 16, 22]]], nuc: [[[-27, 19, 0], [8, 7, 8]], [[-27, -19, 0], [8, 7, 8]], [[27, 19, 0], [8, 7, 8]], [[27, -19, 0], [8, 7, 8]]], nal: 0.2, poles: [], xover: 1 }
+  ];
+  let mode = 'mit', ph = 0, tw = 1, cur = MIT[0];
+  function go(def) {
+    cur = def; tw = 0;
+    sis.forEach(s => { s.from = s.c.slice(); s.fd = s.d.slice(); s.fal = s.al; const r = def.pos(s.q, s.s); s.to = r[0]; s.td = r[1]; s.tal = r[2]; });
+    const cells = def.cells;
+    cellDots.forEach((d, i) => { d.from = d.p.slice(); const c = cells[i % cells.length]; d.to = V.add(c[0], [d.u[0] * c[1][0], d.u[1] * c[1][1], d.u[2] * c[1][2]]); });
+    nucSt.forEach((n, i) => { n.fc = n.c.slice(); n.fr = n.r; const t = def.nuc[i]; if (t) { n.tc = t[0]; n.tr = t[1]; } else { n.tc = n.c.slice(); n.tr = 0; } n.tal = def.nal != null ? def.nal : 0.25; });
+    poles.forEach((p, i) => { poleSt[i].from = p.p.slice(); poleSt[i].to = def.poles[i] || [0, 0, 0]; p.hidden = !def.poles[i]; });
+    fib.forEach((f, i) => { const s = sis[i]; const pi = def.fib ? def.fib(s) : -1; f.hidden = pi < 0 || !def.poles[pi]; f.pi = pi; });
+    // 互換：母系 sister1 下臂 ↔ 父系 sister0 下臂（只在第一對）
+    sis.forEach(s => { s.tb.c = s.ch.col; });
+    if (def.xover) { const a = sis.find(s => s.q === 0 && s.s === 1), b = sis.find(s => s.q === 1 && s.s === 0); a.tb.c = CH[1].col; b.tb.c = CH[0].col; }
+  }
+  S.tick(dt => {
+    if (tw < 1) tw = Math.min(1, tw + dt / 1.5);
+    const e = sm(0, 1, tw);
+    sis.forEach(s => {
+      mv(s.c, V.lerp(s.from, s.to, e)); s.d = V.norm(V.lerp(s.fd, s.td, e)); s.al = K.lerp(s.fal, s.tal, e);
+      mv(s.t, V.add(s.c, V.mul(s.d, s.ch.h))); mv(s.b, V.add(s.c, V.mul(s.d, -s.ch.h * 0.6)));
+      [s.tt, s.tb, s.cs].forEach(o => { o.al = s.al; o.hidden = s.al < 0.03; });
+    });
+    cellDots.forEach(d => mv(d.p, V.lerp(d.from, d.to, e)));
+    nucs.forEach((m, i) => { const n = nucSt[i]; n.c = V.lerp(n.fc, n.tc, e); const fr = Array.isArray(n.fr) ? n.fr : [n.fr, n.fr, n.fr], tr = Array.isArray(n.tr) ? n.tr : [n.tr, n.tr, n.tr]; n.r = [0, 1, 2].map(k => K.lerp(fr[k], tr[k], e)); m.set(n.c, n.r, n.tal); m.hide(n.r[0] < 0.5); });
+    poles.forEach((p, i) => mv(p.p, V.lerp(poleSt[i].from, poleSt[i].to, e)));
+    fib.forEach(f => { if (!f.hidden) f.a = poles[f.pi].p; });
+    const ca = cur.chromatin ? 0.8 * e : 0.8 * (1 - e);
+    chromatin.forEach(d => { d.al = cur.chromatin ? Math.max(d.al, ca) : Math.min(d.al, ca); });
+  });
+  const MS = [
+    { t: '間期 Interphase', d: '染色質分散；S 期已完成 DNA 複製', h: '2n = 4，DNA 已複製' },
+    { t: '前期 Prophase', d: '染色質濃縮成可見染色體（兩條姊妹染色分體）；核膜消失；中心粒移向兩極、形成紡錘絲', h: '染色體濃縮' },
+    { t: '中期 Metaphase', d: '染色體<b>單獨一條條</b>排在赤道板上；紡錘絲連到著絲點', h: '單列排在赤道板' },
+    { t: '後期 Anaphase', d: '<b>姊妹染色分體分開</b>，被紡錘絲拉向兩極', h: '姊妹染色分體分離' },
+    { t: '末期與胞質分裂', d: '核膜重新形成、染色體解開；細胞膜縊縮 → <b>2 個子細胞，各 2n</b>（與親代相同）', h: '2 個 2n 子細胞' }
+  ];
+  const ES = [
+    { t: '間期', d: 'DNA 已複製', h: '2n = 4' },
+    { t: '前期 I：聯會與互換', d: '同源染色體<b>並排配對</b>（四分體），非姊妹染色分體間<b>互換（crossing over）</b>片段', h: '聯會、互換（看紅藍交換的下臂）' },
+    { t: '中期 I', d: '<b>同源染色體成對</b>排在赤道板兩側；每對的方向隨機 → <b>獨立分配</b>', h: '成對排列' },
+    { t: '後期 I', d: '<b>同源染色體分開</b>，每對只有一條到一極；姊妹染色分體仍相連', h: '同源分離' },
+    { t: '末期 I', d: '2 個細胞，各有 <b>23 條（已複製）</b>染色體 → 單倍體', h: '2 個 n 細胞（每條仍有 2 分體）' },
+    { t: '中期 II', d: '第二次分裂像有絲分裂：染色體單列排在新的赤道板', h: '各細胞單列排列' },
+    { t: '後期 II', d: '<b>姊妹染色分體分開</b>到兩極', h: '分體分離' },
+    { t: '末期 II', d: '<b>4 個單倍體（n）細胞</b>，遺傳組成各不相同', h: '4 個 n 細胞' }
+  ];
+  const stM = UI.stepper($('st-mit-steps'), MS, i => { if (mode !== 'mit') return; ph = i; go(MIT[i]); $('m-cap').innerHTML = MS[i].t + '：' + MS[i].h; }, { dur: 4200 });
+  const stE = UI.stepper($('st-mei-steps'), ES, i => { if (mode !== 'mei') return; ph = i; go(MEI[i]); $('m-cap').innerHTML = ES[i].t + '：' + ES[i].h; }, { dur: 4200, autoplay: false });
+  go(MIT[0]); tw = 1;
+  K.seg('#mmode', m => {
+    mode = m; $('st-mit-steps').style.display = m === 'mit' ? '' : 'none'; $('st-mei-steps').style.display = m === 'mei' ? '' : 'none';
+    $('m-hud').textContent = m === 'mit' ? '有絲分裂：1 次分裂 → 2 個 2n' : '減數分裂：2 次分裂 → 4 個 n';
+    (m === 'mit' ? stM : stE).set(0);
+  }, 'mit');
+  S.onPick = o => { if (!o) return; const t = { chr: '染色分體（紅＝母系、藍＝父系）', cen: '著絲點', pole: '紡錘體極（中心體）', spindle: '紡錘絲（微管）', cellm: '細胞膜', nenv: '核膜', chromatin: '染色質（間期）' }[o.id]; if (t) $('m-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 快閃卡 / 測驗 ================= */
+UI.flashcards($('fc'), [
+  { f: '細胞膜的結構模型？', b: '<b>流體鑲嵌模型</b>：磷脂雙層 + 鑲嵌其中的蛋白質（多數貫穿膜）。' },
+  { f: '吞噬 vs 胞飲 vs 受體媒介胞吞', b: '吞噬：偽足包圍大顆粒成食泡；胞飲：膜形成窄溝吞入液體；受體媒介：特定配體與受體結合後內陷（有專一性）。' },
+  { f: '纖毛與鞭毛的微管排列？', b: '<b>9 + 2</b>（9 對微管環繞中央 1 對）；人體只有精子有鞭毛。' },
+  { f: '溶體 vs 過氧化體', b: '溶體：消化酵素（吞噬、自噬）；過氧化體：氧化酶產生 H₂O₂，<b>catalase</b> 分解 H₂O₂（肝臟多）。' },
+  { f: '粗糙 vs 平滑內質網', b: 'RER：有核糖體，合成分泌蛋白；SER：酵素反應、骨骼肌中儲存 <b>Ca²⁺</b>（肌漿網）。' },
+  { f: '分泌型蛋白的路徑', b: 'RER 核糖體 → RER 池 → <b>高基氏體</b>（修飾、分類、包裝）→ 分泌囊泡 → <b>胞吐</b>' },
+  { f: '核小體的組成？', b: 'DNA 纏繞 <b>8 個組蛋白</b>（H2A、H2B、H3、H4 各 2）形成的串珠單位。' },
+  { f: '乙醯化對基因表現的影響？', b: '組蛋白乙醯化 → 染色質鬆開 → 可轉錄（常染色質）；去乙醯化 → 緊縮、沉默（異染色質）。' },
+  { f: '轉錄 vs 轉譯', b: '<b>轉錄</b>：細胞核內，RNA 聚合酶以 DNA 模板股合成 RNA；<b>轉譯</b>：細胞質核糖體上，依 mRNA 密碼子合成多胜肽。' },
+  { f: '內含子與外顯子', b: '<b>內含子</b>：pre-mRNA 中被剪掉的部分；<b>外顯子</b>：被接合成 mRNA 的部分。選擇性剪接使一個基因產生多種蛋白。' },
+  { f: '密碼子共有幾個？', b: '<b>64</b> 個：61 個對應 20 種胺基酸、3 個終止；AUG 為起始（Met）。' },
+  { f: '泛素–蛋白酶體系統', b: '調節蛋白接上 <b>泛素</b> 作標記 → 由 <b>蛋白酶體</b> 分解。' },
+  { f: '半保留複製', b: '每個新 DNA 分子含一條舊股（模板）與一條新股。' },
+  { f: '細胞週期各期', b: 'G₁（生長、合成 RNA/蛋白）→ <b>S（DNA 複製）</b>→ G₂ → M（有絲分裂）；不分裂的細胞在 G₀。' },
+  { f: '細胞凋亡的兩條途徑', b: '外在：死亡配體 + 死亡受體；內在：粒線體釋出<b>細胞色素 c</b>；兩者都活化 <b>caspases</b>。' },
+  { f: '減數分裂第一次分裂的特點？', b: '同源染色體配對（聯會）、互換，每對只有一條到一極 → 2 個單倍體細胞（染色體仍有兩分體）。' }
+], 'ch03');
+UI.quiz($('qz'), [
+  { q: '下列何種胞器的內膜形成「嵴」？', o: ['高基氏體', '粒線體', '溶體', '粗糙內質網'], a: 1, e: '粒線體內膜向內摺成嵴（cristae），是電子傳遞鏈所在。' },
+  { q: '骨骼肌細胞中儲存 Ca²⁺ 的是？', o: ['粗糙內質網', '平滑內質網（肌漿網）', '高基氏體', '過氧化體'], a: 1, e: '平滑內質網在骨骼肌中稱肌漿網。' },
+  { q: 'LDL 膽固醇進入細胞的主要方式？', o: ['吞噬作用', '胞飲作用', '受體媒介胞吞', '胞吐作用'], a: 2, e: '需要特定受體辨認 → 受體媒介胞吞。' },
+  { q: '轉錄的產物是？', o: ['多胜肽', 'pre-mRNA', 'DNA', 'tRNA 胺基酸複合物'], a: 1, e: '轉錄產生 RNA（mRNA 先以 pre-mRNA 形式出現，再剪接）。' },
+  { q: 'DNA 模板股 TAC 對應的 mRNA 密碼子是？', o: ['ATG', 'AUG', 'UAC', 'TAC'], a: 1, e: 'T→A、A→U、C→G → AUG（起始，Met）。' },
+  { q: 'tRNA 上與 mRNA 配對的三個鹼基稱為？', o: ['密碼子', '反密碼子', '啟動子', '外顯子'], a: 1, e: '反密碼子 anticodon。' },
+  { q: '使染色質變鬆、基因可被轉錄的修飾是？', o: ['組蛋白去乙醯化', '組蛋白乙醯化', '泛素化', '磷酸化脂質'], a: 1, e: '乙醯化開放染色質。' },
+  { q: 'DNA 複製發生在細胞週期哪一期？', o: ['G₁', 'S', 'G₂', 'M'], a: 1, e: 'S = synthesis（DNA 合成）。' },
+  { q: '有絲分裂中期的特徵？', o: ['同源染色體配對成四分體', '染色體單獨排列在赤道板', '姊妹染色分體到兩極', '核膜重新形成'], a: 1, e: '配對成四分體是減數分裂前期 I / 中期 I。' },
+  { q: '減數分裂結束後產生？', o: ['2 個 2n 細胞', '2 個 n 細胞', '4 個 n 細胞', '4 個 2n 細胞'], a: 2, e: '兩次分裂 → 4 個單倍體細胞。' },
+  { q: '粒線體釋出細胞色素 c 會引發？', o: ['有絲分裂', '細胞凋亡（內在途徑）', '自噬', '胞吐'], a: 1, e: '細胞色素 c 活化 caspases → 凋亡。' }
+]);
+</script>
+</body>
+</html>

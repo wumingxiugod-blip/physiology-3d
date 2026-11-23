@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>補充：杭丁頓氏症 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .beads{display:flex;flex-wrap:wrap;gap:3px;align-items:center;min-height:30px}
+  .beads i{width:16px;height:16px;border-radius:50%;font-style:normal;font-size:9px;font-weight:900;display:grid;place-items:center;color:#111;background:radial-gradient(circle at 35% 35%,#fde68a,#d97706);box-shadow:0 2px 4px rgba(0,0,0,.5)}
+  .beads i.n{background:radial-gradient(circle at 35% 35%,#cbd5e1,#475569);color:#0f172a}
+  .zone{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:10px;font-size:12px;text-align:center}
+  .zone div{padding:6px 4px;border-radius:8px;border:1px solid var(--line);opacity:.45;transition:.3s}
+  .zone div.on{opacity:1;transform:translateY(-3px);box-shadow:0 0 16px currentColor}
+  .pun{display:grid;grid-template-columns:60px 1fr 1fr;gap:6px;max-width:360px;margin:10px auto;perspective:700px}
+  .pun>div{padding:12px 6px;border-radius:12px;text-align:center;font-weight:900;border:1px solid var(--line);background:var(--panel);transition:.35s}
+  .pun .hd{background:transparent;border:0;color:var(--mut)}
+  .pun .aff{background:linear-gradient(160deg,#9f1239,#4c0519);color:#fff;transform:rotateX(14deg) translateZ(8px);box-shadow:0 8px 0 #2a0610}
+  .pun .ok{background:linear-gradient(160deg,#065f46,#022c22);color:#fff;transform:rotateX(14deg);box-shadow:0 8px 0 #01170f}
+  .tl-wrap{perspective:1200px;overflow-x:auto;padding:30px 10px 60px;scrollbar-width:thin}
+  .tl{display:flex;gap:18px;transform:rotateX(14deg) rotateY(-6deg);transform-style:preserve-3d;width:max-content;position:relative;padding-top:18px}
+  .tl::before{content:"";position:absolute;left:0;right:0;top:6px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--acc),var(--acc2));box-shadow:0 0 18px var(--acc)}
+  .tl .ev{width:230px;flex:none;background:linear-gradient(160deg,#1c2541,#0a1020);border:1px solid var(--line);border-radius:16px;padding:14px;position:relative;transform:translateZ(0);transition:transform .3s,box-shadow .3s;box-shadow:0 14px 30px rgba(0,0,0,.45)}
+  .tl .ev:nth-child(even){transform:translateZ(-40px) translateY(14px)}
+  .tl .ev:hover{transform:translateZ(40px) translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.6),0 0 0 1px var(--acc)}
+  .tl .ev::before{content:"";position:absolute;top:-19px;left:22px;width:14px;height:14px;border-radius:50%;background:var(--acc);box-shadow:0 0 12px var(--acc)}
+  .tl .y{font-size:22px;font-weight:900;color:var(--acc)}
+  .big2{font-size:clamp(30px,5vw,46px);font-weight:900;line-height:1;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+</style>
+</head>
+<body style="--acc:#34d399;--acc2:#22d3ee">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">補充講義 8-2 · Huntington's disease</div>
+  <h1 class="title3d">杭丁頓氏舞蹈症</h1>
+  <p class="sub">整理自《科學發展》2002 年 3 月 351 期〈科學史上的這個月：1993 年 3 月，杭丁頓氏基因現形〉（王道還）。內容為重點摘要與改寫；標示「補充」者為文章以外的一般知識。</p>
+  <div class="chips"><a class="chip" href="#dna">3D DNA</a><a class="chip" href="#facts">疾病重點</a><a class="chip" href="#mech">致病機轉</a><a class="chip" href="#gen">遺傳</a><a class="chip" href="#time">歷史時間軸</a><a class="chip" href="#ch8">連結第 8 章</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="dna" data-nav="3D DNA">
+  <h2><span class="num">01</span>CAG 重複：3D DNA 雙螺旋</h2>
+  <p class="lead">杭丁頓氏症基因＝正常基因中<b>插入大量 CAG 序列</b>。拉動重複次數，看 DNA 與蛋白質如何變長。每一格橫桿代表一個密碼子（3 個鹼基對）。</p>
+  <div class="grid2">
+    <div class="stage" id="st-dna"><canvas aria-label="3D DNA 雙螺旋"></canvas><div class="hud">橘色＝CAG 重複區　灰藍＝其他序列</div><div class="hud2" id="dna-cap"></div></div>
+    <div class="card glow">
+      <div class="ctrl"><label for="rep">CAG 重複次數</label><input type="range" id="rep" min="10" max="70" value="45"><output id="rep-v">45</output></div>
+      <h4>轉譯出的蛋白質（Q＝glutamine）</h4>
+      <div class="beads" id="beads"></div>
+      <div class="zone" id="zone"><div style="color:#34d399">≤26<br>正常</div><div style="color:#a3e635">27–35<br>中間型</div><div style="color:#fbbf24">36–39<br>不完全外顯</div><div style="color:#fb7185">≥40<br>完全外顯</div></div>
+      <p class="small muted mt">重複次數的分界為<b>補充知識</b>（文章未提）；一般而言重複越多，發病越早。</p>
+      <div class="note fix"><b>名詞提醒：</b>文章寫 CAG 對應「穀氨酸」。CAG 實際上是 <b>麩醯胺酸 glutamine（Gln, Q）</b> 的密碼子（不是 glutamic acid 麩胺酸），所以 HD 也稱為 <b>polyglutamine（polyQ）</b>疾病。</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="facts" data-nav="疾病重點">
+  <h2><span class="num">02</span>疾病重點</h2>
+  <div class="grid3">
+    <div class="card tilt"><div class="ic">🩺</div><h3>症狀</h3><ul class="small"><li>身體出現<b>不由自主的動作</b>，無法如意控制運動（舞蹈症）</li><li>伴隨<b>情緒、認知</b>問題</li></ul></div>
+    <div class="card tilt"><div class="ic">🧠</div><h3>直接原因</h3><ul class="small"><li><b>大腦基底核</b>神經元大量死亡</li><li>基底核是中樞神經系統中<b>運動系統</b>的重要元件</li><li>巴金森氏症的病理也涉及基底核</li></ul></div>
+    <div class="card tilt"><div class="ic">⏳</div><h3>發病與病程</h3><ul class="small"><li>通常<b>壯年</b>（約 30 歲以後）才發病，發病前沒有徵兆</li><li>發病後通常可拖 <b>10 年以上</b>才去世</li><li>醫師束手無策</li></ul></div>
+    <div class="card tilt"><div class="ic">📊</div><h3>盛行率（美國資料）</h3><ul class="small"><li>白人新生兒約 <b>1 / 20,000</b></li><li>亞裔、非裔很罕見，約 <b>1 / 1,000,000</b></li></ul></div>
+    <div class="card tilt"><div class="ic">👨‍👩‍👧</div><h3>為何能在人間流傳？</h3><p class="small">病人到壯年才發病，已有機會成家、生兒育女 → 基因傳給下一代。杭丁頓醫師一開始就注意到它是遺傳的。</p></div>
+    <div class="card tilt"><div class="ic">💭</div><h3>家屬的煎熬</h3><p class="small">子女除了照顧責任，還要看著至親逐漸變成另一個人、擔心自己是否正在目睹自己的未來，並為自己的子女擔心。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="mech" data-nav="致病機轉">
+  <h2><span class="num">03</span>致病機轉：我們知道與不知道的</h2>
+  <div class="chain" id="mchain">
+    <div class="nd">基因<small>製造蛋白質的指令</small></div><span class="ar">→</span>
+    <div class="nd">正常基因中插入大量 CAG</div><span class="ar">→</span>
+    <div class="nd">蛋白質插入長串 glutamine<small>polyQ</small></div><span class="ar">→</span>
+    <div class="nd">基底核神經元死亡</div><span class="ar">→</span>
+    <div class="nd">不自主動作 + 情緒/認知問題</div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card"><h3>正常蛋白的功能線索</h3><ul class="small"><li>缺乏這個基因的人<b>活不長</b></li><li>這個蛋白質與神經元的<b>胞吞作用（endocytosis）</b>有關</li></ul></div>
+    <div class="card"><h3>突變蛋白</h3><ul class="small"><li>目前只知與<b>大腦基底核神經元死亡</b>有關</li></ul></div>
+    <div class="card"><h3>仍無法解釋</h3><ul class="small"><li>為什麼通常 <b>30 歲以後</b>才發病</li><li>為什麼發病前<b>沒有徵兆</b></li></ul></div>
+  </div>
+  <div class="card mt"><h3>治療嘗試</h3><p class="small">英國以<b>胚胎神經元移植</b>到病人大腦的療法，臨床評估在 2001 年底發表：<b>部分病人症狀改善，也有人完全沒有改善</b>。</p>
+    <p class="small"><b>文章結語：</b>杭丁頓氏症的故事提醒我們，人類基因組計畫<b>不是所有生物醫學問題的解答</b>──找到基因不等於理解疾病。</p></div>
+</section>
+
+<section class="sec" id="gen" data-nav="遺傳">
+  <h2><span class="num">04</span>遺傳模擬（補充：體染色體顯性遺傳）</h2>
+  <div class="grid2">
+    <div class="card">
+      <div class="btns"><span class="muted small" style="align-self:center">父：</span><button class="btn sm on" data-pa="Hh" type="button">Hh 患者</button><button class="btn sm" data-pa="hh" type="button">hh 正常</button></div>
+      <div class="btns"><span class="muted small" style="align-self:center">母：</span><button class="btn sm" data-ma="Hh" type="button">Hh 患者</button><button class="btn sm on" data-ma="hh" type="button">hh 正常</button></div>
+      <div class="pun" id="pun"></div>
+      <p style="text-align:center;font-weight:800" id="pun-r"></p>
+    </div>
+    <div class="card">
+      <h3>模擬生 100 個孩子</h3><button class="btn on" id="sim" type="button">🎲 開始</button>
+      <div class="kv mt"><div><small>帶有致病基因</small><b id="s-a">—</b></div><div><small>不帶</small><b id="s-o">—</b></div></div>
+      <div class="meter mt"><i id="s-m" style="width:0%;background:linear-gradient(90deg,#fb7185,#9f1239)"></i></div>
+      <p class="small mt">H＝帶 CAG 擴增的等位基因（顯性）。只要一個 H 就會發病，所以患者（Hh）× 正常（hh）的每個孩子都有 <b>50%</b> 機率遺傳。文章中南皙．魏思樂的母親、三個舅舅、外祖父都死於此病，正是這種家族模式。</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="time" data-nav="歷史時間軸">
+  <h2><span class="num">05</span>從 1872 到 1993：找到基因的故事</h2>
+  <p class="lead">左右捲動 3D 時間軸。</p>
+  <div class="tl-wrap"><div class="tl" id="tl"></div></div>
+  <div class="grid4 mt">
+    <div class="card tilt" style="text-align:center"><div class="big2">8</div><small class="muted">代</small><p class="small">委內瑞拉的龐大 HD 家族</p></div>
+    <div class="card tilt" style="text-align:center"><div class="big2">11,000</div><small class="muted">人</small><p class="small">可追溯到 19 世紀初的一名婦人</p></div>
+    <div class="card tilt" style="text-align:center"><div class="big2">371</div><small class="muted">人</small><p class="small">歷年已知罹病者</p></div>
+    <div class="card tilt" style="text-align:center"><div class="big2">9,000</div><small class="muted">人</small><p class="small">仍在世，多數在 40 歲以下</p></div>
+    <div class="card tilt" style="text-align:center"><div class="big2">~660</div><small class="muted">人</small><p class="small">估計帶有基因但尚未發病</p></div>
+    <div class="card tilt" style="text-align:center"><div class="big2">4</div><small class="muted">號染色體</small><p class="small">用家族血樣定位出的基因位置</p></div>
+  </div>
+</section>
+
+<section class="sec" id="ch8" data-nav="連結第 8 章">
+  <h2><span class="num">06</span>連結第 8 章：基底核與多巴胺</h2>
+  <div class="grid2">
+    <div class="tbwrap"><table class="tb"><tr><th></th><th>杭丁頓氏症 HD</th><th>巴金森氏症 PD</th></tr>
+      <tr><td>受損部位</td><td>基底核（紋狀體）神經元大量死亡</td><td>中腦<b>黑質</b>多巴胺神經元退化（黑質紋狀體系統）</td></tr>
+      <tr><td>動作表現（補充）</td><td>動作過多：不自主舞蹈樣動作</td><td>動作過少：顫抖、僵硬、動作遲緩</td></tr>
+      <tr><td>病因</td><td>遺傳（CAG 重複擴增）</td><td>多數為散發性（補充）</td></tr></table></div>
+    <div class="card"><h3>在 3D 大腦中查看</h3><p class="small">兩種疾病都涉及基底核迴路。打開第 8 章的 3D 大腦，直接選取相關構造：</p>
+      <div class="btns"><a class="btn" href="ch08.html#brain-striatum">紋狀體（基底核）→</a><a class="btn" href="ch08.html#brain-sn">黑質 →</a><a class="btn" href="ch08.html#brain-dopamine">多巴胺系統 →</a></div></div>
+  </div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">07</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="自我測驗"><h2><span class="num">08</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>摘要自王道還〈1993 年 3 月，杭丁頓氏基因現形〉，《科學發展》351 期（2002 年 3 月）。僅供個人複習使用。 · <a href="index.html">回總覽</a> · <a href="ch08.html">← 第 8 章 中樞神經</a> · <a href="ch09.html">第 9 章 自主神經 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+
+/* ================= 3D DNA ================= */
+(function () {
+  const st = document.getElementById('st-dna');
+  const S = new Mini3D.Scene(st.querySelector('canvas'), { radius: 140, yaw: 0.35, pitch: 0.28, autoRotate: 0 });
+  Mini3D.controls(S, st);
+  const FL = 8, RAD = 20;
+  let rungs = [], spin = 0, n = 0, sp = 7;
+  const cap = document.getElementById('dna-cap');
+  function build(rep) {
+    S.clear(); rungs = [];
+    n = FL * 2 + rep; sp = Math.min(7, 360 / n);
+    for (let i = 0; i < n; i++) {
+      const cag = i >= FL && i < FL + rep;
+      const r = {
+        i, cag,
+        a: S.sphere([0, 0, 0], 3, '#38bdf8', { id: 'bb' }), b: S.sphere([0, 0, 0], 3, '#a78bfa', { id: 'bb' }),
+        h1: S.tube([0, 0, 0], [0, 0, 0], 1.6, cag ? '#fb923c' : '#64748b', { id: cag ? 'cag' : 'seq', glow: cag ? 0.35 : 0, gc: '#fdba74' }),
+        h2: S.tube([0, 0, 0], [0, 0, 0], 1.6, cag ? '#fde047' : '#94a3b8', { id: cag ? 'cag' : 'seq', glow: cag ? 0.35 : 0, gc: '#fdba74' }),
+        la: null, lb: null
+      };
+      if (i > 0) { r.la = S.tube([0, 0, 0], [0, 0, 0], 1.3, '#0ea5e9', { flat: 1, nopick: true }); r.lb = S.tube([0, 0, 0], [0, 0, 0], 1.3, '#8b5cf6', { flat: 1, nopick: true }); }
+      rungs.push(r);
+    }
+    S.label([-(n / 2) * sp - 8, 34, 0], "5'", { c: '#38bdf8', force: 1 });
+    S.label([(n / 2) * sp + 8, 34, 0], "3'", { c: '#38bdf8', force: 1 });
+    S.label([(FL + rep / 2 - n / 2) * sp, 40, 0], 'CAG × ' + rep, { c: '#fdba74', force: 1, size: 14 });
+    cap.innerHTML = '5′ … <b class="yel">' + 'CAG'.repeat(Math.min(rep, 6)) + (rep > 6 ? '…' : '') + '</b> …3′　共 <b>' + rep + '</b> 個 CAG';
+    place();
+  }
+  function place() {
+    rungs.forEach((r, k) => {
+      const x = (r.i - n / 2) * sp, th = r.i * 0.6 + spin;
+      const A = [x, Math.cos(th) * RAD, Math.sin(th) * RAD], B = [x, -Math.cos(th) * RAD, -Math.sin(th) * RAD], M = V.lerp(A, B, 0.5);
+      r.a.p = A; r.b.p = B; r.h1.a = A; r.h1.b = M; r.h2.a = M; r.h2.b = B;
+      if (k > 0) { const p = rungs[k - 1]; r.la.a = p.a.p; r.la.b = A; r.lb.a = p.b.p; r.lb.b = B; }
+    });
+  }
+  S.onFrame = dt => { spin += dt * 0.6; place(); };
+  const INFO = { cag: 'CAG 重複區：CAG 為 glutamine 的密碼子；重複越多，蛋白質中的 polyQ 越長', seq: '基因中的其他序列', bb: 'DNA 骨架（去氧核糖–磷酸）' };
+  S.onPick = o => { if (o && INFO[o.id]) cap.textContent = '👉 ' + INFO[o.id]; };
+  const rep = document.getElementById('rep'), rv = document.getElementById('rep-v'), beads = document.getElementById('beads'), zone = UI.$$('#zone div');
+  function upd() {
+    const r = +rep.value; rv.textContent = r; build(r);
+    beads.innerHTML = '<i class="n">N</i>' + '<i class="n"></i>'.repeat(3) + '<i>Q</i>'.repeat(r) + '<i class="n"></i>'.repeat(3) + '<i class="n">C</i>';
+    const z = r <= 26 ? 0 : r <= 35 ? 1 : r <= 39 ? 2 : 3; zone.forEach((d, i) => d.classList.toggle('on', i === z));
+  }
+  rep.addEventListener('input', upd); upd();
+})();
+
+/* ================= 遺傳 ================= */
+(function () {
+  let pa = 'Hh', ma = 'hh';
+  const pun = document.getElementById('pun'), res = document.getElementById('pun-r');
+  function draw() {
+    const P = pa.split(''), M = ma.split('');
+    let h = '<div class="hd"></div>' + P.map(a => '<div class="hd">父 ' + a + '</div>').join('');
+    let aff = 0;
+    M.forEach(m => { h += '<div class="hd">母 ' + m + '</div>'; P.forEach(p => { const g = [p, m].sort().join(''); const a = g.includes('H'); if (a) aff++; h += '<div class="' + (a ? 'aff' : 'ok') + '">' + g + '<br><small>' + (a ? '會發病' : '正常') + '</small></div>'; }); });
+    pun.innerHTML = h; res.innerHTML = '每個孩子遺傳到的機率：<span class="red">' + aff * 25 + '%</span>';
+    return aff / 4;
+  }
+  UI.$$('[data-pa]').forEach(b => b.addEventListener('click', () => { pa = b.dataset.pa; UI.$$('[data-pa]').forEach(x => x.classList.toggle('on', x === b)); draw(); }));
+  UI.$$('[data-ma]').forEach(b => b.addEventListener('click', () => { ma = b.dataset.ma; UI.$$('[data-ma]').forEach(x => x.classList.toggle('on', x === b)); draw(); }));
+  draw();
+  document.getElementById('sim').addEventListener('click', () => {
+    const p = draw(); let a = 0, k = 0;
+    const t = setInterval(() => { for (let j = 0; j < 5; j++) { k++; if (Math.random() < p) a++; } document.getElementById('s-a').textContent = a; document.getElementById('s-o').textContent = k - a; document.getElementById('s-m').style.width = (a / k * 100) + '%'; if (k >= 100) clearInterval(t); }, 60);
+  });
+})();
+
+/* ================= 時間軸 ================= */
+(function () {
+  const EV = [
+    ['1872', 'George Huntington 正式描述', '在紐約長島行醫的杭丁頓醫師，第一個以扎實臨床證據報告此病，疾病因此以他命名；據知他一生只發表過這篇論文。'],
+    ['1912', 'Woody Guthrie 出生', '美國民謠形成期的傳奇人物，深深影響了 Bob Dylan。小時候母親就因同一種病被送進療養院。'],
+    ['1954 起', 'Woody 病情惡化', '行為與身體逐漸失常，反覆進出醫院；一開始被診斷為酗酒、精神分裂，最後才確定是杭丁頓氏症。'],
+    ['1967', 'Woody 逝世', '13 年後去世。第二任妻子 Marjorie（曾是 Martha Graham 舞團舞者）一直照料他，之後成立「抗杭丁頓氏症委員會」，持續到國會遊說。'],
+    ['1968', '遺傳疾病基金會', 'Nancy Wexler 的母親確診（母親、三個舅舅、外祖父都死於此病）；她的父親（精神科醫師）同年成立基金會支持研究。'],
+    ['1977', 'NINDS 設立委員會', '國會通過法案，在美國國家衛生院神經疾病研究所設「杭丁頓氏症委員會」，聘年方 30 的 Nancy Wexler 為執行長。'],
+    ['1978', '直接向 DNA 下手', '委員會提出建議案；Nancy 主持執行。研究策略是直接找基因——當時被許多資深科學家視為大海撈針。'],
+    ['委內瑞拉', '龐大的 HD 家族', '8 代、約 11,000 人，追溯到 19 世紀初的一名婦人；這個家族的血樣成為關鍵資料。'],
+    ['1983（補充年份）', '定位到第 4 號染色體', '利用家族血樣，科學家「不久」就確定基因位於第 4 號染色體；本以為很快就能找到基因。'],
+    ['1993', '基因現形', '約十年後才真正找到基因；正式報告共列 6 個團隊、60 多位科學家。'],
+    ['2001', '胚胎神經元移植', '英國的移植療法臨床評估發表：部分病人改善，部分毫無起色。'],
+    ['2002', '文章的提醒', '人類基因組計畫不是一切生醫問題的解答；21 世紀才剛開始。']
+  ];
+  const tl = document.getElementById('tl');
+  EV.forEach(([y, t, d]) => tl.appendChild(UI.h('div', 'ev', '<div class="y">' + y + '</div><b>' + t + '</b><p class="small">' + d + '</p>')));
+})();
+
+UI.flashcards(document.getElementById('fc'), [
+  { tag: '症狀', f: '杭丁頓氏症的主要症狀？', b: '身體出現不由自主的動作（無法如意控制運動），並有情緒與認知問題' },
+  { tag: '病理', f: '症狀的直接原因？', b: '大腦基底核神經元大量死亡（基底核為運動系統的重要元件）' },
+  { tag: '命名', f: '疾病以誰命名？何時？', b: 'George Huntington，1872 年；在紐約長島行醫的醫師，以扎實臨床證據報告此病' },
+  { tag: '流行', f: '美國的發生率？', b: '白人新生兒約 1/20,000；亞裔、非裔約 1/1,000,000' },
+  { tag: '遺傳', f: '為何此病能一直在人間流傳？', b: '通常壯年（約 30 歲後）才發病，病人已有機會生兒育女，把基因傳下去' },
+  { tag: '基因', f: '杭丁頓氏症基因的本質？', b: '正常基因中插入大量 CAG 序列 → 蛋白質中插入長串 glutamine（polyQ）' },
+  { tag: '基因', f: '基因位在哪一號染色體？', b: '第 4 號染色體（由委內瑞拉家族血樣定位）' },
+  { tag: '歷史', f: '基因何時被找到？', b: '1993 年；正式報告列 6 個團隊、60 多位科學家' },
+  { tag: '歷史', f: '委內瑞拉家族的規模？', b: '8 代、約 11,000 人，追溯到 19 世紀初一名婦人；371 人罹病，約 9,000 人在世，估計約 660 人帶基因未發病' },
+  { tag: '人物', f: 'Woody Guthrie 與此病的關係？', b: '美國民謠傳奇（影響 Bob Dylan），死於杭丁頓氏症；妻子 Marjorie 成立抗杭丁頓氏症委員會並遊說國會' },
+  { tag: '人物', f: 'Nancy Wexler 的角色？', b: '1977 年 NINDS 杭丁頓氏症委員會執行長；主持研究方案，策略是直接從 DNA 找基因；家族多人死於此病' },
+  { tag: '功能', f: '正常 huntingtin 蛋白的功能線索？', b: '缺乏此基因的人活不長；與神經元的胞吞作用有關' },
+  { tag: '未解', f: '目前仍無法解釋的是？', b: '為何通常 30 歲以後才發病，且發病前沒有徵兆' },
+  { tag: '治療', f: '英國胚胎神經元移植的結果？', b: '部分病人症狀改善，也有人完全沒有改善' }
+], 'hd');
+UI.quiz(document.getElementById('qz'), [
+  { q: '杭丁頓氏症的症狀直接原因是哪裡的神經元大量死亡？', o: ['小腦', '大腦基底核', '海馬迴', '脊髓前角'], a: 1, e: '基底核是運動系統的重要元件。' },
+  { q: '杭丁頓氏症基因的突變型式是？', o: ['單一鹼基缺失', '插入大量 CAG 重複', '染色體易位', '整個基因缺失'], a: 1, e: '正常基因中插入大量 CAG。' },
+  { q: 'CAG 密碼子對應的胺基酸是？', o: ['Glutamic acid 麩胺酸', 'Glutamine 麩醯胺酸', 'Glycine', 'Alanine'], a: 1, e: '文章寫「穀氨酸」，但正確是 glutamine（Gln, Q）。' },
+  { q: '杭丁頓氏症基因位於第幾號染色體？', o: ['1', '4', '7', '21'], a: 1, e: '利用委內瑞拉家族血樣定位於第 4 號染色體。' },
+  { q: '杭丁頓氏症基因正式被找到的年份是？', o: ['1872', '1968', '1983', '1993'], a: 3, e: '1993 年，6 個團隊、60 多位科學家。' },
+  { q: '此病能在族群中持續存在的主要原因是？', o: ['發病很早', '病人通常壯年才發病，已生育後代', '只傳給男性', '環境因素'], a: 1, e: '晚發病使基因有機會傳給下一代。' },
+  { q: '美國白人新生兒的發生率約為？', o: ['1/200', '1/20,000', '1/1,000,000', '1/2,000,000'], a: 1, e: '亞裔、非裔約百萬分之一。' },
+  { q: '同樣涉及基底核病理的運動系統疾病是？', o: ['阿茲海默症', '巴金森氏症', '多發性硬化症', '狂犬病'], a: 1, e: '巴金森氏症：黑質多巴胺神經元退化，影響黑質紋狀體系統。' }
+]);
+</script>
+</body>
+</html>

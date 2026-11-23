@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch13 血液、心臟與循環 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .evo{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;perspective:900px}
+  @media (max-width:700px){.evo{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .evo .card{text-align:center}
+  .hrt{display:grid;gap:4px;margin:10px auto;width:110px;transform:rotateX(28deg) rotateZ(-6deg);transform-style:preserve-3d}
+  .hrt i{display:grid;place-items:center;height:34px;border-radius:8px;font-style:normal;font-weight:900;font-size:13px;color:#fff;box-shadow:0 7px 0 rgba(0,0,0,.45)}
+  .hrt .A{background:linear-gradient(135deg,#60a5fa,#a855f7)} .hrt .V{background:linear-gradient(135deg,#ef4444,#7c3aed);height:44px}
+  .hrt .o{background:linear-gradient(135deg,#60a5fa,#1d4ed8)} .hrt .r{background:linear-gradient(135deg,#f87171,#b91c1c)} .hrt .mx{background:linear-gradient(90deg,#3b82f6,#a855f7,#ef4444)}
+  .tube{position:relative;width:70px;height:230px;margin:6px auto;border-radius:0 0 35px 35px;border:2px solid #cbd5e1;border-top:none;overflow:hidden;background:#0b1222;box-shadow:inset -10px 0 18px rgba(255,255,255,.08),0 20px 40px rgba(0,0,0,.4)}
+  .tube div{position:absolute;left:0;right:0}
+  .tube::after{content:"";position:absolute;left:10px;top:0;bottom:0;width:8px;background:linear-gradient(90deg,rgba(255,255,255,.35),transparent);border-radius:4px}
+  .stages{display:flex;gap:10px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap}
+  .stg{flex:1;min-width:90px;text-align:center;font-size:12px;color:var(--mut)}
+  .cell{margin:0 auto 8px;border-radius:50%;position:relative;box-shadow:0 10px 20px rgba(0,0,0,.45)}
+  .cell i{position:absolute;border-radius:50%;background:radial-gradient(circle at 35% 35%,#c4b5fd,#4c1d95)}
+  .bt{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .casc{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .casc .col,.casc .common{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px}
+  .casc .common{grid-column:1/-1}
+  .cn{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .cz{position:relative;padding:6px 11px;border-radius:10px;border:1px solid var(--line);background:linear-gradient(160deg,#1a2440,#0b1222);font-size:13px;box-shadow:0 4px 0 #050913;transition:.3s}
+  .cz small{color:var(--mut);font-size:11px;margin-left:4px}
+  .cz.on{border-color:#fbbf24;background:linear-gradient(160deg,#92400e,#1a2440);box-shadow:0 0 18px rgba(251,191,36,.45);transform:translateY(-2px)}
+  .cz.blk{border-color:var(--bad);background:linear-gradient(160deg,#7f1d1d,#1a2440)}
+  .cz.blk::after{content:"✖";position:absolute;right:-7px;top:-9px;color:#fb7185;font-size:15px;font-weight:900}
+  .cz.vk::before{content:"K";position:absolute;left:-6px;top:-8px;font-size:10px;background:#16a34a;color:#fff;border-radius:6px;padding:0 4px}
+  .ca{color:#22d3ee}
+  .ar2{color:var(--mut)}
+  @media (max-width:640px){.casc{grid-template-columns:1fr}}
+</style>
+</head>
+<body style="--acc:#fb7185;--acc2:#f59e0b">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 13 · Blood, Heart, and Circulation</div>
+  <h1 class="title3d">血液、心臟與循環</h1>
+  <p class="sub">血液組成與造血、血型、凝血、3D 跳動心臟（血流、瓣膜、傳導系統與心電圖同步）、心臟電生理、血管構造、免疫與淋巴系統。</p>
+  <div class="chips">
+    <a class="chip" href="#func">功能組成</a><a class="chip" href="#blood">血液 3D</a><a class="chip" href="#hema">造血</a><a class="chip" href="#type">血型</a><a class="chip" href="#clot">凝血</a><a class="chip" href="#heart">3D 心臟</a><a class="chip" href="#ep">心電生理</a><a class="chip" href="#vessel">血管</a><a class="chip" href="#immune">免疫淋巴</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a>
+  </div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="func" data-nav="功能組成">
+  <h2><span class="num">01</span>循環系統的功能、組成與演化</h2>
+  <div class="grid3">
+    <div class="card tilt"><h3>三大功能</h3><ul class="small"><li><b>運輸</b>：呼吸氣體、養分、廢物</li><li><b>調節</b>：激素、體溫</li><li><b>保護</b>：凝血、免疫</li></ul></div>
+    <div class="card tilt"><h3>心血管系統</h3><ul class="small"><li>心臟：四腔幫浦</li><li>血管：動脈 → 小動脈 → 微血管 → 小靜脈 → 靜脈</li></ul></div>
+    <div class="card tilt"><h3>淋巴系統</h3><ul class="small"><li>淋巴管、淋巴組織</li><li>淋巴器官：脾、胸腺、扁桃腺、淋巴結</li></ul></div>
+  </div>
+  <h3 class="mt2">心臟的演化：不是每種動物都有四腔心</h3>
+  <div class="evo mt">
+    <div class="card tilt"><b>魚類</b><div class="hrt"><i class="A o">A</i><i class="V o">V</i></div><span class="tag">2 腔</span></div>
+    <div class="card tilt"><b>兩生類</b><div class="hrt" style="grid-template-columns:1fr 1fr"><i class="A o">A</i><i class="A r">A</i><i class="V mx" style="grid-column:1/-1">V</i></div><span class="tag">3 腔</span></div>
+    <div class="card tilt"><b>爬蟲類</b><div class="hrt" style="grid-template-columns:1fr 1fr"><i class="A o">A</i><i class="A r">A</i><i class="V mx" style="grid-column:1/-1;background:linear-gradient(90deg,#3b82f6 45%,#a855f7 50%,#ef4444 55%)">V（部分隔開）</i></div><span class="tag">3 腔</span></div>
+    <div class="card tilt"><b>鳥類與哺乳類</b><div class="hrt" style="grid-template-columns:1fr 1fr"><i class="A o">A</i><i class="A r">A</i><i class="V o">V</i><i class="V r">V</i></div><span class="tag">4 腔</span></div>
+  </div>
+</section>
+
+<section class="sec" id="blood" data-nav="血液 3D">
+  <h2><span class="num">02</span>血液的組成（3D 血流）</h2>
+  <p class="lead">點選血管中的細胞辨認種類；按「止血過程」依序看血管收縮 → 血小板栓 → 纖維蛋白網。</p>
+  <div class="grid2">
+    <div class="stage" id="st-blood"><canvas aria-label="3D 血流與血球"></canvas>
+      <div class="hud">血管內的血球 · 點選辨認</div><div class="hud2" id="bl-cap">正常血流</div>
+      <div class="sbar"><button class="btn sm" data-h="1" type="button">① 血管收縮</button><button class="btn sm" data-h="2" type="button">② 血小板栓</button><button class="btn sm" data-h="3" type="button">③ 纖維蛋白網</button><button class="btn sm" data-h="0" type="button">重設</button></div>
+    </div>
+    <div class="card info" id="info-blood"><div class="tt">點一顆細胞</div><p class="empty">紅血球（圓盤）、白血球（白色大顆，可看到細胞核）、血小板（黃色小點）。</p></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card">
+      <h3>① 血漿 Plasma（液體部分）</h3>
+      <div class="grid2 even" style="gap:10px;align-items:center">
+        <div><div class="tube" aria-label="離心後的血液"><div style="top:0;height:55%;background:linear-gradient(180deg,#fde68a,#facc15)"></div><div style="top:55%;height:2%;background:#f8fafc"></div><div style="top:57%;bottom:0;background:linear-gradient(180deg,#dc2626,#7f1d1d)"></div></div><p class="small muted" style="text-align:center">離心後（補充）：血漿約 55%、白血球血小板層 &lt;1%、紅血球約 45%</p></div>
+        <ul class="small"><li><b>血漿蛋白</b>佔血漿 7–9%</li><li><b>白蛋白 Albumin（60–80%）</b>：產生滲透壓，把組織的水拉回微血管 → 維持血量與血壓</li><li><b>球蛋白 Globulins</b>：α、β 球蛋白攜帶脂質；<b>γ 球蛋白＝抗體</b></li><li><b>纖維蛋白原 Fibrinogen（4%）</b>：轉成不可溶的纖維蛋白 fibrin → 凝血</li><li><b>血清 Serum</b>：血漿去掉凝血蛋白（纖維蛋白原）後的液體</li></ul>
+      </div>
+    </div>
+    <div class="card tilt"><h3>② 紅血球 RBC</h3><ul class="small"><li>攜帶 O₂</li><li><b>無細胞核、無粒線體</b> → 進行無氧呼吸</li><li>壽命 <b>120 天</b></li><li>含血紅素（hemoglobin）與 transferrin</li></ul>
+      <h3 class="mt">④ 血小板 Platelets</h3><ul class="small"><li>最小的有形成分，<b>無細胞核</b></li><li>壽命很短（<b>5–9 天</b>）</li><li>參與凝血，需要纖維蛋白原</li></ul></div>
+    <div class="card tilt"><h3>③ 白血球 WBC</h3><p class="small">有細胞核與粒線體。</p><ul class="small"><li><b>顆粒型</b>：嗜中性球 neutrophil、嗜酸性球 eosinophil、嗜鹼性球 basophil</li><li><b>非顆粒型</b>：單核球 monocyte、淋巴球 lymphocyte</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="hema" data-nav="造血">
+  <h2><span class="num">03</span>造血 Hematopoiesis</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>紅血球生成的階段</h3>
+      <div class="stages mt">
+        <div class="stg"><div class="cell" style="width:66px;height:66px;background:radial-gradient(circle at 35% 35%,#93c5fd,#1e3a8a)"><i style="inset:10px"></i></div>前紅血球母細胞</div>
+        <div class="stg"><div class="cell" style="width:58px;height:58px;background:radial-gradient(circle at 35% 35%,#c4b5fd,#4338ca)"><i style="inset:13px"></i></div>紅血球母細胞</div>
+        <div class="stg"><div class="cell" style="width:50px;height:50px;background:radial-gradient(circle at 35% 35%,#fda4af,#9f1239)"><i style="inset:16px;background:radial-gradient(circle at 35% 35%,#6d28d9,#1e1b4b)"></i></div>正母紅血球</div>
+        <div class="stg"><div class="cell" style="width:46px;height:46px;background:radial-gradient(circle at 35% 35%,#fca5a5,#b91c1c);outline:2px dotted rgba(255,255,255,.35);outline-offset:-10px"></div>網狀紅血球</div>
+        <div class="stg"><div class="cell" style="width:44px;height:44px;background:radial-gradient(circle,#7f1d1d 0 28%,#ef4444 52%,#fecaca 78%,#b91c1c 100%)"></div>紅血球</div>
+      </div>
+      <p class="small muted mt">細胞逐漸變小、細胞核濃縮後被排出（網狀紅血球已無核），最後成為雙凹圓盤狀的紅血球。</p>
+    </div>
+    <div class="card">
+      <h3>EPO 負回饋（拉動血氧）</h3>
+      <div class="ctrl"><label for="o2">組織 O₂</label><input type="range" id="o2" min="0" max="100" value="60"><output id="o2v">正常</output></div>
+      <div class="kv"><div><small>腎臟分泌 EPO</small><div class="meter"><i id="epo" style="width:30%;background:linear-gradient(90deg,#f59e0b,#ef4444)"></i></div></div><div><small>紅血球生成</small><div class="meter"><i id="rbcm" style="width:30%;background:linear-gradient(90deg,#fb7185,#dc2626)"></i></div></div></div>
+      <ul class="small mt"><li><b>Erythropoietin 紅血球生成素</b>：<b>腎臟</b>在<b>低氧</b>時分泌 → 刺激紅血球生成</li><li><b>Hepcidin 鐵調素</b>：<b>肝臟</b>分泌，調節鐵代謝</li><li><b>Thrombopoietin</b>：刺激血小板生成</li><li><b>白血球生成</b>：紅骨髓與淋巴組織；受 <b>cytokine 細胞介素</b>調節</li></ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="type" data-nav="血型">
+  <h2><span class="num">04</span>紅血球抗原與血型</h2>
+  <p class="lead">抗原在細胞表面讓免疫系統辨認「自己」；淋巴球對外來細胞分泌抗體。人會有<b>對抗自己沒有的抗原</b>的抗體。選擇捐血者與受血者看會不會凝集。</p>
+  <div class="grid2">
+    <div class="card" style="padding:12px"><canvas class="plot" id="agg" style="--ph:300px" aria-label="凝集反應模擬"></canvas><p id="agg-r" class="mt" style="font-weight:800"></p></div>
+    <div class="card">
+      <h4>捐血者（紅血球）</h4><div class="bt" id="don"></div>
+      <div class="btns"><button class="btn sm on" id="donrh" type="button">Rh+</button></div>
+      <h4>受血者（血漿中的抗體）</h4><div class="bt" id="rec"></div>
+      <div class="btns"><button class="btn sm on" id="recrh" type="button">Rh+</button></div>
+      <div class="tbwrap mt"><table class="tb" style="min-width:0"><tr><th>血型</th><th>紅血球抗原</th><th>血漿抗體（補充）</th></tr><tr><td>A</td><td>A</td><td>抗 B</td></tr><tr><td>B</td><td>B</td><td>抗 A</td></tr><tr><td>AB</td><td>A + B</td><td>無</td></tr><tr><td>O</td><td>無</td><td>抗 A + 抗 B</td></tr></table></div>
+    </div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>輸血反應</h3><p class="small">輸錯血型時，受血者的抗體與捐血者紅血球結合 → <b>凝集 agglutination</b>。凝集反應也可用來<b>驗血型</b>。</p></div>
+    <div class="card tilt"><h3>Rh 因子與懷孕</h3><ul class="small"><li>Rh 抗原 = <b>D 抗原</b>（名稱來自 rhesus monkey）；Rh+ 較常見</li><li>Rh− 母親在分娩時接觸 Rh+ 胎兒血 → 產生抗體</li><li>下次懷孕抗體穿過胎盤攻擊胎兒紅血球 → <b>胎兒紅血球母細胞增多症 / 新生兒溶血症</b></li><li>預防：分娩後給 Rh− 母親 <b>RhoGAM（抗 Rh 抗體）</b>，使來自胎兒的 Rh 抗原失去活性</li></ul></div>
+    <div class="card tilt"><h3>動物：狗的血型</h3><ul class="small"><li>以 <b>DEA</b>（Dog Erythrocyte Antigen）區分：DEA1(−)、1.1、1.2、3、4、5、6、7、8…</li><li>最常見且最需注意：DEA1(−)、1.1、1.2</li><li>首次輸血通常不排斥；但體內最多只能存在兩種血型 → 再次輸血只能接受自身與第一次的血型</li><li>動物血型也可用來鑑別疾病，例如豬的 PSS（Porcine Stress Syndrome）</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="clot" data-nav="凝血">
+  <h2><span class="num">05</span>止血與凝血 Hemostasis</h2>
+  <div class="grid3">
+    <div class="card tilt"><h3>完整內皮：防止凝血</h3><ul class="small"><li>分泌 <b>前列腺環素 PGI₂</b> 與 <b>NO</b> → 血管舒張、抑制血小板聚集</li><li><b>CD39</b>：把 ADP 分解成 AMP + Pi → 進一步抑制聚集</li></ul></div>
+    <div class="card tilt"><h3>受損：血小板栓</h3><ol class="small"><li>膠原暴露，血小板結合膠原</li><li><b>von Willebrand factor</b> 把它們固定住</li><li><b>血小板釋放反應</b>：分泌 <b>ADP</b>（使血小板變黏）、<b>serotonin</b>（血管收縮）、<b>thromboxane A₂</b>（變黏 + 收縮）→ 招來更多血小板形成栓</li></ol></div>
+    <div class="card tilt"><h3>止血三步驟</h3><ol class="small"><li>血管收縮</li><li>形成血小板栓</li><li>形成纖維蛋白網</li></ol><p class="small muted">→ 可在上方「血液 3D」按止血過程觀看。</p></div>
+  </div>
+  <h3 class="mt2">凝血級聯：點路徑看反應順序，再加入抗凝血劑看哪裡被阻斷</h3>
+  <div class="btns"><button class="btn on" id="c-in" type="button">▶ 內在路徑</button><button class="btn" id="c-ex" type="button">▶ 外在路徑</button><span class="muted small" style="align-self:center">抗凝血劑：</span><button class="btn sm" data-ac="ca" type="button">檸檬酸鈉 / EDTA</button><button class="btn sm" data-ac="hep" type="button">Heparin</button><button class="btn sm" data-ac="cou" type="button">Coumarin</button></div>
+  <div class="casc" id="casc">
+    <div class="col"><h4>內在路徑 Intrinsic（膠原暴露活化）</h4><div class="cn">
+      <span class="cz" data-p="in" data-i="0">膠原暴露</span><span class="ar2">→</span><span class="cz" data-p="in" data-i="1">XII → XIIa</span><span class="ar2">→</span><span class="cz" data-p="in" data-i="2">XI → XIa</span><span class="ar2">→</span><span class="cz vk" data-p="in" data-i="3" data-k="1">IX → IXa</span><span class="ar2">→</span><span class="cz" data-p="in" data-i="4" data-ca="1">+ VIIIa、<span class="ca">Ca²⁺</span>、磷脂</span></div></div>
+    <div class="col"><h4>外在路徑 Extrinsic（較直接）</h4><div class="cn">
+      <span class="cz" data-p="ex" data-i="0">組織受損</span><span class="ar2">→</span><span class="cz" data-p="ex" data-i="1">組織因子（III）</span><span class="ar2">→</span><span class="cz vk" data-p="ex" data-i="2" data-k="1">VII → VIIa</span><span class="ar2">→</span><span class="cz" data-p="ex" data-i="3" data-ca="1">+ <span class="ca">Ca²⁺</span></span></div></div>
+    <div class="common"><h4>共同路徑 Common</h4><div class="cn">
+      <span class="cz vk" data-p="co" data-i="0" data-k="1">X → Xa</span><span class="ar2">→</span><span class="cz" data-p="co" data-i="1" data-ca="1">+ Va、<span class="ca">Ca²⁺</span>、磷脂</span><span class="ar2">→</span><span class="cz vk" data-p="co" data-i="2" data-k="1">凝血酶原（II）</span><span class="ar2">→</span><span class="cz" data-p="co" data-i="3" data-h="1">凝血酶 Thrombin</span><span class="ar2">→</span><span class="cz" data-p="co" data-i="4">纖維蛋白原 → 纖維蛋白</span><span class="ar2">→</span><span class="cz" data-p="co" data-i="5">XIII 交聯 → 血塊</span></div></div>
+  </div>
+  <p id="c-msg" class="mt" style="font-weight:800"></p>
+  <div class="grid2 mt">
+    <div class="card"><h3>抗凝血劑 Anticoagulants</h3><ul class="small"><li><b>鈣螯合劑</b>（檸檬酸鈉 sodium citrate、EDTA）：移除 Ca²⁺</li><li><b>Heparin</b>：阻斷凝血酶 thrombin</li><li><b>Coumarin</b>：抑制<b>維生素 K</b>（兩條路徑都需要；圖中 <span class="tag" style="background:#16a34a;color:#fff">K</span> 為需維生素 K 合成的因子）</li></ul><p class="small muted">補充：級聯中的因子編號依教科書標準圖；講義重點為 XII（內在起點）、III（外在起點）、Ca²⁺ 與磷脂、凝血酶原 → 凝血酶 → 纖維蛋白原 → 纖維蛋白、維生素 K。</p></div>
+    <div class="card"><h3>動物的正常凝血時間</h3><div id="clotbars"></div></div>
+  </div>
+</section>
+
+<section class="sec" id="heart" data-nav="3D 心臟">
+  <h2><span class="num">06</span>3D 心臟：構造、血流、瓣膜與心週期</h2>
+  <p class="lead">藍色＝缺氧血（右心），紅色＝充氧血（左心）。心臟依心率跳動，瓣膜開關、傳導系統與下方心電圖同步。點選腔室、血管、瓣膜或節點看說明。</p>
+  <div class="grid2">
+    <div>
+      <div class="stage" id="st-heart"><canvas aria-label="3D 心臟模型"></canvas>
+        <div class="hud">前面觀（病人的右側在畫面左邊）</div><div class="hud2" id="h-ph"></div>
+        <div class="sbar"><span class="seg" id="hmode"><button class="btn sm on" data-m="flow" type="button">血流</button><button class="btn sm" data-m="cond" type="button">傳導系統</button></span><button class="btn sm" id="h-slow" type="button">慢動作</button></div>
+      </div>
+      <div class="card mt" style="padding:12px"><canvas class="plot" id="ecg" style="--ph:170px" aria-label="心電圖"></canvas>
+        <div class="ctrl"><label for="hr">心率 HR</label><input type="range" id="hr" min="40" max="180" value="72"><output id="hrv">72</output></div>
+        <div class="btns"><button class="btn sm" id="h-sym" type="button">交感（NE/E）↑</button><button class="btn sm" id="h-para" type="button">副交感（ACh）↓</button><button class="btn sm" id="h-norm" type="button">正常 72</button></div>
+      </div>
+    </div>
+    <div>
+      <div class="card info" id="info-heart"><div class="tt">點選心臟的部位</div><p class="empty">或看下方心週期狀態。</p></div>
+      <div class="card mt">
+        <h3>心週期 Cardiac cycle</h3>
+        <div class="kv"><div><small>目前階段</small><b id="cy-ph" style="font-size:16px">—</b></div><div><small>房室瓣 AV</small><b id="cy-av" style="font-size:16px">—</b></div><div><small>半月瓣 SL</small><b id="cy-sl" style="font-size:16px">—</b></div><div><small>心音</small><b id="cy-snd" style="font-size:16px">—</b></div></div>
+        <ol class="small mt" id="cy-list">
+          <li>心室開始收縮、壓力上升 → <b>AV 瓣關閉（Lub 隆）</b></li>
+          <li>壓力夠大 → <b>半月瓣打開</b>，血液射入動脈</li>
+          <li>心室壓力下降 → <b>半月瓣關閉（Dub 咚）</b></li>
+          <li>心室壓力低於心房 → <b>AV 瓣打開</b>，心室充血</li>
+          <li><b>心房收縮</b>，把最後的血送入心室</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>四個腔室</h3><ul class="small"><li><b>左心室</b>：把充氧血泵到全身</li><li><b>右心室</b>：把缺氧血泵到肺</li><li><b>左心房</b>：接收來自肺的充氧血</li><li><b>右心房</b>：接收來自全身的缺氧血</li></ul></div>
+    <div class="card tilt"><h3>體循環與肺循環</h3><ul class="small"><li><b>體循環</b>：心臟 ↔ 身體組織；經<b>主動脈</b>送出，經<b>上、下腔靜脈</b>回心</li><li><b>肺循環</b>：心臟 ↔ 肺；經<b>肺動脈</b>送到肺，經<b>肺靜脈</b>回心</li></ul></div>
+    <div class="card tilt"><h3>纖維性骨架 Fibrous skeleton</h3><ul class="small"><li>結締組織，把心房與心室分開（也是<b>電性</b>隔開）→ 心房作為一個單位、心室作為另一單位</li><li>形成<b>纖維環 annuli fibrosi</b>，固定心瓣膜</li></ul></div>
+    <div class="card tilt"><h3>心瓣膜</h3><ul class="small"><li><b>房室瓣</b>：三尖瓣（右）、二尖瓣（左）</li><li><b>半月瓣</b>：肺動脈瓣（右心室 → 肺動脈幹）、主動脈瓣（左心室 → 主動脈）</li></ul></div>
+    <div class="card tilt"><h3>心音 Heart sounds</h3><ul class="small"><li>由<b>瓣膜關閉</b>產生</li><li><b>Lub 隆</b>＝AV 瓣關閉，發生於心室收縮期；在 QRS 之後</li><li><b>Dub 咚</b>＝半月瓣關閉，發生於心室舒張期；講義：在 T 波開始時</li></ul></div>
+    <div class="card tilt"><h3>心雜音 Heart murmur</h3><ul class="small"><li>異常血流造成的異常心音，多由<b>瓣膜缺損</b>引起</li><li><b>僧帽瓣狹窄</b>：瓣膜鈣化阻礙左心房 → 左心室 → 可能肺高壓</li><li><b>閉鎖不全</b>：關不緊，可能因乳頭狀肌受損</li><li><b>中膈缺損</b>：心房或心室中膈有洞，血液跨到另一側</li></ul></div>
+  </div>
+  <div class="card mt"><h3>動物心臟病變（講義圖片重點）</h3><div class="grid4" style="gap:10px"><p class="small"><b>黑色區域</b>：組織病變或壞死</p><p class="small"><b>花椰菜狀病變</b>：血栓附著，常在瓣膜上</p><p class="small"><b>中膈破洞</b>：連通左右心</p><p class="small"><b>Shaggy heart</b>：心包膜感染造成纖維性物質包覆</p></div><p class="small muted">心臟位於胸腔，呈漏斗狀中空肌肉器官，包在心包膜 pericardium 內。</p></div>
+</section>
+
+<section class="sec" id="ep" data-nav="心電生理">
+  <h2><span class="num">07</span>心臟的電活動與心電圖</h2>
+  <div class="grid2">
+    <div class="card" style="padding:12px"><h3 style="margin:4px 6px 8px">竇房結的節律點電位</h3><canvas class="plot" id="pm" style="--ph:260px" aria-label="節律點電位"></canvas>
+      <div class="btns"><button class="btn sm on" data-pm="n" type="button">正常</button><button class="btn sm" data-pm="s" type="button">交感（NE/E）</button><button class="btn sm" data-pm="p" type="button">副交感（ACh）</button></div><p class="small" id="pm-t"></p></div>
+    <div class="card"><h3>SA node 竇房結：節律器</h3><ul class="small"><li>位於<b>右心房</b></li><li><b>節律點電位</b>：緩慢自發去極化，由 −60 mV 到 −40 mV（HCN 通道：hyperpolarization-activated cyclic nucleotide channels）</li><li>到 <b>−40 mV</b> 時 <b>VG Ca²⁺ 通道</b>打開 → 動作電位與收縮</li><li><b>VG K⁺ 通道</b>打開、K⁺ 外流 → 再極化</li><li><b>NE / E</b>：cAMP↑ → 讓 Na⁺（HCN）通道保持開啟 → <b>心率加快</b></li><li><b>副交感 ACh</b>：打開 K⁺ 通道 → <b>心率變慢</b></li></ul>
+      <h4>心肌細胞間的連接</h4><ul class="small"><li>以<b>間盤 intercalated discs</b>（間隙接合）相連，刺激由細胞傳到細胞</li><li>一次刺激所收縮的區域稱為 myocardium；心房與心室被纖維性骨架電性隔開</li></ul></div>
+  </div>
+  <div class="grid2 mt">
+    <div class="card"><h3>傳導路徑與速度</h3>
+      <div class="chain"><div class="nd">SA node</div><span class="ar">→</span><div class="nd">心房</div><span class="ar">→</span><div class="nd">AV node<small>右心房底部</small></div><span class="ar">→</span><div class="nd">希氏束</div><span class="ar">→</span><div class="nd">束支<small>心室中膈</small></div><span class="ar">→</span><div class="nd">蒲金氏纖維</div></div>
+      <div id="spd" class="mt"></div><p class="small muted">高度以對數尺度表示。AV node 傳導很慢，佔心房到心室延遲的一半；心室在心房之後 0.1–0.2 秒收縮。</p></div>
+    <div class="card"><h3>心電圖 ECG</h3><ul class="small"><li>記錄心臟電活動造成的體內離子移動</li><li><b>P 波</b>：心房去極化</li><li><b>QRS 波</b>：心室去極化</li><li><b>S-T 段</b>：高原期 plateau</li><li><b>T 波</b>：心室再極化</li></ul>
+      <h4>導程 Leads</h4><ul class="small"><li><b>雙極肢導程</b>：Lead I、II、III（電極在手腕與腿）</li><li>Lead II：右手–左腳；Lead III：左手–左腳</li><li><b>單極導程</b>：身上電極對機器內的接地：肢導程 aVR、aVL、aVF ＋ <b>6 個胸導程</b></li></ul>
+      <div class="note fix"><b>講義更正提醒：</b>講義寫 Lead I 為「right arm – right leg」，標準定義是 <b>右手 – 左手</b>（右腳為接地）。考試若依講義作答請自行判斷。</div>
+      <h4>不反應期</h4><p class="small">心肌的不反應期很長，在收縮期間無法再被刺激，所以心臟不會像骨骼肌那樣出現強直收縮。</p></div>
+  </div>
+  <div class="card mt"><h3>各種動物每分鐘心跳次數</h3><div id="hrbars"></div><p class="small muted">對數尺度。年幼動物心跳較快：體型較小，且<b>迷走神經緊張性尚未發達</b>。大型犬 70–80、小型犬 &gt;120。</p></div>
+</section>
+
+<section class="sec" id="vessel" data-nav="血管">
+  <h2><span class="num">08</span>血管 3D：動脈、靜脈、微血管</h2>
+  <div class="grid2">
+    <div class="stage short" id="st-ves"><canvas aria-label="3D 血管橫切"></canvas><div class="hud">剖開的血管壁三層 · 點選</div>
+      <div class="sbar"><button class="btn sm" id="v-ex" type="button">分層展開</button></div></div>
+    <div class="card info" id="info-ves"><div class="tt">血管壁三層</div><ul class="small"><li><b>內膜 Tunica intima</b>：單層鱗狀內皮 + 基底膜 + 結締組織</li><li><b>中膜 Tunica media</b>：平滑肌</li><li><b>外膜 Tunica externa</b>：結締組織</li></ul><p class="small muted">點選模型的各層或各種血管。</p></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>動脈</h3><ul class="small"><li><b>彈性動脈</b>：靠近心臟；血液打入時被撐開、心室舒張時回彈</li><li><b>肌肉性動脈</b>：離心臟較遠；平滑肌比例較高、管腔較小 → 阻力較大</li><li><b>小動脈</b>：直徑 20–30 µm</li></ul></div>
+    <div class="card tilt"><h3>微血管</h3><ul class="small"><li>最小：7–10 µm，管壁只有<b>單層鱗狀上皮</b></li><li>氣體與養分交換處</li><li>血流受<b>小動脈收縮/舒張</b>與<b>微血管前括約肌</b>調節</li><li><b>連續型</b>：細胞緊密；肌肉、脂肪、CNS（構成 BBB）</li><li><b>窗孔型</b>：管壁有孔；腎、腸、內分泌腺</li><li><b>不連續型</b>：細胞間有大縫隙、蛋白質可通過；骨髓、肝、脾</li></ul></div>
+    <div class="card tilt"><h3>靜脈</h3><ul class="small"><li>壓力低：約 <b>2 mmHg</b>（動脈平均約 100 mmHg）</li><li>幫助血液回心：<b>① 骨骼肌幫浦</b> <b>② 靜脈瓣</b>（單向流動）<b>③ 呼吸</b>（吸氣時橫膈下降，腹腔壓 &gt; 胸腔壓，血液流向心臟）</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="immune" data-nav="免疫淋巴">
+  <h2><span class="num">09</span>先天免疫、後天免疫與淋巴系統</h2>
+  <div class="grid2">
+    <div class="card"><h3>先天（非特異性）免疫</h3><ul class="small"><li>以 <b>PAMPs</b>（病原相關分子模式）分辨自己與非自己</li><li>對抗入侵病原的<b>第一道防線</b>：上皮屏障、胃酸、吞噬作用、干擾素、發燒</li><li>PAMPs 只由微生物產生：G(−) 菌的 <b>LPS</b>、G(+) 菌的 <b>peptidoglycan</b></li><li>免疫細胞表面的受體＝<b>Toll 受體</b>（人類已知 10 種）</li></ul>
+      <h4>吞噬細胞</h4><ul class="small"><li><b>嗜中性球</b>：最先抵達感染處</li><li><b>單核吞噬細胞</b>：巨噬細胞、單核球</li><li><b>器官特有的吞噬細胞</b>：肝、脾、淋巴結、肺、腦；固定吞噬細胞襯在肝、脾、淋巴結的竇狀隙</li></ul></div>
+    <div class="card"><h3>吞噬作用的步驟</h3>
+      <div class="chain" id="phago"><div class="nd">趨化 chemotaxis<small>chemokines 吸引</small></div><span class="ar">→</span><div class="nd">血球滲出<small>extravasation / diapedesis</small></div><span class="ar">→</span><div class="nd">偽足包圍<small>pseudopods</small></div><span class="ar">→</span><div class="nd">形成液泡<small>vacuole</small></div><span class="ar">→</span><div class="nd">與溶體融合<small>消化病原</small></div></div>
+      <h3 class="mt2">後天（特異性）免疫</h3><ul class="small"><li>先前接觸病原後獲得的特異性防禦，由淋巴球產生特異抗體所媒介</li><li>淋巴球源自<b>骨髓幹細胞</b>，會自我更新，播種到胸腺、脾、淋巴結</li></ul>
+      <div class="grid2 even" style="gap:10px"><div class="card" style="padding:12px"><b>B 細胞</b><p class="small">分泌抗體到血液與淋巴，對抗細菌感染 → <b>體液性免疫</b></p></div><div class="card" style="padding:12px"><b>T 細胞</b><p class="small">在胸腺發育、不分泌抗體；攻擊被感染細胞、癌細胞、外來細胞 → <b>細胞性免疫</b>；佔血液淋巴球 65–85%</p></div></div></div>
+  </div>
+  <div class="grid2 mt">
+    <div class="card"><h3>淋巴系統</h3><ul class="small"><li>把多餘的<b>組織間液</b>運回靜脈（進入淋巴管後稱<b>淋巴</b>）</li><li>產生並容納淋巴球</li><li>把腸道吸收的<b>脂肪</b>運到血液</li></ul>
+      <div class="chain mt"><div class="nd">組織間液</div><span class="ar">→</span><div class="nd">微淋巴管<small>盲端、最小</small></div><span class="ar">→</span><div class="nd">淋巴管<small>經淋巴結過濾</small></div><span class="ar">→</span><div class="nd">胸管 / 右淋巴管</div><span class="ar">→</span><div class="nd">鎖骨下靜脈</div></div>
+      <p class="small mt">淋巴器官：扁桃腺、胸腺、脾 → 淋巴球生成處。淋巴結散布在淋巴管間，各有自己的血液供應與靜脈引流。</p></div>
+    <div class="card"><h3>動物的正常體溫（直腸測量）</h3><div class="tbwrap"><table class="tb" style="min-width:0"><tr><th>動物</th><th>平均</th><th>範圍</th></tr>
+      <tr><td>馬</td><td>100.5°F（38.1°C）</td><td>99.5–101.5°F（37.5–38.6°C）</td></tr><tr><td>牛</td><td>101.5°F（38.6°C）</td><td>100.5–102.5°F（38.1–39.2°C）</td></tr><tr><td>豬</td><td>102.5°F（39.2°C）</td><td>101.0–103.0°F（38.3–39.4°C）</td></tr><tr><td>羊</td><td>103.0°F（39.4°C）</td><td>102.0–104.0°F（38.9–40.0°C）</td></tr></table></div>
+      <p class="small muted mt">體溫高於正常＝發燒；但興奮、運動、消化、休息、高環境溫度也會影響。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">10</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="自我測驗"><h2><span class="num">11</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>整理自課程講義 Chapter 13（Blood, Heart, and Circulation），僅供個人複習使用。3D 模型為示意。 · <a href="index.html">回總覽</a> · <a href="bone.html">← 補充：骨骼與關節</a> · <a href="ch14.html">第 14 章 心輸出量與血壓 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const sm = (a, b, x) => { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); };
+function fit(cv) { const w = cv.clientWidth, h = cv.clientHeight, d = Math.min(2, devicePixelRatio || 1); if (cv.width !== Math.round(w * d) || cv.height !== Math.round(h * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); } const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return [c, w, h]; }
+function onScreen(el) { const s = { v: true }; new IntersectionObserver(es => { s.v = es[0].isIntersecting; }).observe(el); return s; }
+
+/* ================= 3D 血流與止血 ================= */
+(function () {
+  const st = document.getElementById('st-blood');
+  const S = new Mini3D.Scene(st.querySelector('canvas'), { radius: 120, yaw: 0.45, pitch: 0.2, autoRotate: 0.03 });
+  Mini3D.controls(S, st);
+  const R0 = 46; let R = R0, Rt = R0;
+  const wall = [];
+  for (let x = -150; x <= 150; x += 7) for (let a = 0; a < 6.283; a += 0.2) wall.push(S.dot([x, Math.sin(a) * R0, Math.cos(a) * R0], 1.5, '#fda4af', { id: 'wall', al: 0.16, ang: a, x0: x }));
+  const cells = [];
+  const rnd = (r) => { const a = Math.random() * 6.283, d = Math.sqrt(Math.random()) * r; return [Math.sin(a) * d, Math.cos(a) * d]; };
+  for (let i = 0; i < 64; i++) { const [y, z] = rnd(38); cells.push({ k: 'rbc', o: S.disc([(Math.random() - .5) * 300, y, z], 7, '#dc2626', { id: 'rbc', ang: Math.random() * 3, tilt: Math.random() * 3 }), sp: Math.random() * 2 + 1 }); }
+  const WB = [
+    ['neutrophil', 10, '#e2e8f0', [[-3, 2, 0, 3.2], [2, 3, 1, 3], [3, -2, -1, 3]], '#a78bfa'],
+    ['eosinophil', 10, '#fecaca', [[-3, 1, 0, 3.6], [3, 1, 0, 3.6]], '#7c3aed'],
+    ['basophil', 9.5, '#c4b5fd', [[0, 0, 0, 4], [-3, 3, 1, 2], [3, -3, 1, 2], [3, 3, -1, 2]], '#3b0764'],
+    ['monocyte', 12.5, '#e0e7ff', [[-2, 1, 0, 5.5], [3, -1, 0, 4.5]], '#6366f1'],
+    ['lymphocyte', 8, '#e0f2fe', [[0, 0, 0, 6.4]], '#4338ca'],
+    ['neutrophil', 10, '#e2e8f0', [[-3, 2, 0, 3.2], [2, 3, 1, 3], [3, -2, -1, 3]], '#a78bfa'],
+    ['lymphocyte', 8, '#e0f2fe', [[0, 0, 0, 6.4]], '#4338ca']
+  ];
+  WB.forEach(([k, r, c, nuc, nc]) => {
+    const [y, z] = rnd(28); const p = [(Math.random() - .5) * 300, y, z];
+    const o = S.sphere(p, r, c, { id: k, al: 0.55 });
+    const ns = nuc.map(n => S.sphere(V.add(p, n.slice(0, 3)), n[3], nc, { id: k, zb: -r, off: n.slice(0, 3) }));
+    cells.push({ k, o, ns, sp: 0.6 + Math.random() * 0.5 });
+  });
+  for (let i = 0; i < 34; i++) { const [y, z] = rnd(40); cells.push({ k: 'platelet', o: S.sphere([(Math.random() - .5) * 300, y, z], 2.4, '#fde68a', { id: 'platelet' }), sp: Math.random() * 2 + 1 }); }
+  const collagen = [], fibrin = [];
+  for (let i = 0; i < 7; i++) collagen.push(S.tube([-16 + i * 5, R0 + 2, -12 + Math.random() * 6], [-12 + i * 5, R0 + 1, 10 + Math.random() * 6], 1.6, '#d97706', { id: 'collagen', hidden: true }));
+  for (let i = 0; i < 22; i++) { const a = [(Math.random() - .5) * 46, R0 - 2 - Math.random() * 22, (Math.random() - .5) * 46], b = [(Math.random() - .5) * 46, R0 - 2 - Math.random() * 22, (Math.random() - .5) * 46]; fibrin.push(S.tube(a, b, 0.7, '#fef3c7', { id: 'fibrin', hidden: true, flat: 1 })); }
+  const INFO = {
+    rbc: ['紅血球 Erythrocyte', ['攜帶 O₂；含血紅素', '無細胞核、無粒線體 → 無氧呼吸', '壽命 120 天；雙凹圓盤狀']],
+    neutrophil: ['嗜中性球 Neutrophil', ['顆粒型白血球；細胞核分 3–5 葉', '<b>最先抵達</b>感染處的吞噬細胞']],
+    eosinophil: ['嗜酸性球 Eosinophil', ['顆粒型白血球；細胞核常為 2 葉']],
+    basophil: ['嗜鹼性球 Basophil', ['顆粒型白血球；顆粒深色']],
+    monocyte: ['單核球 Monocyte', ['非顆粒型白血球，最大；腎形核', '屬單核吞噬細胞（可分化為巨噬細胞）']],
+    lymphocyte: ['淋巴球 Lymphocyte', ['非顆粒型白血球；細胞核幾乎佔滿細胞', 'B 細胞（抗體、體液性免疫）與 T 細胞（細胞性免疫）']],
+    platelet: ['血小板 Platelet（thrombocyte）', ['最小的有形成分、無核', '壽命 5–9 天；參與凝血']],
+    wall: ['血管壁（內皮）', ['完整內皮分泌 PGI₂、NO 與 CD39 → 防止血小板聚集']],
+    collagen: ['暴露的膠原纖維', ['血小板結合膠原，由 von Willebrand factor 固定']],
+    fibrin: ['纖維蛋白網 Fibrin', ['凝血酶把纖維蛋白原轉成不可溶的纖維蛋白，網住血球形成血塊']]
+  };
+  const info = document.getElementById('info-blood'), cap = document.getElementById('bl-cap');
+  S.onPick = o => { if (!o || !INFO[o.id]) return; const d = INFO[o.id]; S.each(q => { q.hl = q.id === o.id; }); info.innerHTML = '<div class="tt">' + d[0] + '</div><ul>' + d[1].map(x => '<li>' + x + '</li>').join('') + '</ul>'; };
+  let H = 0;
+  const HC = ['正常血流：完整內皮防止血小板聚集', '① 血管受損 → 膠原暴露，血管收縮', '② 血小板黏上膠原（vWF），釋放 ADP、serotonin、TXA₂ → 形成血小板栓', '③ 凝血酶把纖維蛋白原轉成纖維蛋白，網住血球 → 血塊'];
+  const W = [0, R0 - 6, 0];
+  const nearW = p => Math.hypot(p[0] - W[0], p[1] - W[1], p[2] - W[2]);
+  function setH(n) {
+    H = n; cap.textContent = HC[n]; Rt = n ? 38 : R0;
+    UI.$$('[data-h]', st).forEach(b => b.classList.toggle('on', +b.dataset.h === n && n > 0));
+    collagen.forEach(c => { c.hidden = n < 1; }); fibrin.forEach(f => { f.hidden = n < 3; });
+    if (n === 0) cells.forEach(c => { c.stuck = false; });
+    wall.forEach(w => { w.hidden = n > 0 && Math.abs(w.x0) < 18 && Math.abs(w.ang - Math.PI / 2) < 0.5; });
+  }
+  UI.$$('[data-h]', st).forEach(b => b.addEventListener('click', () => setH(+b.dataset.h)));
+  S.onFrame = (dt, t) => {
+    R += (Rt - R) * Math.min(1, dt * 2);
+    const k = R / R0;
+    wall.forEach(w => { w.p = [w.x0, Math.sin(w.ang) * R, Math.cos(w.ang) * R]; });
+    const sb = H >= 1 ? 0.6 : 1;
+    cells.forEach(c => {
+      const p = c.o.p;
+      if (!c.stuck) {
+        const rr = Math.hypot(p[1], p[2]) / (R0 * k);
+        p[0] += (1 - rr * rr * 0.8) * 40 * c.sp * dt * sb * (c.k === 'platelet' ? 1.1 : 1);
+        if (p[0] > 150) { p[0] = -150; const [y, z] = rnd(R - 8); p[1] = y; p[2] = z; }
+        const lim = R - (c.o.r || 4) - 1, d = Math.hypot(p[1], p[2]); if (d > lim) { p[1] *= lim / d; p[2] *= lim / d; }
+        if (c.k === 'rbc') { c.o.ang += dt * 0.8 * c.sp; c.o.tilt += dt * 0.6; }
+        if (H >= 2 && c.k === 'platelet' && nearW(p) < 30) { c.stuck = true; c.to = V.add(W, [(Math.random() - .5) * 30, Math.random() * 6, (Math.random() - .5) * 30]); }
+        if (H >= 3 && c.k === 'rbc' && nearW(p) < 26) { c.stuck = true; c.to = V.add(W, [(Math.random() - .5) * 34, -Math.random() * 16, (Math.random() - .5) * 34]); }
+      } else { c.o.p = V.lerp(p, c.to, Math.min(1, dt * 3)); if (c.k === 'platelet') c.o.glow = 0.5; }
+      if (!c.stuck && c.k === 'platelet') c.o.glow = 0;
+      if (c.ns) c.ns.forEach(n => { n.p = V.add(c.o.p, n.off); });
+    });
+  };
+  setH(0);
+})();
+
+/* ================= EPO ================= */
+(function () {
+  const o2 = document.getElementById('o2'), v = document.getElementById('o2v'), e = document.getElementById('epo'), r = document.getElementById('rbcm');
+  function u() { const x = +o2.value, ep = Math.max(6, Math.min(100, 100 - x * 1.1 + 6)); v.textContent = x < 35 ? '低氧' : x > 75 ? '偏高' : '正常'; e.style.width = ep + '%'; setTimeout(() => { r.style.width = ep + '%'; }, 500); }
+  o2.addEventListener('input', u); u();
+})();
+
+/* ================= 血型與凝集 ================= */
+(function () {
+  const TYPES = ['A', 'B', 'AB', 'O'], AG = { A: ['A'], B: ['B'], AB: ['A', 'B'], O: [] };
+  let don = 'A', rec = 'A', drh = true, rrh = true;
+  const mk = (id, cb) => { const box = document.getElementById(id); TYPES.forEach(t => { const b = UI.h('button', 'btn', t); b.type = 'button'; b.onclick = () => { cb(t); UI.$$('.btn', box).forEach(x => x.classList.toggle('on', x === b)); upd(); }; if (t === 'A') b.classList.add('on'); box.appendChild(b); }); };
+  mk('don', t => { don = t; }); mk('rec', t => { rec = t; });
+  const rhB = (id, set) => { const b = document.getElementById(id); b.onclick = () => { const v = set(); b.textContent = v ? 'Rh+' : 'Rh−'; b.classList.toggle('on', v); upd(); }; };
+  rhB('donrh', () => (drh = !drh)); rhB('recrh', () => (rrh = !rrh));
+  const cv = document.getElementById('agg'), res = document.getElementById('agg-r'), vis = onScreen(cv);
+  const cells = []; for (let i = 0; i < 34; i++) cells.push({ x: Math.random(), y: Math.random(), vx: 0, vy: 0, g: i % 5 });
+  const abs = []; for (let i = 0; i < 26; i++) abs.push({ x: Math.random(), y: Math.random(), a: Math.random() * 6 });
+  let bad = [], rhWarn = false;
+  function upd() {
+    bad = AG[don].filter(a => !AG[rec].includes(a)); rhWarn = drh && !rrh;
+    const antiB = ['A', 'O'].includes(rec), antiA = ['B', 'O'].includes(rec);
+    let msg = '受血者 ' + rec + (rrh ? '+' : '−') + ' 血漿含：' + ([antiA ? '抗 A' : '', antiB ? '抗 B' : ''].filter(Boolean).join('、') || '無抗 A/B 抗體') + '。';
+    if (bad.length) { res.innerHTML = '❌ <span class="red">凝集！</span>捐血者紅血球帶 ' + bad.join('、') + ' 抗原，受血者有對應抗體。' + msg; }
+    else if (rhWarn) { res.innerHTML = '⚠️ <span class="yel">ABO 相容，但 Rh+ 輸給 Rh−</span>：首次通常不會立即凝集，但受血者會被致敏產生抗 D 抗體（下次就會凝集）。'; }
+    else res.innerHTML = '✅ <span class="grn">相容，不凝集。</span>' + msg;
+  }
+  upd();
+  let last = performance.now();
+  (function loop(now) {
+    const dt = Math.max(0, Math.min(0.05, (now - last) / 1000)); last = now;
+    if (vis.v) {
+      const [c, w, h] = fit(cv); c.clearRect(0, 0, w, h);
+      const ag = bad.length > 0, centers = [[0.22, 0.3], [0.7, 0.28], [0.45, 0.62], [0.2, 0.75], [0.78, 0.72]];
+      cells.forEach(p => {
+        if (ag) { const ce = centers[p.g]; p.vx += (ce[0] - p.x) * dt * 2.2; p.vy += (ce[1] - p.y) * dt * 2.2; }
+        p.vx += (Math.random() - .5) * dt * 0.4; p.vy += (Math.random() - .5) * dt * 0.4; p.vx *= 0.92; p.vy *= 0.92;
+        p.x = Math.min(0.97, Math.max(0.03, p.x + p.vx * dt)); p.y = Math.min(0.95, Math.max(0.05, p.y + p.vy * dt));
+        const x = p.x * w, y = p.y * h, r = 13;
+        const g = c.createRadialGradient(x, y, 2, x, y, r); g.addColorStop(0, '#7f1d1d'); g.addColorStop(.55, '#dc2626'); g.addColorStop(.85, '#fca5a5'); g.addColorStop(1, '#b91c1c');
+        c.fillStyle = g; c.beginPath(); c.arc(x, y, r, 0, 6.3); c.fill();
+        AG[don].forEach((a, i) => { c.fillStyle = a === 'A' ? '#fde047' : '#22d3ee'; const ang = i * 2.1 + p.g; const ax = x + Math.cos(ang) * r, ay = y + Math.sin(ang) * r; if (a === 'A') { c.beginPath(); c.moveTo(ax, ay - 4); c.lineTo(ax + 4, ay + 3); c.lineTo(ax - 4, ay + 3); c.fill(); } else c.fillRect(ax - 3, ay - 3, 6, 6); });
+        if (drh) { c.fillStyle = '#a3e635'; c.beginPath(); c.arc(x + Math.cos(p.g + 4) * r, y + Math.sin(p.g + 4) * r, 2.5, 0, 6.3); c.fill(); }
+      });
+      const antiA = ['B', 'O'].includes(rec), antiB = ['A', 'O'].includes(rec);
+      abs.forEach((a, i) => {
+        const kind = (antiA && antiB) ? (i % 2 ? 'A' : 'B') : antiA ? 'A' : antiB ? 'B' : null; if (!kind) return;
+        a.x += (Math.random() - .5) * 0.004; a.y += (Math.random() - .5) * 0.004; a.a += dt;
+        let x = a.x * w, y = a.y * h;
+        if (ag && bad.includes(kind)) { const p = cells[i % cells.length]; x = p.x * w + 16 * Math.cos(i); y = p.y * h + 16 * Math.sin(i); }
+        c.save(); c.translate(x, y); c.rotate(a.a); c.strokeStyle = kind === 'A' ? '#fde047' : '#22d3ee'; c.lineWidth = 2; c.beginPath(); c.moveTo(0, 7); c.lineTo(0, 0); c.lineTo(-5, -6); c.moveTo(0, 0); c.lineTo(5, -6); c.stroke(); c.restore();
+      });
+      c.font = '12px ' + Mini3D.FONT; c.fillStyle = '#cbd5e1'; c.textAlign = 'left';
+      c.fillText('▲ A 抗原　■ B 抗原　● D(Rh) 抗原　Y 抗體', 10, h - 10);
+    }
+    requestAnimationFrame(loop);
+  })(last);
+})();
+
+/* ================= 凝血級聯 ================= */
+(function () {
+  const z = UI.$$('#casc .cz'), msg = document.getElementById('c-msg');
+  const ac = { ca: false, hep: false, cou: false };
+  const blocked = el => (ac.ca && el.dataset.ca) || (ac.hep && el.dataset.h) || (ac.cou && el.dataset.k);
+  function mark() { z.forEach(el => el.classList.toggle('blk', !!blocked(el))); }
+  let timer = null;
+  function run(path) {
+    clearInterval(timer); z.forEach(el => el.classList.remove('on')); msg.textContent = '';
+    const seq = z.filter(el => el.dataset.p === path).concat(z.filter(el => el.dataset.p === 'co'));
+    let i = 0;
+    timer = setInterval(() => {
+      if (i >= seq.length) { clearInterval(timer); msg.innerHTML = '✅ 形成纖維蛋白血塊（' + (path === 'in' ? '內在路徑：由膠原暴露、XII 啟動' : '外在路徑：由組織因子 III 啟動，較直接') + '）'; return; }
+      const el = seq[i];
+      if (blocked(el)) { clearInterval(timer); el.classList.add('on'); msg.innerHTML = '⛔ <span class="red">在「' + el.textContent.replace('K', '') + '」被阻斷 → 無法凝血</span>（' + (ac.ca && el.dataset.ca ? '缺 Ca²⁺' : ac.hep && el.dataset.h ? 'heparin 阻斷凝血酶' : 'coumarin 抑制維生素 K，此因子無法合成') + '）'; return; }
+      el.classList.add('on'); i++;
+    }, 550);
+  }
+  document.getElementById('c-in').onclick = e => { UI.$$('#c-in,#c-ex').forEach(b => b.classList.toggle('on', b === e.currentTarget)); run('in'); };
+  document.getElementById('c-ex').onclick = e => { UI.$$('#c-in,#c-ex').forEach(b => b.classList.toggle('on', b === e.currentTarget)); run('ex'); };
+  UI.$$('[data-ac]').forEach(b => b.addEventListener('click', () => { ac[b.dataset.ac] = !ac[b.dataset.ac]; b.classList.toggle('on', ac[b.dataset.ac]); mark(); }));
+  mark(); setTimeout(() => run('in'), 800);
+  UI.bars(document.getElementById('clotbars'), [{ label: '馬', v: 11.5, text: '11.5 分', c: '#38bdf8' }, { label: '牛', v: 6.5, text: '6.5 分', c: '#34d399' }, { label: '豬', v: 3.5, text: '3.5 分', c: '#fbbf24' }, { label: '羊', v: 2.5, text: '2.5 分', c: '#fb7185' }]);
+})();
+
+/* ================= 3D 心臟 ================= */
+(function () {
+  const st = document.getElementById('st-heart');
+  const S = new Mini3D.Scene(st.querySelector('canvas'), { radius: 92, yaw: 0.2, pitch: 0.12, autoRotate: 0.06, target: [-2, 6, 4] });
+  Mini3D.controls(S, st);
+  const CH = {
+    ra: { c: [-30, 18, 2], r: [18, 20, 18], col: '#60a5fa', rz: 0, a: 1, n: 240 },
+    rv: { c: [-12, -14, -12], r: [22, 25, 16], col: '#3b82f6', rz: 0.25, a: 0, n: 320 },
+    la: { c: [22, 26, 16], r: [19, 14, 15], col: '#f87171', rz: 0, a: 1, n: 220 },
+    lv: { c: [16, -18, 8], r: [21, 31, 20], col: '#ef4444', rz: 0.35, a: 0, n: 360 }
+  };
+  const inCh = (p, k) => { const q = CH[k]; const l = V.rotZ(V.sub(p, q.c), -q.rz); return (l[0] / q.r[0]) ** 2 + (l[1] / q.r[1]) ** 2 + (l[2] / q.r[2]) ** 2 < 1; };
+  const SA = [-24, 36, -6];
+  const dots = [];
+  Object.keys(CH).forEach(k => {
+    const q = CH[k];
+    Mini3D.shell(q.n, q.c, q.r, { rz: q.rz }).forEach(s => {
+      if (Object.keys(CH).some(o => o !== k && inCh(s.p, o))) return;
+      dots.push(S.dot(s.p, 2.1, q.col, { id: k, al: 0.6, ch: k, p0: s.p.slice(), dSA: V.dist(s.p, SA), base: q.col }));
+    });
+  });
+  const VS = [
+    ['svc', [[-30, 80, 6], [-31, 55, 4], [-30, 36, 3]], 7, '#3b82f6'],
+    ['ivc', [[-26, -72, 14], [-27, -30, 10], [-28, 2, 6]], 7.5, '#3b82f6'],
+    ['pa', [[-2, 4, -22], [2, 26, -22], [6, 44, -14], [24, 48, 0], [48, 44, 10]], 6, '#2563eb'],
+    ['pa', [[6, 44, -14], [-4, 50, 6], [-30, 48, 12], [-52, 44, 14]], 5.5, '#2563eb'],
+    ['aorta', [[8, 6, 0], [4, 30, -6], [0, 56, -2], [8, 68, 10], [20, 62, 22], [24, 40, 28], [24, 0, 30], [22, -72, 30]], 7.5, '#dc2626'],
+    ['aorta', [[2, 62, 0], [-6, 90, 0]], 3, '#dc2626'], ['aorta', [[10, 68, 10], [10, 92, 10]], 3, '#dc2626'], ['aorta', [[18, 66, 18], [24, 90, 20]], 3, '#dc2626'],
+    ['pv', [[56, 34, 26], [38, 30, 22]], 3.5, '#f87171'], ['pv', [[56, 20, 26], [38, 22, 22]], 3.5, '#f87171'],
+    ['pv', [[-14, 34, 30], [6, 30, 24]], 3.5, '#f87171'], ['pv', [[-14, 20, 30], [6, 22, 24]], 3.5, '#f87171']
+  ];
+  VS.forEach(([id, pts, r, c]) => S.path(pts, r, c, { id, al: 0.88 }, 5));
+  function valve(id, c, n, R) {
+    n = V.norm(n); const a = Math.abs(n[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0];
+    const u = V.norm(V.cross(n, a)), v = V.cross(n, u), arr = [];
+    for (let i = 0; i < 12; i++) { const t = (i / 12) * 6.283; arr.push(S.sphere(V.add(c, V.add(V.mul(u, Math.cos(t) * R), V.mul(v, Math.sin(t) * R))), 1.7, '#f8fafc', { id, zb: -3, ang: t })); }
+    const cusp = S.sphere(c, R * 0.72, '#f8fafc', { id, al: 0.5, zb: -2 });
+    return { arr, cusp, c, u, v, R };
+  }
+  const VAL = { tricuspid: valve('tricuspid', [-22, 2, -4], [0.5, -1, -0.3], 8), pulmv: valve('pulmv', [-2, 6, -22], [0.1, 1, 0], 5.5), mitral: valve('mitral', [18, 8, 12], [0, -1, -0.2], 7.5), aorticv: valve('aorticv', [8, 8, 0], [-0.1, 1, -0.2], 6) };
+  function setValve(v, open) {
+    v.cusp.hidden = open;
+    v.arr.forEach(s => { const R = v.R * (open ? 1.15 : 1); s.p = V.add(v.c, V.add(V.mul(v.u, Math.cos(s.ang) * R), V.mul(v.v, Math.sin(s.ang) * R))); s.c = open ? '#4ade80' : '#f8fafc'; });
+  }
+  const C = { cond: 1 };
+  const sa = S.sphere(SA, 4, '#fde047', Object.assign({ id: 'sa', zb: -8 }, C));
+  const av = S.sphere([-6, 4, 4], 3.4, '#fde047', Object.assign({ id: 'av', zb: -8 }, C));
+  const his = S.path([[-6, 4, 4], [-3, -1, 2], [0, -6, 0]], 1.8, '#fde047', Object.assign({ id: 'his', zb: -6 }, C), 3);
+  const bb = [S.path([[0, -6, 0], [5, -22, 3], [12, -40, 4], [18, -50, 4]], 1.3, '#fde047', Object.assign({ id: 'bb', zb: -6 }, C), 4), S.path([[0, -6, 0], [-5, -20, -5], [-10, -36, -10]], 1.3, '#fde047', Object.assign({ id: 'bb', zb: -6 }, C), 4)];
+  const purk = [];
+  [['lv', [0, 1.2, 2.4, 3.6, 4.8, 5.6]], ['rv', [0.6, 2, 3.6, 5]]].forEach(([k, angs]) => {
+    const q = CH[k];
+    angs.forEach(f => { const pts = [-0.92, -0.7, -0.45, -0.18].map(yy => { const s = Math.sqrt(1 - yy * yy) * 0.9; return V.add(q.c, V.rotZ([Math.cos(f) * s * q.r[0], yy * q.r[1], Math.sin(f) * s * q.r[2]], q.rz)); }); purk.push(S.path(pts, 0.8, '#fde047', Object.assign({ id: 'purkinje', zb: -4, flat: 1 }, C), 3)); });
+  });
+  const condObjs = S.where(o => o.cond);
+  const lab = (p, t, id, c, dx, dy, cond) => S.label(p, t, { id, c, dx, dy, lc: cond });
+  const labs = [
+    lab([-36, 18, -16], '右心房 RA', 'ra', '#93c5fd', -40, -6), lab([-16, -22, -26], '右心室 RV', 'rv', '#93c5fd', -40, 14), lab([26, 30, 30], '左心房 LA', 'la', '#fca5a5', 46, -10), lab([22, -30, -10], '左心室 LV', 'lv', '#fca5a5', 46, 14),
+    lab([8, 68, 10], '主動脈', 'aorta', '#f87171', 30, -16), lab([2, 30, -22], '肺動脈幹', 'pa', '#93c5fd', -50, -10), lab([-31, 70, 5], '上腔靜脈', 'svc', '#93c5fd', -44, 0), lab([-27, -50, 12], '下腔靜脈', 'ivc', '#93c5fd', -44, 0), lab([56, 34, 26], '肺靜脈', 'pv', '#fca5a5', 30, -10),
+    lab([-22, 2, -4], '三尖瓣', 'tricuspid', '#e2e8f0', -50, 22), lab([18, 8, 12], '二尖瓣', 'mitral', '#e2e8f0', 52, 18), lab([-2, 6, -22], '肺動脈瓣', 'pulmv', '#e2e8f0', -42, -26), lab([8, 8, 0], '主動脈瓣', 'aorticv', '#e2e8f0', 30, -30),
+    lab(SA, 'SA node', 'sa', '#fde047', -40, -20, 1), lab([-6, 4, 4], 'AV node', 'av', '#fde047', -46, 10, 1), lab([0, -6, 0], '希氏束', 'his', '#fde047', 34, -6, 1), lab([12, -40, 4], '束支', 'bb', '#fde047', 30, 6, 1), lab([30, -30, 14], '蒲金氏纖維', 'purkinje', '#fde047', 40, 18, 1)
+  ];
+  const PATHS = [
+    [[[-30, 80, 6], [-30, 40, 3], [-30, 18, 2], [-22, 2, -4], [-14, -16, -12], [-6, -30, -12], [-4, -6, -18], [-2, 6, -22], [2, 26, -22], [6, 44, -14], [24, 48, 0], [48, 44, 10]], '#60a5fa'],
+    [[[-26, -72, 14], [-27, -30, 10], [-28, 0, 6], [-30, 16, 2], [-22, 2, -4], [-14, -16, -12], [-6, -30, -12], [-4, -6, -18], [-2, 6, -22], [2, 26, -22], [6, 44, -14], [-4, 50, 6], [-30, 48, 12], [-52, 44, 14]], '#60a5fa'],
+    [[[56, 30, 26], [38, 28, 22], [22, 26, 16], [18, 8, 12], [16, -16, 8], [22, -36, 6], [10, -8, 2], [8, 8, 0], [4, 30, -6], [0, 56, -2], [8, 68, 10], [20, 62, 22], [24, 40, 28], [24, 0, 30], [22, -72, 30]], '#fb7185'],
+    [[[-14, 30, 30], [6, 28, 24], [22, 26, 16], [18, 8, 12], [16, -16, 8], [22, -36, 6], [10, -8, 2], [8, 8, 0], [4, 30, -6], [0, 56, -2], [-2, 62, 0], [-6, 90, 0]], '#fb7185']
+  ].map(([pts, c]) => ({ P: new Mini3D.Path(pts, 6), c }));
+  const parts = [];
+  PATHS.forEach((pp, i) => { for (let j = 0; j < 20; j++) parts.push({ pp, u: j / 20 + Math.random() * 0.03, o: S.sphere([0, 0, 0], 2.2, pp.c, { zb: -2, nopick: true }) }); });
+  const INFO = {
+    ra: ['右心房 Right atrium', ['接收來自全身的<b>缺氧血</b>（上、下腔靜脈）', 'SA node（節律器）位於右心房壁']],
+    rv: ['右心室 Right ventricle', ['把缺氧血經<b>肺動脈瓣 → 肺動脈幹</b>泵到肺（肺循環）']],
+    la: ['左心房 Left atrium', ['接收來自肺的<b>充氧血</b>（肺靜脈）']],
+    lv: ['左心室 Left ventricle', ['把充氧血經<b>主動脈瓣 → 主動脈</b>泵到全身（體循環）', '壁最厚（需產生較高壓力）']],
+    svc: ['上腔靜脈 Superior vena cava', ['上半身的缺氧血回右心房']], ivc: ['下腔靜脈 Inferior vena cava', ['下半身的缺氧血回右心房']],
+    pa: ['肺動脈 Pulmonary arteries', ['把缺氧血送到肺', '注意：肺動脈裡是<b>缺氧血</b>']], pv: ['肺靜脈 Pulmonary veins', ['把充氧血從肺送回左心房', '注意：肺靜脈裡是<b>充氧血</b>']],
+    aorta: ['主動脈 Aorta', ['體循環的起點；彈性動脈，射血時撐開、舒張時回彈']],
+    tricuspid: ['三尖瓣 Tricuspid（房室瓣）', ['右心房與右心室之間', '心室收縮初期關閉 → <b>Lub</b>']], mitral: ['二尖瓣 Bicuspid / Mitral（房室瓣）', ['左心房與左心室之間', '鈣化 → 僧帽瓣狹窄']],
+    pulmv: ['肺動脈半月瓣', ['右心室與肺動脈幹之間', '心室舒張時關閉 → <b>Dub</b>']], aorticv: ['主動脈半月瓣', ['左心室與主動脈之間']],
+    sa: ['竇房結 SA node（節律器）', ['位於右心房；節律點電位 −60 → −40 mV 自發去極化', 'AP 由此快速擴散到心房（0.8–1.0 m/s）', '對應 ECG 的 P 波（心房去極化）']],
+    av: ['房室結 AV node', ['位於右心房底部', '傳導<b>很慢</b>（0.03–0.05 m/s），佔心房→心室延遲的一半 → 讓心房先收縮完']],
+    his: ['希氏束 Bundle of His', ['把刺激由 AV node 傳到心室', '在心室中膈分成左右束支']], bb: ['束支 Bundle branches', ['沿心室中膈下行，末端成為蒲金氏纖維']],
+    purkinje: ['蒲金氏纖維 Purkinje fibers', ['傳導最快，約 5 m/s', '刺激心室收縮；對應 QRS 波']]
+  };
+  const info = document.getElementById('info-heart');
+  let sel = null;
+  S.onPick = o => { if (!o || !INFO[o.id]) return; sel = o.id; const d = INFO[o.id]; info.innerHTML = '<div class="tt">' + d[0] + '</div><ul>' + d[1].map(x => '<li>' + x + '</li>').join('') + '</ul>'; };
+  let mode = 'flow', hr = 72, ph = 0, cum = 0;
+  const samples = [];
+  function setMode(m) {
+    mode = m; UI.$$('#hmode .btn').forEach(b => b.classList.toggle('on', b.dataset.m === m));
+    dots.forEach(d => { d.al = m === 'cond' ? 0.16 : 0.6; });
+    S.each(o => { if (o.t === 't' && !o.cond && o.id && ['svc', 'ivc', 'pa', 'aorta', 'pv'].includes(o.id)) o.al = m === 'cond' ? 0.18 : 0.88; });
+    condObjs.forEach(o => { o.al = m === 'cond' ? 1 : 0.35; });
+    parts.forEach(p => { p.o.hidden = m === 'cond'; });
+    labs.forEach(l => { l.hidden = m === 'cond' ? !l.lc && !['ra', 'rv', 'la', 'lv'].includes(l.id) : !!l.lc; });
+  }
+  UI.$$('#hmode .btn').forEach(b => b.addEventListener('click', () => setMode(b.dataset.m)));
+  const hrIn = document.getElementById('hr'), hrv = document.getElementById('hrv');
+  const setHR = v => { hr = v; hrIn.value = v; hrv.textContent = v; };
+  hrIn.addEventListener('input', () => setHR(+hrIn.value));
+  document.getElementById('h-sym').onclick = () => setHR(120); document.getElementById('h-para').onclick = () => setHR(55); document.getElementById('h-norm').onclick = () => setHR(72);
+  document.getElementById('h-slow').onclick = e => { S.speed = S.speed === 1 ? 0.3 : 1; e.currentTarget.classList.toggle('on', S.speed !== 1); };
+  const vc = t => sm(0.19, 0.26, t) * (1 - sm(0.44, 0.52, t)), ac = t => sm(0.08, 0.11, t) * (1 - sm(0.14, 0.18, t));
+  const win = (t, a, b) => t >= a && t < b;
+  const PH = t => t < 0.08 ? [4, '心室充血（舒張末期）'] : t < 0.19 ? [5, '心房收縮'] : t < 0.24 ? [1, '等容收縮：AV 瓣關閉'] : t < 0.48 ? [2, '心室射血：半月瓣打開'] : t < 0.55 ? [3, '等容舒張：半月瓣關閉'] : [4, '心室充血：AV 瓣打開'];
+  const $ = id => document.getElementById(id);
+  const cyL = UI.$$('#cy-list li');
+  S.onFrame = dt => {
+    cum += dt * hr / 60; ph = ((cum % 1) + 1) % 1;
+    const nowS = performance.now() / 1000; samples.push([nowS, cum]); while (samples.length > 2 && nowS - samples[0][0] > 4.5) samples.shift();
+    const t = ph, v = vc(t), a = ac(t);
+    dots.forEach(d => {
+      const q = CH[d.ch], s = q.a ? 1 - 0.13 * a : 1 - 0.13 * v;
+      d.p = V.add(q.c, V.mul(V.sub(d.p0, q.c), s));
+      let dep = false;
+      if (q.a) { const tt = t - 0.02 - d.dSA * 0.0011; dep = tt > 0 && tt < 0.06; }
+      else dep = win(t, 0.18, 0.24);
+      d.hl = dep || sel === d.ch;
+    });
+    const avOpen = t < 0.19 || t >= 0.55, slOpen = t >= 0.24 && t < 0.48;
+    setValve(VAL.tricuspid, avOpen); setValve(VAL.mitral, avOpen); setValve(VAL.pulmv, slOpen); setValve(VAL.aorticv, slOpen);
+    const gl = (o, on) => { o.glow = on ? (o.t === 't' ? 0.45 : 1.4) : 0; o.hl = on || sel === o.id; };
+    gl(sa, win(t, 0, 0.07)); gl(av, win(t, 0.09, 0.16));
+    his.tubes.forEach(o => gl(o, win(t, 0.155, 0.175))); bb.forEach(P => P.tubes.forEach(o => gl(o, win(t, 0.165, 0.185)))); purk.forEach(P => P.tubes.forEach(o => gl(o, win(t, 0.175, 0.205))));
+    const boost = 1 + 1.4 * v + 0.6 * a;
+    parts.forEach(p => { p.u += dt * 0.085 * boost; if (p.u > 1) p.u -= 1; p.o.p = p.pp.P.at(p.u); });
+    const [k, name] = PH(t);
+    $('cy-ph').textContent = name; $('cy-av').textContent = avOpen ? '開' : '關'; $('cy-av').style.color = avOpen ? '#4ade80' : '#f8fafc';
+    $('cy-sl').textContent = slOpen ? '開' : '關'; $('cy-sl').style.color = slOpen ? '#4ade80' : '#f8fafc';
+    const snd = win(t, 0.19, 0.26) ? 'Lub 隆！' : win(t, 0.48, 0.55) ? 'Dub 咚！' : '—'; $('cy-snd').textContent = snd; $('cy-snd').style.color = snd === '—' ? '' : '#fbbf24';
+    $('h-ph').innerHTML = '步驟 ' + k + '：' + name + (snd !== '—' ? '　<b class="yel">' + snd + '</b>' : '');
+    cyL.forEach((li, i) => { li.style.color = i + 1 === k ? '#fff' : ''; li.style.fontWeight = i + 1 === k ? '800' : ''; });
+  };
+  setMode('flow');
+  /* ECG */
+  const ecgC = document.getElementById('ecg'), vis = onScreen(ecgC);
+  const g = (x, m, s, a) => a * Math.exp(-((x - m) ** 2) / (2 * s * s));
+  const ecg = t => g(t, 0.06, 0.018, 0.15) + g(t, 0.165, 0.006, -0.12) + g(t, 0.18, 0.007, 1) + g(t, 0.195, 0.007, -0.25) + g(t, 0.52, 0.035, 0.3);
+  const WIN = 3.2;
+  const cumAt = t => { let lo = 0, hi = samples.length - 1; if (hi < 1 || t < samples[0][0]) return null; if (t >= samples[hi][0]) return samples[hi][1]; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (samples[m][0] <= t) lo = m; else hi = m; } const a = samples[lo], b = samples[hi]; return a[1] + (b[1] - a[1]) * ((t - a[0]) / ((b[0] - a[0]) || 1)); };
+  const timeAt = cv => { let lo = 0, hi = samples.length - 1; if (hi < 1 || cv < samples[0][1] || cv > samples[hi][1]) return null; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (samples[m][1] <= cv) lo = m; else hi = m; } const a = samples[lo], b = samples[hi]; return a[0] + (b[0] - a[0]) * ((cv - a[1]) / ((b[1] - a[1]) || 1)); };
+  (function loop() {
+    if (vis.v && samples.length > 2) {
+      const [c, w, h] = fit(ecgC); c.clearRect(0, 0, w, h);
+      c.strokeStyle = 'rgba(251,113,133,.08)'; for (let x = 0; x < w; x += 20) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x, h); c.stroke(); } for (let y = 0; y < h; y += 20) { c.beginPath(); c.moveTo(0, y); c.lineTo(w, y); c.stroke(); }
+      const now = samples[samples.length - 1][0], base = h * 0.66, amp = h * 0.5, X = t => w - ((now - t) / WIN) * w;
+      c.strokeStyle = '#4ade80'; c.lineWidth = 2; c.shadowColor = '#4ade80'; c.shadowBlur = 8; c.beginPath(); let started = false;
+      for (let x = 0; x <= w; x += 1.5) { const cv = cumAt(now - (1 - x / w) * WIN); if (cv == null) continue; const y = base - ecg(cv % 1) * amp; if (started) c.lineTo(x, y); else { c.moveTo(x, y); started = true; } }
+      c.stroke(); c.shadowBlur = 0;
+      c.font = 'bold 12px ' + Mini3D.FONT; c.textAlign = 'center';
+      const c0 = cumAt(now - WIN) ?? samples[0][1], c1 = samples[samples.length - 1][1];
+      for (let k = Math.floor(c0); k <= Math.floor(c1); k++) {
+        [[0.06, 'P', '#93c5fd', base - amp * 0.15 - 10], [0.18, 'QRS', '#fca5a5', Math.max(13, base - amp - 6)], [0.52, 'T', '#fde68a', base - amp * 0.3 - 10]].forEach(([m, t, col, y]) => { const tm = timeAt(k + m); if (tm == null) return; c.fillStyle = col; c.fillText(t, X(tm), y); });
+        [[0.2, 'Lub'], [0.48, 'Dub']].forEach(([m, t]) => { const tm = timeAt(k + m); if (tm == null) return; const x = X(tm); c.strokeStyle = 'rgba(251,191,36,.55)'; c.setLineDash([3, 3]); c.beginPath(); c.moveTo(x, 20); c.lineTo(x, h - 18); c.stroke(); c.setLineDash([]); c.fillStyle = '#fbbf24'; c.fillText(t, x, h - 5); });
+      }
+      c.fillStyle = '#94a3b8'; c.textAlign = 'left'; c.font = '11px ' + Mini3D.FONT; c.fillText('ECG（與 3D 心臟同步）', 8, 14);
+    }
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* ================= 節律點電位 ================= */
+(function () {
+  const cv = document.getElementById('pm'), vis = onScreen(cv), txt = document.getElementById('pm-t');
+  const M = { n: { s: -60, k: 20 / 0.6, name: '正常' }, s: { s: -60, k: 20 / 0.3, name: '交感' }, p: { s: -66, k: 26 / 1.1, name: '副交感' } };
+  let m = 'n', v = -60, phase = 'slow', pt = 0, hist = [], beats = [];
+  UI.$$('[data-pm]').forEach(b => b.addEventListener('click', () => { m = b.dataset.pm; UI.$$('[data-pm]').forEach(x => x.classList.toggle('on', x === b)); beats = []; }));
+  let last = performance.now(), tt = 0;
+  (function loop(now) {
+    const dt = Math.max(0, Math.min(0.05, (now - last) / 1000)); last = now;
+    if (vis.v) {
+      tt += dt; const P = M[m];
+      if (phase === 'slow') { v += P.k * dt; if (v >= -40) { phase = 'up'; pt = 0; beats.push(tt); } }
+      else if (phase === 'up') { pt += dt; v = -40 + 50 * Math.min(1, pt / 0.06); if (pt > 0.06) { phase = 'down'; pt = 0; } }
+      else { pt += dt; v = 10 - (10 - P.s) * Math.min(1, pt / 0.18); if (pt > 0.18) { phase = 'slow'; v = P.s; } }
+      hist.push([tt, v]); while (hist.length && tt - hist[0][0] > 4) hist.shift();
+      beats = beats.filter(b => tt - b < 6);
+      const hrv = beats.length > 1 ? Math.round(60 / ((beats[beats.length - 1] - beats[0]) / (beats.length - 1))) : '…';
+      const [c, w, h] = fit(cv); c.clearRect(0, 0, w, h);
+      const Y = vv => 16 + ((20 - vv) / 95) * (h - 36), X = t0 => 40 + (1 - (tt - t0) / 4) * (w - 50);
+      c.font = '11px ' + Mini3D.FONT; c.fillStyle = '#94a3b8'; c.textAlign = 'right';
+      [10, -20, -40, -60, -70].forEach(vv => { c.strokeStyle = 'rgba(255,255,255,.07)'; c.beginPath(); c.moveTo(40, Y(vv)); c.lineTo(w - 10, Y(vv)); c.stroke(); c.fillText(vv, 34, Y(vv) + 4); });
+      c.setLineDash([5, 4]); c.strokeStyle = '#fbbf24'; c.beginPath(); c.moveTo(40, Y(-40)); c.lineTo(w - 10, Y(-40)); c.stroke(); c.setLineDash([]);
+      c.textAlign = 'left'; c.fillStyle = '#fbbf24'; c.fillText('閾值 −40 mV（VG Ca²⁺ 開）', 46, Y(-40) - 5);
+      c.strokeStyle = m === 's' ? '#fb7185' : m === 'p' ? '#60a5fa' : '#5ad1ff'; c.lineWidth = 2.5; c.beginPath();
+      hist.forEach(([t0, vv], i) => { i ? c.lineTo(X(t0), Y(vv)) : c.moveTo(X(t0), Y(vv)); }); c.stroke(); c.lineWidth = 1;
+      c.fillStyle = '#fff'; c.font = 'bold 13px ' + Mini3D.FONT; c.fillText('心率 ≈ ' + hrv + ' bpm', 46, 20);
+      txt.innerHTML = m === 'n' ? 'HCN 通道使 Na⁺ 緩慢流入 → 自發去極化（−60 → −40 mV）。' : m === 's' ? 'NE/E → cAMP↑ → HCN 通道保持開啟 → 斜率變陡 → <b>心率加快</b>。' : 'ACh → 打開 K⁺ 通道 → 膜更負且去極化變慢 → <b>心率變慢</b>。';
+    }
+    requestAnimationFrame(loop);
+  })(last);
+  UI.bars(document.getElementById('spd'), [
+    { label: 'SA → 心房', v: Math.log10(90), text: '0.8–1.0 m/s', c: '#38bdf8' },
+    { label: 'AV node', v: Math.log10(4), text: '0.03–0.05 m/s', c: '#fb7185' },
+    { label: '蒲金氏纖維', v: Math.log10(500), text: '5 m/s', c: '#fde047' }
+  ], { max: Math.log10(500) });
+  const HR = [['小鼠', 600, 600], ['豚鼠', 280, 280], ['雞', 200, 400], ['鴨', 212, 212], ['貓', 110, 130], ['犬', 70, 120], ['人', 60, 90], ['綿羊', 70, 80], ['山羊', 70, 80], ['豬', 60, 80], ['乳牛', 60, 70], ['馬', 32, 44], ['象', 30, 30]];
+  const box = document.getElementById('hrbars'), lg = v => (Math.log10(v) - Math.log10(20)) / (Math.log10(800) - Math.log10(20)) * 100;
+  const cols = ['#f472b6', '#fb7185', '#fbbf24', '#facc15', '#a3e635', '#34d399', '#5ad1ff', '#38bdf8', '#60a5fa', '#818cf8', '#a78bfa', '#c084fc', '#e879f9'];
+  HR.forEach(([n, a, b], i) => { const row = UI.h('div', 'hbar', '<span>' + n + '</span><div class="trk"><i class="rg" style="--c:' + cols[i] + ';left:' + lg(a) + '%;width:' + Math.max(1.2, lg(b) - lg(a)) + '%"></i></div><span class="v">' + (a === b ? a : a + '–' + b) + '</span>'); box.appendChild(row); });
+})();
+
+/* ================= 血管 3D ================= */
+(function () {
+  const st = document.getElementById('st-ves');
+  const S = new Mini3D.Scene(st.querySelector('canvas'), { radius: 78, yaw: 0.6, pitch: 0.3, autoRotate: 0.05, target: [0, 0, 0] });
+  Mini3D.controls(S, st);
+  const layers = [];
+  function ringLayer(cx, r, z0, z1, col, id, kind, sq) {
+    for (let z = z0; z <= z1; z += 4) {
+      const n = Math.max(10, Math.round(r * 1.1));
+      for (let i = 0; i < n; i++) { const a = (i / n) * 6.283; layers.push(S.dot([cx + Math.cos(a) * r, Math.sin(a) * r * (sq || 1), z], 1.35, col, { id, kind, z0: z, al: 0.9 })); }
+    }
+  }
+  [10].forEach(r => ringLayer(-72, r, -40, 40, '#fef9c3', 'intima', 'artery'));
+  [13, 15.5, 18].forEach(r => ringLayer(-72, r, -26, 40, '#f87171', 'media', 'artery'));
+  [20.5, 23].forEach(r => ringLayer(-72, r, -12, 40, '#fbbf24', 'externa', 'artery'));
+  ringLayer(4, 16, -40, 40, '#fef9c3', 'intima', 'vein', 0.72);
+  ringLayer(4, 18.5, -26, 40, '#f87171', 'media', 'vein', 0.72);
+  [21, 23.5].forEach(r => ringLayer(4, r, -12, 40, '#fbbf24', 'externa', 'vein', 0.72));
+  for (let y = -11; y <= 11; y += 1.8) for (let x = -13; x <= 13; x += 2.4) { if ((x / 15) ** 2 + (y / 11.5) ** 2 > 1) continue; S.dot([4 + x, y, -6 + Math.abs(y) * 0.9], 1.1, '#e0f2fe', { id: 'valve', al: 0.75 }); }
+  ringLayer(70, 6, -40, 40, '#fef9c3', 'endo', 'cap');
+  const rbcs = []; for (let i = 0; i < 5; i++) rbcs.push(S.disc([70, 0, -40 + i * 18], 4.6, '#dc2626', { id: 'rbcap', tilt: 1.2, ang: 0 }));
+  S.label([-72, 30, 0], '動脈 Artery', { id: 'artery', c: '#fca5a5' });
+  S.label([4, 26, 0], '靜脈 Vein', { id: 'vein', c: '#93c5fd' });
+  S.label([70, 14, 0], '微血管', { id: 'cap', c: '#fef9c3' });
+  S.label([-72, -10, -40], '內膜', { id: 'intima', c: '#fef9c3', dx: -34, dy: 30 }); S.label([-72, -15.5, -26], '中膜', { id: 'media', c: '#f87171', dx: -40, dy: 34 }); S.label([-72, -22, -12], '外膜', { id: 'externa', c: '#fbbf24', dx: -44, dy: 34 });
+  S.label([4, 0, -6], '靜脈瓣', { id: 'valve', c: '#e0f2fe', dx: 34, dy: -30 });
+  const INFO = {
+    intima: ['內膜 Tunica intima', ['最內層：<b>單層鱗狀內皮</b> + 基底膜 + 結締組織', '完整內皮分泌 PGI₂、NO 防止凝血']],
+    media: ['中膜 Tunica media', ['中間層：<b>平滑肌</b>', '動脈的中膜較厚（肌肉性動脈比例最高），可收縮/舒張調節阻力']],
+    externa: ['外膜 Tunica externa', ['最外層：<b>結締組織</b>']],
+    artery: ['動脈 Artery', ['壁厚、中膜發達、管腔圓', '彈性動脈靠近心臟；肌肉性動脈阻力大；小動脈 20–30 µm']],
+    vein: ['靜脈 Vein', ['壁薄、管腔大、常塌扁', '壓力約 2 mmHg；有<b>靜脈瓣</b>確保單向回流']],
+    valve: ['靜脈瓣 Venous valve', ['確保血液單向流回心臟', '配合骨骼肌幫浦']],
+    cap: ['微血管 Capillary', ['7–10 µm，只有單層內皮', '紅血球幾乎單排通過；物質交換處']], endo: ['微血管內皮', ['單層鱗狀上皮；類型：連續、窗孔、不連續']], rbcap: ['紅血球通過微血管', ['微血管直徑約等於紅血球，需單排通過']]
+  };
+  const info = document.getElementById('info-ves');
+  S.onPick = o => { if (!o || !INFO[o.id]) return; const d = INFO[o.id]; S.each(q => { q.hl = q.id === o.id || q.kind === o.id; }); info.innerHTML = '<div class="tt">' + d[0] + '</div><ul>' + d[1].map(x => '<li>' + x + '</li>').join('') + '</ul>'; };
+  let ex = 0, exT = 0;
+  document.getElementById('v-ex').onclick = e => { ex = ex ? 0 : 1; e.currentTarget.classList.toggle('on', !!ex); };
+  S.onFrame = dt => {
+    exT += (ex - exT) * Math.min(1, dt * 3);
+    layers.forEach(o => { const off = o.id === 'media' ? 16 : o.id === 'externa' ? 34 : 0; o.p[2] = o.z0 + off * exT; });
+    rbcs.forEach(r => { r.p[2] += dt * 22; if (r.p[2] > 44) r.p[2] = -44; r.ang += dt; });
+  };
+})();
+
+/* ================= 快閃卡與測驗 ================= */
+UI.flashcards(document.getElementById('fc'), [
+  { tag: '功能', f: '循環系統的三大功能？', b: '運輸（氣體、養分、廢物）、調節（激素、體溫）、保護（凝血、免疫）' },
+  { tag: '演化', f: '魚、兩生、爬蟲、鳥/哺乳的心臟腔數？', b: '魚 2 腔；兩生 3 腔；爬蟲 3 腔（心室部分隔開）；鳥與哺乳 4 腔' },
+  { tag: '血漿', f: '白蛋白的功能與比例？', b: '佔血漿蛋白 60–80%；產生滲透壓，把水從組織拉回微血管，維持血量與血壓' },
+  { tag: '血漿', f: '球蛋白有哪些功能？', b: 'α、β 球蛋白攜帶脂質；γ 球蛋白為抗體' },
+  { tag: '血漿', f: '血漿 vs 血清', b: '血清＝血漿去掉纖維蛋白原（凝血蛋白）' },
+  { tag: 'RBC', f: '紅血球的特徵？', b: '攜帶 O₂；無核、無粒線體 → 無氧呼吸；壽命 120 天' },
+  { tag: 'WBC', f: '顆粒型 vs 非顆粒型白血球', b: '顆粒：嗜中性、嗜酸性、嗜鹼性<br>非顆粒：單核球、淋巴球' },
+  { tag: '血小板', f: '血小板的特徵？', b: '最小、無核、壽命 5–9 天；凝血，需纖維蛋白原' },
+  { tag: '造血', f: 'EPO 由哪裡分泌？刺激為何？', b: '腎臟；低氧時分泌，刺激紅血球生成' },
+  { tag: '造血', f: 'Hepcidin 的來源與功能？', b: '肝臟分泌；調節鐵代謝' },
+  { tag: '血型', f: 'O 型與 AB 型的抗原/抗體？', b: 'O：無 A/B 抗原，有抗 A、抗 B<br>AB：A、B 抗原皆有，無抗 A/B 抗體' },
+  { tag: 'Rh', f: '新生兒溶血症如何發生與預防？', b: 'Rh− 母親分娩時接觸 Rh+ 胎兒血產生抗體，下次懷孕抗體穿過胎盤攻擊胎兒紅血球；分娩後打 RhoGAM' },
+  { tag: '凝血', f: '完整內皮如何防止凝血？', b: 'PGI₂ 與 NO：血管舒張、抑制血小板聚集；CD39：ADP → AMP + Pi' },
+  { tag: '凝血', f: '血小板釋放反應分泌哪些物質？', b: 'ADP（變黏）、serotonin（血管收縮）、thromboxane A₂（變黏 + 收縮）' },
+  { tag: '凝血', f: '內在 vs 外在路徑的起點？', b: '內在：膠原暴露活化 factor XII<br>外在：組織因子（factor III），較直接' },
+  { tag: '凝血', f: '三種抗凝血劑的作用？', b: '檸檬酸鈉/EDTA：螯合 Ca²⁺<br>Heparin：阻斷凝血酶<br>Coumarin：抑制維生素 K' },
+  { tag: '心臟', f: '四個腔室各接收/送出什麼血？', b: 'RA：全身缺氧血；RV：送肺<br>LA：肺回來的充氧血；LV：送全身' },
+  { tag: '心臟', f: '纖維性骨架的功能？', b: '分隔心房與心室（電性也隔開）→ 心房、心室各為一單位；形成纖維環固定瓣膜' },
+  { tag: '瓣膜', f: '四個瓣膜的位置？', b: '三尖瓣：RA–RV；二尖瓣：LA–LV；肺動脈瓣：RV–肺動脈幹；主動脈瓣：LV–主動脈' },
+  { tag: '心音', f: 'Lub 與 Dub 的成因？', b: 'Lub：AV 瓣關閉（心室收縮期，QRS 後）<br>Dub：半月瓣關閉（心室舒張期，講義：T 波開始）' },
+  { tag: '電生理', f: 'SA node 節律點電位的離子機制？', b: 'HCN 通道緩慢去極化 −60 → −40 mV；−40 mV 時 VG Ca²⁺ 開 → AP；VG K⁺ 開 → 再極化' },
+  { tag: '電生理', f: '自主神經如何調節心率？', b: 'NE/E：cAMP↑，HCN 通道保持開 → 加快<br>ACh：打開 K⁺ 通道 → 變慢' },
+  { tag: '傳導', f: '傳導速度：SA、AV、Purkinje？', b: 'SA→心房 0.8–1.0 m/s；AV 0.03–0.05 m/s（最慢）；Purkinje 5 m/s（最快）' },
+  { tag: 'ECG', f: 'P、QRS、S-T、T 代表？', b: 'P：心房去極化；QRS：心室去極化；S-T：高原期；T：心室再極化' },
+  { tag: '血管', f: '血管壁三層？', b: '內膜：內皮 + 基底膜 + CT；中膜：平滑肌；外膜：CT' },
+  { tag: '血管', f: '三種微血管與分布？', b: '連續：肌肉、脂肪、CNS<br>窗孔：腎、腸、內分泌腺<br>不連續：骨髓、肝、脾（蛋白可過）' },
+  { tag: '血管', f: '靜脈回流的三個機制？', b: '骨骼肌幫浦、靜脈瓣、呼吸（吸氣時橫膈下降）' },
+  { tag: '免疫', f: 'PAMPs 與 Toll 受體？', b: 'PAMPs：微生物特有分子（LPS、peptidoglycan）；Toll 受體辨認 PAMPs，人類有 10 種' },
+  { tag: '免疫', f: 'B 細胞 vs T 細胞', b: 'B：分泌抗體 → 體液性免疫<br>T：胸腺發育、不分泌抗體 → 細胞性免疫，佔血液淋巴球 65–85%' },
+  { tag: '淋巴', f: '淋巴系統的三功能？', b: '組織間液回靜脈；產生/容納淋巴球；運送腸道吸收的脂肪' }
+], 'ch13');
+UI.quiz(document.getElementById('qz'), [
+  { q: '血漿蛋白中負責產生膠體滲透壓的主要是？', o: ['纖維蛋白原', '白蛋白', 'γ 球蛋白', '血紅素'], a: 1, e: '白蛋白佔 60–80%，把水拉回微血管。' },
+  { q: '紅血球進行無氧呼吸的原因是？', o: ['沒有細胞核', '沒有粒線體', '沒有血紅素', '細胞膜不透氣'], a: 1, e: '紅血球無粒線體。' },
+  { q: '刺激紅血球生成的 EPO 主要由哪個器官分泌？', o: ['肝臟', '骨髓', '腎臟', '脾臟'], a: 2, e: '腎臟在低氧時分泌 EPO；肝臟分泌 hepcidin。' },
+  { q: 'B 型的人血漿中含有？', o: ['抗 A 抗體', '抗 B 抗體', '兩者皆有', '兩者皆無'], a: 0, e: '會有對抗自己沒有的抗原的抗體。' },
+  { q: '凝血外在路徑由哪個因子啟動？', o: ['Factor XII', 'Factor III（組織因子）', 'Factor X', 'Factor VIII'], a: 1, e: '外在：組織因子 III；內在：膠原活化 XII。' },
+  { q: 'Coumarin 抗凝血的機制是？', o: ['螯合 Ca²⁺', '阻斷凝血酶', '抑制維生素 K', '分解纖維蛋白'], a: 2, e: 'Coumarin 抑制維生素 K，兩條路徑都受影響。' },
+  { q: '把缺氧血送往肺的是？', o: ['左心室', '右心室', '左心房', '右心房'], a: 1, e: '右心室 → 肺動脈 → 肺。' },
+  { q: '「Lub」心音是由哪個事件產生？', o: ['半月瓣關閉', 'AV 瓣關閉', '心房收縮', 'AV 瓣打開'], a: 1, e: '心室收縮初期 AV 瓣關閉。' },
+  { q: '心臟傳導系統中速度最慢的是？', o: ['SA node', 'AV node', '希氏束', '蒲金氏纖維'], a: 1, e: 'AV node 0.03–0.05 m/s，讓心房先收縮完。' },
+  { q: 'SA node 的動作電位上升支主要由何種通道造成？', o: ['VG Na⁺', 'VG Ca²⁺', 'VG K⁺', 'Cl⁻ 通道'], a: 1, e: '到 −40 mV 時 VG Ca²⁺ 通道打開。' },
+  { q: 'ECG 的 QRS 波代表？', o: ['心房去極化', '心室去極化', '心室再極化', '心房再極化'], a: 1, e: 'P 心房去極化、QRS 心室去極化、T 心室再極化。' },
+  { q: '血管壁中由平滑肌構成的是？', o: ['內膜', '中膜', '外膜', '基底膜'], a: 1, e: '中膜＝平滑肌。' },
+  { q: '允許蛋白質通過、見於肝脾骨髓的微血管是？', o: ['連續型', '窗孔型', '不連續型', '以上皆非'], a: 2, e: '不連續型微血管細胞間有大縫隙。' },
+  { q: '最先抵達感染處的吞噬細胞是？', o: ['單核球', '嗜中性球', '淋巴球', '嗜鹼性球'], a: 1, e: '嗜中性球最先抵達。' },
+  { q: '提供細胞性免疫的是？', o: ['B 細胞', 'T 細胞', '紅血球', '血小板'], a: 1, e: 'T 細胞攻擊被感染細胞、癌細胞與外來細胞。' }
+]);
+</script>
+</body>
+</html>

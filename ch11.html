@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch11 內分泌腺 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .lv{display:grid;grid-template-columns:110px minmax(0,1fr) 70px;gap:10px;align-items:center;margin:8px 0;font-size:14px}
+  .lv .trk{height:18px;background:var(--panel2);border-radius:9px;overflow:hidden}
+  .lv .trk i{display:block;height:100%;border-radius:9px;transition:width .3s}
+  .lv b{text-align:right;font-variant-numeric:tabular-nums}
+  .gland{width:100%;height:120px}
+</style>
+</head>
+<body style="--acc:#a78bfa;--acc2:#fbbf24">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 11 · Endocrine Glands</div>
+  <h1 class="title3d">內分泌腺</h1>
+  <p class="sub">3D 全身內分泌腺地圖、激素作用機制 3D 動畫（類固醇核受體、甲狀腺素、cAMP、磷脂酶 C–Ca²⁺、酪胺酸激酶）、3D 下視丘–腦下垂體（後葉神經分泌 vs 前葉門脈系統）、負回饋軸模擬（甲狀腺腫、葛瑞夫茲、類固醇突然停藥）、腎上腺分區、甲狀腺濾泡合成 T₄、胰島素與升糖素。</p>
+  <div class="chips"><a class="chip" href="#glands">腺體地圖</a><a class="chip" href="#mech">作用機制</a><a class="chip" href="#pit">腦下垂體</a><a class="chip" href="#axis">回饋軸</a><a class="chip" href="#adr">腎上腺</a><a class="chip" href="#thy">甲狀腺</a><a class="chip" href="#pan">胰島</a><a class="chip" href="#local">其他與旁分泌</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="glands" data-nav="腺體地圖">
+  <h2><span class="num">01</span>內分泌腺與激素（3D 地圖）</h2>
+  <p class="lead">內分泌腺<b>沒有導管</b>，把激素分泌到血液，作用於有特定受體的<b>標的細胞</b>。點選腺體看分泌的激素、化學類別與作用。</p>
+  <div class="grid2">
+    <div class="stage" id="st-glands"><canvas aria-label="3D 內分泌腺地圖"></canvas><div class="hud">點選腺體</div><div class="hud2" id="gl-cap">顏色＝化學類別</div>
+      <div class="sbar"><div class="seg" id="sex"><button class="btn sm" data-v="f" type="button">♀ 女性</button><button class="btn sm" data-v="m" type="button">♂ 男性</button></div></div></div>
+    <div class="card info"><div id="info-gl"><div class="tt">選一個腺體</div><p class="empty">顏色代表激素的化學類別（見下表）。</p></div><div class="picker" id="pk-gl"></div></div>
+  </div>
+  <div class="grid2 mt">
+    <div class="tbwrap"><table class="tb"><tr><th>類別</th><th>例子</th><th>性質</th></tr>
+      <tr><td><span class="dotc" style="color:#fb923c"></span>胺類（來自酪胺酸、色胺酸）</td><td>腎上腺素、正腎上腺素、甲狀腺素、褪黑激素</td><td>兒茶酚胺為極性；甲狀腺素為非極性</td></tr>
+      <tr><td><span class="dotc" style="color:#60a5fa"></span>多胜肽／蛋白質</td><td>ADH、催產素、胰島素、升糖素、GH、ACTH、PTH</td><td>極性、水溶性</td></tr>
+      <tr><td><span class="dotc" style="color:#34d399"></span>醣蛋白</td><td>FSH、LH、TSH、hCG</td><td>極性</td></tr>
+      <tr><td><span class="dotc" style="color:#fbbf24"></span>類固醇（來自膽固醇）</td><td>皮質醇、醛固酮、睪固酮、雌二醇、黃體素</td><td><b>親脂性</b>，可穿過細胞膜</td></tr></table></div>
+    <div class="card"><h3>激素的交互作用與濃度效應</h3><ul class="small"><li><b>協同</b>：共同作用（如 E、NE 對心臟）</li><li><b>允許</b>：一激素提高標的對另一激素的反應（雌二醇誘導子宮黃體素受體）</li><li><b>拮抗</b>：作用相反（懷孕時雌、黃體素抑制泌乳素作用）</li><li><b>前激素 prohormone</b>：腺體內較不活性的前驅（如胰島素原）；<b>前驅激素 prehormone</b>：腺體正常分泌、需在標的轉換（T₄ → T₃、睪固酮 → DHT、維生素 D₃ → 1,25-(OH)₂D₃）</li><li>高濃度長期刺激 → <b>去敏感化 / 下調</b>受體；因此許多激素以<b>脈衝</b>分泌</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="mech" data-nav="作用機制">
+  <h2><span class="num">02</span>激素作用機制（3D 動畫）</h2>
+  <p class="lead"><b>親脂性</b>激素（類固醇、甲狀腺素）進入細胞與<b>核受體</b>結合，作為配體依賴的轉錄因子；<b>極性</b>激素結合細胞膜受體，經<b>第二傳訊者</b>作用。</p>
+  <div class="grid2">
+    <div class="stage" id="st-mech"><canvas aria-label="3D 激素作用機制"></canvas><div class="hud" id="me-hud"></div><div class="hud2" id="me-cap"></div>
+      <div class="sbar"><div class="seg" id="memode"><button class="btn sm" data-v="ster" type="button">類固醇</button><button class="btn sm" data-v="thy" type="button">甲狀腺素</button><button class="btn sm" data-v="camp" type="button">cAMP</button><button class="btn sm" data-v="plc" type="button">PLC–Ca²⁺</button><button class="btn sm" data-v="tk" type="button">酪胺酸激酶</button></div></div></div>
+    <div class="card" id="me-info"></div>
+  </div>
+</section>
+
+<section class="sec" id="pit" data-nav="腦下垂體">
+  <h2><span class="num">03</span>下視丘與腦下垂體（3D）</h2>
+  <p class="lead">切換：<b>後葉</b>的激素其實在下視丘<b>視上核、室旁核</b>製造，經<b>下視丘–垂體徑</b>的軸突運到後葉釋放；<b>前葉</b>受下視丘的釋放/抑制激素控制，經<b>下視丘–垂體門脈系統</b>送達。</p>
+  <div class="grid2">
+    <div class="stage" id="st-pit"><canvas aria-label="3D 下視丘腦下垂體"></canvas><div class="hud" id="pi-hud"></div><div class="hud2" id="pi-cap"></div>
+      <div class="sbar"><div class="seg" id="pimode"><button class="btn sm" data-v="post" type="button">後葉（神經垂體）</button><button class="btn sm" data-v="ant" type="button">前葉（腺垂體）</button></div></div></div>
+    <div class="card info"><div id="info-pit"><div class="tt">點選構造或激素</div></div><div class="picker" id="pk-pit"></div></div>
+  </div>
+  <div class="tbwrap mt"><table class="tb"><tr><th>前葉激素</th><th>標的與作用</th><th>下視丘調控</th><th>回饋</th></tr>
+    <tr><td><b>GH</b> 生長激素</td><td>蛋白質合成、生長（經 IGF-1／體介素）</td><td>GHRH ↑、體抑素 ↓</td><td>IGF-1</td></tr>
+    <tr><td><b>TSH</b></td><td>甲狀腺分泌 T₄（並有營養作用）</td><td>TRH ↑</td><td>T₄/T₃</td></tr>
+    <tr><td><b>ACTH</b></td><td>腎上腺皮質分泌糖皮質素</td><td>CRH ↑</td><td>皮質醇</td></tr>
+    <tr><td><b>FSH、LH</b></td><td>性腺：配子生成、性類固醇</td><td>GnRH ↑</td><td>性類固醇、抑制素</td></tr>
+    <tr><td><b>PRL</b> 泌乳素</td><td>乳腺製造乳汁</td><td>PIH（多巴胺）↓</td><td>—</td></tr>
+    <tr><td colspan="4" class="small muted">後葉：<b>ADH（抗利尿激素／血管加壓素）</b>— 腎保水、血管收縮；<b>催產素</b>— 分娩子宮收縮、射乳反射（神經內分泌反射）。</td></tr></table></div>
+</section>
+
+<section class="sec" id="axis" data-nav="回饋軸">
+  <h2><span class="num">04</span>負回饋軸模擬</h2>
+  <p class="lead">標的腺體激素回頭抑制下視丘與前葉。選一種狀況看各層激素與腺體大小如何變化（示意模型）。</p>
+  <div class="grid2">
+    <div class="card"><div class="seg" id="axmode"><button class="btn sm" data-v="hpt" type="button">甲狀腺軸</button><button class="btn sm" data-v="hpa" type="button">腎上腺軸</button></div>
+      <div class="btns" id="ax-btn"></div><div id="ax-lv"></div><canvas class="gland" id="ax-cv"></canvas></div>
+    <div class="card" id="ax-info"></div>
+  </div>
+</section>
+
+<section class="sec" id="adr" data-nav="腎上腺">
+  <h2><span class="num">05</span>腎上腺</h2>
+  <div class="grid2">
+    <div class="stage short" id="st-adr"><canvas aria-label="3D 腎上腺剖面"></canvas><div class="hud">剖面：皮質三層 + 髓質</div><div class="hud2" id="ad-cap">點選分區</div></div>
+    <div class="card info"><div id="info-adr"><div class="tt">點選分區</div><p class="empty">記法：外到內 G-F-R 分泌「鹽、糖、性」。</p></div><div class="picker" id="pk-adr"></div></div>
+  </div>
+  <div class="grid2 even mt">
+    <div class="card"><h3>壓力與一般適應症候群（Selye）</h3><div class="chain"><div class="nd">壓力源</div><span class="ar">→</span><div class="nd on">下視丘 CRH</div><span class="ar">→</span><div class="nd on">前葉 ACTH</div><span class="ar">→</span><div class="nd on">皮質醇 ↑</div></div><p class="small mt">同時交感腎上腺系統分泌腎上腺素。長期高皮質醇抑制免疫與發炎。高等腦區（前額葉、杏仁體、海馬）協調反應。</p></div>
+    <div class="card"><h3>疾病</h3><ul class="small"><li><b>庫欣氏症候群</b>：糖皮質素長期過高 → 脂肪重分布（水牛肩、月亮臉）、高血糖、肌肉流失</li><li><b>愛迪生氏病</b>（腎上腺皮質功能不全）：皮質醇不足 → 低血糖；醛固酮不足 → 失 Na⁺、留 K⁺、脫水、低血壓</li><li>長期服用類固醇（如 prednisolone）後<b>突然停藥</b> → ACTH 被抑制、腎上腺萎縮 → 腎上腺功能不全（見第 04 節模擬）</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="thy" data-nav="甲狀腺">
+  <h2><span class="num">06</span>甲狀腺與副甲狀腺</h2>
+  <p class="lead">濾泡細胞把碘 I⁻ 主動送進<b>膠質</b>，接到甲狀腺球蛋白的酪胺酸上（MIT、DIT），偶聯成 <b>T₄（DIT+DIT）</b>與 <b>T₃（MIT+DIT）</b>；TSH 刺激濾泡細胞把膠質胞吞回來、釋出 T₄、T₃ 進入血液。</p>
+  <div class="grid2">
+    <div class="stage" id="st-thy"><canvas aria-label="3D 甲狀腺濾泡"></canvas><div class="hud">濾泡：一層濾泡細胞包住膠質</div><div class="hud2" id="th-cap"></div></div>
+    <div class="card"><div id="th-steps"></div></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>甲狀腺激素的作用</h3><ul class="small"><li>T₄（甲狀腺素）多、T₃ 少；T₄ 在標的細胞轉成活性較強的 T₃</li><li>提高幾乎所有細胞的呼吸作用 → 設定<b>基礎代謝率</b></li><li>促進蛋白質合成；兒童生長與<b>中樞神經發育</b>必需</li></ul></div>
+    <div class="card tilt"><h3>甲狀腺疾病</h3><ul class="small"><li><b>地方性甲狀腺腫</b>：缺碘 → T₄↓ → TSH↑ → 腺體肥大</li><li>甲狀腺低下：成人<b>黏液水腫</b>、先天<b>呆小症</b>；橋本氏甲狀腺炎（自體免疫）</li><li><b>葛瑞夫茲病</b>：自體抗體（TSI）刺激 TSH 受體 → 甲亢、甲狀腺腫、突眼</li></ul></div>
+    <div class="card tilt"><h3>鈣的調節</h3><ul class="small"><li><b>副甲狀腺</b>（嵌在甲狀腺後面）分泌 <b>PTH</b> → 血鈣↑（骨吸收、腎再吸收 Ca²⁺、活化維生素 D₃）</li><li>濾泡旁細胞（C 細胞）分泌<b>降鈣素</b> → 可能降低血鈣</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="pan" data-nav="胰島">
+  <h2><span class="num">07</span>胰島：胰島素與升糖素</h2>
+  <div class="grid2">
+    <div class="card"><canvas class="plot" id="glu-plot" style="--ph:280px"></canvas><div class="seg" id="glmode"><button class="btn sm" data-v="n" type="button">正常</button><button class="btn sm" data-v="t1" type="button">第 1 型糖尿病</button><button class="btn sm" data-v="t2" type="button">第 2 型糖尿病</button></div></div>
+    <div class="card"><ul class="small"><li>蘭氏小島：<b>β 細胞 → 胰島素</b>、<b>α 細胞 → 升糖素</b>（δ 細胞 → 體抑素）</li><li><b>胰島素</b>：餐後血糖上升時分泌 → 降低血糖，促進肝醣、脂肪、蛋白質合成</li><li><b>升糖素</b>：禁食、血糖下降時分泌 → 肝醣分解、糖質新生、脂肪分解、酮體生成 → 升高血糖</li><li><b>第 1 型</b>：β 細胞被破壞 → 缺胰島素（升糖素過多）</li><li><b>第 2 型</b>：組織對胰島素不敏感 + 分泌不足；肥胖加重、運動改善</li></ul><p class="small muted">曲線為示意（三餐：7、12、18 時）。詳見第 19 章。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="local" data-nav="其他與旁分泌">
+  <h2><span class="num">08</span>其他內分泌腺、旁分泌與自分泌</h2>
+  <div class="grid4">
+    <div class="card tilt"><h3>松果體</h3><p class="small">分泌<b>褪黑激素</b>，<b>夜晚最高</b>，促進睡眠。受下視丘<b>視交叉上核（SCN）</b>經交感神經控制；SCN 是晝夜節律的主要中樞。</p></div>
+    <div class="card tilt"><h3>腸胃道</h3><p class="small">胃泌素、胰泌素、膽囊收縮素（CCK）、GIP 等調節消化（第 18 章）。</p></div>
+    <div class="card tilt"><h3>性腺與胎盤</h3><p class="small">睪丸間質（Leydig）細胞 → 睪固酮；濾泡顆粒細胞 → 雌二醇；黃體 → 黃體素 + 雌二醇；胎盤 → 雌、黃體素、hCG、hCS。</p></div>
+    <div class="card tilt"><h3>其他</h3><p class="small">胸腺（thymopoietin）、心房（心房利鈉激素）、腎（紅血球生成素）、肝（體介素 IGF）、脂肪（瘦體素）。</p></div>
+  </div>
+  <div class="grid2 even mt">
+    <div class="card"><h3>旁分泌與自分泌</h3><ul class="small"><li>局部調節分子，<b>不經血液</b>運輸</li><li><b>自分泌</b>：在同一組織產生並作用；<b>旁分泌</b>：由一組織產生，調節同器官的另一組織</li><li>例：內皮產生的 NO 使血管平滑肌放鬆</li></ul></div>
+    <div class="card"><h3>前列腺素</h3><div class="chain"><div class="nd">膜磷脂</div><span class="ar">→</span><div class="nd">花生四烯酸</div><span class="ar">→</span><div class="nd on">環氧酶 COX</div><span class="ar">→</span><div class="nd">前列腺素</div></div><p class="small mt">20 碳脂肪酸衍生物，在多數器官作局部調節（發炎、疼痛、發燒、血管、子宮收縮）。<b>阿斯匹靈等 NSAIDs 抑制 COX</b>。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">09</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">10</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 11 章整理，僅供個人複習。3D 與模擬為示意。 · <a href="index.html">回總覽</a> · <a href="ch10.html">← 第 10 章 感覺</a> · <a href="ch12.html">第 12 章 肌肉 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+const CLS = { amine: '#fb923c', pep: '#60a5fa', gly: '#34d399', ster: '#fbbf24', mix: '#c084fc' };
+
+/* ================= 01 腺體地圖 ================= */
+(function () {
+  const S = K.stage('st-glands', { radius: 54, yaw: 0.35, pitch: 0.1, autoRotate: 0.06, target: [0, 24, 0] });
+  K.ellipsoid(S, [0, 64, 0], [12, 14, 12], '#94a3b8', 18, 9, { id: 'body', al: 0.1 });
+  K.ellipsoid(S, [0, 10, 0], [22, 36, 12], '#94a3b8', 22, 12, { id: 'body', al: 0.08 });
+  K.sweep(S, [[0, 52, 0], [0, 46, 0]], 5, '#94a3b8', 4, 10, { id: 'body', al: 0.1 });
+  const G = {
+    hyp: { c: [0, 64, 2], r: [3, 2.2, 3], col: CLS.pep, n: '下視丘' }, pit: { c: [0, 59, 4], r: [2, 2, 2], col: CLS.mix, n: '腦下垂體' }, pin: { c: [0, 66, -5], r: [1.6, 1.6, 1.6], col: CLS.amine, n: '松果體' },
+    thy: { c: [0, 44, 6], r: [6, 3, 2], col: CLS.amine, n: '甲狀腺' }, para: { c: [0, 44, 3.4], r: [0.1, 0.1, 0.1], col: CLS.pep, n: '副甲狀腺' }, thym: { c: [0, 34, 8], r: [5, 6, 2], col: CLS.pep, n: '胸腺' },
+    heart: { c: [3, 28, 5], r: [5, 5, 4], col: CLS.pep, n: '心臟' }, liver: { c: [-8, 14, 6], r: [9, 5, 5], col: CLS.pep, n: '肝臟' }, sto: { c: [7, 12, 7], r: [6, 4, 3], col: CLS.pep, n: '胃與小腸' },
+    pan: { c: [0, 6, 3], r: [9, 2, 2], col: CLS.pep, n: '胰臟（胰島）' }, adr: { c: [-8, 15, -3], r: [3, 2, 2], col: CLS.ster, n: '腎上腺' }, kid: { c: [-8, 8, -4], r: [3, 5, 3], col: CLS.pep, n: '腎臟' },
+    fat: { c: [-15, -4, 8], r: [5, 4, 3], col: CLS.pep, n: '脂肪組織' }, ova: { c: [-8, -16, 2], r: [2.4, 1.6, 1.6], col: CLS.ster, n: '卵巢' }, tes: { c: [-4, -32, 6], r: [2.4, 3, 2.4], col: CLS.ster, n: '睪丸' }
+  };
+  const objs = {};
+  Object.keys(G).forEach(k => { const g = G[k]; if (k === 'para') { objs[k] = [[-3, 45.5, 3.4], [3, 45.5, 3.4], [-3, 42.5, 3.4], [3, 42.5, 3.4]].map(p => S.sphere(p, 1.1, g.col, { id: k })); return; } objs[k] = K.ellipsoid(S, g.c, g.r, g.col, 12, 7, { id: k, al: 0.95 }); });
+  K.ellipsoid(S, [8, 15, -3], [3, 2, 2], CLS.ster, 10, 6, { id: 'adr' }); K.ellipsoid(S, [8, 8, -4], [3, 5, 3], CLS.pep, 10, 6, { id: 'kid' });
+  const ovaR = K.ellipsoid(S, [8, -16, 2], [2.4, 1.6, 1.6], CLS.ster, 10, 6, { id: 'ova' }), tesR = K.ellipsoid(S, [4, -32, 6], [2.4, 3, 2.4], CLS.ster, 10, 6, { id: 'tes' });
+  const labs = {};
+  Object.keys(G).forEach((k, i) => { labs[k] = K.lab(S, G[k].c, G[k].n, k, '#e2e8f0', (i % 2 ? 1 : -1) * 46, 0, { size: 11 }); });
+  const INFO = {
+    hyp: ['下視丘', ['<b>釋放／抑制激素</b>：TRH、CRH、GnRH、GHRH、體抑素、PIH（多巴胺）→ 經門脈系統控制前葉', '製造 ADH 與催產素（運到後葉釋放）']],
+    pit: ['腦下垂體', ['前葉：GH、TSH、ACTH、FSH、LH、PRL（共 6 種）', '後葉：ADH、催產素（共 8 種）']],
+    pin: ['松果體', ['<b>褪黑激素</b>（胺類，來自色胺酸）：夜間分泌，促進睡眠、調節晝夜節律']],
+    thy: ['甲狀腺', ['濾泡：<b>T₄（甲狀腺素）</b>、T₃ → 提高代謝率、生長與神經發育', '濾泡旁細胞：<b>降鈣素</b>（多胜肽）→ 可能降低血鈣']],
+    para: ['副甲狀腺', ['<b>PTH</b>（多胜肽）→ 升高血鈣']], thym: ['胸腺', ['thymopoietin 等 → 促進 T 淋巴球的功能']],
+    heart: ['心臟（心房）', ['<b>心房利鈉激素</b> → 促進腎排 Na⁺ 與水']], liver: ['肝臟', ['<b>體介素（IGF）</b>：介導 GH 的生長作用', '把維生素 D₃ 轉成 25-羥基 D₃']],
+    sto: ['胃與小腸', ['胃泌素、胰泌素、CCK、GIP 等 → 調節消化']], pan: ['胰臟（蘭氏小島）', ['β 細胞：<b>胰島素</b>（降血糖）', 'α 細胞：<b>升糖素</b>（升血糖）']],
+    adr: ['腎上腺', ['皮質（類固醇）：醛固酮、皮質醇、弱雄性素', '髓質（胺類）：腎上腺素、少量正腎上腺素']],
+    kid: ['腎臟', ['<b>紅血球生成素 EPO</b> → 刺激骨髓造紅血球', '1,25-(OH)₂D₃（活性維生素 D）→ 腸道吸收 Ca²⁺']],
+    fat: ['脂肪組織', ['<b>瘦體素 leptin</b> → 調節食慾與代謝（第 19 章）']],
+    ova: ['卵巢', ['濾泡顆粒細胞：<b>雌二醇</b>', '黃體：<b>黃體素</b> + 雌二醇']], tes: ['睪丸', ['間質（Leydig）細胞：<b>睪固酮</b>', '支持細胞：抑制素']]
+  };
+  K.info(S, 'info-gl', INFO, { picker: 'pk-gl', on: id => { $('gl-cap').textContent = '👉 ' + INFO[id][0]; } });
+  K.seg('#sex', v => { [objs.ova, ovaR].forEach(a => a.forEach(o => { o.hidden = v !== 'f'; })); [objs.tes, tesR].forEach(a => a.forEach(o => { o.hidden = v !== 'm'; })); labs.ova.hidden = v !== 'f'; labs.tes.hidden = v !== 'm'; }, 'f');
+})();
+
+/* ================= 02 作用機制 ================= */
+(function () {
+  const S = K.stage('st-mech', { radius: 58, yaw: 0.25, pitch: 0.3, autoRotate: 0 });
+  K.sheet(S, [-60, 22, -20], [120, 0, 0], [0, 0, 40], 16, 5, '#f59e0b', { id: 'mem', al: 0.45 });
+  K.sheet(S, [-60, 18, -20], [120, 0, 0], [0, 0, 40], 16, 5, '#f59e0b', { id: 'mem', al: 0.45 });
+  const nucF = K.ellipsoid(S, [0, -24, 0], [30, 12, 18], '#a78bfa', 22, 10, { id: 'nuc', al: 0.22 });
+  const dna = K.helixPts([-26, -26, 0], [26, -26, 0], 2.2, 7, 80); const dB = dna.map(p => S.sphere(p, 0.9, '#c4b5fd', { id: 'dna' }));
+  const hre = S.tube([-4, -26, 0], [6, -26, 0], 2.8, '#fde047', { id: 'hre', al: 0.6, gs: 'ster thy' });
+  K.lab(S, [-50, 20, -20], '細胞膜', 'mem', '#fcd34d', -20, -10); K.lab(S, [24, -16, 0], '細胞核', 'nuc', '#c4b5fd', 30, -10);
+  const lHre = K.lab(S, [1, -26, 0], '激素反應元件 HRE', 'hre', '#fde047', 0, 30, { gs: 'ster thy' });
+  const M = {};
+  const mk = (gs, list) => { M[gs] = {}; list.forEach(([k, type, a, b, c, d]) => { M[gs][k] = type === 's' ? S.sphere([0, 0, 0], a, b, Object.assign({ gs, id: c || k }, d)) : null; }); };
+  // 類固醇
+  mk('ster', [['h', 's', 2.6, '#fbbf24', 'horm'], ['car', 's', 3.6, '#64748b', 'carrier'], ['r1', 's', 3.2, '#a855f7', 'nr'], ['h2', 's', 2.6, '#fbbf24', 'horm'], ['r2', 's', 3.2, '#a855f7', 'nr'], ['prot', 's', 3.6, '#22d3ee', 'prot']]);
+  const mrnaS = []; for (let i = 0; i < 12; i++) mrnaS.push(S.sphere([0, 0, 0], 1.1, '#f472b6', { gs: 'ster thy', id: 'mrna' }));
+  // 甲狀腺
+  mk('thy', [['t4', 's', 2.8, '#fb923c', 'horm'], ['iod', 's', 1.2, '#a3e635', 'iod'], ['rT', 's', 3.2, '#a855f7', 'nr'], ['rx', 's', 3.2, '#60a5fa', 'rxr'], ['prot', 's', 3.6, '#22d3ee', 'prot']]);
+  // cAMP / PLC / TK 共用：膜受體
+  const recC = K.mover(K.ellipsoid(S, [0, 0, 0], [4, 9, 4], '#34d399', 10, 6, { gs: 'camp plc', id: 'rec' }));
+  mk('camp', [['h', 's', 2.8, '#60a5fa', 'horm'], ['ga', 's', 2.6, '#f472b6', 'gp'], ['gb', 's', 2.2, '#fda4af', 'gp'], ['gg', 's', 1.8, '#fecdd3', 'gp'], ['pkR', 's', 3.2, '#94a3b8', 'pk'], ['pkC', 's', 3.2, '#22d3ee', 'pk'], ['enz', 's', 3, '#fbbf24', 'enz'], ['P', 's', 1.4, '#f59e0b', 'phos']]);
+  const ac = K.mover(K.ellipsoid(S, [0, 0, 0], [5, 7, 5], '#38bdf8', 10, 6, { gs: 'camp', id: 'ac' }));
+  const camp = []; for (let i = 0; i < 16; i++) camp.push(S.sphere([0, 0, 0], 1.2, '#fde047', { gs: 'camp', id: 'camp', glow: 0.5, k: i }));
+  mk('plc', [['h', 's', 2.8, '#fb923c', 'horm'], ['ga', 's', 2.6, '#f472b6', 'gp'], ['gb', 's', 2.2, '#fda4af', 'gp'], ['ip3', 's', 1.8, '#a3e635', 'ip3'], ['dag', 's', 1.8, '#fbbf24', 'dag'], ['cam', 's', 3.2, '#c084fc', 'cam']]);
+  const plcE = K.mover(K.ellipsoid(S, [0, 0, 0], [5, 6, 5], '#f97316', 10, 6, { gs: 'plc', id: 'plc' }));
+  const erF = K.mover(K.ellipsoid(S, [0, 0, 0], [14, 4, 8], '#2dd4bf', 14, 6, { gs: 'plc', id: 'er', al: 0.5 }));
+  const ca = []; for (let i = 0; i < 14; i++) ca.push(S.sphere([0, 0, 0], 1.1, '#e2e8f0', { gs: 'plc', id: 'ca', k: i }));
+  // TK
+  const tkA = K.mover(K.ellipsoid(S, [0, 0, 0], [3, 10, 3], '#34d399', 8, 6, { gs: 'tk', id: 'tkr' })), tkB = K.mover(K.ellipsoid(S, [0, 0, 0], [3, 10, 3], '#34d399', 8, 6, { gs: 'tk', id: 'tkr' }));
+  mk('tk', [['ins', 's', 3.2, '#60a5fa', 'horm'], ['p1', 's', 1.3, '#f59e0b', 'phos'], ['p2', 's', 1.3, '#f59e0b', 'phos'], ['irs', 's', 2.8, '#c084fc', 'irs'], ['p3', 's', 1.3, '#f59e0b', 'phos']]);
+  const gl4 = [0, 1, 2].map(i => ({ v: K.mover(K.ellipsoid(S, [0, 0, 0], [3.2, 3.2, 3.2], '#fb7185', 8, 5, { gs: 'tk', id: 'glut' })), i }));
+  const glu = []; for (let i = 0; i < 8; i++) glu.push(S.sphere([0, 0, 0], 1.3, '#fef08a', { gs: 'tk', id: 'glc', k: i }));
+  const L = (p, t, id, c, dx, dy, gs) => K.lab(S, p, t, id, c, dx, dy, { gs });
+  const LB = {
+    sH: L(M.ster.h.p, '類固醇', 'horm', '#fde68a', -30, -16, 'ster'), sR: L(M.ster.r1.p, '核受體', 'nr', '#d8b4fe', 30, -10, 'ster'), sP: L(M.ster.prot.p, '新蛋白質', 'prot', '#67e8f9', 30, 0, 'ster'), sC: L(M.ster.car.p, '血漿攜帶蛋白', 'carrier', '#cbd5e1', -30, -16, 'ster'),
+    tH: L(M.thy.t4.p, 'T₄', 'horm', '#fdba74', -20, -16, 'thy'), tI: L(M.thy.iod.p, '移除一個碘 → T₃', 'iod', '#bef264', 30, -10, 'thy'), tR: L(M.thy.rx.p, 'RXR', 'rxr', '#93c5fd', 20, 16, 'thy'), tT: L(M.thy.rT.p, 'T₃ 受體', 'nr', '#d8b4fe', -30, 16, 'thy'),
+    cH: L(M.camp.h.p, '激素', 'horm', '#93c5fd', -20, -16, 'camp'), cG: L(M.camp.ga.p, 'G 蛋白 α', 'gp', '#f9a8d4', -30, 10, 'camp'), cA: L([12, 18, 0], '腺苷酸環化酶', 'ac', '#7dd3fc', 30, 30, 'camp'), cC: L(camp[0].p, 'cAMP', 'camp', '#fde047', 30, -10, 'camp'), cK: L(M.camp.pkC.p, '蛋白激酶', 'pk', '#67e8f9', 30, 10, 'camp'),
+    pH: L(M.plc.h.p, '激素', 'horm', '#fdba74', -20, -16, 'plc'), pE: L([14, 18, 0], '磷脂酶 C', 'plc', '#fdba74', 30, 30, 'plc'), pI: L(M.plc.ip3.p, 'IP₃', 'ip3', '#bef264', 20, -10, 'plc'), pD: L(M.plc.dag.p, 'DAG', 'dag', '#fde68a', 20, 10, 'plc'), pR: L([-14, -4, 0], '內質網', 'er', '#5eead4', -40, 10, 'plc'), pC: L(M.plc.cam.p, 'Ca²⁺–攜鈣素', 'cam', '#d8b4fe', 30, 10, 'plc'),
+    kI: L(M.tk.ins.p, '胰島素', 'horm', '#93c5fd', -30, -16, 'tk'), kR: L([0, 18, 0], '酪胺酸激酶受體', 'tkr', '#86efac', 40, 30, 'tk'), kS: L(M.tk.irs.p, 'IRS', 'irs', '#d8b4fe', 30, 0, 'tk'), kG: L([30, 20, 0], 'GLUT4', 'glut', '#fda4af', 30, -16, 'tk')
+  };
+  const seg = (t, a, b) => sm(a, b, t);
+  const lp = (A, B, u) => V.lerp(A, B, u);
+  const MODES = {
+    ster: { hud: '親脂性激素 → 核受體', dur: 10, steps: [[0.2, '類固醇在血漿中與攜帶蛋白結合；解離後擴散穿過細胞膜'], [0.4, '與細胞質（或核內）受體結合 → 進入細胞核'], [0.6, '兩個受體–激素單元形成二聚體，結合 DNA 上的激素反應元件'], [0.8, '活化基因轉錄 → mRNA'], [1, 'mRNA 出核 → 轉譯成新蛋白質 → 產生作用']],
+      upd(t) { const m = M.ster; mv(m.car.p, [-30, 40, 0]); mv(m.h.p, t < 0.08 ? [-27, 40, 0] : lp([-27, 40, 0], [-10, 8, 4], seg(t, 0.08, 0.22))); mv(m.r1.p, lp([-12, 6, 4], [-2, -21, 0], seg(t, 0.25, 0.42))); if (t > 0.22) mv(m.h.p, V.add(m.r1.p, [0, 3.4, 0]));
+        mv(m.h2.p, lp([40, 40, 4], V.add(lp([12, 6, -4], [4, -21, 0], seg(t, 0.25, 0.42)), [0, 3.4, 0]), seg(t, 0.05, 0.25))); mv(m.r2.p, lp([12, 6, -4], [4, -21, 0], seg(t, 0.25, 0.42)));
+        mrnaS.forEach((o, i) => { o.hidden = t < 0.6 + i * 0.012; mv(o.p, t < 0.8 ? [-8 + i * 1.6, -21 + Math.sin(i) , 4] : V.add([-8 + i * 1.6, -21, 4], [10 * seg(t, 0.8, 0.9), 30 * seg(t, 0.8, 0.9), 0])); });
+        mv(m.prot.p, lp([12, 8, 4], [20, 10, 4], seg(t, 0.9, 1))); m.prot.hidden = t < 0.9; hre.glow = t > 0.45 && t < 0.8 ? 1 : 0; LB.sH.p = m.h.p; LB.sR.p = m.r1.p; LB.sP.p = m.prot.p; LB.sC.p = m.car.p; } },
+    thy: { hud: '甲狀腺素：T₄ → T₃ → 核內受體', dur: 9, steps: [[0.25, 'T₄ 經攜帶蛋白運送，進入標的細胞'], [0.45, 'T₄ 移除一個碘 → 活性較強的 T₃（T₄ 是前驅激素）'], [0.65, 'T₃ 進入細胞核，與已結合在 DNA 上的受體（與 RXR 形成二聚體）結合'], [1, '活化轉錄 → 新蛋白質（如提高代謝的酵素）']],
+      upd(t) { const m = M.thy; mv(m.t4.p, t < 0.45 ? lp([-30, 40, 0], [-6, 6, 0], seg(t, 0, 0.25)) : lp([-6, 6, 0], [-2, -18, 0], seg(t, 0.45, 0.62))); mv(m.iod.p, t < 0.3 ? V.add(m.t4.p, [2.8, 1.5, 0]) : lp([-3, 8, 0], [16, 18, 6], seg(t, 0.3, 0.45))); m.iod.hidden = t > 0.47; m.t4.c = t > 0.38 ? '#f97316' : '#fb923c';
+        mv(m.rT.p, [-2, -22, 0]); mv(m.rx.p, [4, -22, 0]); mrnaS.forEach((o, i) => { o.hidden = t < 0.66 + i * 0.01; mv(o.p, t < 0.8 ? [-6 + i * 1.6, -19, 4] : V.add([-6 + i * 1.6, -19, 4], [8 * seg(t, 0.8, 0.9), 28 * seg(t, 0.8, 0.9), 0])); }); mv(m.prot.p, [18, 10, 4]); m.prot.hidden = t < 0.92; hre.glow = t > 0.6 ? 1 : 0;
+        LB.tH.p = m.t4.p; LB.tH.text = t > 0.4 ? 'T₃' : 'T₄'; LB.tI.p = m.iod.p; LB.tI.hidden = t < 0.28 || t > 0.47; LB.tR.p = m.rT.p; LB.tT.p = m.rT.p; } },
+    camp: { hud: '腺苷酸環化酶–cAMP 系統', dur: 10, steps: [[0.15, '激素結合膜受體'], [0.32, 'G 蛋白解離，α 次單元移向腺苷酸環化酶'], [0.55, '腺苷酸環化酶把 ATP → cAMP（大量 → 放大）'], [0.78, 'cAMP 結合蛋白激酶的調節次單元 → 催化次單元被釋放、活化'], [1, '蛋白激酶把酵素磷酸化 → 活化或抑制 → 生理反應；磷酸二酯酶分解 cAMP']],
+      upd(t) { const m = M.camp; recC.set([-18, 20, 0], 1); ac.set([12, 20, 0], 1); mv(m.h.p, lp([-18, 46, 0], [-18, 31, 0], seg(t, 0, 0.15)));
+        const gp = lp([-12, 12, 0], [8, 12, 0], seg(t, 0.17, 0.32)); mv(m.ga.p, gp); mv(m.gb.p, t < 0.17 ? [-15, 11, 2] : [-15, 11, 2]); mv(m.gg.p, [-17, 13, -2]);
+        camp.forEach((c, i) => { const s0 = 0.34 + i * 0.012; c.hidden = t < s0; const a = i * 0.9, r = 4 + i * 1.3; mv(c.p, lp([12, 12, 0], [12 + Math.cos(a) * r, 2 - i * 0.6, Math.sin(a) * r], seg(t, s0, s0 + 0.12))); if (t > 0.6 && i < 4) mv(c.p, lp(c.p, [-6 + i * 2, -2, 0], seg(t, 0.6, 0.7))); c.al = t > 0.9 ? 1 - seg(t, 0.9, 1) : 1; });
+        mv(m.pkR.p, [-6, -4, 0]); mv(m.pkC.p, lp([-6, -1, 0], [10, -6, 6], seg(t, 0.62, 0.78))); mv(m.enz.p, [16, -8, 8]); mv(m.P.p, V.add(m.enz.p, [2.4, 2.4, 0])); m.P.hidden = t < 0.82; m.enz.glow = t > 0.82 ? 1 : 0;
+        LB.cH.p = m.h.p; LB.cG.p = m.ga.p; LB.cC.p = camp[5].p; LB.cK.p = m.pkC.p; } },
+    plc: { hud: '磷脂酶 C–Ca²⁺ 系統', dur: 10, steps: [[0.15, '激素（如腎上腺素作用於 α₁ 受體）結合膜受體'], [0.3, 'G 蛋白 α 次單元活化磷脂酶 C'], [0.45, '膜磷脂 → IP₃ + DAG'], [0.7, 'IP₃ 到內質網，打開 Ca²⁺ 通道 → 細胞質 Ca²⁺ 上升'], [1, 'Ca²⁺ 結合攜鈣素 → 活化蛋白激酶 → 磷酸化其他酵素']],
+      upd(t) { const m = M.plc; recC.set([-18, 20, 0], 1); plcE.set([14, 18, 0], 1); erF.set([-12, -6, 0], 1); mv(m.h.p, lp([-18, 46, 0], [-18, 31, 0], seg(t, 0, 0.15))); mv(m.ga.p, lp([-12, 12, 0], [9, 12, 0], seg(t, 0.15, 0.3))); mv(m.gb.p, [-15, 11, 2]);
+        mv(m.ip3.p, t < 0.45 ? [14, 14, 0] : lp([14, 14, 0], [-8, -1, 0], seg(t, 0.45, 0.6))); m.ip3.hidden = t < 0.38; mv(m.dag.p, [20, 18, 3]); m.dag.hidden = t < 0.38;
+        ca.forEach((c, i) => { const s0 = 0.58 + i * 0.01; c.hidden = t < s0; mv(c.p, lp([-12 + (i % 5) * 4 - 8, -6, (i % 3) * 3 - 3], [-4 + (i % 5) * 4, 4 + (i % 4) * 2, (i % 3) * 4 - 4], seg(t, s0, s0 + 0.12))); if (t > 0.8 && i < 4) mv(c.p, lp(c.p, V.add([14, 0, 4], [i - 2, 2, 0]), seg(t, 0.8, 0.9))); });
+        mv(m.cam.p, [14, 0, 4]); m.cam.glow = t > 0.88 ? 1 : 0; LB.pH.p = m.h.p; LB.pI.p = m.ip3.p; LB.pD.p = m.dag.p; LB.pC.p = m.cam.p; LB.pI.hidden = LB.pD.hidden = t < 0.38; } },
+    tk: { hud: '酪胺酸激酶受體（胰島素）', dur: 10, steps: [[0.15, '胰島素結合受體的細胞外部分'], [0.32, '受體構形改變 → 自體磷酸化（酪胺酸上接磷酸）→ 活化激酶'], [0.5, '受體磷酸化胰島素受體受質（IRS）'], [0.75, '訊息傳遞 → 含 GLUT4 的囊泡移到細胞膜並融合'], [1, '葡萄糖經 GLUT4 進入細胞（骨骼肌、脂肪）']],
+      upd(t) { const m = M.tk; tkA.set([-4, 18, 0], 1); tkB.set([4, 18, 0], 1); mv(m.ins.p, lp([0, 46, 0], [0, 30, 0], seg(t, 0, 0.15)));
+        mv(m.p1.p, [-6.5, 10, 0]); mv(m.p2.p, [6.5, 10, 0]); m.p1.hidden = m.p2.hidden = t < 0.22; [tkA, tkB].forEach(x => x.F.forEach(f => { f.glow = t > 0.25 && t < 0.45 ? 0.8 : 0; }));
+        mv(m.irs.p, lp([16, -2, 0], [8, 6, 0], seg(t, 0.32, 0.45))); mv(m.p3.p, V.add(m.irs.p, [2.4, 2, 0])); m.p3.hidden = t < 0.48;
+        gl4.forEach(g => { const x = 22 + g.i * 9; g.v.set(lp([x, -10, 4], [x, 20, 4], seg(t, 0.55 + g.i * 0.05, 0.72 + g.i * 0.05)), 1); });
+        glu.forEach((o, i) => { const g = gl4[i % 3], x = 22 + (i % 3) * 9, s0 = 0.78 + (i >> 2) * 0.06; o.hidden = t < 0.6; mv(o.p, t < s0 ? [x + (i % 2 ? 2 : -2), 34 + (i >> 1), 4] : lp([x, 26, 4], [x + (i % 2 ? 3 : -3), 2 - i, 6], seg(t, s0, s0 + 0.12))); });
+        LB.kI.p = m.ins.p; LB.kS.p = m.irs.p; } }
+  };
+  const INFO = {
+    ster: ['類固醇激素', ['非極性 → 在血漿中多與<b>攜帶蛋白</b>結合', '擴散穿過細胞膜，與<b>核受體</b>結合（有些先在細胞質）', '受體有<b>配體結合區</b>與<b>DNA 結合區</b>；兩個受體單元（二聚體）結合 HRE', '作用：改變基因轉錄 → 較慢但持久']],
+    thy: ['甲狀腺激素', ['T₄ 經攜帶蛋白（甲狀腺素結合球蛋白）運送', '細胞內 T₄ → T₃（移除一個碘）', 'T₃ 受體已位於 DNA 上，與 <b>RXR</b>（9-cis 視黃酸受體）形成異二聚體']],
+    camp: ['cAMP 第二傳訊者', ['許多極性激素（如腎上腺素 β 受體、升糖素、TSH、ACTH）', 'G 蛋白 → 腺苷酸環化酶 → cAMP → 蛋白激酶', '一個激素分子 → 大量 cAMP → <b>放大</b>', '<b>磷酸二酯酶</b>分解 cAMP 終止訊號']],
+    plc: ['磷脂酶 C–Ca²⁺', ['G 蛋白活化磷脂酶 C → IP₃ + DAG', 'IP₃ 使內質網釋出 Ca²⁺', 'Ca²⁺ + <b>攜鈣素</b> → 活化蛋白激酶', 'DAG 也活化蛋白激酶 C']],
+    tk: ['酪胺酸激酶', ['胰島素與多種生長因子的受體本身就是<b>酵素</b>', '結合後自體磷酸化 → 磷酸化胰島素受體受質', '結果之一：<b>GLUT4</b> 插入細胞膜 → 葡萄糖進入骨骼肌與脂肪']]
+  };
+  let mode = 'ster', T = 0;
+  S.tick(dt => { const md = MODES[mode]; T = (T + dt / md.dur) % 1.08; const t = Math.min(1, T); md.upd(t); $('me-cap').textContent = md.steps.find(s => t <= s[0])[1]; });
+  K.seg('#memode', m => { mode = m; T = 0; S.each(o => { if (o.gs) o.hidden = !o.gs.split(' ').includes(m); }); const d = INFO[m]; $('me-info').innerHTML = '<div class="info"><div class="tt">' + d[0] + '</div></div><ul class="small">' + d[1].map(x => '<li>' + x + '</li>').join('') + '</ul><ol class="small muted">' + MODES[m].steps.map(s => '<li>' + s[1] + '</li>').join('') + '</ol>'; $('me-hud').textContent = MODES[m].hud; }, 'ster');
+  S.onPick = o => { if (!o) return; const t = { horm: '激素', carrier: '血漿攜帶蛋白', nr: '核受體（配體依賴轉錄因子）', rxr: 'RXR（類視色素 X 受體）', prot: '新合成的蛋白質', mrna: 'mRNA', hre: '激素反應元件', dna: 'DNA', rec: '膜受體', gp: 'G 蛋白（α、β、γ）', ac: '腺苷酸環化酶', camp: 'cAMP', pk: '蛋白激酶', enz: '標的酵素', phos: '磷酸根', plc: '磷脂酶 C', ip3: 'IP₃', dag: 'DAG', er: '內質網（儲存 Ca²⁺）', ca: 'Ca²⁺', cam: '攜鈣素', tkr: '酪胺酸激酶受體', irs: '胰島素受體受質', glut: 'GLUT4 葡萄糖運輸蛋白', glc: '葡萄糖', iod: '碘', mem: '細胞膜', nuc: '細胞核' }[o.id]; if (t) $('me-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 03 腦下垂體 ================= */
+(function () {
+  const S = K.stage('st-pit', { radius: 54, yaw: 0.55, pitch: 0.15, autoRotate: 0 });
+  K.ellipsoid(S, [0, 24, 0], [30, 14, 18], '#c4b5fd', 18, 9, { id: 'hypo', al: 0.16 });
+  K.sweep(S, [[0, 12, 0], [0, -2, 0]], t => 4 - t, '#c4b5fd', 8, 10, { id: 'stalk', al: 0.3 });
+  K.ellipsoid(S, [-8, -14, 0], [10, 9, 9], '#fb923c', 14, 8, { id: 'ant', al: 0.35 }); K.ellipsoid(S, [8, -14, 0], [8, 8, 8], '#60a5fa', 14, 8, { id: 'post', al: 0.35 });
+  const P = { gs: 'post' }, A = { gs: 'ant' };
+  const so = [10, 22, 8], pv = [6, 30, -4];
+  S.sphere(so, 3, '#93c5fd', Object.assign({ id: 'son' }, P)); S.sphere(pv, 3, '#f9a8d4', Object.assign({ id: 'pvn' }, P));
+  const axons = [[so, [5, 10, 2], [6, 0, 1], [8, -12, 2]], [pv, [3, 12, -2], [5, 0, -1], [9, -14, -2]], [V.add(so, [3, 0, -2]), [6, 10, 0], [7, -1, 0], [10, -10, 0]]].map((pts, i) => { const Pt = new Mini3D.Path(pts, 6); Pt.pts.slice(0, -1).forEach((p, k) => S.tube(p, Pt.pts[k + 1], 0.6, '#e2e8f0', Object.assign({ id: 'tract' }, P))); return Pt; });
+  const fP = axons.map((pp, i) => K.flow(S, pp, 4, 1.2, i === 1 ? '#f472b6' : '#60a5fa', 0.25, Object.assign({ glow: 0.8, id: i === 1 ? 'oxy' : 'adh' }, P)));
+  const capP = new Mini3D.Path([[18, -8, 6], [10, -12, 4], [6, -18, 0], [12, -24, -4], [24, -30, -6]], 6); capP.pts.slice(0, -1).forEach((p, k) => S.tube(p, capP.pts[k + 1], 1.2, '#ef4444', Object.assign({ id: 'cap', al: 0.7 }, P)));
+  const outP = K.flow(S, capP, 6, 1, '#93c5fd', 0.2, Object.assign({ id: 'adh' }, P));
+  K.lab(S, so, '視上核', 'son', '#93c5fd', 30, -10, P); K.lab(S, pv, '室旁核', 'pvn', '#f9a8d4', -30, -14, P); K.lab(S, [6, 0, 1], '下視丘–垂體徑', 'tract', '#e2e8f0', 40, 0, P); K.lab(S, [8, -14, 0], '後葉：釋放 ADH、催產素', 'post', '#93c5fd', 40, 20, P);
+  const nE = [[-14, 20, 4], [-6, 26, -6], [-18, 26, -2]].map((p, i) => S.sphere(p, 2.6, ['#fde047', '#34d399', '#f472b6'][i], Object.assign({ id: 'hyn' }, A)));
+  const me = [0, 10, 0];
+  nE.forEach((n, i) => { const Pt = new Mini3D.Path([n.p, V.lerp(n.p, me, 0.5), V.add(me, [-2 + i * 2, 0, 0])], 4); Pt.pts.slice(0, -1).forEach((p, k) => S.tube(p, Pt.pts[k + 1], 0.6, '#e2e8f0', Object.assign({ id: 'hyn' }, A))); K.flow(S, Pt, 3, 1.1, n.c, 0.3, Object.assign({ glow: 0.8, id: 'rh' }, A)); });
+  const prim = K.circle(me, 4, [0, 1, 0], 10); prim.forEach((p, i) => S.tube(p, prim[(i + 1) % 10], 0.8, '#ef4444', Object.assign({ id: 'prim' }, A)));
+  S.tube([-20, 8, 6], V.add(me, [-4, 0, 0]), 1.3, '#dc2626', Object.assign({ id: 'art' }, A));
+  const portal = [[-1, 9, 1], [-2, 0, 1], [-5, -8, 0]], portal2 = [[1, 9, -1], [-1, 0, -1], [-6, -9, -2]];
+  [portal, portal2].forEach(pp => { const Pt = new Mini3D.Path(pp, 6); Pt.pts.slice(0, -1).forEach((p, k) => S.tube(p, Pt.pts[k + 1], 1, '#3b82f6', Object.assign({ id: 'portal' }, A))); K.flow(S, Pt, 3, 1, '#fde047', 0.28, Object.assign({ id: 'rh' }, A)); });
+  const sec = K.circle([-8, -14, 0], 6, [0, 1, 0.3], 12); sec.forEach((p, i) => S.tube(p, sec[(i + 1) % 12], 0.7, '#ef4444', Object.assign({ id: 'sec' }, A)));
+  const cellsA = [['GH', '#fb923c'], ['TSH', '#34d399'], ['ACTH', '#fde047'], ['FSH/LH', '#f472b6'], ['PRL', '#e2e8f0']].map(([n, c], i) => { const a = i * 1.256; const p = [-8 + Math.cos(a) * 5, -14 + Math.sin(a) * 4, Math.sin(a) * 3]; return S.sphere(p, 2.4, c, Object.assign({ id: 'ac' + i, nm: n }, A)); });
+  const outA = new Mini3D.Path([[-12, -20, -4], [-18, -28, -8], [-28, -34, -10]], 6); outA.pts.slice(0, -1).forEach((p, k) => S.tube(p, outA.pts[k + 1], 1.2, '#3b82f6', Object.assign({ id: 'vein' }, A))); K.flow(S, outA, 5, 1.3, '#fb923c', 0.22, Object.assign({ glow: 0.6, id: 'troph' }, A));
+  K.lab(S, nE[0].p, '下視丘神經元（釋放激素）', 'hyn', '#fde047', -40, -16, A); K.lab(S, me, '正中隆起：初級微血管叢', 'prim', '#fca5a5', 50, -10, A); K.lab(S, [-2, 0, 1], '門脈血管', 'portal', '#93c5fd', 40, 0, A); K.lab(S, [-8, -14, 0], '前葉：次級微血管叢', 'sec', '#fdba74', -40, 24, A); K.lab(S, [-28, -34, -10], '營養激素 → 全身', 'troph', '#fdba74', 0, 16, A);
+  cellsA.forEach(c => K.lab(S, c.p, c.nm, c.id, c.c, 0, -12, Object.assign({ size: 10 }, A)));
+  K.lab(S, [0, 30, 0], '下視丘', 'hypo', '#c4b5fd', 0, -40); K.lab(S, [0, 4, 0], '漏斗柄', 'stalk', '#c4b5fd', -40, 0);
+  const INFO = {
+    hypo: ['下視丘', ['神經內分泌的整合中樞', '受高等腦區、回饋訊號影響']], stalk: ['漏斗（垂體柄）', ['連接下視丘與腦下垂體']],
+    son: ['視上核', ['主要製造 <b>ADH</b>（也製造催產素）']], pvn: ['室旁核', ['主要製造<b>催產素</b>（也製造 ADH）']],
+    tract: ['下視丘–垂體徑', ['軸突把激素運到後葉儲存', '動作電位到達時以胞吐釋放進入微血管']], post: ['後葉（神經垂體）', ['神經組織，自己不製造激素', '釋放 ADH、催產素']],
+    adh: ['ADH（血管加壓素）', ['血漿滲透壓↑時分泌（神經內分泌反射）', '腎集尿管保水；血管收縮']], oxy: ['催產素', ['分娩時子宮收縮', '<b>射乳反射</b>：吸吮 → 神經訊號 → 催產素 → 乳腺腺泡收縮']], cap: ['後葉微血管', ['激素由此進入血液']],
+    ant: ['前葉（腺垂體）', ['分泌 6 種營養激素：GH、TSH、ACTH、FSH、LH、PRL']], hyn: ['下視丘的激素神經元', ['TRH、CRH、GnRH、GHRH、體抑素、PIH（多巴胺）']],
+    prim: ['初級微血管叢（正中隆起）', ['下視丘激素在此進入血液']], art: ['上垂體動脈', ['供應初級微血管叢']], portal: ['下視丘–垂體門脈血管', ['連接兩個微血管床 → 下視丘激素以高濃度直達前葉，不需先經全身循環']],
+    sec: ['次級微血管叢（前葉）', ['下視丘激素在此刺激或抑制前葉細胞']], rh: ['釋放／抑制激素', ['沿門脈血管流向前葉']], troph: ['營養激素', ['經靜脈進入全身循環到標的腺體']], vein: ['垂體靜脈', ['引流前葉的血液']],
+    ac0: ['GH 細胞', ['GHRH ↑、體抑素 ↓']], ac1: ['TSH 細胞', ['TRH ↑']], ac2: ['ACTH 細胞', ['CRH ↑']], ac3: ['FSH/LH 細胞', ['GnRH ↑（脈衝式）']], ac4: ['PRL 細胞', ['PIH（多巴胺）抑制']]
+  };
+  K.info(S, 'info-pit', INFO, { picker: 'pk-pit' });
+  K.seg('#pimode', m => { S.each(o => { if (o.gs) o.hidden = o.gs !== m; }); $('pi-hud').textContent = m === 'post' ? '神經內分泌：軸突運輸' : '門脈系統：兩個微血管床'; $('pi-cap').textContent = m === 'post' ? '視上核、室旁核 → 軸突 → 後葉釋放進入血液' : '下視丘激素 → 初級微血管叢 → 門脈 → 前葉 → 營養激素'; }, 'post');
+})();
+
+/* ================= 04 回饋軸 ================= */
+(function () {
+  const AX = {
+    hpt: { lv: ['TRH', 'TSH', 'T₄'], cols: ['#a78bfa', '#34d399', '#fb923c'], gland: '甲狀腺',
+      sc: { norm: ['正常', '三層激素維持穩定，T₄ 負回饋抑制 TRH 與 TSH'], iod: ['缺碘', '甲狀腺無法製造足夠 T₄ → 回饋減弱 → <b>TSH↑</b> → 營養作用使腺體肥大 → <b>地方性甲狀腺腫</b>（甲狀腺低下）'], grv: ['葛瑞夫茲病', '自體抗體（TSI）直接刺激 TSH 受體 → <b>T₄↑</b>、甲狀腺腫；高 T₄ 回饋使 <b>TSH↓</b>'], hash: ['橋本氏甲狀腺炎', '自體免疫破壞腺體 → T₄↓ → TSH↑（原發性甲狀腺低下）'], sup: ['服用甲狀腺素', '外源 T₄ 提供回饋 → TRH、TSH 下降']}, },
+    hpa: { lv: ['CRH', 'ACTH', '皮質醇'], cols: ['#a78bfa', '#fde047', '#fbbf24'], gland: '腎上腺皮質',
+      sc: { norm: ['正常', '皮質醇負回饋抑制 CRH 與 ACTH'], str: ['壓力', '壓力 → CRH↑ → ACTH↑ → 皮質醇↑（一般適應症候群）'], pred: ['長期服用 prednisolone', '外源糖皮質素提供強烈負回饋 → ACTH↓ → <b>腎上腺萎縮</b>（自身皮質醇↓）'], stop: ['突然停藥', '萎縮的腎上腺無法立即恢復 → 皮質醇不足 → <b>腎上腺功能不全</b>（低血糖、低血壓）；需逐步減藥'], add: ['愛迪生氏病', '腎上腺皮質受損 → 皮質醇↓ → ACTH↑'], cus: ['庫欣（ACTH 腫瘤）', '過多 ACTH → 皮質醇↑']}, }
+  };
+  let ax = 'hpt', sc = 'norm', H = 1, Pz = 1, T = 1, size = 1, ext = 0, hist = [];
+  const cv = $('ax-cv');
+  function setAx(a) { ax = a; sc = 'norm'; H = Pz = T = size = 1; ext = 0; hist = []; const box = $('ax-btn'); box.innerHTML = ''; Object.keys(AX[a].sc).forEach(k => { const b = UI.h('button', 'btn sm' + (k === 'norm' ? ' on' : ''), AX[a].sc[k][0]); b.type = 'button'; b.onclick = () => { sc = k; UI.$$('#ax-btn .btn').forEach(x => x.classList.toggle('on', x === b)); info(); }; box.appendChild(b); }); info(); }
+  function info() { const d = AX[ax].sc[sc]; $('ax-info').innerHTML = '<div class="info"><div class="tt">' + d[0] + '</div></div><p class="small">' + d[1] + '</p><div class="chain mt"><div class="nd">下視丘<small>' + AX[ax].lv[0] + '</small></div><span class="ar">→</span><div class="nd">前葉<small>' + AX[ax].lv[1] + '</small></div><span class="ar">→</span><div class="nd">' + AX[ax].gland + '<small>' + AX[ax].lv[2] + '</small></div><span class="ar" style="color:#fb7185">⟲ 負回饋</span></div>'; }
+  K.loop(dt => {
+    const h = Math.min(dt, 0.05) * 1.6;
+    let cap = 1, stim = 0, extF = 0, kill = 1, tumor = 0, stress = 0;
+    if (ax === 'hpt') { if (sc === 'iod') cap = 0.25; if (sc === 'grv') stim = 2.2; if (sc === 'hash') kill = 0.3; if (sc === 'sup') extF = 1.6; }
+    else { if (sc === 'str') stress = 1.4; if (sc === 'pred') extF = 2.2; if (sc === 'add') kill = 0.25; if (sc === 'cus') tumor = 2.5; }
+    if (ax === 'hpa') { if (sc === 'pred') ext = Math.min(1, ext + h); else ext = Math.max(0, ext - h * 0.6); extF = ext * 2.2; }
+    const fb = T + extF;
+    const Ht = (1 + stress) / (0.3 + 0.7 * fb), Pt = (Ht / (0.3 + 0.7 * fb)) + tumor;
+    H += (Ht - H) * h * 2; Pz += (Pt - Pz) * h * 2;
+    const tsGrow = ax === 'hpt' ? (Pz + stim) : Pz;
+    size += ((0.4 + 0.6 * tsGrow) - size) * h * (ax === 'hpa' && sc === 'stop' ? 0.08 : 0.35);
+    const Tt = Math.min(4, (ax === 'hpt' ? (Pz + stim) * cap : Pz) * kill * Math.min(size, 3) / 1);
+    T += (Tt - T) * h * 1.2;
+    const vals = [H, Pz, T];
+    $('ax-lv').innerHTML = AX[ax].lv.map((n, i) => '<div class="lv"><span>' + n + '</span><div class="trk"><i style="width:' + Math.min(100, vals[i] / 3 * 100).toFixed(0) + '%;background:' + AX[ax].cols[i] + '"></i></div><b>' + (vals[i] * 100).toFixed(0) + '%</b></div>').join('') + (extF > 0.05 ? '<div class="lv"><span>外源激素</span><div class="trk"><i style="width:' + Math.min(100, extF / 3 * 100) + '%;background:#94a3b8"></i></div><b>' + (extF * 100).toFixed(0) + '%</b></div>' : '');
+    const [c, w, hh] = K.fit(cv); c.clearRect(0, 0, w, hh);
+    const r = 22 * Math.max(0.35, Math.min(2.4, size));
+    c.fillStyle = '#94a3b8'; c.font = '12px ' + Mini3D.FONT; c.fillText(AX[ax].gland + '大小 ×' + size.toFixed(2), 10, 16);
+    const g = c.createRadialGradient(w / 2 - r * 0.3, hh / 2 - r * 0.3, 2, w / 2, hh / 2, r * 1.2); g.addColorStop(0, '#fff'); g.addColorStop(0.3, AX[ax].cols[2]); g.addColorStop(1, '#1e293b');
+    c.fillStyle = g; if (ax === 'hpt') { c.beginPath(); c.ellipse(w / 2 - r * 0.7, hh / 2, r * 0.7, r, 0, 0, 6.28); c.ellipse(w / 2 + r * 0.7, hh / 2, r * 0.7, r, 0, 0, 6.28); c.fill(); } else { c.beginPath(); c.moveTo(w / 2 - r * 1.2, hh / 2 + r * 0.5); c.quadraticCurveTo(w / 2, hh / 2 - r * 1.6, w / 2 + r * 1.2, hh / 2 + r * 0.5); c.closePath(); c.fill(); }
+  }, cv);
+  K.seg('#axmode', a => setAx(a), 'hpt');
+})();
+
+/* ================= 05 腎上腺 ================= */
+(function () {
+  const S = K.stage('st-adr', { radius: 34, yaw: 0.5, pitch: 0.3, autoRotate: 0.05 });
+  const CUT = { u0: 0.05, u1: 0.8 };
+  const Z = [['cap', [22, 13, 14], '#94a3b8', 0.25], ['zg', [21, 12.2, 13.2], '#34d399', 0.95], ['zf', [19, 10.6, 11.6], '#fbbf24', 0.95], ['zr', [13, 7, 8], '#fb923c', 0.95], ['med', [9, 4.6, 5.5], '#b91c1c', 1]];
+  Z.forEach(([id, r, c, al]) => K.ellipsoid(S, [0, 0, 0], r, c, 26, 12, { id, al }, id === 'med' ? {} : CUT));
+  K.lab(S, [10, 11, -6], '被膜', 'cap', '#cbd5e1', 30, -20); K.lab(S, [14, 8, -4], '球狀帶', 'zg', '#86efac', 40, -10); K.lab(S, [12, 4, -4], '束狀帶', 'zf', '#fde047', 40, 6); K.lab(S, [8, 2, -2], '網狀帶', 'zr', '#fdba74', 40, 20); K.lab(S, [0, 0, 0], '髓質', 'med', '#fca5a5', -30, 20);
+  K.info(S, 'info-adr', {
+    zg: ['球狀帶 Zona glomerulosa', ['分泌<b>礦物皮質素</b>（主要：<b>醛固酮</b>）', '促進腎保 Na⁺、排 K⁺', '主要受腎素–血管張力素系統與血 K⁺ 調節（第 17 章）']],
+    zf: ['束狀帶 Zona fasciculata', ['分泌<b>糖皮質素</b>（主要：<b>皮質醇／氫皮質酮</b>）', '受 ACTH 刺激；調節能量平衡（糖質新生、蛋白分解）', '抑制發炎與免疫']],
+    zr: ['網狀帶 Zona reticularis', ['分泌<b>性類固醇</b>（主要為弱雄性素，如 DHEA）']],
+    med: ['髓質 Medulla', ['嗜鉻細胞，源自神經嵴（像交感神經節）', '分泌<b>腎上腺素</b>與少量正腎上腺素 → 輔助交感神經作用', '由交感節前纖維支配']],
+    cap: ['被膜', ['結締組織外膜']]
+  }, { picker: 'pk-adr', on: id => { $('ad-cap').textContent = '👉 ' + id; } });
+})();
+
+/* ================= 06 甲狀腺濾泡 ================= */
+(function () {
+  const S = K.stage('st-thy', { radius: 46, yaw: 0.3, pitch: 0.3, autoRotate: 0 });
+  const R = 18, cells = [];
+  Mini3D.fib(70).forEach(u => { const th = Math.atan2(u[2], u[0]); if (th > -2.2 && th < -0.6 && u[1] < 0.6) return; const c = V.mul(u, R + 3); cells.push(K.ellipsoid(S, c, [3.6, 3.6, 3.6], '#f9a8d4', 6, 4, { id: 'fc', al: 0.85 })); });
+  K.ellipsoid(S, [0, 0, 0], [R - 0.6, R - 0.6, R - 0.6], '#fde68a', 18, 9, { id: 'colloid', al: 0.25 });
+  const TG = []; for (let i = 0; i < 4; i++) { const pts = K.helixPts([-10, -8 + i * 5, -4], [10, -6 + i * 5, 4], 2, 3, 20); const tubes = pts.slice(0, -1).map((p, k) => S.tube(p, pts[k + 1], 0.8, '#fbbf24', { id: 'tg' })); TG.push({ pts, tubes }); }
+  const capl = new Mini3D.Path([[-40, -28, -20], [-30, -26, -14], [-20, -27, -6], [-6, -30, 4], [10, -32, 10], [30, -30, 16]], 8);
+  capl.pts.slice(0, -1).forEach((p, k) => S.tube(p, capl.pts[k + 1], 3, '#dc2626', { id: 'blood', al: 0.6 }));
+  const cC = [[24, -18, 12], [-22, -20, 16]].map(p => K.ellipsoid(S, p, [4, 3, 3], '#38bdf8', 8, 5, { id: 'ccell' }));
+  const I = []; for (let i = 0; i < 10; i++) I.push(S.sphere([0, 0, 0], 1.1, '#a3e635', { id: 'iod', k: i }));
+  const MD = []; for (let i = 0; i < 10; i++) MD.push(S.sphere([0, 0, 0], 1.6, i % 2 ? '#fb923c' : '#facc15', { id: i % 2 ? 'dit' : 'mit', k: i }));
+  const T4 = []; for (let i = 0; i < 6; i++) T4.push(S.sphere([0, 0, 0], 2.2, i < 4 ? '#f97316' : '#ef4444', { id: i < 4 ? 't4' : 't3', glow: 0.5 }));
+  const ves = K.mover(K.ellipsoid(S, [0, 0, 0], [3, 3, 3], '#fde68a', 8, 5, { id: 'endo', al: 0.6 }));
+  const tsh = S.sphere([0, 0, 0], 2.4, '#34d399', { id: 'tsh' });
+  K.lab(S, [0, R + 3, 0], '濾泡細胞', 'fc', '#f9a8d4', 30, -20); K.lab(S, [0, 6, 0], '膠質（甲狀腺球蛋白）', 'colloid', '#fde68a', -40, -20); K.lab(S, [-6, -30, 4], '微血管', 'blood', '#fca5a5', -30, 20); K.lab(S, [24, -18, 12], '濾泡旁細胞（C 細胞）', 'ccell', '#7dd3fc', 30, 10);
+  const lT = K.lab(S, T4[0].p, 'T₄ / T₃', 't4', '#fdba74', 20, -10), lI = K.lab(S, I[0].p, 'I⁻', 'iod', '#bef264', -14, -12), lS = K.lab(S, tsh.p, 'TSH', 'tsh', '#86efac', 0, -14);
+  let step = 0, tw = 0;
+  const cellIn = V.mul(V.norm([-0.3, -0.85, 0.4]), R + 3), cellPos = V.mul(V.norm([-0.3, -0.85, 0.4]), R - 2);
+  const STEPS = [
+    { t: '① 碘的攝取', d: '濾泡細胞從血液<b>主動運輸</b> I⁻（Na⁺/I⁻ 同向運輸）' },
+    { t: '② 送入膠質並氧化', d: 'I⁻ 進入膠質，被氧化成碘，接到甲狀腺球蛋白的<b>酪胺酸</b>上 → MIT、DIT' },
+    { t: '③ 偶聯', d: 'DIT + DIT → <b>T₄</b>；MIT + DIT → <b>T₃</b>（仍接在甲狀腺球蛋白上）' },
+    { t: '④ TSH 刺激胞吞', d: 'TSH 結合濾泡細胞受體 → 把膠質<b>胞吞</b>回細胞' },
+    { t: '⑤ 分解與分泌', d: '溶體酵素水解甲狀腺球蛋白 → 釋出 T₄、T₃ 進入血液' }
+  ];
+  S.tick(dt => {
+    tw = Math.min(1, tw + dt / 2.2); const e = sm(0, 1, tw);
+    I.forEach((o, i) => { const a = i * 0.63, start = V.add(capl.at(0.3 + i * 0.03), [0, 2, 0]), inside = [Math.cos(a) * 6, -6 + Math.sin(a) * 4, Math.sin(a) * 6];
+      o.hidden = step > 1; if (step === 0) mv(o.p, V.lerp(start, cellIn, e)); else if (step === 1) mv(o.p, V.lerp(cellIn, inside, e)); });
+    MD.forEach((o, i) => { const tg = TG[i % 4], p = tg.pts[4 + (i >> 2) * 6]; o.hidden = step < 1 || (step === 1 && e < 0.6) || step > 2; mv(o.p, p); if (step === 2) mv(o.p, V.lerp(p, TG[i % 4].pts[10], e)); });
+    T4.forEach((o, i) => { const tg = TG[i % 4], p = tg.pts[10 + i]; o.hidden = step < 2 || (step === 2 && e < 0.7); if (step <= 3) mv(o.p, step === 3 ? V.lerp(p, V.add(cellPos, [i - 2, 0, 0]), sm(0.4, 1, e)) : p); else mv(o.p, V.lerp(V.add(cellPos, [i - 2, 0, 0]), V.add(capl.at(0.55 + i * 0.05), [0, 3, 0]), e)); });
+    ves.hide(step !== 3); if (step === 3) ves.set(V.lerp([0, -8, 0], cellPos, sm(0.4, 1, e)), 1 + 0.6 * (1 - e));
+    tsh.hidden = step !== 3; mv(tsh.p, V.lerp(capl.at(0.4), V.add(cellIn, [0, -3, 0]), sm(0, 0.4, e)));
+    lT.p = T4[0].p; lT.hidden = step < 2; lI.p = I[0].p; lI.hidden = step > 1; lS.p = tsh.p; lS.hidden = step !== 3;
+  });
+  UI.stepper($('th-steps'), STEPS, i => { step = i; tw = 0; $('th-cap').innerHTML = STEPS[i].t + '：' + STEPS[i].d; }, { dur: 4200 });
+  S.onPick = o => { if (!o) return; const t = { fc: '濾泡細胞：合成甲狀腺球蛋白、攝取碘、TSH 受體', colloid: '膠質：儲存含 T₄/T₃ 的甲狀腺球蛋白', tg: '甲狀腺球蛋白', blood: '微血管', ccell: '濾泡旁細胞：降鈣素', iod: '碘離子 I⁻', mit: 'MIT（單碘酪胺酸）', dit: 'DIT（雙碘酪胺酸）', t4: 'T₄ 甲狀腺素（四碘）', t3: 'T₃（三碘）', endo: '胞吞的膠質', tsh: 'TSH' }[o.id]; if (t) $('th-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 07 血糖 ================= */
+(function () {
+  const meals = [7, 12, 18];
+  const bump = (t, tm, tau) => { const x = t - tm; return x <= 0 ? 0 : (x / tau) * Math.exp(1 - x / tau); };
+  function draw(m) {
+    const G = t => { const b = meals.reduce((a, tm) => a + bump(t, tm, m === 'n' ? 0.9 : 1.6), 0); return m === 'n' ? 85 + 45 * b : m === 't1' ? 230 + 110 * b + 10 * Math.sin(t) : 135 + 95 * b; };
+    const I = t => { const b = meals.reduce((a, tm) => a + bump(t, tm - 0.15, m === 'n' ? 0.8 : 1.5), 0); return m === 'n' ? 10 + 55 * b : m === 't1' ? 2 : 35 + 75 * b; };
+    const Gn = t => { const b = meals.reduce((a, tm) => a + bump(t, tm, 1), 0); return m === 't1' ? 120 - 10 * b : m === 'n' ? 95 - 40 * b + (t < 6 ? 15 : 0) : 100 - 20 * b; };
+    K.plot($('glu-plot'), { x: [0, 24], y: [0, 380], xt: [0, 6, 7, 12, 18, 24], yt: [0, 100, 200, 300], xl: '時間（時）', yl: '濃度（相對）', series: [{ f: G, c: '#fbbf24', w: 3, label: '血糖 mg/dL' }, { f: I, c: '#60a5fa', w: 2.2, label: '胰島素（相對）' }, { f: Gn, c: '#f472b6', w: 2, dash: [5, 4], label: '升糖素（相對）' }], hl: [{ y: 126, c: '#fb7185', t: '空腹血糖 126（糖尿病診斷參考）' }], vl: meals.map(x => ({ x, c: '#475569', t: '🍚' })) });
+  }
+  let cur = 'n'; K.seg('#glmode', m => { cur = m; draw(m); }, 'n'); addEventListener('resize', () => draw(cur));
+})();
+
+/* ================= 快閃卡 / 測驗 ================= */
+UI.flashcards($('fc'), [
+  { f: '激素的四種化學類別', b: '胺類、多胜肽/蛋白質、醣蛋白、類固醇。' },
+  { f: '前激素 vs 前驅激素', b: 'prohormone：腺體內不活性前驅（胰島素原）；prehormone：正常分泌但需在標的轉換（T₄→T₃、睪固酮→DHT）。' },
+  { f: '協同、允許、拮抗', b: '協同：共同作用；允許：一激素提高對另一激素的反應（雌二醇→黃體素受體）；拮抗：作用相反。' },
+  { f: '類固醇激素的作用機制', b: '擴散入細胞 → 核受體 → 二聚體結合 HRE → 改變基因轉錄。' },
+  { f: 'cAMP 系統的順序', b: '激素 → 受體 → G 蛋白 → 腺苷酸環化酶 → cAMP → 蛋白激酶 → 磷酸化；磷酸二酯酶終止。' },
+  { f: 'PLC–Ca²⁺ 系統', b: 'G 蛋白 → 磷脂酶 C → IP₃ + DAG；IP₃ → ER 釋 Ca²⁺ → 攜鈣素 → 蛋白激酶。' },
+  { f: '胰島素受體屬於？', b: '<b>酪胺酸激酶</b>受體：自體磷酸化 → 磷酸化 IRS → GLUT4 上膜。' },
+  { f: '後葉激素在哪裡製造？', b: '下視丘<b>視上核、室旁核</b> → 下視丘–垂體徑運到後葉釋放（ADH、催產素）。' },
+  { f: '下視丘–垂體門脈系統', b: '正中隆起初級微血管叢 → 門脈血管 → 前葉次級微血管叢；把釋放/抑制激素直接送到前葉。' },
+  { f: '前葉 6 種激素', b: 'GH、TSH、ACTH、FSH、LH、PRL。' },
+  { f: '6 種下視丘激素', b: 'TRH、CRH、GnRH、GHRH、體抑素、PIH（多巴胺）。' },
+  { f: '腎上腺皮質三層與產物', b: '球狀帶：醛固酮；束狀帶：皮質醇；網狀帶：弱雄性素。髓質：腎上腺素。' },
+  { f: '長期服類固醇後突然停藥的危險', b: '外源激素抑制 ACTH → 腎上腺萎縮 → 停藥後皮質醇不足（腎上腺功能不全）。' },
+  { f: '地方性甲狀腺腫的成因', b: '缺碘 → T₄↓ → 回饋減弱 → TSH↑ → 營養作用使甲狀腺肥大。' },
+  { f: '葛瑞夫茲病', b: '自體抗體刺激 TSH 受體 → 甲亢、甲狀腺腫、突眼；TSH 低。' },
+  { f: 'T₄ 與 T₃ 的形成', b: 'DIT + DIT → T₄；MIT + DIT → T₃；在膠質中接在甲狀腺球蛋白上。' },
+  { f: 'PTH 與降鈣素', b: 'PTH（副甲狀腺）升高血鈣；降鈣素（濾泡旁細胞）可能降低血鈣。' },
+  { f: '褪黑激素', b: '松果體分泌，夜間最高；受 SCN 經交感神經控制。' },
+  { f: '前列腺素與阿斯匹靈', b: '花生四烯酸經 COX 形成前列腺素；阿斯匹靈等 NSAIDs 抑制 COX。' }
+], 'ch11');
+UI.quiz($('qz'), [
+  { q: '下列何者可直接穿過細胞膜作用於核受體？', o: ['胰島素', '腎上腺素', '皮質醇', 'ACTH'], a: 2, e: '類固醇為親脂性。' },
+  { q: 'T₄ 在標的細胞轉換成 T₃，T₄ 屬於？', o: ['前激素', '前驅激素（prehormone）', '第二傳訊者', '旁分泌因子'], a: 1, e: '腺體正常分泌、需在標的活化 → prehormone。' },
+  { q: 'cAMP 由哪個酵素產生？', o: ['磷脂酶 C', '腺苷酸環化酶', '磷酸二酯酶', '蛋白激酶'], a: 1, e: '腺苷酸環化酶把 ATP 轉成 cAMP。' },
+  { q: 'IP₃ 的主要作用是？', o: ['活化腺苷酸環化酶', '使內質網釋放 Ca²⁺', '結合 DNA', '分解 cAMP'], a: 1, e: 'IP₃ 打開 ER 的 Ca²⁺ 通道。' },
+  { q: 'ADH 在哪裡製造？', o: ['前葉', '後葉', '下視丘', '腎上腺'], a: 2, e: '視上核、室旁核製造，後葉只是釋放。' },
+  { q: '泌乳素的分泌主要受下視丘何者抑制？', o: ['TRH', 'GnRH', 'PIH（多巴胺）', 'CRH'], a: 2, e: 'PIH = 多巴胺。' },
+  { q: '醛固酮由腎上腺哪一層分泌？', o: ['球狀帶', '束狀帶', '網狀帶', '髓質'], a: 0, e: 'G-F-R：鹽、糖、性。' },
+  { q: '缺碘造成甲狀腺腫的主因是？', o: ['TSI 抗體', 'TSH 升高的營養作用', 'T₄ 過多', '降鈣素過多'], a: 1, e: 'T₄ 低 → 回饋減弱 → TSH 高 → 腺體肥大。' },
+  { q: '葛瑞夫茲病患者的 TSH 通常？', o: ['升高', '降低', '正常', '無法偵測 T₄'], a: 1, e: '高 T₄ 負回饋使 TSH 低。' },
+  { q: '升高血鈣的激素是？', o: ['降鈣素', 'PTH', '胰島素', '褪黑激素'], a: 1, e: 'PTH 促進骨吸收與腎再吸收鈣。' },
+  { q: '第 1 型糖尿病的原因是？', o: ['組織對胰島素不敏感', 'β 細胞被破壞', '升糖素不足', 'GLUT4 過多'], a: 1, e: '第 2 型才是胰島素阻抗為主。' },
+  { q: '阿斯匹靈的抗發炎作用來自抑制？', o: ['磷脂酶 C', '環氧酶 COX', '腺苷酸環化酶', '酪胺酸激酶'], a: 1, e: '減少前列腺素合成。' }
+]);
+</script>
+</body>
+</html>

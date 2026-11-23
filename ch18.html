@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch18 消化系統 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>canvas.anim{width:100%;height:var(--ph,260px);display:block;border-radius:14px;background:#060b17;border:1px solid var(--line)}</style>
+</head>
+<body style="--acc:#fb923c;--acc2:#a3e635">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 18 · The Digestive System</div>
+  <h1 class="title3d">消化系統</h1>
+  <p class="sub">3D 消化道全貌（食團一路旅行）、可蠕動與分節運動的 3D 管壁四層、壁細胞分泌胃酸（質子幫浦與 PPI）、小腸絨毛的吸收（微血管 vs 乳糜管）、3D 肝小葉血流與膽汁反向流動、胃液分泌三期、胰泌素與 CCK、脂質消化吸收步驟。</p>
+  <div class="chips"><a class="chip" href="#gi">消化道 3D</a><a class="chip" href="#wall">管壁</a><a class="chip" href="#sto">胃</a><a class="chip" href="#si">小腸絨毛</a><a class="chip" href="#li">肝臟</a><a class="chip" href="#pan">胰與膽</a><a class="chip" href="#reg">調控</a><a class="chip" href="#abs">消化吸收</a><a class="chip" href="#li2">大腸</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="gi" data-nav="消化道 3D">
+  <h2><span class="num">01</span>消化系統總覽（3D）</h2>
+  <p class="lead">消化 = 大分子<b>水解</b>成單體（在消化道管腔，由專一酵素催化），再經黏膜<b>吸收</b>進入血液或淋巴。看食團（黃球）從口一路到直腸。</p>
+  <div class="grid2">
+    <div class="stage" id="st-gi"><canvas aria-label="3D 消化道"></canvas><div class="hud">點選器官</div><div class="hud2" id="gi-cap"></div></div>
+    <div class="card info"><div id="info-gi"><div class="tt">點選器官</div></div><div class="picker" id="pk-gi"></div></div>
+  </div>
+  <div class="grid4 mt">
+    <div class="card tilt"><h3>運動 Motility</h3><p class="small">攝食、咀嚼、吞嚥、<b>蠕動</b>、分節</p></div>
+    <div class="card tilt"><h3>分泌 Secretion</h3><p class="small">外分泌（酵素、HCl、黏液、膽汁）與內分泌（胃泌素、胰泌素、CCK…）</p></div>
+    <div class="card tilt"><h3>消化 Digestion</h3><p class="small">水解：澱粉 → 單醣、蛋白 → 胺基酸、脂肪 → 脂肪酸 + 單酸甘油酯</p></div>
+    <div class="card tilt"><h3>吸收 Absorption</h3><p class="small">主要在<b>小腸</b>；單醣、胺基酸入肝門靜脈；脂質入乳糜管</p></div>
+  </div>
+</section>
+
+<section class="sec" id="wall" data-nav="管壁">
+  <h2><span class="num">02</span>消化道管壁的四層（3D）</h2>
+  <p class="lead">由內而外：<b>黏膜</b>（上皮、固有層、黏膜肌層）→ <b>黏膜下層</b>（黏膜下神經叢）→ <b>肌層</b>（內環、外縱；之間為肌間神經叢）→ <b>漿膜</b>（臟層腹膜）。切換看蠕動與分節運動。</p>
+  <div class="grid2">
+    <div class="stage short" id="st-wall"><canvas aria-label="3D 消化道管壁"></canvas><div class="hud">四分之一剖開的小腸</div><div class="hud2" id="wa-cap"></div>
+      <div class="sbar"><div class="seg" id="wamode"><button class="btn sm" data-v="still" type="button">靜止</button><button class="btn sm" data-v="peri" type="button">蠕動</button><button class="btn sm" data-v="seg" type="button">分節</button></div></div></div>
+    <div class="card info"><div id="info-wall"><div class="tt">點選管壁層</div></div><div class="picker" id="pk-wall"></div></div>
+  </div>
+</section>
+
+<section class="sec" id="sto" data-nav="胃">
+  <h2><span class="num">03</span>胃：胃酸與胃蛋白酶</h2>
+  <div class="grid2">
+    <div class="stage short" id="st-par"><canvas aria-label="3D 壁細胞"></canvas><div class="hud">壁細胞：上＝胃腔，下＝血液</div><div class="hud2" id="pa-cap"></div>
+      <div class="sbar"><div class="seg" id="pamode"><button class="btn sm" data-v="on" type="button">受刺激</button><button class="btn sm" data-v="ppi" type="button">💊 Omeprazole（PPI）</button></div></div></div>
+    <div class="card"><ul class="small"><li>胃分為賁門、胃底、胃體、幽門（竇）；內壁有<b>皺襞</b>，<b>胃小凹</b>通往胃腺</li><li>胃腺細胞：黏液頸細胞、<b>壁細胞（HCl + 內在因子）</b>、<b>主細胞（胃蛋白酶原）</b>、ECL 細胞（組織胺）、<b>G 細胞（胃泌素）</b>、P/D1 細胞（飢餓素 ghrelin）</li><li>壁細胞以 <b>H⁺/K⁺ ATPase（質子幫浦）</b>主動分泌 H⁺（pH 可低至 0.8）；基底側以 HCO₃⁻ 交換 Cl⁻（餐後「鹼潮」）</li><li>刺激：<b>胃泌素</b>（主要間接經 ECL 的組織胺）、<b>組織胺</b>（H₂ 受體）、<b>ACh</b>（迷走）</li><li>酸性下胃蛋白酶原 → <b>胃蛋白酶</b>（自我催化）；胃唯一攸關生命的功能是分泌<b>內在因子</b>（B₁₂ 吸收）</li></ul></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>消化性潰瘍</h3><p class="small">胃或十二指腸黏膜被 HCl 侵蝕；多數患者感染<b>幽門螺旋桿菌</b>（或使用 NSAIDs）。治療：PPI + 抗生素；根除 H. pylori 可治癒 80% 以上十二指腸潰瘍。</p></div>
+    <div class="card tilt"><h3>胃食道逆流 GERD</h3><p class="small">酸性食糜逆流 → 胸口灼熱；長期可變成巴瑞特食道。下食道括約肌控制；PPI（omeprazole）抑制質子幫浦。</p></div>
+    <div class="card tilt"><h3>胃的保護</h3><p class="small">黏液 + HCO₃⁻ 屏障、上皮緊密接合、細胞快速更新；酒精與 NSAIDs 會破壞屏障。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="si" data-nav="小腸絨毛">
+  <h2><span class="num">04</span>小腸：絨毛、微絨毛與吸收（3D）</h2>
+  <p class="lead">小腸 = 十二指腸 → 空腸 → 迴腸。環狀皺褶、<b>絨毛</b>、<b>微絨毛（刷狀緣）</b>大幅增加表面積；刷狀緣上有<b>刷狀緣酵素</b>完成消化。中間那根絨毛剖開看內部。</p>
+  <div class="grid2">
+    <div class="stage" id="st-vil"><canvas aria-label="3D 小腸絨毛"></canvas><div class="hud">白＝單醣　綠＝胺基酸　黃＝乳糜微粒</div><div class="hud2" id="vi-cap"></div></div>
+    <div class="card info"><div id="info-vil"><div class="tt">點選構造</div></div><div class="picker" id="pk-vil"></div></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>刷狀緣酵素</h3><ul class="small"><li>雙醣酶：蔗糖酶、麥芽糖酶、<b>乳糖酶</b>（缺乏 → 乳糖不耐）</li><li>胺肽酶等：完成蛋白質消化</li><li>腸激酶（腸肽酶）：活化胰蛋白酶原</li></ul></div>
+    <div class="card tilt"><h3>腸腺（Lieberkühn 隱窩）</h3><p class="small">隱窩底部的幹細胞產生新上皮細胞，往絨毛頂端推移並脫落（約數天更新一次）；Paneth 細胞分泌抗菌物質。</p></div>
+    <div class="card tilt"><h3>小腸運動</h3><p class="small"><b>蠕動</b>推進；<b>分節</b>混合食糜。節律由 <b>Cajal 間質細胞</b>（電節律起搏）產生的慢波決定；兩餐之間有遷移運動複合波清空小腸。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="li" data-nav="肝臟">
+  <h2><span class="num">05</span>肝臟：肝小葉（3D）</h2>
+  <p class="lead">血液從小葉周邊的<b>門脈三合體</b>（肝動脈 + 肝門靜脈分支）經<b>竇狀隙</b>流向<b>中央靜脈</b>；<b>膽汁</b>在肝細胞板之間的<b>膽小管</b>中<b>反向</b>流向周邊的膽小管。</p>
+  <div class="grid2">
+    <div class="stage" id="st-lob"><canvas aria-label="3D 肝小葉"></canvas><div class="hud">紅/紫＝血流向中心　綠＝膽汁向外</div><div class="hud2" id="lo-cap"></div></div>
+    <div class="card"><h3>肝臟的功能</h3><ul class="small"><li><b>解毒</b>：排入膽汁、Kupffer 細胞吞噬、化學轉化（使藥物更水溶以利腎排除）</li><li>醣類：肝醣生成/分解、糖質新生</li><li>脂質：脂蛋白、膽固醇、酮體</li><li>製造血漿蛋白：白蛋白、凝血因子、血管張力素原</li><li>分泌<b>膽汁</b>：膽鹽、膽紅素、膽固醇、磷脂</li><li>儲存：肝醣、鐵、維生素</li></ul>
+      <div class="chain mt"><div class="nd">老舊紅血球</div><span class="ar">→</span><div class="nd">血基質 → 膽綠素 → <b>游離膽紅素</b><small>脾、骨髓的巨噬細胞</small></div><span class="ar">→</span><div class="nd">肝臟<b>結合</b><small>葡萄糖醛酸</small></div><span class="ar">→</span><div class="nd">膽汁 → 腸道<small>細菌 → 尿膽素原</small></div></div>
+      <p class="small mt">膽汁中的物質可再被吸收回肝門靜脈 → <b>腸肝循環</b>。<b>黃疸</b>：膽紅素過多（新生兒生理性黃疸、溶血、肝病、膽道阻塞）。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="pan" data-nav="胰與膽">
+  <h2><span class="num">06</span>胰臟與膽囊</h2>
+  <div class="grid2">
+    <div class="card"><h3>胰液（外分泌腺泡）</h3><div class="tbwrap"><table class="tb" style="min-width:0"><tr><th>酵素</th><th>作用</th></tr>
+      <tr><td><b>胰蛋白酶原 → 胰蛋白酶</b></td><td>由刷狀緣<b>腸激酶</b>活化；再活化其他酶原</td></tr><tr><td>胰凝乳蛋白酶、羧肽酶</td><td>蛋白質 → 短胜肽</td></tr><tr><td><b>胰澱粉酶</b></td><td>澱粉 → 雙醣、寡醣</td></tr><tr><td><b>胰脂酶</b>（+ 共脂酶）</td><td>三酸甘油酯 → 脂肪酸 + 單酸甘油酯</td></tr><tr><td>磷脂酶、核酸酶</td><td>磷脂、核酸</td></tr><tr><td><b>HCO₃⁻</b></td><td>中和酸性食糜</td></tr></table></div>
+      <p class="small mt">胰臟同時是內分泌腺：<b>蘭氏小島</b>分泌胰島素、升糖素。胰液經胰管與總膽管一起進入十二指腸。</p></div>
+    <div class="card"><h3>膽汁與膽囊</h3><ul class="small"><li>肝臟持續分泌膽汁；<b>膽囊</b>儲存並濃縮</li><li><b>CCK</b> 與神經反射使膽囊收縮、Oddi 括約肌放鬆 → 膽汁進入十二指腸</li><li><b>膽鹽</b>（膽酸衍生，兩性分子）<b>乳化</b>脂肪並形成<b>微胞</b></li><li>膽固醇過飽和 → <b>膽結石</b></li></ul>
+      <div class="chain mt"><div class="nd">腸激酶</div><span class="ar">→</span><div class="nd on">胰蛋白酶原 → 胰蛋白酶</div><span class="ar">→</span><div class="nd">其他酶原（胰凝乳蛋白酶原、羧肽酶原、磷脂酶原…）活化</div></div></div>
+  </div>
+</section>
+
+<section class="sec" id="reg" data-nav="調控">
+  <h2><span class="num">07</span>消化的調控</h2>
+  <div class="grid3">
+    <div class="card tilt"><h3>① 頭期</h3><p class="small">看、聞、想到食物 → 高等腦區 → <b>迷走神經</b> → 胃液分泌（約佔 30%）。</p></div>
+    <div class="card tilt"><h3>② 胃期</h3><p class="small">食物（胜肽、胺基酸）與胃擴張 → <b>G 細胞分泌胃泌素</b> → HCl、胃蛋白酶原；pH &lt; 2.5 時負回饋抑制胃泌素。</p></div>
+    <div class="card tilt"><h3>③ 腸期</h3><p class="small">食糜進入十二指腸 → 神經反射與激素（腸抑胃素：胰泌素、CCK、GIP 等）<b>抑制</b>胃排空與分泌，保護小腸。</p></div>
+  </div>
+  <div class="grid2 even mt">
+    <div class="card"><h3>胰泌素與 CCK</h3><div class="btns"><button class="btn sm" id="r-acid" type="button">酸性食糜進入十二指腸</button><button class="btn sm" id="r-fat" type="button">含脂肪食糜進入</button></div><div class="chain" id="r-chain"></div></div>
+    <div class="card"><h3>腸神經系統與短反射</h3><ul class="small"><li>「腸腦」：感覺神經元、中間神經元、自主運動神經元（黏膜下與肌間神經叢）</li><li>蠕動：食團<b>上方收縮、下方放鬆</b></li><li><b>胃迴腸反射</b>（胃活動增加迴腸運動）、<b>迴胃反射</b>（迴腸擴張抑制胃）、腸–腸反射</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="abs" data-nav="消化吸收">
+  <h2><span class="num">08</span>食物的消化與吸收</h2>
+  <div class="tbwrap"><table class="tb"><tr><th>營養素</th><th>起點</th><th>主要酵素</th><th>產物</th><th>吸收路徑</th></tr>
+    <tr><td>醣類</td><td>口腔（唾液澱粉酶）</td><td>胰澱粉酶 → 刷狀緣雙醣酶</td><td>單醣</td><td>微血管 → 肝門靜脈</td></tr>
+    <tr><td>蛋白質</td><td>胃（胃蛋白酶）</td><td>胰蛋白酶、胰凝乳蛋白酶 → 刷狀緣胜肽酶</td><td>胺基酸（及雙、三胜肽）</td><td>微血管 → 肝門靜脈</td></tr>
+    <tr><td>脂質</td><td>小腸（先被膽鹽乳化）</td><td>胰脂酶</td><td>脂肪酸 + 單酸甘油酯</td><td>微胞 → 細胞內再合成三酸甘油酯 → <b>乳糜微粒</b> → <b>乳糜管</b> → 胸管 → 血液</td></tr></table></div>
+  <div class="grid2 mt">
+    <div class="card" style="padding:12px"><canvas class="anim" id="fat-cv" style="--ph:270px"></canvas></div>
+    <div class="card"><div id="fat-steps"></div></div>
+  </div>
+</section>
+
+<section class="sec" id="li2" data-nav="大腸">
+  <h2><span class="num">09</span>大腸</h2>
+  <div class="grid3">
+    <div class="card tilt"><h3>構造</h3><p class="small">盲腸（附闌尾）→ 升結腸 → 橫結腸 → 降結腸 → 乙狀結腸 → 直腸 → 肛管；壁上的膨出稱<b>結腸袋</b>。</p></div>
+    <div class="card tilt"><h3>腸道菌叢</h3><p class="small">共生細菌在大腸最多：製造部分 <b>B 群維生素與維生素 K</b>、<b>短鏈脂肪酸</b>；保護腸道免於病原菌引起的發炎反應。</p></div>
+    <div class="card tilt"><h3>水與電解質、排便</h3><p class="small">每天 1.5–2.0 L 進入大腸，吸收約 <b>90%</b>（Na⁺ 主動吸收、水跟隨）。排便：肛門括約肌放鬆 + 其他肌肉收縮提高直腸壓。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">10</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">11</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 18 章整理，僅供個人複習。3D 模型為示意。 · <a href="index.html">回總覽</a> · <a href="ch17.html">← 第 17 章 腎臟</a> · <a href="ch20.html">第 20 章 生殖 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+
+/* ================= 01 消化道 ================= */
+(function () {
+  const S = K.stage('st-gi', { radius: 76, yaw: 0.25, pitch: 0.08, autoRotate: 0, target: [0, 8, 0] });
+  K.ellipsoid(S, [0, 72, 2], [8, 6, 7], '#fda4af', 12, 7, { id: 'mouth', al: 0.6 });
+  const eso = [[0, 66, 2], [0, 50, -2], [1, 34, -2], [4, 22, -1]];
+  K.sweep(S, eso, 2.2, '#f9a8d4', 20, 8, { id: 'eso', al: 0.7 });
+  const stoP = [[4, 22, -1], [10, 22, 1], [17, 16, 3], [18, 7, 4], [12, 1, 5], [7, 0, 5]];
+  K.sweep(S, stoP, t => t < 0.12 ? 3 + t * 50 : 9 - (t - 0.12) * 7.5, '#fb923c', 30, 14, { id: 'sto', al: 0.75 });
+  K.ellipsoid(S, [-11, 15, 3], [16, 7, 10], '#92400e', 18, 9, { id: 'liver', al: 0.8 });
+  K.ellipsoid(S, [-6, 8, 9], [2.6, 3.6, 2.6], '#4ade80', 10, 6, { id: 'gb' });
+  K.ellipsoid(S, [6, -5, -5], [13, 2.4, 3], '#fde68a', 14, 6, { id: 'pan' }, { rz: 0.15 });
+  const duo = [[7, 0, 5], [3, -3, 6], [2, -9, 6], [8, -12, 6], [13, -10, 5]];
+  K.sweep(S, duo, 2.4, '#fdba74', 16, 8, { id: 'duo' });
+  const si = [[13, -10, 5]]; for (let i = 0; i < 14; i++) { const a = i * 1.15; si.push([Math.cos(a) * (8 + (i % 3) * 3), -16 - i * 1.0 + Math.sin(a * 1.7) * 3, 7 + Math.sin(a) * 4]); } si.push([-16, -32, 6]);
+  K.sweep(S, si, 2.2, '#fda4af', 90, 8, { id: 'si', al: 0.85 });
+  const colon = [[-16, -32, 6], [-20, -30, 6], [-21, -14, 6], [-20, 0, 8], [-6, 2, 10], [10, 2, 10], [21, 0, 8], [22, -16, 6], [21, -30, 6], [12, -38, 5], [4, -40, 4], [2, -46, 2], [2, -56, 1]];
+  K.sweep(S, colon, t => t > 0.85 ? 3 : 4.2, '#c2410c', 70, 10, { id: 'colon', al: 0.65 });
+  K.sweep(S, [[-20, -33, 6], [-18, -38, 7], [-16, -40, 8]], 1.1, '#c2410c', 6, 6, { id: 'app' });
+  const all = [eso, stoP, duo, si, colon].map(p => new Mini3D.Path(p, 8));
+  const STOPS = [['口腔：咀嚼、唾液澱粉酶開始分解澱粉', 0], ['食道：蠕動把食團推過下食道括約肌', 1], ['胃：攪拌、HCl 與胃蛋白酶 → 食糜', 2], ['十二指腸：胰液、膽汁進入', 3], ['空腸、迴腸：大部分消化與吸收', 4], ['大腸：吸收水與電解質、菌叢', 5]];
+  const bol = S.sphere([0, 0, 0], 2.4, '#fde047', { glow: 1, nopick: true });
+  const ring = K.circle([0, 0, 0], 3, [0, 1, 0], 10).map(() => S.sphere([0, 0, 0], 0.9, '#f43f5e', { nopick: true }));
+  let T = 0;
+  S.tick(dt => {
+    T = (T + dt / 22) % 1;
+    const seg = T < 0.06 ? 0 : T < 0.2 ? 1 : T < 0.42 ? 2 : T < 0.5 ? 3 : T < 0.75 ? 4 : 5;
+    let p;
+    if (seg === 0) p = [0, 70, 4]; else if (seg === 5) p = all[4].at((T - 0.75) / 0.25); else { const pp = all[seg - 1], a = [0.06, 0.2, 0.42, 0.5][seg - 1], b = [0.2, 0.42, 0.5, 0.75][seg - 1]; let u = (T - a) / (b - a); if (seg === 2) u = u < 0.2 ? u / 0.2 * 0.5 : u > 0.8 ? 0.5 + (u - 0.8) / 0.2 * 0.5 : 0.5 + Math.sin(u * 30) * 0.08; p = pp.at(u); }
+    mv(bol.p, p);
+    const on = seg === 1, rc = V.add(p, [0, 4, 0]);
+    ring.forEach((r, i) => { r.hidden = !on; const a = i / 10 * 6.2832; mv(r.p, V.add(rc, [Math.cos(a) * 2.6, 0, Math.sin(a) * 2.6])); });
+    $('gi-cap').textContent = STOPS[seg][0];
+  });
+  [['mouth', [0, 72, 2], '口腔', -30, -10], ['eso', [0, 46, -2], '食道', -30, 0], ['sto', [17, 14, 4], '胃', 30, -10], ['liver', [-16, 20, 4], '肝臟', -30, -14], ['gb', [-6, 8, 9], '膽囊', -40, 10], ['pan', [12, -4, -5], '胰臟', 40, -10], ['duo', [2, -9, 6], '十二指腸', -40, 0], ['si', [6, -22, 9], '空腸／迴腸', 40, 10], ['colon', [21, -16, 6], '大腸（結腸）', 40, 0], ['app', [-16, -40, 8], '闌尾', -30, 10], ['colon', [2, -54, 1], '直腸', 30, 0]].forEach(([id, p, t, dx, dy]) => K.lab(S, p, t, id, '#e2e8f0', dx, dy, { size: 11 }));
+  K.info(S, 'info-gi', {
+    mouth: ['口腔', ['咀嚼；唾液（<b>唾液澱粉酶</b>）開始分解澱粉']], eso: ['食道', ['<b>蠕動</b>把食團往下推', '下食道括約肌防止逆流']],
+    sto: ['胃', ['儲存、攪拌、HCl、胃蛋白酶 → 食糜', '幽門括約肌控制排空', '分泌內在因子（B₁₂）']], liver: ['肝臟', ['最大的內臟；製造<b>膽汁</b>、解毒、代謝', '經肝門靜脈接收來自腸道的血']], gb: ['膽囊', ['儲存並濃縮膽汁；CCK 刺激收縮']],
+    pan: ['胰臟', ['外分泌：胰液（酵素 + HCO₃⁻）', '內分泌：胰島素、升糖素']], duo: ['十二指腸', ['小腸第一段；總膽管與胰管開口', '分泌胰泌素、CCK']], si: ['空腸、迴腸', ['大部分消化與吸收；迴腸吸收 B₁₂ 與膽鹽']],
+    colon: ['大腸', ['吸收水與電解質；菌叢製造維生素 K', '直腸 → 排便']], app: ['闌尾', ['附在盲腸，含淋巴組織']]
+  }, { picker: 'pk-gi' });
+})();
+
+/* ================= 02 管壁 ================= */
+(function () {
+  const S = K.stage('st-wall', { radius: 46, yaw: 0.9, pitch: 0.35, autoRotate: 0 });
+  const L = [['muc', 9, 12, '#f472b6'], ['sub', 12, 15.5, '#fde68a'], ['circ', 15.5, 19, '#ef4444'], ['long', 19, 21.5, '#b91c1c'], ['ser', 21.5, 22.5, '#e2e8f0']];
+  let mode = 'still', T = 0;
+  const rad = (x, r0) => { if (mode === 'peri') { const w = Math.exp(-(((x - (((T * 18) % 60) - 30)) / 5) ** 2)); return r0 * (1 - 0.32 * w); } if (mode === 'seg') { const ph = Math.sin(T * 3) > 0 ? 0 : 1, w = Math.exp(-((((x + 30) % 15) - 7.5 + (ph ? 7.5 : 0)) ** 2) / 8) ; return r0 * (1 - 0.25 * w * Math.abs(Math.sin(T * 3))); } return r0; };
+  const NU = 30, NV = 18, U0 = 0.27;
+  const surfs = [];
+  L.forEach(([id, r0, r1, col]) => {
+    const f = (u, v) => { const th = (U0 + u * (1 - U0)) * 6.2832, x = -30 + v * 60, r = rad(x, r1); return [x, Math.cos(th) * r, Math.sin(th) * r]; };
+    const F = K.surf(S, f, NU, NV, col, { id, al: id === 'ser' ? 0.35 : 0.95 }); surfs.push({ F, f, nu: NU, nv: NV });
+    const fe = (u, v) => { const th = (U0 + u * (1 - U0)) * 6.2832, r = K.lerp(r0, r1, v), x = 30; return [x, Math.cos(th) * rad(x, r), Math.sin(th) * rad(x, r)]; };
+    const E = K.surf(S, fe, NU, 1, col, { id }); surfs.push({ F: E, f: fe, nu: NU, nv: 1 });
+    [0, 1].forEach(side => { const fc = (u, v) => { const th = (side ? U0 : 1) * 6.2832, r = K.lerp(r0, r1, u), x = -30 + v * 60; return [x, Math.cos(th) * rad(x, r), Math.sin(th) * rad(x, r)]; }; const C = K.surf(S, fc, 1, NV, col, { id }); surfs.push({ F: C, f: fc, nu: 1, nv: NV }); });
+  });
+  const vil = []; for (let i = 0; i < 40; i++) { const th = (U0 + ((i * 0.37) % 1) * (1 - U0)) * 6.2832, x = -28 + (i % 10) * 6; vil.push({ t: S.tube([0, 0, 0], [0, 0, 0], 1.1, '#fbcfe8', { id: 'villi' }), th, x }); }
+  const plex = []; [[13.8, 'subp'], [19, 'myp']].forEach(([r, id]) => { for (let i = 0; i < 24; i++) { const th = (U0 + (i / 24) * (1 - U0)) * 6.2832, x = -26 + ((i * 7) % 52); plex.push({ o: S.sphere([0, 0, 0], 1.1, '#facc15', { id, glow: 0.4 }), th, x, r }); } });
+  K.lab(S, [30, 0, -11], '黏膜', 'muc', '#f9a8d4', 30, 10); K.lab(S, [30, 0, -14], '黏膜下層', 'sub', '#fde68a', 40, 24); K.lab(S, [30, 0, -17], '環肌層', 'circ', '#fca5a5', 50, 38); K.lab(S, [30, 0, -20], '縱肌層', 'long', '#fca5a5', 60, 52); K.lab(S, [30, 22, 0], '漿膜', 'ser', '#e2e8f0', 20, -20);
+  S.tick(dt => {
+    T += dt;
+    surfs.forEach(s => s.F.grid.forEach((row, i) => row.forEach((p, j) => mv(p, s.f(i / s.nu, j / s.nv)))));
+    vil.forEach(v => { const r = rad(v.x, 9); mv(v.t.a, [v.x, Math.cos(v.th) * r, Math.sin(v.th) * r]); mv(v.t.b, [v.x, Math.cos(v.th) * (r - 3.5), Math.sin(v.th) * (r - 3.5)]); });
+    plex.forEach(p => { const r = rad(p.x, p.r); mv(p.o.p, [p.x, Math.cos(p.th) * r, Math.sin(p.th) * r]); });
+  });
+  K.seg('#wamode', m => { mode = m; $('wa-cap').textContent = { still: '點選各層看構造與功能', peri: '蠕動：收縮環向前推進（食團上方收縮、下方放鬆）', seg: '分節：多處同時收縮、交替 → 混合食糜' }[m]; }, 'still');
+  K.info(S, 'info-wall', {
+    muc: ['黏膜 Mucosa', ['單層柱狀上皮（吸收、分泌）', '<b>固有層</b>：結締組織、淋巴結節', '<b>黏膜肌層</b>：薄層平滑肌', '小腸黏膜形成絨毛']], villi: ['絨毛', ['黏膜指狀突起（小腸）']],
+    sub: ['黏膜下層 Submucosa', ['結締組織、血管、淋巴管', '含<b>黏膜下神經叢</b>（Meissner）→ 調節分泌']], subp: ['黏膜下神經叢', ['腸神經系統的一部分']],
+    circ: ['肌層：內環肌', ['收縮使管腔變窄']], long: ['肌層：外縱肌', ['收縮使腸段縮短', '兩層之間是<b>肌間神經叢</b>（Auerbach）→ 調節運動']], myp: ['肌間神經叢', ['控制蠕動等運動']],
+    ser: ['漿膜 Serosa', ['結締組織外覆<b>臟層腹膜</b>']]
+  }, { picker: 'pk-wall' });
+})();
+
+/* ================= 03 壁細胞 ================= */
+(function () {
+  const S = K.stage('st-par', { radius: 38, yaw: 0.35, pitch: 0.25, autoRotate: 0 });
+  K.ellipsoid(S, [0, 0, 0], [20, 14, 14], '#c084fc', 18, 10, { id: 'cell', al: 0.2 });
+  K.sweep(S, [[0, 16, 0], [0, 6, 0], [-6, 0, 0]], 3, '#fde68a', 8, 10, { id: 'canal', al: 0.35 });
+  const pumps = [[-3, 10, 2], [3, 8, -2], [-6, 2, 1]].map(p => S.sphere(p, 2.2, '#22d3ee', { id: 'pump', glow: 0.4 }));
+  S.sphere([0, -2, 3], 2.2, '#fbbf24', { id: 'ca' }); const ex = S.sphere([10, -12, 0], 2.2, '#34d399', { id: 'exch' });
+  const Hs = [], Ks = [], Cl = [], Hc = [], Cl2 = [];
+  for (let i = 0; i < 6; i++) { Hs.push(S.sphere([0, 0, 0], 1.1, '#fb7185', { id: 'h' })); Ks.push(S.sphere([0, 0, 0], 1.2, '#a78bfa', { id: 'k' })); Cl.push(S.sphere([0, 0, 0], 1.2, '#4ade80', { id: 'cl' })); Hc.push(S.sphere([0, 0, 0], 1.2, '#38bdf8', { id: 'hco3' })); }
+  const X = S.sphere([0, 0, 0], 3, '#ef4444', { id: 'ppi', hidden: true }); const lX = K.lab(S, [-3, 10, 2], 'PPI 阻斷質子幫浦', 'ppi', '#fca5a5', -40, -20, { hidden: true });
+  K.lab(S, [0, 18, 0], '胃腺管腔（胃液 pH < 2）', 'canal', '#fde68a', 0, -14); K.lab(S, [-3, 10, 2], 'H⁺/K⁺ ATPase', 'pump', '#67e8f9', 40, -24); K.lab(S, [0, -2, 3], '碳酸酐酶', 'ca', '#fde68a', -40, 10); K.lab(S, [10, -12, 0], 'HCO₃⁻/Cl⁻ 交換', 'exch', '#86efac', 40, 10); K.lab(S, [0, -18, 0], '血液（微血管）', 'blood', '#fca5a5', 0, 14);
+  S.tube([-24, -18, 0], [24, -18, 0], 2.4, '#dc2626', { id: 'blood', al: 0.5 });
+  let mode = 'on', T = 0;
+  S.tick(dt => {
+    T += dt * 0.35; const on = mode === 'on';
+    for (let i = 0; i < 6; i++) {
+      const t = (T + i / 6) % 1, pp = pumps[i % 3].p;
+      Hs[i].hidden = !on && t > 0.45; mv(Hs[i].p, t < 0.45 ? V.lerp([0, -2, 3], pp, t / 0.45) : on ? V.lerp(pp, [pp[0], 20, pp[2]], (t - 0.45) / 0.55) : pp);
+      Ks[i].hidden = !on; mv(Ks[i].p, V.lerp([pp[0] + 2, 20, pp[2]], V.add(pp, [2, -2, 0]), t));
+      mv(Cl[i].p, t < 0.5 ? V.lerp([16, -22, (i - 3) * 2], [10, -12, 0], t / 0.5) : V.lerp([10, -12, 0], [2 + i, 18, -2], (t - 0.5) / 0.5)); Cl[i].hidden = !on && t > 0.5;
+      mv(Hc[i].p, t < 0.5 ? V.lerp([0, -2, 3], [10, -12, 0], t / 0.5) : V.lerp([10, -12, 0], [20, -20, (i - 3) * 2], (t - 0.5) / 0.5)); Hc[i].hidden = !on;
+    }
+    X.hidden = on; lX.hidden = on; mv(X.p, [-3, 10, 2]);
+  });
+  K.seg('#pamode', m => { mode = m; $('pa-cap').innerHTML = m === 'on' ? '胃泌素、組織胺、ACh → 質子幫浦把 H⁺ 打入胃腔換 K⁺；Cl⁻ 跟隨 → <b>HCl</b>；HCO₃⁻ 進入血液（鹼潮）' : '<b>Omeprazole</b> 抑制 H⁺/K⁺ ATPase → 胃酸分泌大減（治療 GERD、潰瘍）'; }, 'on');
+  S.onPick = o => { if (!o) return; const t = { cell: '壁細胞', canal: '細胞內小管（分泌面）', pump: '質子幫浦（主動運輸，耗 ATP）', ca: '碳酸酐酶：CO₂ + H₂O → H⁺ + HCO₃⁻', exch: 'HCO₃⁻/Cl⁻ 交換蛋白', h: 'H⁺', k: 'K⁺', cl: 'Cl⁻', hco3: 'HCO₃⁻（進入血液）', blood: '微血管', ppi: 'PPI 作用點' }[o.id]; if (t) $('pa-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 04 絨毛 ================= */
+(function () {
+  const S = K.stage('st-vil', { radius: 50, yaw: 0.45, pitch: 0.2, autoRotate: 0, target: [0, 10, 0] });
+  K.sheet(S, [-34, 0, -20], [68, 0, 0], [0, 0, 40], 12, 7, '#f9a8d4', { id: 'muc', al: 0.7 });
+  const pos = []; for (let i = -2; i <= 2; i++) for (let j = -1; j <= 1; j++) pos.push([i * 13, 0, j * 13]);
+  pos.forEach((p, k) => { const cut = k === 7; K.sweep(S, [p, V.add(p, [0, 14, 0]), V.add(p, [0, 26, 0])], t => t > 0.92 ? 4 * Math.sqrt(Math.max(0, 1 - ((t - 0.92) / 0.08) ** 2)) + 0.3 : 4, '#fbcfe8', 14, 14, { id: 'villus', al: cut ? 0.25 : 0.85 }, cut ? { a0: 0.25, a1: 1 } : {}); });
+  const C = pos[7];
+  const capL = [V.add(C, [-2.4, 0, 1]), V.add(C, [-2.4, 22, 1]), V.add(C, [0, 25, 1]), V.add(C, [2.4, 22, 1]), V.add(C, [2.4, 0, 1])];
+  const CP = new Mini3D.Path(capL, 6); CP.pts.slice(0, -1).forEach((p, k) => S.tube(p, CP.pts[k + 1], 0.7, k < CP.pts.length / 2 ? '#ef4444' : '#7c3aed', { id: 'cap' }));
+  S.tube(V.add(C, [0, -2, -1]), V.add(C, [0, 22, -1]), 1.1, '#fde047', { id: 'lacteal', al: 0.8 });
+  pos.forEach((p, k) => { if (k !== 7) S.tube(V.add(p, [6.5, 0, 6.5]), V.add(p, [6.5, -8, 6.5]), 1.8, '#be185d', { id: 'crypt', al: 0.7 }); });
+  const mv2 = []; for (let i = 0; i < 30; i++) { const a = (0.25 + (i / 30) * 0.75) * 6.2832, y = 4 + (i % 6) * 3.6; mv2.push(S.tube(V.add(C, [Math.cos(a) * 4, y, Math.sin(a) * 4]), V.add(C, [Math.cos(a) * 5, y, Math.sin(a) * 5]), 0.3, '#fef3c7', { id: 'mv', flat: 1 })); }
+  const P = []; for (let i = 0; i < 18; i++) { const kind = i % 3; P.push({ o: S.sphere([0, 0, 0], kind === 2 ? 1.3 : 0.9, ['#f8fafc', '#4ade80', '#fde047'][kind], { id: ['glc', 'aa', 'chylo'][kind] }), kind, u: i / 18, y: 6 + (i % 5) * 3.6 }); }
+  K.lab(S, V.add(C, [4, 26, 0]), '絨毛', 'villus', '#fbcfe8', 30, -14); K.lab(S, V.add(C, [-2.4, 14, 1]), '微血管', 'cap', '#fca5a5', -40, 0); K.lab(S, V.add(C, [0, 18, -1]), '中央乳糜管', 'lacteal', '#fde047', 40, -10); K.lab(S, V.add(pos[3], [6.5, -6, 6.5]), '腸腺（隱窩）', 'crypt', '#f9a8d4', 30, 16); K.lab(S, V.add(C, [5, 10, 0]), '微絨毛（刷狀緣）', 'mv', '#fef3c7', 40, 10);
+  S.tick(dt => {
+    P.forEach(p => {
+      p.u = (p.u + dt * 0.25) % 1; const out = V.add(C, [Math.cos(p.u * 9) * 9, p.y, Math.sin(p.u * 9) * 9]);
+      if (p.kind === 2) { const tgt = V.add(C, [0, p.y, -1]); mv(p.o.p, p.u < 0.5 ? V.lerp(out, tgt, p.u * 2) : V.add(tgt, [0, -(p.u - 0.5) * 40, 0])); }
+      else { const tgt = CP.at(0.5 + (p.y - 4) / 50); mv(p.o.p, p.u < 0.5 ? V.lerp(out, tgt, p.u * 2) : CP.at(Math.min(1, 0.55 + (p.u - 0.5)))); }
+    });
+  });
+  K.info(S, 'info-vil', {
+    villus: ['絨毛 Villus', ['黏膜的指狀突起；表面為單層柱狀上皮（吸收細胞 + 杯狀細胞）', '頂端細胞不斷脫落，由隱窩補充']], mv: ['微絨毛（刷狀緣）', ['上皮細胞頂膜的皺摺，大幅增加面積', '<b>刷狀緣酵素</b>嵌在膜上']],
+    cap: ['絨毛微血管', ['吸收<b>單醣、胺基酸</b> → 肝門靜脈 → 肝臟']], lacteal: ['中央乳糜管', ['淋巴管：吸收<b>乳糜微粒</b>（脂質）→ 胸管 → 血液']], crypt: ['腸腺（Lieberkühn 隱窩）', ['幹細胞產生新上皮細胞；Paneth 細胞分泌抗菌物質']],
+    muc: ['黏膜', ['小腸內面']], glc: ['單醣', ['經 Na⁺ 共同運輸等進入細胞，再到微血管']], aa: ['胺基酸', ['進入微血管 → 肝門靜脈']], chylo: ['乳糜微粒', ['三酸甘油酯 + 蛋白質的顆粒 → 乳糜管']]
+  }, { picker: 'pk-vil' });
+  $('vi-cap').textContent = '單醣與胺基酸 → 微血管；脂質（乳糜微粒）→ 中央乳糜管';
+})();
+
+/* ================= 05 肝小葉 ================= */
+(function () {
+  const S = K.stage('st-lob', { radius: 48, yaw: 0.3, pitch: 0.75, autoRotate: 0.05 });
+  const R = 28, H = 8, corners = [0, 1, 2, 3, 4, 5].map(k => [Math.cos(k * Math.PI / 3) * R, 0, Math.sin(k * Math.PI / 3) * R]);
+  S.tube([0, -H, 0], [0, H, 0], 2.6, '#3b82f6', { id: 'cv' });
+  corners.forEach((c, k) => { S.tube(V.add(c, [-1.6, -H, 0]), V.add(c, [-1.6, H, 0]), 1.3, '#ef4444', { id: 'ha' }); S.tube(V.add(c, [1.6, -H, 0]), V.add(c, [1.6, H, 0]), 2.2, '#7c3aed', { id: 'pv' }); S.tube(V.add(c, [0, -H, 2]), V.add(c, [0, H, 2]), 1, '#22c55e', { id: 'bd' }); S.tube(c, corners[(k + 1) % 6], 0.4, '#94a3b8', { id: 'edge', flat: 1, al: 0.5 }); });
+  for (let k = 0; k < 12; k++) { const a = k * Math.PI / 6 + Math.PI / 12, d = [Math.cos(a), 0, Math.sin(a)], rr = R * 0.92; S.face([V.add(V.mul(d, 3), [0, -H * 0.8, 0]), V.add(V.mul(d, rr), [0, -H * 0.8, 0]), V.add(V.mul(d, rr), [0, H * 0.8, 0]), V.add(V.mul(d, 3), [0, H * 0.8, 0])], '#b45309', { id: 'plate', al: 0.35 }); }
+  for (let k = 0; k < 12; k++) { const a = k * Math.PI / 6, d = [Math.cos(a), 0, Math.sin(a)]; S.sphere(V.add(V.mul(d, 15), [0, 2, 0]), 1.5, '#fbbf24', { id: 'kupffer' }); }
+  const bl = [], bi = [];
+  for (let i = 0; i < 36; i++) bl.push({ o: S.sphere([0, 0, 0], 1, '#ef4444', { nopick: true }), k: i % 6, u: Math.random(), y: (Math.random() - 0.5) * H * 1.4, off: (Math.random() - 0.5) * 0.4 });
+  for (let i = 0; i < 18; i++) bi.push({ o: S.sphere([0, 0, 0], 0.8, '#4ade80', { nopick: true }), k: i % 6, u: Math.random(), y: (Math.random() - 0.5) * H * 1.4, off: (Math.random() - 0.5) * 0.3 });
+  K.lab(S, [0, H, 0], '中央靜脈', 'cv', '#93c5fd', 0, -16); K.lab(S, V.add(corners[0], [0, H, 0]), '門脈三合體', 'pv', '#c4b5fd', 40, -14); K.lab(S, V.add(V.mul([Math.cos(0.26), 0, Math.sin(0.26)], 18), [0, H * 0.8, 0]), '肝細胞板', 'plate', '#fdba74', 30, -20); K.lab(S, [15, 2, 0], 'Kupffer 細胞', 'kupffer', '#fde047', 30, 20);
+  S.tick(dt => {
+    bl.forEach(b => { b.u = (b.u + dt * 0.18) % 1; const c = corners[b.k], d = V.lerp(c, [0, 0, 0], b.u); const a = Math.atan2(c[2], c[0]) + b.off * (1 - b.u); mv(b.o.p, [Math.cos(a) * V.len(d), b.y, Math.sin(a) * V.len(d)]); b.o.c = b.u < 0.6 ? '#ef4444' : '#7c3aed'; });
+    bi.forEach(b => { b.u = (b.u + dt * 0.12) % 1; const c = corners[b.k], d = V.lerp([0, 0, 0], c, b.u * 0.95); const a = Math.atan2(c[2], c[0]) + 0.26 + b.off; mv(b.o.p, [Math.cos(a) * V.len(d), b.y, Math.sin(a) * V.len(d)]); });
+  });
+  $('lo-cap').textContent = '血：三合體 → 竇狀隙 → 中央靜脈 → 肝靜脈；膽汁：膽小管 → 周邊膽小管 → 肝管';
+  S.onPick = o => { if (!o) return; const t = { cv: '中央靜脈 → 肝靜脈 → 下腔靜脈', ha: '肝動脈分支（含氧血）', pv: '肝門靜脈分支（來自腸、脾，富含營養）', bd: '膽小管（膽管分支）', plate: '肝細胞板：之間為竇狀隙；膽小管在相鄰肝細胞之間', kupffer: 'Kupffer 細胞：竇狀隙中的吞噬細胞', edge: '小葉邊界' }[o.id]; if (t) $('lo-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 07 胰泌素 / CCK ================= */
+(function () {
+  const A = '<div class="nd on">酸性食糜（pH < 4.5）</div><span class="ar on">→</span><div class="nd on">十二指腸分泌<b>胰泌素</b></div><span class="ar on">→</span><div class="nd on">胰臟分泌富含 <b>HCO₃⁻</b> 的胰液、膽汁 HCO₃⁻↑</div><span class="ar on">→</span><div class="nd on">中和酸、抑制胃分泌與排空</div>';
+  const F = '<div class="nd on">脂肪（與蛋白質）食糜</div><span class="ar on">→</span><div class="nd on">十二指腸分泌 <b>CCK</b></div><span class="ar on">→</span><div class="nd on">膽囊收縮 + 胰液<b>酵素</b>分泌</div><span class="ar on">→</span><div class="nd on">乳化與消化脂肪；抑制胃排空</div>';
+  $('r-acid').onclick = () => { $('r-chain').innerHTML = A; $('r-acid').classList.add('on'); $('r-fat').classList.remove('on'); };
+  $('r-fat').onclick = () => { $('r-chain').innerHTML = F; $('r-fat').classList.add('on'); $('r-acid').classList.remove('on'); };
+  $('r-acid').onclick();
+})();
+
+/* ================= 08 脂質消化動畫 ================= */
+(function () {
+  const cv = $('fat-cv'); let st = 0, tw = 0;
+  const STEPS = [
+    { t: '① 乳化', d: '<b>膽鹽</b>（兩性）把大油滴打散成小滴 → 增加脂酶作用面積（不是化學消化）' },
+    { t: '② 胰脂酶水解', d: '三酸甘油酯 → <b>游離脂肪酸 + 單酸甘油酯</b>（共脂酶協助）' },
+    { t: '③ 形成微胞', d: '膽鹽包住脂肪酸、單酸甘油酯 → <b>微胞</b>，移到刷狀緣' },
+    { t: '④ 進入上皮細胞並重新合成', d: '在細胞內重新合成三酸甘油酯，與蛋白質組成<b>乳糜微粒</b>' },
+    { t: '⑤ 進入乳糜管', d: '乳糜微粒經胞吐進入<b>中央乳糜管</b> → 淋巴 → 胸管 → 血液' }
+  ];
+  UI.stepper($('fat-steps'), STEPS, i => { st = i; tw = 0; }, { dur: 4200 });
+  K.loop(dt => {
+    tw = Math.min(1, tw + dt / 2); const e = sm(0, 1, tw);
+    const [c, w, h] = K.fit(cv); c.clearRect(0, 0, w, h);
+    const ey = h * 0.62;
+    c.fillStyle = '#f9a8d433'; c.fillRect(0, ey, w, h - ey); c.strokeStyle = '#f9a8d4'; c.beginPath(); c.moveTo(0, ey); c.lineTo(w, ey); c.stroke();
+    for (let x = 6; x < w; x += 9) { c.strokeStyle = '#fef3c7'; c.beginPath(); c.moveTo(x, ey); c.lineTo(x, ey - 6); c.stroke(); }
+    c.fillStyle = '#fde04733'; c.fillRect(w * 0.7, ey + 20, 26, h - ey - 20); c.fillStyle = '#fde047'; c.font = '11px ' + Mini3D.FONT; c.fillText('乳糜管', w * 0.7 - 4, h - 6);
+    c.fillStyle = '#cbd5e1'; c.fillText('腸腔', 8, 16); c.fillText('上皮細胞（刷狀緣）', 8, ey + 18);
+    const drop = (x, y, r, col) => { c.fillStyle = col; c.beginPath(); c.arc(x, y, r, 0, 6.28); c.fill(); };
+    if (st === 0) { const n = Math.round(1 + e * 11); for (let i = 0; i < n; i++) { const a = i * 2.4, rr = n === 1 ? 0 : 40 * e; drop(w * 0.3 + Math.cos(a) * rr, h * 0.3 + Math.sin(a) * rr * 0.6, 28 / Math.sqrt(n), '#fbbf24'); } for (let i = 0; i < 16; i++) { const a = i / 16 * 6.28; drop(w * 0.3 + Math.cos(a) * (32 + 10 * e), h * 0.3 + Math.sin(a) * (20 + 6 * e), 2.5, '#22c55e'); } }
+    if (st === 1) { for (let i = 0; i < 10; i++) { const x = w * 0.15 + i * 26, y = h * 0.3; drop(x, y, 7 * (1 - e * 0.5), '#fbbf24'); if (e > 0.3) { drop(x + 10 * e, y - 10 * e, 2.4, '#fde68a'); drop(x - 8 * e, y + 10 * e, 2.4, '#fde68a'); } } drop(w * 0.7, h * 0.22, 9, '#a78bfa'); c.fillStyle = '#c4b5fd'; c.fillText('胰脂酶', w * 0.7 - 16, h * 0.22 - 14); }
+    if (st >= 2) { const mx = st === 2 ? K.lerp(w * 0.2, w * 0.45, e) : w * 0.45, my = st === 2 ? K.lerp(h * 0.3, ey - 18, e) : ey - 18; for (let k = 0; k < 3; k++) { const cx = mx + k * 40 - 40; for (let i = 0; i < 10; i++) { const a = i / 10 * 6.28; drop(cx + Math.cos(a) * 11, my + Math.sin(a) * 11, 2.2, '#22c55e'); } drop(cx, my, 5, '#fde68a'); } c.fillStyle = '#86efac'; c.fillText('微胞', mx - 50, my - 18); }
+    if (st >= 3) { const k = st === 3 ? e : 1; for (let i = 0; i < 5; i++) { const x = w * 0.42 + i * 14, y = ey + 14 + k * 30; drop(x, y, 3, '#fde68a'); } const chx = st === 4 ? K.lerp(w * 0.55, w * 0.7 + 13, e) : w * 0.55, chy = st === 4 ? K.lerp(ey + 50, h - 30, e) : ey + 50; if (k > 0.6) { drop(chx, chy, 8, '#fbbf24'); c.strokeStyle = '#38bdf8'; c.lineWidth = 2; c.beginPath(); c.arc(chx, chy, 9, 0, 6.28); c.stroke(); c.fillStyle = '#fde68a'; c.fillText('乳糜微粒', chx + 12, chy + 4); } }
+  }, cv);
+})();
+
+/* ================= 快閃卡 / 測驗 ================= */
+UI.flashcards($('fc'), [
+  { f: '消化道管壁四層（由內而外）', b: '黏膜 → 黏膜下層 → 肌層（內環外縱）→ 漿膜。' },
+  { f: '兩個腸神經叢的位置', b: '黏膜下神經叢：黏膜下層；肌間神經叢：環肌與縱肌之間。' },
+  { f: '胃腺的細胞與分泌物', b: '壁細胞：HCl、內在因子；主細胞：胃蛋白酶原；G 細胞：胃泌素；ECL：組織胺。' },
+  { f: '壁細胞如何分泌 H⁺？', b: 'H⁺/K⁺ ATPase 主動運輸；Cl⁻ 跟隨；HCO₃⁻ 經 Cl⁻ 交換進入血液（鹼潮）。' },
+  { f: 'Omeprazole 的作用', b: '質子幫浦抑制劑（PPI）：抑制 H⁺/K⁺ ATPase → 減少胃酸。' },
+  { f: '胃唯一攸關生命的功能', b: '分泌<b>內在因子</b>（迴腸吸收維生素 B₁₂）。' },
+  { f: '消化性潰瘍的主要原因', b: '幽門螺旋桿菌感染（或 NSAIDs）；PPI + 抗生素治療。' },
+  { f: '增加小腸表面積的構造', b: '環狀皺褶、絨毛、微絨毛（刷狀緣）。' },
+  { f: '刷狀緣酵素有哪些？', b: '雙醣酶（乳糖酶等）、胜肽酶、腸激酶。' },
+  { f: '單醣、胺基酸 vs 脂質的吸收去向', b: '單醣、胺基酸 → 微血管 → 肝門靜脈；脂質 → 乳糜微粒 → 乳糜管 → 淋巴。' },
+  { f: '肝小葉中血與膽汁的流向', b: '血：門脈三合體 → 竇狀隙 → 中央靜脈；膽汁：反向流向周邊膽小管。' },
+  { f: '膽紅素的來源與黃疸', b: '血基質分解 → 游離膽紅素 → 肝結合 → 膽汁；過多 → 黃疸。' },
+  { f: '腸肝循環', b: '膽汁中的物質（如膽鹽）在腸道再吸收回肝門靜脈，回到肝臟再分泌。' },
+  { f: '胰蛋白酶原如何活化？', b: '十二指腸刷狀緣的<b>腸激酶</b>；胰蛋白酶再活化其他酶原。' },
+  { f: '胰泌素 vs CCK', b: '胰泌素：酸刺激 → 胰液 HCO₃⁻；CCK：脂肪刺激 → 膽囊收縮、胰酵素。' },
+  { f: '胃液分泌三期', b: '頭期（迷走）、胃期（胃泌素）、腸期（抑制）。' },
+  { f: '脂質消化吸收步驟', b: '膽鹽乳化 → 胰脂酶水解 → 微胞 → 細胞內再合成三酸甘油酯 → 乳糜微粒 → 乳糜管。' },
+  { f: '大腸的功能', b: '吸收水與電解質（約 90% 進入的水）、菌叢製造維生素 K 與 B 群、排便。' }
+], 'ch18');
+UI.quiz($('qz'), [
+  { q: '肌間神經叢位於？', o: ['黏膜下層', '環肌與縱肌之間', '黏膜固有層', '漿膜'], a: 1, e: '黏膜下神經叢在黏膜下層。' },
+  { q: '分泌內在因子的是？', o: ['主細胞', '壁細胞', 'G 細胞', '杯狀細胞'], a: 1, e: '壁細胞分泌 HCl 與內在因子。' },
+  { q: '胃蛋白酶原轉為胃蛋白酶需要？', o: ['腸激酶', '酸性環境', '膽鹽', '胰泌素'], a: 1, e: 'HCl 使其部分自我消化活化。' },
+  { q: '胃泌素刺激 HCl 分泌主要是透過？', o: ['直接作用壁細胞', '刺激 ECL 細胞釋放組織胺', '抑制迷走神經', '活化腸激酶'], a: 1, e: '主要間接經組織胺。' },
+  { q: '乳糖不耐症缺乏的是？', o: ['胰澱粉酶', '刷狀緣乳糖酶', '胃蛋白酶', '胰脂酶'], a: 1, e: '乳糖酶位於刷狀緣。' },
+  { q: '乳糜微粒進入？', o: ['絨毛微血管', '肝門靜脈', '中央乳糜管', '膽小管'], a: 2, e: '經淋巴到胸管。' },
+  { q: '肝小葉中血液流向？', o: ['中央靜脈 → 門脈三合體', '門脈三合體 → 竇狀隙 → 中央靜脈', '膽小管 → 中央靜脈', '肝動脈 → 膽小管'], a: 1, e: '膽汁流向相反。' },
+  { q: '活化胰蛋白酶原的酵素是？', o: ['胃蛋白酶', '腸激酶', '胰脂酶', '碳酸酐酶'], a: 1, e: '刷狀緣的腸激酶（腸肽酶）。' },
+  { q: '酸性食糜進入十二指腸主要刺激分泌？', o: ['CCK', '胰泌素', '胃泌素', '飢餓素'], a: 1, e: '胰泌素 → 富含 HCO₃⁻ 的胰液。' },
+  { q: '使膽囊收縮的主要激素是？', o: ['胰泌素', 'CCK', '胃泌素', 'GIP'], a: 1, e: 'CCK 也刺激胰酵素分泌。' },
+  { q: '膽鹽在脂肪消化中的角色是？', o: ['水解三酸甘油酯', '乳化並形成微胞', '活化胰脂酶原', '吸收進乳糜管'], a: 1, e: '乳化不是化學消化。' },
+  { q: '大腸菌叢可提供的維生素是？', o: ['維生素 A', '維生素 K', '維生素 C', '維生素 D'], a: 1, e: '也包括部分 B 群。' }
+]);
+</script>
+</body>
+</html>

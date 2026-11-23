@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>補充：骨骼與關節 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body style="--acc:#e2e8f0;--acc2:#38bdf8">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">補充 · 骨骼系統（課程講義 11）</div>
+  <h1 class="title3d">骨骼與關節</h1>
+  <p class="sub">長骨的構造（股骨剖面）、緻密骨的骨元與骨細胞、軟骨內骨化與骺板、周邊生長、膝關節剖面、可動關節六型（會動）、不動與微動關節。</p>
+  <div class="chips"><a class="chip" href="#s1">① 長骨構造</a><a class="chip" href="#s2">② 骨元</a><a class="chip" href="#s3">③ 骨的生長</a><a class="chip" href="#s4">④ 膝關節</a><a class="chip" href="#s5">⑤ 可動關節六型</a><a class="chip" href="#s6">⑥ 不動與微動關節</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="s1" data-nav="長骨構造">
+  <h2><span class="num">01</span>長骨的構造（右側股骨，冠狀剖面）</h2>
+  <div class="grid2">
+    <div class="stage" id="st-long"><canvas aria-label="3D 股骨剖面"></canvas><div class="hud">後半為剖面，前半半透明</div><div class="hud2" id="long-cap">點選部位</div></div>
+    <div class="card info"><div id="info-long"><div class="tt">點選部位</div></div><div class="picker" id="pk-long"></div></div>
+  </div>
+  <div class="card mt"> <p class="small"><b>骨骼的功能</b>：① 支持（形成骨架、維持外型）② 保護臟器 ③ <b>造血</b>（紅骨髓製造紅血球、白血球、血小板）④ 儲存礦物質與脂肪 ⑤ 配合肌肉形成<b>槓桿</b>產生運動。</p> <p class="small"><b>組成</b>（講義）：鈣磷鹽約 2/3 骨重、膠原約 1/3、骨細胞與蛋白聚醣約 2%。課本指出骨中的鈣磷鹽是<b>羥磷灰石</b>晶體 Ca₁₀(PO₄)₆(OH)₂，沉積在成骨細胞分泌的膠原基質上。</p> <div class="tbwrap mt"><table class="tb"> <tr><td><b>骨幹</b> diaphysis</td><td>骨的主體（中段）</td></tr> <tr><td><b>骨骺</b> epiphysis</td><td>骨的兩端（股骨頭、股骨髁）</td></tr> <tr><td><b>骨幹端</b> metaphysis</td><td>骨幹與骨骺交接處；生長期有<b>骺板</b>（軟骨鈣化區）</td></tr> <tr><td><b>骨髓腔</b></td><td>骨幹內空腔，含紅、黃骨髓（成人骨幹內主要為黃骨髓）</td></tr> <tr><td><b>骨外膜</b> periosteum</td><td>骨表面的白色纖維膜：外層纖維層（含血管、淋巴管、神經），內層生骨層（含彈性纖維、血管與<b>成骨細胞</b>）</td></tr> <tr><td><b>骨內膜</b> endosteum</td><td>襯在骨髓腔內面，含<b>蝕骨細胞</b></td></tr> </table></div> <p class="small"><b>緻密骨</b>：由許多骨元構成，承受應力的主要部位（骨幹最厚）。<b>海綿骨</b>：無骨元，由<b>骨小樑</b>形成格子網，其間充滿<b>紅骨髓</b>；骨小樑的排列方向順著受力方向。</p> <p class="small muted">模型以右側股骨為例（前方朝向你）；剖面切開前半以露出內部。</p></div>
+</section>
+
+<section class="sec" id="s2" data-nav="骨元">
+  <h2><span class="num">02</span>緻密骨的微細構造：骨元（哈氏系統）</h2>
+  <div class="grid2">
+    <div class="stage" id="st-ost"><canvas aria-label="3D 骨元"></canvas><div class="hud" id="ost-hud"></div><div class="hud2" id="ost-cap">點選部位</div>
+      <div class="sbar"><div class="seg" id="ostmode"><button class="btn sm" data-v="c" type="button">緻密骨與海綿骨</button><button class="btn sm" data-v="z" type="button">骨細胞放大</button></div></div></div>
+    <div class="card info"><div id="info-ost"><div class="tt">點選部位</div></div><div class="picker" id="pk-ost"></div></div>
+  </div>
+  <div class="card mt"> <p class="small"><b>骨元</b>（osteon，又稱哈氏系統）是緻密骨的結構單位：</p> <ol class="small"> <li><b>哈氏管</b>（Haversian canal，中央管）：骨內的血管通道，內有動脈、靜脈與神經；與骨髓、骨膜的血管形成網路。</li> <li>哈氏管貫穿骨的<b>縱軸</b>，周圍由<b>骨板</b>（lamellae）以同心圓環繞。</li> <li>骨板之間形成<b>骨陷窩</b>（lacunae），是<b>骨細胞</b>（osteocyte）的居所。</li> <li>骨陷窩周圍由<b>骨小管</b>（canaliculi）形成輻射狀網路，負責擴散以提供<b>養分</b>、交換<b>廢物</b>。</li> <li>緻密骨是承受應力的主要部位。</li> </ol> <p class="small">課本：成骨細胞被自己分泌、鈣化的基質包住後困在骨陷窩中，即成為骨細胞；骨細胞靠伸入骨小管的細胞質突起與血管相連而存活。</p> <p class="small"><b>穿通管</b>（perforating / Volkmann's canal）橫向穿過骨，連接骨外膜、各哈氏管與骨髓腔的血管。</p> <p class="small muted">右前方的骨元已縱向剖開並讓骨板呈階梯狀伸出，以便看見各層。</p></div>
+</section>
+
+<section class="sec" id="s3" data-nav="骨的生長">
+  <h2><span class="num">03</span>骨的發育：軟骨內骨化、骺板與周邊生長</h2>
+  <div class="grid2">
+    <div class="stage" id="st-gro"><canvas aria-label="3D 骨的發育"></canvas><div class="hud" id="gro-hud"></div><div class="hud2" id="gro-cap">點選部位</div>
+      <div class="sbar"><div class="seg" id="gromode"><button class="btn sm" data-v="o" type="button">骨化階段</button><button class="btn sm" data-v="p" type="button">骺板分區</button><button class="btn sm" data-v="c" type="button">周邊生長</button></div></div></div>
+    <div class="card"><div class="ctrl"><label for="age">周邊生長</label><input type="range" id="age" min="0" max="100" value="20"><output id="age-v">兒童</output></div><div class="info mt" id="info-gro"></div><div class="picker" id="pk-gro"></div></div>
+  </div>
+  <div class="card mt"> <p class="small"><b>鈣化</b>（calcification）：鈣鹽沉積；結果可使組織損傷或死亡（如軟骨鈣化後軟骨細胞死亡）。<b>骨化</b>（ossification）：<b>成骨細胞</b>造骨的生長作用，分為：</p> <div class="tbwrap mt"><table class="tb"> <tr><td><b>膜內骨化</b><br>intramembranous</td><td>直接在<b>纖維膜</b>中造骨：顱頂、下頜骨、鎖骨</td></tr> <tr><td><b>軟骨內骨化</b><br>endochondral</td><td>先形成<b>透明軟骨</b>模型再被骨取代：顱骨基部、體內諸骨（長骨）</td></tr> </table></div> <p class="small"><b>周邊生長</b>（circumferential growth，使骨幹<b>增粗</b>）：骨外膜的成骨細胞在外圍造新骨；同時骨內膜的<b>蝕骨細胞</b>吸收舊骨、擴大骨髓腔。</p> <p class="small"><b>縱向生長</b>（longitudinal growth，使骨幹<b>加長</b>）：經軟骨內骨化在<b>骺板</b>進行；生長激素經 IGF-1 刺激骺板軟骨細胞分裂。青春期後骺板關閉（被緻密骨取代），身高停止增加。</p> <p class="small"><b>骨的改建</b>（remodeling）：不論生長是否完成，骨都持續被成骨細胞沉積、被蝕骨細胞吸收（講義：周轉率約 18%/年）；成熟緻密骨依機械應力及血鈣濃度改建。課本：前 20 年造骨快於吸收；骨量約 30 多歲達高峰，50–60 歲後吸收常超過沉積。</p></div>
+</section>
+
+<section class="sec" id="s4" data-nav="膝關節">
+  <h2><span class="num">04</span>可動關節（滑液關節）：膝關節</h2>
+  <div class="grid2">
+    <div class="stage" id="st-knee"><canvas aria-label="3D 膝關節剖面"></canvas><div class="hud">矢狀切面（前方在右）</div><div class="hud2" id="knee-cap">點選部位</div></div>
+    <div class="card"><div class="ctrl"><label for="flex">屈膝</label><input type="range" id="flex" min="0" max="90" value="10"><output id="flex-v">10°</output></div><div class="info mt" id="info-knee"></div><div class="picker" id="pk-knee"></div></div>
+  </div>
+  <div class="card mt"> <p class="small"><b>可動關節</b>（synovial joint，滑液關節）：位於長骨端，兩骨之間有<b>關節腔</b>。</p> <ul class="small"> <li>兩骨相對的關節面覆蓋<b>關節軟骨</b>。</li> <li>外包<b>關節囊</b>（纖維層），內襯<b>滑膜</b>；滑膜分泌<b>滑液</b>，可擴散並具<b>潤滑</b>作用（也提供關節軟骨養分）。</li> </ul> <div class="tbwrap mt"><table class="tb"> <tr><td><b>滑囊</b> bursa</td><td>充滿滑液的小囊，<b>減少摩擦、吸震</b>（髕上、髕前、髕下滑囊）</td></tr> <tr><td><b>脂肪墊</b> fat pad</td><td><b>保護</b>軟骨、填補空隙（髕下脂肪墊）</td></tr> <tr><td><b>半月板</b> meniscus</td><td>股骨與脛骨之間 C 形的纖維軟骨墊；<b>導引滑液流動</b>、使關節面更吻合並分散壓力</td></tr> </table></div> <p class="small muted">右膝，沿<b>內側髁</b>外緣縱切（矢狀面）後從內側觀看：右方為前、左方為後。類風濕性關節炎即滑膜與滑液發炎，使關節軟骨受損。</p></div>
+</section>
+
+<section class="sec" id="s5" data-nav="可動關節六型">
+  <h2><span class="num">05</span>可動關節（滑液關節）的六種類型</h2>
+  <div class="grid2">
+    <div class="stage" id="st-jnt"><canvas aria-label="3D 可動關節六型"></canvas><div class="hud">六種關節同時示範運動</div><div class="hud2" id="jnt-cap">點選關節</div></div>
+    <div class="card info"><div id="info-jnt"><div class="tt">點選關節</div></div><div class="picker" id="pk-jnt"></div></div>
+  </div>
+  <div class="card mt"> <div class="tbwrap mt"><table class="tb"> <tr><th>類型</th><th>運動軸</th><th>例子（Fig 8.9）</th></tr> <tr><td><b>屈戌關節</b> hinge</td><td>單軸：屈／伸</td><td>肘（肱尺）、膝、指間</td></tr> <tr><td><b>車軸關節</b> pivot</td><td>單軸：繞骨長軸旋轉</td><td>寰樞關節（齒突在寰椎環中）、近端橈尺</td></tr> <tr><td><b>滑動關節</b> gliding</td><td>平面滑動（非軸性）</td><td>腕骨間、跗骨間</td></tr> <tr><td><b>橢圓關節</b> condyloid</td><td>雙軸：屈伸＋內收外展</td><td>掌指關節、橈腕</td></tr> <tr><td><b>鞍狀關節</b> saddle</td><td>雙軸（兩面都呈馬鞍形）</td><td>拇指的腕掌關節</td></tr> <tr><td><b>杵臼關節</b> ball &amp; socket</td><td>多軸：屈伸、內收外展、旋轉</td><td>肩、髖</td></tr> </table></div> <p class="small muted">深色＝固定的骨、淺色＝活動的骨，彩色箭頭＝運動軸。髖關節的骨盆已把前半切開，以便看見股骨頭在髖臼中。第一次開啟需數秒建立模型。</p></div>
+</section>
+
+<section class="sec" id="s6" data-nav="不動與微動關節">
+  <h2><span class="num">06</span>關節的分類：不動關節與微動關節</h2>
+  <div class="grid2">
+    <div class="stage" id="st-fix"><canvas aria-label="3D 不動與微動關節"></canvas><div class="hud">上排：不動關節　下排：微動關節</div><div class="hud2" id="fix-cap">點選部位</div></div>
+    <div class="card info"><div id="info-fix"><div class="tt">點選部位</div></div><div class="picker" id="pk-fix"></div></div>
+  </div>
+  <div class="card mt"> <p class="small"><b>關節</b>（articulation）：兩骨交接處。依<b>運動範圍</b>分為：</p> <p class="small"><b>1. 不動關節</b>（synarthrosis）：無關節腔，骨間充填結締組織或軟骨，年齡增長後可能癒合。</p> <ul class="small"> <li>依骨接面：<b>縫合</b>（suture）—額、頂、顳骨間的骨縫；<b>釘嵌</b>（gomphosis）—牙齒與齒槽。</li> <li>依組織性質：<b>軟骨接合</b>（synchondrosis）—以透明軟骨相連，如第一肋骨與胸骨柄、骺板；<b>骨質接合</b>（synostosis）—原本分開的骨完全癒合，如頭部諸骨。</li> </ul> <p class="small"><b>2. 微動關節</b>（amphiarthrosis）：只允許非常有限的運動。</p> <ul class="small"><li><b>韌帶聯合</b>（syndesmosis）—脛骨與腓骨遠端之間的骨間韌帶。</li><li><b>聯合</b>（symphysis）—以纖維軟骨盤相連，如<b>恥骨聯合</b>。</li></ul> <p class="small"><b>3. 可動關節</b>（synovial joint）：見④⑤。</p></div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">07</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">08</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依課程講義「11-骨骼」與原「骨骼與關節 3D」內容整理，僅供個人複習。3D 為示意。 · <a href="index.html">回總覽</a> · <a href="ch12.html">← 第 12 章 肌肉</a> · <a href="ch13.html">第 13 章 血液與心臟 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+const lab = (S, p, t, id, c, dx, dy, x) => K.lab(S, p, t, id, c, dx, dy, Object.assign({ size: 11 }, x));
+const BONE = '#e7e5e4', CART = '#bfdbfe', MARROW = '#fde68a', RED = '#b91c1c';
+const trab = (S, c, r, n, id, seed, x) => { const R = Mini3D.rng(seed || 1); for (let i = 0; i < n; i++) { const a = V.add(c, [(R() - 0.5) * r[0] * 2, (R() - 0.5) * r[1] * 2, -0.3]), b = V.add(a, [(R() - 0.5) * 4, (R() - 0.5) * 4, 0]); S.tube(a, b, 0.35, '#f5f5f4', Object.assign({ id }, x)); } };
+/* 鏡頭在 -z：剖面圖保留 z>0 的後半。由上往下的掃掠用 BACK/FRONT，橢球用 EB/EF */
+const BACK = { a0: -0.25, a1: 0.25 }, FRONT = { a0: 0.25, a1: 0.75 }, EB = { u0: 0, u1: 0.5 }, EF = { u0: 0.5, u1: 1 }, PINK = '#fecaca';
+const cutFaces = (S, F, col, x) => F.rings.slice(0, -1).forEach((r, i) => { const s = F.rings[i + 1], n = r.length - 1; S.face([r[0], s[0], s[n], r[n]], col, Object.assign({ zb: 2.5 }, x)); });
+
+/* ========== ① 長骨 ========== */
+(function () {
+  const INFO = {"緻密骨": {"t": "緻密骨", "en": "Compact bone　〔骨組織〕", "p": "骨幹的厚壁與骨骺表面的薄殼；由許多<b>骨元</b>構成（見②），是承受應力的主要部位。剖面上越往骨幹中段越厚。"}, "關節軟骨": {"t": "關節軟骨", "en": "Articular cartilage　〔骨組織〕", "p": "覆蓋股骨頭、股骨髁與髕骨面的<b>透明軟骨</b>，表面光滑，可減少摩擦並緩衝。"}, "前半（完整外觀）": {"t": "前半（完整外觀）", "en": "Front half　〔骨組織〕", "p": "（見下方說明）"}, "骨外膜（纖維層）": {"t": "骨外膜（纖維層）", "en": "Periosteum – fibrous layer　〔骨膜〕", "p": "骨表面的白色纖維外膜之<b>外層</b>：含血管、淋巴管及神經。（上半段已剝除，露出內層）"}, "骨外膜（生骨層）": {"t": "骨外膜（生骨層）", "en": "Periosteum – osteogenic layer　〔骨膜〕", "p": "骨外膜<b>內層</b>：含彈性纖維、血管及<b>成骨細胞</b>（osteoblast），負責骨的<b>增粗</b>（周邊生長）與修復。"}, "股骨頭": {"t": "股骨頭", "en": "Head of femur", "p": "球形，嵌入髖臼形成<b>杵臼關節</b>（髖關節）；表面覆蓋關節軟骨，中央小凹為股骨頭凹（股骨頭韌帶附著）。"}, "股骨頸": {"t": "股骨頸", "en": "Neck of femur", "p": "連接股骨頭與骨幹，與骨幹約成 125° 角；老年人骨質疏鬆時易在此骨折。"}, "大轉子": {"t": "大轉子", "en": "Greater trochanter", "p": "外側的大突起，臀肌附著處。"}, "小轉子": {"t": "小轉子", "en": "Lesser trochanter", "p": "後內側的小突起，髂腰肌附著處。"}, "內側髁": {"t": "內側髁", "en": "Medial condyle", "p": "與脛骨內側髁形成膝關節。"}, "外側髁": {"t": "外側髁", "en": "Lateral condyle", "p": "與脛骨外側髁形成膝關節。"}, "髕骨面": {"t": "髕骨面", "en": "Patellar surface", "p": "遠端前方的淺溝（滑車），與髕骨後面形成關節。"}, "股骨粗線": {"t": "股骨粗線", "en": "Linea aspera", "p": "骨幹後面的縱行骨嵴，許多大腿肌肉附著。"}, "營養動脈": {"t": "營養動脈", "en": "Nutrient artery　〔血管〕", "p": "經骨幹上的<b>營養孔</b>斜穿緻密骨進入骨髓腔，分支供應骨髓與骨內部。"}, "骨骺（近端）": {"t": "骨骺（近端）", "en": "Proximal epiphysis　〔區域〕", "p": "股骨頭：內部為海綿骨（含紅骨髓），外包薄層緻密骨，關節面覆蓋關節軟骨。"}, "骨幹端": {"t": "骨幹端", "en": "Metaphysis　〔區域〕", "p": "骨幹與骨骺的交接處；生長期在此有骺板。"}, "骨幹": {"t": "骨幹", "en": "Diaphysis　〔區域〕", "p": "骨的主體，中空的管狀緻密骨，內為骨髓腔。"}, "骨骺（遠端）": {"t": "骨骺（遠端）", "en": "Distal epiphysis　〔區域〕", "p": "股骨髁：與脛骨、髕骨形成膝關節。"}};
+  const S = K.stage('st-long', { radius: 62, yaw: 0.1, pitch: 0.1, autoRotate: 0, target: [0, 2, 0] });
+  const B = Object.assign({ smooth: 2 }, BACK);
+  const shaft = [[0, 34, 0], [1, 0, 0], [0, -34, 0]], rS = t => 6 + 2.5 * Math.abs(t - 0.5) * 2;
+  const F0 = K.sweep(S, shaft, rS, BONE, 16, 12, { id: '緻密骨' }, B), R0 = F0.rings, n0 = R0[0].length - 1;
+  K.sweep(S, shaft, t => rS(t) + 0.7, '#f9a8d4', 16, 12, { id: '骨外膜（生骨層）', al: 0.75 }, B);
+  K.sweep(S, shaft, t => rS(t) + 1.4, '#f8fafc', 16, 12, { id: '骨外膜（纖維層）', al: 0.5 }, B);
+  for (let i = 0; i < 16; i++) {
+    const ca = F0.path.at(i / 16), cb = F0.path.at((i + 1) / 16), mid = (i + 0.5) / 16, end = mid < 0.12 || mid > 0.88;
+    const P = (k, j, f) => V.lerp(R0[k][j], k === i ? ca : cb, f);
+    [0, n0].forEach(j => S.face([P(i, j, 0), P(i + 1, j, 0), P(i + 1, j, 0.32), P(i, j, 0.32)], '#d6d3d1', { id: '緻密骨', zb: 2 }));
+    S.face([P(i, 0, 0.32), P(i + 1, 0, 0.32), P(i + 1, n0, 0.32), P(i, n0, 0.32)], end ? PINK : MARROW, { id: end ? '骨幹端' : '骨幹', zb: 3 });
+  }
+  const HEAD = [-12, 46, 0];
+  K.ellipsoid(S, HEAD, [7.5, 7.5, 7.5], BONE, 16, 10, { id: '股骨頭' }, EB);
+  S.face(K.circle(HEAD, 7.4, [0, 0, 1], 20), PINK, { id: '骨骺（近端）', zb: 2 }); trab(S, HEAD, [4.6, 4.6], 22, '骨骺（近端）', 3);
+  K.ellipsoid(S, V.add(HEAD, [-1, 1, 0]), [8.2, 8.2, 8.2], CART, 14, 6, { id: '關節軟骨', al: 0.8 }, { u0: 0, u1: 0.5, v0: 0, v1: 0.45, rz: 0.6 });
+  const FN = K.sweep(S, [HEAD, [-5, 40, 0], [0, 34, 0]], 4.6, BONE, 6, 10, { id: '股骨頸' }, BACK); cutFaces(S, FN, PINK, { id: '股骨頸' });
+  K.ellipsoid(S, [9, 44, 0], [5, 6, 5], BONE, 12, 8, { id: '大轉子' }, EB); S.face(K.circle([9, 44, 0], 4.9, [0, 0, 1], 16), PINK, { id: '大轉子', zb: 2 }); trab(S, [9, 44, 0], [3, 4], 10, '大轉子', 6);
+  K.ellipsoid(S, [-3, 30, 2.5], [2.6, 3.4, 2.6], BONE, 10, 6, { id: '小轉子' });
+  S.face(K.circle([3, 37, 0], 6, [0, 0, 1], 16), PINK, { id: '骨幹端', zb: 2.2 }); trab(S, [3, 37, 0], [4, 4], 16, '骨幹端', 4);
+  [[-6, -42, 0, '內側髁'], [6, -42, 0, '外側髁']].forEach(([x, y, z, id]) => { K.ellipsoid(S, [x, y, z], [6.5, 7.5, 8], BONE, 14, 8, { id }, EB); K.ellipsoid(S, [x, y - 0.6, z], [7.2, 8.2, 8.6], CART, 12, 6, { id: '關節軟骨', al: 0.8 }, { u0: 0, u1: 0.5, v0: 0.55, v1: 1 }); });
+  S.face(K.circle([0, -41, 0], 9.6, [0, 0, 1], 20).map(p => [p[0] * 1.25, p[1], 0]), PINK, { id: '骨骺（遠端）', zb: 2 }); trab(S, [0, -41, 0], [8, 6], 28, '骨骺（遠端）', 5);
+  K.sheet(S, [-5, -37, -8.6], [10, 0, 0], [0, -7, 0], 2, 2, CART, { id: '髕骨面', al: 0.35 });
+  K.sweep(S, [[1, 26, 7], [2, 0, 8.6], [1, -26, 7]], 0.9, '#d6d3d1', 10, 6, { id: '股骨粗線' });
+  const art = new Mini3D.Path([[-14, 6, -6], [-9, 4, -3], [-5, 2, -0.4], [-1, 8, -0.4], [2, 18, -0.4]], 6); art.pts.slice(0, -1).forEach((p, k) => S.tube(p, art.pts[k + 1], 0.7, '#ef4444', { id: '營養動脈' })); S.tube([-1, 2, -0.4], [1, -12, -0.4], 0.5, '#ef4444', { id: '營養動脈' });
+  K.sweep(S, shaft, rS, BONE, 12, 10, { id: '前半（完整外觀）', al: 0.1 }, Object.assign({ smooth: 2 }, FRONT));
+  K.ellipsoid(S, HEAD, [7.5, 7.5, 7.5], BONE, 12, 8, { id: '前半（完整外觀）', al: 0.1 }, EF);
+  [['股骨頭', V.add(HEAD, [0, 7.5, 0]), '股骨頭', 0, -26], ['關節軟骨', V.add(HEAD, [-7, 4, 0]), '關節軟骨', -50, -14], ['股骨頸', [-5, 40, 0], '股骨頸', 10, -44], ['大轉子', [10, 49, 0], '大轉子', 30, -16], ['小轉子', [-3, 30, 2.5], '小轉子', -50, 16], ['骨骺（近端）', HEAD, '近端骨骺（海綿骨＋紅骨髓）', -70, 18], ['骨幹端', [3, 37, 0], '骨幹端', 46, 10], ['骨幹', [0, 8, 0], '骨幹（骨髓腔）', -55, -30], ['緻密骨', [6, -12, 0], '緻密骨', 40, 10], ['骨外膜（纖維層）', [8.4, 24, 0], '骨外膜纖維層', 50, -10], ['骨外膜（生骨層）', [7.7, 2, 0], '骨外膜生骨層', 50, 14], ['營養動脈', [-12, 5, -5], '營養動脈', -40, 0], ['骨骺（遠端）', [0, -40, 0], '遠端骨骺', 0, 34], ['內側髁', [-8, -46, 0], '內側髁', -40, 10], ['外側髁', [8, -46, 0], '外側髁', 40, 10]].forEach(([id, p, t, dx, dy]) => lab(S, p, t, id, '#e2e8f0', dx, dy));
+  K.info(S, 'info-long', INFO, { picker: 'pk-long', hl: false, on: id => { $('long-cap').textContent = '👉 ' + id; } });
+})();
+
+/* ========== ② 骨元 ========== */
+(function () {
+  const INFO = {"間骨板（骨元之間）": {"t": "間骨板（骨元之間）", "en": "Interstitial lamellae　〔緻密骨〕", "p": "骨元之間殘留的舊骨板（骨不斷改建所留下）。"}, "外環骨板": {"t": "外環骨板", "en": "Circumferential lamellae　〔緻密骨〕", "p": "緊貼骨外膜下方、環繞整根骨的數層骨板。"}, "骨元（哈氏系統）": {"t": "骨元（哈氏系統）", "en": "Osteon (Haversian system)　〔骨元〕", "p": "緻密骨的結構單位：以哈氏管為中心、同心圓排列的骨板，沿骨的<b>縱軸</b>排列。"}, "同心骨板": {"t": "同心骨板", "en": "Concentric lamellae　〔骨元〕", "p": "一層層環繞哈氏管的骨板（此骨元呈階梯狀伸出）。相鄰骨板的膠原纖維方向不同，增加強度。"}, "骨細胞（在骨陷窩中）": {"t": "骨細胞（在骨陷窩中）", "en": "Osteocytes in lacunae　〔骨元〕", "p": "骨板之間的小腔＝<b>骨陷窩</b>，住著骨細胞（由被基質包埋的成骨細胞轉變而來）。"}, "骨小管": {"t": "骨小管", "en": "Canaliculi　〔骨元〕", "p": "自骨陷窩向四周輻射的細小管道，骨細胞的突起伸入其中，相鄰骨細胞彼此相連，並通到哈氏管 → 擴散提供<b>養分</b>、交換<b>廢物</b>。"}, "哈氏管（中央管）": {"t": "哈氏管（中央管）", "en": "Haversian (central) canal　〔骨元〕", "p": "貫穿骨元中央、沿骨縱軸的管道，內有血管與神經。"}, "動脈": {"t": "動脈", "en": "Artery　〔血管與神經〕", "p": "經穿通管、哈氏管分布到骨內部的血管。"}, "靜脈": {"t": "靜脈", "en": "Vein　〔血管與神經〕", "p": "（見下方說明）"}, "神經": {"t": "神經", "en": "Nerve　〔血管與神經〕", "p": "伴隨血管走在哈氏管中。"}, "穿通管（福克曼管）": {"t": "穿通管（福克曼管）", "en": "Perforating (Volkmann's) canal　〔血管與神經〕", "p": "<b>橫向</b>穿過骨的管道，連接骨外膜、各哈氏管與骨髓腔的血管。"}, "骨外膜": {"t": "骨外膜", "en": "Periosteum　〔骨膜〕", "p": "包在骨表面的結締組織膜（外纖維層＋內生骨層含成骨細胞），其中的血管經穿通管進入骨內。"}, "骨小樑": {"t": "骨小樑", "en": "Trabeculae　〔海綿骨〕", "p": "海綿骨由骨小樑交織成格子網；<b>不含骨元</b>，骨小樑內的骨細胞靠鄰近骨髓的血管擴散供應。"}, "紅骨髓": {"t": "紅骨髓", "en": "Red marrow　〔海綿骨〕", "p": "填在骨小樑之間，造血組織。"}, "骨內膜": {"t": "骨內膜", "en": "Endosteum　〔海綿骨〕", "p": "襯在骨髓腔面與骨小樑表面的薄膜，含蝕骨細胞。"}, "骨陷窩": {"t": "骨陷窩", "en": "Lacuna　〔骨細胞放大〕", "p": "骨細胞所在的小腔。"}, "骨細胞": {"t": "骨細胞", "en": "Osteocyte　〔骨細胞放大〕", "p": "困在骨陷窩中的成熟骨細胞，維持骨基質；以細長突起經骨小管與鄰近骨細胞及血管相連。"}, "細胞突起（在骨小管內）": {"t": "細胞突起（在骨小管內）", "en": "Cell processes in canaliculi　〔骨細胞放大〕", "p": "骨細胞的細胞質突起伸入骨小管，相鄰骨細胞的突起相接（隙型連結），物質得以在細胞間傳遞。"}};
+  const S = K.stage('st-ost', { radius: 50, yaw: 0.5, pitch: 0.3, autoRotate: 0 });
+  const C = { gs: 'c' }, Z = { gs: 'z' };
+  K.box(S, [0, 6, 0], [60, 26, 36], BONE, Object.assign({ id: '間骨板（骨元之間）', al: 0.12 }, C));
+  K.sheet(S, [-30, 19.2, -18], [60, 0, 0], [0, 0, 36], 6, 4, '#fda4af', Object.assign({ id: '骨外膜', al: 0.5 }, C));
+  [17.5, 16.2].forEach(y => K.sheet(S, [-30, y, -18], [60, 0, 0], [0, 0, 36], 6, 4, '#d6d3d1', Object.assign({ id: '外環骨板', al: 0.35 }, C)));
+  const OS = [[-16, -6], [0, 6], [16, -4], [-10, 10], [12, 12]];
+  OS.forEach(([x, z], k) => {
+    const lam = k === 0 ? 5 : 4;
+    for (let l = 0; l < lam; l++) { const r = 2 + l * 1.6, top = k === 0 ? 14 - l * 3.4 : 15; K.sweep(S, [[x, -6, z], [x, top, z]], r, l % 2 ? '#d6d3d1' : '#e7e5e4', 1, 16, Object.assign({ id: '同心骨板', al: k === 0 ? 0.95 : 0.4 }, C), { smooth: 1, a0: k === 0 ? 0.1 : 0, a1: k === 0 ? 0.85 : 1 }); }
+    S.tube([x - 0.6, -6, z], [x - 0.6, 18, z], 0.5, '#ef4444', Object.assign({ id: '動脈' }, C)); S.tube([x + 0.6, -6, z], [x + 0.6, 18, z], 0.5, '#3b82f6', Object.assign({ id: '靜脈' }, C)); S.tube([x, -6, z + 0.6], [x, 18, z + 0.6], 0.25, '#fde047', Object.assign({ id: '神經' }, C));
+    for (let l = 1; l < 4; l++) for (let a = 0; a < 6; a++) { const r = 2.8 + l * 1.6, ang = a * 1.05 + l, p = [x + Math.cos(ang) * r, (k === 0 ? 10 - l * 3 : 12) - (a % 2) * 3, z + Math.sin(ang) * r]; S.sphere(p, 0.5, '#7c3aed', Object.assign({ id: '骨細胞（在骨陷窩中）' }, C)); S.tube(p, V.add(p, [-Math.cos(ang) * 1.2, 0.2, -Math.sin(ang) * 1.2]), 0.1, '#c4b5fd', Object.assign({ id: '骨小管', flat: 1 }, C)); }
+  });
+  K.sweep(S, [[-16, 2, -6], [0, 2, 0], [0, 2, 6], [16, 4, -4]], 0.9, '#f87171', 16, 8, Object.assign({ id: '穿通管（福克曼管）' }, C));
+  for (let i = 0; i < 40; i++) { const a = [(i * 13 % 56) - 28, -10 - (i * 7 % 16), (i * 11 % 32) - 16]; S.tube(a, V.add(a, [(i % 5) - 2, (i % 3) + 2, (i % 4) - 1.5]), 0.6, '#f5f5f4', Object.assign({ id: '骨小樑' }, C)); }
+  K.box(S, [0, -18, 0], [58, 14, 34], RED, Object.assign({ id: '紅骨髓', al: 0.18 }, C));
+  K.sheet(S, [-29, -7, -17], [58, 0, 0], [0, 0, 34], 6, 4, '#a78bfa', Object.assign({ id: '骨內膜', al: 0.35 }, C));
+  [['骨元（哈氏系統）', [-16, 14, -6], '骨元（剖開）', -40, -20], ['同心骨板', [-12, 4, -6], '同心骨板', -50, 10], ['哈氏管（中央管）', [-16, 18, -6], '哈氏管', 20, -30], ['穿通管（福克曼管）', [0, 2, 0], '穿通管', 20, 44], ['骨外膜', [26, 19.5, 16], '骨外膜', 30, -16], ['外環骨板', [26, 17, 16], '外環骨板', 40, 6], ['間骨板（骨元之間）', [8, 8, -14], '間骨板', 60, -14], ['骨小樑', [10, -14, 8], '海綿骨：骨小樑', 40, 10], ['紅骨髓', [-20, -18, 14], '紅骨髓', -30, 16], ['骨內膜', [-26, -7, 15], '骨內膜', -30, 0], ['骨細胞（在骨陷窩中）', [-11.6, 7, -4], '骨細胞', -56, 52]].forEach(([id, p, t, dx, dy]) => lab(S, p, t, id, '#e2e8f0', dx, dy, C));
+  S.sphere([-16, 18, -6], 0.1, '#fff', Object.assign({ id: '哈氏管（中央管）' }, C)); S.tube([-16, -6, -6], [-16, 18, -6], 1.4, '#0f172a', Object.assign({ id: '骨元（哈氏系統）', al: 0.4 }, C));
+  // 骨細胞放大
+  K.ellipsoid(S, [0, 0, 0], [12, 6, 8], '#d6d3d1', 16, 8, Object.assign({ id: '骨陷窩', al: 0.25 }, Z));
+  K.ellipsoid(S, [0, 0, 0], [9, 4.4, 6], '#a78bfa', 14, 8, Object.assign({ id: '骨細胞' }, Z)); K.ellipsoid(S, [0, 0, 0], [3, 2.4, 2.4], '#5b21b6', 10, 6, Object.assign({ id: '骨細胞' }, Z));
+  Mini3D.fib(16).forEach(u => { const a = [u[0] * 10, u[1] * 5, u[2] * 7], b = V.mul(a, 2.6); S.tube(V.mul(a, 0.9), b, 0.5, '#c4b5fd', Object.assign({ id: '細胞突起（在骨小管內）' }, Z)); S.tube(V.mul(a, 1.1), b, 1.1, '#e7e5e4', Object.assign({ id: '骨小管', al: 0.25 }, Z)); });
+  [['骨陷窩', [12, 0, 0], '骨陷窩', 30, -10], ['骨細胞', [0, 4, 0], '骨細胞', 0, -30], ['細胞突起（在骨小管內）', [20, 12, 0], '細胞突起（在骨小管內）', 30, -10]].forEach(([id, p, t, dx, dy]) => lab(S, p, t, id, '#e2e8f0', dx, dy, Z));
+  K.seg('#ostmode', m => { S.each(o => { if (o.gs) o.hidden = o.gs !== m; }); $('ost-hud').textContent = m === 'c' ? '上：緻密骨（骨元）　下：海綿骨' : '骨陷窩中的骨細胞'; S.resetView(); if (m === 'z') S.dist = S.home.dist * 0.55; }, 'c');
+  K.info(S, 'info-ost', INFO, { picker: 'pk-ost', hl: false, on: id => { $('ost-cap').textContent = '👉 ' + id; } });
+})();
+
+/* ========== ③ 骨的發育與生長 ========== */
+(function () {
+  const INFO = {"軟骨膜": {"t": "軟骨膜", "en": "Perichondrium", "p": "包住軟骨的結締組織膜；之後轉變為骨外膜。"}, "骨領（緻密骨）": {"t": "骨領（緻密骨）", "en": "Bone collar / compact bone", "p": "骨外膜的成骨細胞在骨幹外圍造出的骨（膜內方式）；之後增厚成骨幹的緻密骨。"}, "骨外膜": {"t": "骨外膜", "en": "Periosteum", "p": "由軟骨膜轉變而來；內層含成骨細胞，使骨增粗。"}, "鈣化軟骨": {"t": "鈣化軟骨", "en": "Calcified cartilage", "p": "骨幹中段的軟骨細胞肥大，基質鈣化，軟骨細胞隨後死亡。"}, "初級骨化中心（海綿骨）": {"t": "初級骨化中心（海綿骨）", "en": "Primary ossification center", "p": "血管帶入的成骨細胞在鈣化軟骨殘骸上沉積骨質，形成海綿骨。"}, "血管": {"t": "血管", "en": "Blood vessels", "p": "營養動脈穿過骨領進入骨幹中央，帶入成骨細胞與蝕骨細胞的前驅細胞。"}, "骨髓腔": {"t": "骨髓腔", "en": "Medullary cavity", "p": "骨幹中央的骨被蝕骨細胞吸收而成；內含骨髓。"}, "骺板（軟骨）": {"t": "骺板（軟骨）", "en": "Epiphyseal plate", "p": "骨骺與骨幹之間保留的透明軟骨層，軟骨細胞持續增生、鈣化、被骨取代，使骨加長（右側為放大）。"}, "骺線": {"t": "骺線", "en": "Epiphyseal line", "p": "骺板關閉後留下的痕跡。"}, "關節軟骨": {"t": "關節軟骨", "en": "Articular cartilage", "p": "骨骺關節面保留的透明軟骨。"}, "軟骨基質": {"t": "軟骨基質", "en": "Cartilage matrix　〔骺板放大〕", "p": "骺板的透明軟骨基質。"}, "骨骺的骨組織": {"t": "骨骺的骨組織", "en": "Bone tissue of epiphysis　〔骺板放大〕", "p": "骺板上方（骨骺側）的海綿骨。"}, "鈣化的細胞間質": {"t": "鈣化的細胞間質", "en": "Calcified intercellular substance　〔骺板放大〕", "p": "肥大的軟骨細胞使周圍基質鈣化，養分無法擴散，軟骨細胞死亡。"}, "新骨（骨小樑）": {"t": "新骨（骨小樑）", "en": "New bone on cartilage remnants　〔骺板放大〕", "p": "成骨細胞在鈣化軟骨的殘骸表面沉積骨質，形成骨幹端的海綿骨。"}, "微血管": {"t": "微血管", "en": "Capillaries　〔骺板放大〕", "p": "自骨幹端伸入，帶來成骨細胞並移除死亡的軟骨細胞。"}, "成骨細胞": {"t": "成骨細胞", "en": "Osteoblasts　〔骺板放大〕", "p": "沉積骨組織（分泌膠原基質，再以羥磷灰石鈣化）。"}, "靜止軟骨細胞": {"t": "靜止軟骨細胞", "en": "Resting cells　〔骺板放大〕", "p": "①靠骨骺側的小型軟骨細胞，散在不分裂（幹細胞庫）。"}, "軟骨細胞柱": {"t": "軟骨細胞柱", "en": "Chondrocyte columns　〔骺板放大〕", "p": "②增生區：軟骨細胞進行<b>有絲分裂</b>，扁平細胞疊成柱狀；③肥大區：較老的細胞<b>變大</b>並使基質<b>鈣化</b>；④細胞死亡、留下鈣化間質。細胞不斷往骨幹方向「推進」，所以骨變長。"}, "骨幹橫切（緻密骨）": {"t": "骨幹橫切（緻密骨）", "en": "Diaphysis cross section　〔周邊生長〕", "p": "骨幹的環狀緻密骨。拖動滑桿可看到外徑與骨髓腔一起變大。"}, "骨髓腔·周邊生長": {"t": "骨髓腔", "en": "Medullary cavity　〔周邊生長〕", "p": "被蝕骨細胞擴大。"}, "骨外膜·周邊生長": {"t": "骨外膜", "en": "Periosteum　〔周邊生長〕", "p": "內層含成骨細胞。"}, "成骨細胞（外表面）": {"t": "成骨細胞（外表面）", "en": "Osteoblasts　〔周邊生長〕", "p": "骨外膜生骨層的成骨細胞在<b>外表面</b>製造新骨 → 骨幹<b>增粗</b>。"}, "蝕骨細胞（內表面）": {"t": "蝕骨細胞（內表面）", "en": "Osteoclasts　〔周邊生長〕", "p": "骨內膜上<b>多核</b>的大型細胞（類巨噬細胞）：以皺褶膜分泌 H⁺（溶解磷酸鈣）與 cathepsin K（分解膠原）→ <b>吸收</b>舊骨、擴大骨髓腔。"}};
+  const S = K.stage('st-gro', { radius: 56, yaw: 0, pitch: 0.12, autoRotate: 0 });
+  const O = { gs: 'o' }, P = { gs: 'p' }, Cc = { gs: 'c' };
+  const xs = [-44, -22, 0, 22, 44];
+  const rM = v => 4.4 + 2.6 * Math.pow(Math.abs(v - 0.5) * 2, 3), r5 = v => 5 + 3 * Math.pow(Math.abs(v - 0.5) * 2, 3);
+  /* 後半殼（v0..v1 為整根的上下比例）與 z=0 剖面帶（u0..u1 為寬度比例） */
+  const shell = (x, h, rf, v0, v1, d, col, id, al) => K.sweep(S, [[x, h - 2 * h * v0, 0], [x, h - 2 * h * v1, 0]], t => rf(v0 + (v1 - v0) * t) + d, col, 8, 12, Object.assign({ id, al: al || 1 }, O), Object.assign({ smooth: 1 }, BACK));
+  const band = (x, h, rf, v0, v1, u0, u1, col, id, zb) => K.surf(S, (u, v) => { const vv = v0 + (v1 - v0) * v, r = rf(vv); return [x + (u0 + (u1 - u0) * u - 0.5) * 2 * r, h - 2 * h * vv, 0]; }, 2, Math.max(1, Math.round((v1 - v0) * 16)), col, Object.assign({ id, zb: zb == null ? 3 : zb }, O));
+  const model = (x) => { shell(x, 18, rM, 0, 1, 0, CART, '軟骨基質'); band(x, 18, rM, 0, 1, 0, 1, CART, '軟骨基質'); };
+  // ① 透明軟骨模型
+  model(xs[0]); shell(xs[0], 18, rM, 0, 1, 0.7, '#60a5fa', '軟骨膜', 0.8);
+  // ② 骨領 + 中央軟骨鈣化
+  model(xs[1]); shell(xs[1], 18, rM, 0, 0.32, 0.7, '#60a5fa', '軟骨膜', 0.8); shell(xs[1], 18, rM, 0.68, 1, 0.7, '#60a5fa', '軟骨膜', 0.8);
+  shell(xs[1], 18, rM, 0.32, 0.68, 0.8, BONE, '骨領（緻密骨）'); band(xs[1], 18, rM, 0.32, 0.68, 0, 0.12, BONE, '骨領（緻密骨）', 2); band(xs[1], 18, rM, 0.32, 0.68, 0.88, 1, BONE, '骨領（緻密骨）', 2);
+  band(xs[1], 18, rM, 0.36, 0.64, 0.2, 0.8, '#94a3b8', '鈣化軟骨', 2);
+  // ③ 初級骨化中心
+  model(xs[2]); shell(xs[2], 18, rM, 0.25, 0.75, 0.9, '#f9a8d4', '骨外膜', 0.8);
+  band(xs[2], 18, rM, 0.25, 0.75, 0, 0.14, BONE, '骨領（緻密骨）', 2); band(xs[2], 18, rM, 0.25, 0.75, 0.86, 1, BONE, '骨領（緻密骨）', 2);
+  band(xs[2], 18, rM, 0.3, 0.7, 0.16, 0.84, PINK, '初級骨化中心（海綿骨）', 2); trab(S, [xs[2], 0, 0], [2.6, 6], 16, '初級骨化中心（海綿骨）', 7, O);
+  S.tube([xs[2] - 9, 3, -0.5], [xs[2] - 1, 0, -0.5], 0.6, '#ef4444', Object.assign({ id: '血管' }, O));
+  // ④ 骨髓腔、骺板、次級骨化中心
+  model(xs[3]); shell(xs[3], 18, rM, 0.2, 0.8, 0.9, '#f9a8d4', '骨外膜', 0.8);
+  band(xs[3], 18, rM, 0.2, 0.8, 0, 0.16, BONE, '骨領（緻密骨）', 2); band(xs[3], 18, rM, 0.2, 0.8, 0.84, 1, BONE, '骨領（緻密骨）', 2);
+  band(xs[3], 18, rM, 0.28, 0.72, 0.18, 0.82, MARROW, '骨髓腔', 2);
+  [[0.2, 0.28], [0.72, 0.8]].forEach(([a, b]) => band(xs[3], 18, rM, a, b, 0.18, 0.82, PINK, '初級骨化中心（海綿骨）', 2));
+  [[0.13, 0.2], [0.8, 0.87]].forEach(([a, b]) => band(xs[3], 18, rM, a, b, 0, 1, '#60a5fa', '骺板（軟骨）', 1.5));
+  [[0.03, 0.11], [0.89, 0.97]].forEach(([a, b]) => band(xs[3], 18, rM, a, b, 0.2, 0.8, PINK, '骨骺的骨組織', 1.5));
+  // ⑤ 成人：骺線
+  shell(xs[4], 22, r5, 0, 1, 0, BONE, '骨外膜'); shell(xs[4], 22, r5, 0.04, 0.96, 0.7, '#f9a8d4', '骨外膜', 0.8);
+  band(xs[4], 22, r5, 0, 1, 0, 1, BONE, '骨領（緻密骨）');
+  band(xs[4], 22, r5, 0.2, 0.8, 0.16, 0.84, MARROW, '骨髓腔', 2);
+  [[0.03, 0.2], [0.8, 0.97]].forEach(([a, b]) => band(xs[4], 22, r5, a, b, 0.1, 0.9, PINK, '骨骺的骨組織', 2));
+  [[0, 0.03], [0.97, 1]].forEach(([a, b]) => band(xs[4], 22, r5, a, b, 0, 1, CART, '關節軟骨', 1.5));
+  [-1, 1].forEach(s => S.tube([xs[4] - 6.4, s * 13.2, -0.4], [xs[4] + 6.4, s * 13.2, -0.4], 0.35, '#64748b', Object.assign({ id: '骺線' }, O)));
+  ['① 透明軟骨模型', '② 骨領 + 中央軟骨鈣化', '③ 初級骨化中心', '④ 骨髓腔、骺板', '⑤ 成人：骺線'].forEach((t, i) => { const up = i % 2 === 0, h = i === 4 ? 22 : 18; lab(S, [xs[i], up ? h : -h, 0], t, ['軟骨基質', '骨領（緻密骨）', '初級骨化中心（海綿骨）', '骺板（軟骨）', '骺線'][i], '#e2e8f0', 0, up ? -14 : 16, O); });
+  // 骺板分區
+  K.box(S, [0, 0, 0], [44, 48, 8], '#dbeafe', Object.assign({ id: '軟骨基質', al: 0.12 }, P));
+  trab(S, [0, 21, 0], [20, 3], 20, '骨骺的骨組織', 11, P);
+  for (let i = 0; i < 6; i++) S.sphere([-18 + i * 7, 15 + (i % 2) * 2, 1], 0.9, '#93c5fd', Object.assign({ id: '靜止軟骨細胞' }, P));
+  for (let c = 0; c < 6; c++) for (let k = 0; k < 8; k++) { const y = 10 - k * 2.6, big = k > 4; K.ellipsoid(S, [-17 + c * 7, y, 1], [big ? 2.4 : 2, big ? 1.2 : 0.6, 1.2], big ? '#a5b4fc' : '#60a5fa', 6, 4, Object.assign({ id: '軟骨細胞柱' }, P)); }
+  K.box(S, [0, -12, 0], [44, 4, 7], '#94a3b8', Object.assign({ id: '鈣化的細胞間質', al: 0.5 }, P));
+  for (let c = 0; c < 6; c++) { S.tube([-17 + c * 7, -14, 1.5], [-17 + c * 7, -24, 1.5], 1.2, '#f5f5f4', Object.assign({ id: '新骨（骨小樑）' }, P)); S.sphere([-15.6 + c * 7, -18, 2.6], 0.8, '#fb923c', Object.assign({ id: '成骨細胞' }, P)); S.tube([-13.5 + c * 7, -24, 0], [-13.5 + c * 7, -13, 0], 0.6, '#ef4444', Object.assign({ id: '微血管' }, P)); }
+  [['骨骺的骨組織', [16, 21, 0], '骨骺（海綿骨）', 40, -10], ['靜止軟骨細胞', [17, 17, 1], '① 靜止區', 40, 0], ['軟骨細胞柱', [17, 6, 1], '② 增生區（柱狀）', 40, 0], ['軟骨細胞柱', [17, -4, 1], '③ 肥大區', 40, 0], ['鈣化的細胞間質', [20, -12, 0], '④ 鈣化 → 細胞死亡', 40, 0], ['新骨（骨小樑）', [18, -20, 1.5], '新骨（骨幹端）', 40, 6], ['成骨細胞', [-15.6, -18, 2.6], '成骨細胞', -40, 0], ['微血管', [-13.5, -23, 0], '微血管', -40, 10]].forEach(([id, p, t, dx, dy]) => lab(S, p, t, id, '#e2e8f0', dx, dy, P));
+  // 周邊生長
+  const ringO = [], ringI = [], obs = [], ocs = [];
+  for (let k = 0; k < 36; k++) { ringO.push([0, 0, 0]); ringI.push([0, 0, 0]); }
+  const faces = []; for (let k = 0; k < 36; k++) faces.push(S.face([ringI[k], ringO[k], ringO[(k + 1) % 36], ringI[(k + 1) % 36]], BONE, Object.assign({ id: '骨幹橫切（緻密骨）' }, Cc)));
+  const cav = S.face(ringI, MARROW, Object.assign({ id: '骨髓腔·周邊生長', al: 0.8, zb: 2 }, Cc));
+  const peri = []; for (let k = 0; k < 36; k++) peri.push(S.tube([0, 0, 0], [0, 0, 0], 0.5, '#f9a8d4', Object.assign({ id: '骨外膜·周邊生長' }, Cc)));
+  for (let k = 0; k < 10; k++) { obs.push(S.sphere([0, 0, 0], 1, '#fb923c', Object.assign({ id: '成骨細胞（外表面）' }, Cc))); ocs.push(S.sphere([0, 0, 0], 1.5, '#a855f7', Object.assign({ id: '蝕骨細胞（內表面）' }, Cc))); }
+  const lO = lab(S, [0, 0, 0], '成骨細胞（外表面造骨）', '成骨細胞（外表面）', '#fdba74', 40, -20, Cc), lC = lab(S, [0, 0, 0], '蝕骨細胞（內表面吸收）', '蝕骨細胞（內表面）', '#d8b4fe', -40, 20, Cc);
+  let g = 0.2;
+  S.tick(() => {
+    const ro = 10 + g * 14, ri = 4 + g * 10;
+    for (let k = 0; k < 36; k++) { const a = k / 36 * 6.2832; mv(ringO[k], [Math.cos(a) * ro, Math.sin(a) * ro, 0]); mv(ringI[k], [Math.cos(a) * ri, Math.sin(a) * ri, 0.1]); peri[k].a = [Math.cos(a) * (ro + 0.8), Math.sin(a) * (ro + 0.8), 0]; peri[k].b = [Math.cos(a + 0.175) * (ro + 0.8), Math.sin(a + 0.175) * (ro + 0.8), 0]; }
+    obs.forEach((o, i) => { const a = i * 0.628; mv(o.p, [Math.cos(a) * (ro + 1.8), Math.sin(a) * (ro + 1.8), 0.5]); }); ocs.forEach((o, i) => { const a = i * 0.628 + 0.3; mv(o.p, [Math.cos(a) * (ri - 1), Math.sin(a) * (ri - 1), 0.6]); });
+    lO.p = obs[1].p; lC.p = ocs[6].p;
+  });
+  K.range('age', v => { g = v / 100; }, v => v < 30 ? '兒童' : v < 70 ? '青少年' : '成人');
+  K.seg('#gromode', m => { S.each(o => { if (o.gs) o.hidden = o.gs !== m; }); $('gro-hud').textContent = { o: '軟骨內骨化：由左到右', p: '骺板：縱向生長（加長）', c: '骨幹橫切：周邊生長（增粗）' }[m]; S.resetView(); if (m === 'c') { S.yaw = 0; S.pitch = 0; S.dist = S.home.dist * 0.62; } }, 'o');
+  K.info(S, 'info-gro', INFO, { picker: 'pk-gro', hl: false, on: id => { $('gro-cap').textContent = '👉 ' + id; } });
+})();
+
+/* ========== ④ 膝關節 ========== */
+(function () {
+  const INFO = {"股骨（遠端）": {"t": "股骨（遠端）", "en": "Femur　〔骨〕", "p": "大腿骨的遠端；兩個<b>股骨髁</b>與脛骨形成關節，前方的滑車面（髕骨面）與髕骨形成關節。剖面可見外圍的緻密骨與內部的海綿骨（骨小樑＋紅骨髓）。"}, "股骨關節軟骨": {"t": "股骨關節軟骨", "en": "Femoral articular cartilage　〔軟骨〕", "p": "覆蓋股骨髁與髕骨面的透明軟骨，表面光滑以減少摩擦。"}, "關節腔（滑液）": {"t": "關節腔（滑液）", "en": "Joint cavity with synovial fluid　〔關節腔〕", "p": "兩骨之間的空腔，充滿<b>滑液</b>：潤滑關節、減少摩擦並供應關節軟骨養分。向上延伸為髕上滑囊。"}, "滑膜": {"t": "滑膜", "en": "Synovial membrane　〔關節腔〕", "p": "襯在關節囊內面的薄膜，分泌滑液。"}, "關節囊（纖維層）": {"t": "關節囊（纖維層）", "en": "Fibrous capsule　〔關節腔〕", "p": "包住整個關節的緻密結締組織，與韌帶共同穩定關節。"}, "髕上滑囊": {"t": "髕上滑囊", "en": "Suprapatellar bursa　〔滑囊與脂肪墊〕", "p": "位於股四頭肌腱與股骨之間、與關節腔相通的大型滑囊。"}, "髕骨": {"t": "髕骨", "en": "Patella　〔骨〕", "p": "膝蓋骨：包在股四頭肌腱中的種子骨，後面與股骨髕骨面形成關節，增加股四頭肌的力臂。"}, "髕骨關節軟骨": {"t": "髕骨關節軟骨", "en": "Patellar cartilage　〔軟骨〕", "p": "髕骨後面的關節軟骨（人體最厚的關節軟骨之一）。"}, "髕前滑囊": {"t": "髕前滑囊", "en": "Prepatellar bursa　〔滑囊與脂肪墊〕", "p": "位於髕骨前方與皮膚之間的滑囊（長期跪姿易發炎）。"}, "脛骨（近端）": {"t": "脛骨（近端）", "en": "Tibia　〔骨〕", "p": "小腿內側的主要骨；上端的<b>脛骨平台</b>（內、外側髁）與股骨髁形成關節。前方隆起為<b>脛骨粗隆</b>（髕韌帶附著）。"}, "腓骨（頭）": {"t": "腓骨（頭）", "en": "Fibula　〔骨〕", "p": "小腿外側的細骨，上端（腓骨頭）與脛骨外側髁下方形成關節，不參與膝關節本身。"}, "脛骨關節軟骨": {"t": "脛骨關節軟骨", "en": "Tibial cartilage　〔軟骨〕", "p": "脛骨平台上的關節軟骨。"}, "半月板": {"t": "半月板", "en": "Menisci　〔軟骨〕", "p": "位於股骨髁與脛骨平台之間、呈 <b>C 形</b>的<b>纖維軟骨</b>（剖面為三角形：前角與後角）。內側半月板較大、呈 C 形；外側較圓。加深關節窩、分散壓力並<b>導引滑液流動</b>。"}, "髕下脂肪墊": {"t": "髕下脂肪墊", "en": "Infrapatellar fat pad　〔滑囊與脂肪墊〕", "p": "位於髕韌帶後方、關節腔前方的脂肪組織，保護並緩衝。"}, "髕下滑囊（深）": {"t": "髕下滑囊（深）", "en": "Infrapatellar bursa　〔滑囊與脂肪墊〕", "p": "位於髕韌帶與脛骨之間的滑囊，減少摩擦。"}, "股四頭肌腱": {"t": "股四頭肌腱", "en": "Quadriceps tendon　〔肌腱與韌帶〕", "p": "股四頭肌的肌腱，包住髕骨。"}, "髕韌帶": {"t": "髕韌帶", "en": "Patellar ligament　〔肌腱與韌帶〕", "p": "由髕骨下緣連到脛骨粗隆（股四頭肌腱的延續）；膝跳反射敲擊處。"}};
+  const S = K.stage('st-knee', { radius: 50, yaw: -0.2, pitch: 0.1, autoRotate: 0 });
+  const GREY = '#d6d3d1';
+  // 股骨（固定）：後半殼 + 矢狀剖面
+  K.sweep(S, [[-2, 46, 0], [0, 14, 0]], t => 5 + t * 3, BONE, 6, 12, { id: '股骨（遠端）' }, BACK);
+  K.surf(S, (u, v) => { const r = 5 + 3 * v; return [-2 + 2 * v + (u - 0.5) * 2 * r, 46 - 32 * v, 0]; }, 5, 6, (u, v) => v > 0.8 ? PINK : (u > 0.3 && u < 0.7 ? MARROW : GREY), { id: '股骨（遠端）', zb: 2 });
+  K.ellipsoid(S, [0, 8, 0], [9, 8, 9], BONE, 16, 10, { id: '股骨（遠端）' }, EB);
+  S.face(K.circle([0, 8.5, 0], 8.6, [0, 0, 1], 20), PINK, { id: '股骨（遠端）', zb: 2 }); trab(S, [0, 9, 0], [6, 5], 16, '股骨（遠端）', 21);
+  K.ellipsoid(S, [0, 7.4, 0], [9.8, 8.8, 9.8], CART, 14, 8, { id: '股骨關節軟骨', al: 0.8 }, { u0: 0, u1: 0.5, v0: 0.45, v1: 1 });
+  // 脛骨、腓骨、半月板（隨屈膝旋轉）
+  const tibS = K.surf(S, (u, v) => { const r = 9 - 4 * v; return [(u - 0.5) * 2 * r, -2 - 38 * v, 0]; }, 5, 8, (u, v) => v < 0.25 ? PINK : (u > 0.3 && u < 0.7 ? MARROW : GREY), { id: '脛骨（近端）', zb: 2 });
+  const tibF = K.sweep(S, [[0, -2, 0], [0, -40, 0]], t => 9 - t * 4, BONE, 8, 12, { id: '脛骨（近端）' }, BACK);
+  const tcF = K.ellipsoid(S, [0, -1.4, 0], [10, 1.4, 9], CART, 12, 4, { id: '脛骨關節軟骨', al: 0.85 }, EB);
+  const fibF = K.sweep(S, [[-7, -8, 5], [-7, -40, 5]], 2.2, GREY, 6, 8, { id: '腓骨（頭）' });
+  const men = [-1, 1].map(s => K.ellipsoid(S, [s * 7, -0.2, -0.3], [3, 1.6, 2], '#a3e635', 8, 5, { id: '半月板' }));
+  // 關節腔、滑膜、關節囊（後半）
+  K.ellipsoid(S, [0, 2, 0], [11, 4, 10], '#38bdf8', 14, 6, { id: '關節腔（滑液）', al: 0.35 }, EB);
+  K.ellipsoid(S, [3, 6, 0], [13, 14, 12], '#f472b6', 16, 8, { id: '滑膜', al: 0.25 }, EB);
+  K.ellipsoid(S, [3, 6, 0], [14, 15, 13], '#e2e8f0', 16, 8, { id: '關節囊（纖維層）', al: 0.18 }, EB);
+  // 髕骨與肌腱
+  const pat = [12, 12, 0];
+  K.ellipsoid(S, pat, [3, 6, 4], BONE, 12, 8, { id: '髕骨' }, EB);
+  S.face(K.circle(pat, 1, [0, 0, 1], 16).map(p => [pat[0] + (p[0] - pat[0]) * 2.9, pat[1] + (p[1] - pat[1]) * 5.8, 0]), PINK, { id: '髕骨', zb: 2 });
+  K.ellipsoid(S, V.add(pat, [-2.6, 0, 0]), [1.2, 5, 3.6], CART, 8, 6, { id: '髕骨關節軟骨' }, EB);
+  K.sweep(S, [[8, 40, 0], [12, 22, 0], [13, 17, 0]], 1.8, '#f8fafc', 10, 8, { id: '股四頭肌腱' });
+  const lig = { a: [12, 6, 0], b: [0, 0, 0] }; S.tube(lig.a, lig.b, 1.4, '#f8fafc', { id: '髕韌帶' });
+  K.ellipsoid(S, [8.5, 24, 0], [2.6, 7, 4], '#7dd3fc', 10, 6, { id: '髕上滑囊', al: 0.6 });
+  K.ellipsoid(S, V.add(pat, [3.8, 0, 0]), [1.2, 5, 3], '#7dd3fc', 8, 5, { id: '髕前滑囊', al: 0.6 });
+  const fat = K.mover(K.ellipsoid(S, [0, 0, 0], [3, 4, 4], '#fde68a', 10, 6, { id: '髕下脂肪墊' })); const bur = S.sphere([0, 0, 0], 1.4, '#7dd3fc', { id: '髕下滑囊（深）' });
+  [['股骨（遠端）', [-3, 30, 0], '股骨', -40, 0], ['股骨關節軟骨', [-8, 3, 0], '股骨關節軟骨', -50, 6], ['關節腔（滑液）', [-10, 2, 3], '關節腔（滑液）', -50, -22], ['滑膜', [-10, 14, 3], '滑膜', -40, -10], ['關節囊（纖維層）', [-11, 16, 4], '關節囊', -50, -34], ['髕骨', V.add(pat, [1, 6, 0]), '髕骨', 30, -16], ['股四頭肌腱', [10, 30, 0], '股四頭肌腱', 40, -10], ['髕上滑囊', [8.5, 26, 0], '髕上滑囊', -50, -16], ['髕前滑囊', V.add(pat, [4.4, -2, 0]), '髕前滑囊', 40, 10]].forEach(([id, p, t, dx, dy]) => lab(S, p, t, id, '#e2e8f0', dx, dy));
+  const lT = lab(S, [0, 0, 0], '脛骨', '脛骨（近端）', '#e2e8f0', -40, 0), lB = lab(S, [0, 0, 0], '腓骨頭', '腓骨（頭）', '#e2e8f0', -40, 10), lM = lab(S, [0, 0, 0], '半月板', '半月板', '#bef264', -14, 56);
+  const lL = lab(S, [0, 0, 0], '髕韌帶', '髕韌帶', '#e2e8f0', 44, 36), lF = lab(S, [0, 0, 0], '髕下脂肪墊', '髕下脂肪墊', '#fde68a', 56, -8);
+  const PIV = [0, -1, 0], ROT = [tibS, tibF, tcF, fibF].concat(men), BASE = ROT.map(F => (F.grid || F.rings).map(r => r.map(p => p.slice())));
+  let ang = 10;
+  S.tick(() => {
+    const a = -ang * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+    const rot = p => { const x = p[0] - PIV[0], y = p[1] - PIV[1]; return [x * c - y * s + PIV[0], x * s + y * c + PIV[1], p[2]]; };
+    ROT.forEach((F, k) => (F.grid || F.rings).forEach((r, i) => r.forEach((p, j) => mv(p, rot(BASE[k][i][j])))));
+    const tt = rot([10, -10, 0]), mid = V.lerp(lig.a, tt, 0.5), fp = V.add(mid, [-3.6, 0, 0]);
+    mv(lig.b, tt); lL.p = mid; fat.set(fp, 1); lF.p = fp; mv(bur.p, V.add(tt, [-2, 2, 0]));
+    lT.p = rot([-2, -20, 0]); lB.p = rot([-7, -10, 5]); lM.p = rot([7, -0.2, -0.3]);
+  });
+  K.range('flex', v => { ang = v; }, v => v + '°');
+  K.info(S, 'info-knee', INFO, { picker: 'pk-knee', hl: false, on: id => { $('knee-cap').textContent = '👉 ' + id; } });
+})();
+
+/* ========== ⑤ 可動關節六型 ========== */
+(function () {
+  const INFO = {"屈戌關節": {"t": "屈戌關節", "en": "Hinge joint　〔可動關節〕", "p": "肱骨<b>滑車</b>（像線軸）嵌入尺骨的<b>滑車切跡</b>，只能繞<b>一個軸</b>屈伸（如門的鉸鏈）。旁邊的橈骨頭則與肱骨小頭相接。例：肘關節、膝、指間關節。"}, "車軸關節": {"t": "車軸關節", "en": "Pivot joint　〔可動關節〕", "p": "樞椎（第 2 頸椎）向上伸出的<b>齒突</b>，套在寰椎（第 1 頸椎）的環中，寰椎繞齒突<b>旋轉</b>（搖頭說「不」）。例：寰樞關節、近端橈尺關節。"}, "滑動關節": {"t": "滑動關節", "en": "Gliding (plane) joint　〔可動關節〕", "p": "兩塊腕骨相對的關節面<b>近乎平坦</b>，只能做小幅的平面滑動。例：腕骨之間、跗骨之間。"}, "橢圓關節": {"t": "橢圓關節", "en": "Condyloid (ellipsoidal) joint　〔可動關節〕", "p": "掌骨的<b>橢圓形</b>頭嵌入近節指骨基部的橢圓形凹面，可沿<b>兩個軸</b>運動（屈伸、內收外展），但不能繞長軸旋轉。例：掌指關節、橈腕關節。"}, "鞍狀關節": {"t": "鞍狀關節", "en": "Saddle joint　〔可動關節〕", "p": "大多角骨與第一掌骨的關節面都呈<b>馬鞍形</b>（一方向凸、垂直方向凹），互相交錯嵌合，可沿<b>兩個軸</b>運動，使拇指能對掌。例：拇指的腕掌關節。"}, "杵臼關節": {"t": "杵臼關節", "en": "Ball-and-socket joint　〔可動關節〕", "p": "股骨頭（球）嵌入骨盆的<b>髖臼</b>（杯），可沿<b>多個軸</b>運動：屈伸、內收外展與旋轉，活動度最大。例：髖關節、肩關節。"}};
+  const S = K.stage('st-jnt', { radius: 58, yaw: 0.15, pitch: 0.25, autoRotate: 0 });
+  const POS = { hinge: [-36, 14, 0], pivot: [0, 14, 0], glide: [36, 14, 0], cond: [-36, -16, 0], saddle: [0, -16, 0], ball: [36, -16, 0] };
+  const ID = { hinge: '屈戌關節', pivot: '車軸關節', glide: '滑動關節', cond: '橢圓關節', saddle: '鞍狀關節', ball: '杵臼關節' };
+  const mov = {};
+  // 屈戌：滑車（固定）+ 尺骨（繞 z 軸）
+  { const c = POS.hinge; K.sweep(S, [V.add(c, [-6, 0, 0]), V.add(c, [6, 0, 0])], t => 3 + Math.abs(Math.sin(t * 6.28)) * 0.8, BONE, 10, 12, { id: ID.hinge }); S.tube(V.add(c, [0, 3, 0]), V.add(c, [0, 16, 0]), 3, BONE, { id: ID.hinge }); const u = { a: V.add(c, [0, -2, 0]), b: [0, 0, 0] }; S.tube(u.a, u.b, 2.4, '#d6d3d1', { id: ID.hinge }); mov.hinge = t => mv(u.b, V.add(c, [Math.sin(0.4 + 0.8 * (0.5 + 0.5 * Math.sin(t))) * 14, -Math.cos(0.4 + 0.8 * (0.5 + 0.5 * Math.sin(t))) * 14, 0])); }
+  // 車軸：齒突 + 寰椎環
+  { const c = POS.pivot; S.tube(V.add(c, [0, -10, 0]), V.add(c, [0, 4, 0]), 2, BONE, { id: ID.pivot }); const ring = K.circle(V.add(c, [0, 2, 0]), 6, [0, 1, 0], 16); const ringT = ring.map((p, i) => S.tube(p, ring[(i + 1) % 16], 1.2, '#d6d3d1', { id: ID.pivot })); const bump = S.sphere([0, 0, 0], 1.6, '#d6d3d1', { id: ID.pivot }); mov.pivot = t => { const a = Math.sin(t) * 0.9; ring.forEach((p, i) => { const th = i / 16 * 6.2832 + a; mv(p, V.add(c, [Math.cos(th) * 6, 2, Math.sin(th) * 6])); }); mv(bump.p, V.add(c, [Math.cos(a) * 8, 2, Math.sin(a) * 8])); }; }
+  // 滑動
+  { const c = POS.glide; K.box(S, V.add(c, [0, -3, 0]), [12, 5, 9], BONE, { id: ID.glide }); const top = K.mover(K.ellipsoid(S, [0, 0, 0], [6, 2.6, 4.5], '#d6d3d1', 10, 6, { id: ID.glide })); mov.glide = t => top.set(V.add(c, [Math.sin(t) * 2.2, 2.2, Math.cos(t * 0.7) * 1.4]), 1); }
+  // 橢圓
+  { const c = POS.cond; K.ellipsoid(S, V.add(c, [0, -3, 0]), [7, 4, 5], BONE, 12, 6, { id: ID.cond }, { v0: 0.5, v1: 1 }); S.tube(V.add(c, [0, -4, 0]), V.add(c, [0, -14, 0]), 2.4, BONE, { id: ID.cond }); const hd = K.mover(K.ellipsoid(S, [0, 0, 0], [5, 3, 3.6], '#d6d3d1', 12, 6, { id: ID.cond })); const sh = { a: [0, 0, 0], b: [0, 0, 0] }; S.tube(sh.a, sh.b, 2, '#d6d3d1', { id: ID.cond }); mov.cond = t => { const ax = Math.sin(t) * 0.5, az = Math.sin(t * 1.3) * 0.4, d = V.norm([Math.sin(az), 1, Math.sin(ax)]); hd.set(V.add(c, V.mul(d, 1.5)), 1); mv(sh.a, V.add(c, V.mul(d, 2))); mv(sh.b, V.add(c, V.mul(d, 14))); }; }
+  // 鞍狀
+  { const c = POS.saddle; K.surf(S, (u, v) => { const x = (u - 0.5) * 12, z = (v - 0.5) * 10; return V.add(c, [x, -2 + (x * x - z * z) * 0.05, z]); }, 10, 10, BONE, { id: ID.saddle }); const up = K.surf(S, (u, v) => [0, 0, 0], 10, 10, '#d6d3d1', { id: ID.saddle, al: 0.9 }); mov.saddle = t => { const a = Math.sin(t) * 0.35, b = Math.sin(t * 1.4) * 0.3; up.grid.forEach((r, i) => r.forEach((p, j) => { const x = (i / 10 - 0.5) * 10, z = (j / 10 - 0.5) * 12; let q = [x, 0.4 + (x * x - z * z) * 0.05 + 1.6, z]; q = V.rotZ(V.rotX(q, a), b); mv(p, V.add(c, q)); })); }; }
+  // 杵臼
+  { const c = POS.ball; K.ellipsoid(S, c, [7, 7, 7], BONE, 16, 8, { id: ID.ball, al: 0.6 }, { v0: 0.5, v1: 1 }); const hd = S.sphere(c, 5.6, '#d6d3d1', { id: ID.ball }); const nk = { a: [0, 0, 0], b: [0, 0, 0] }; S.tube(nk.a, nk.b, 2.4, '#d6d3d1', { id: ID.ball }); mov.ball = t => { const d = V.norm([Math.sin(t) * 0.8, 1, Math.cos(t * 1.3) * 0.8]); mv(nk.a, V.add(c, V.mul(d, 4))); mv(nk.b, V.add(c, V.mul(d, 16))); }; }
+  Object.keys(POS).forEach(k => lab(S, V.add(POS[k], [0, -11, 0]), ID[k], ID[k], '#e2e8f0', 0, 14));
+  let T = 0; S.tick(dt => { T += dt * 1.4; Object.values(mov).forEach(f => f(T)); });
+  K.info(S, 'info-jnt', INFO, { picker: 'pk-jnt', on: id => { $('jnt-cap').textContent = '👉 ' + id; } });
+})();
+
+/* ========== ⑥ 不動與微動關節 ========== */
+(function () {
+  const INFO = {"縫合（顱骨）": {"t": "縫合（顱骨）", "en": "Suture　〔不動關節〕", "p": "顱骨之間以<b>鋸齒狀邊緣</b>互相嵌合，其間只有很薄的緻密結締組織（縫合韌帶）。例：額骨、頂骨、顳骨之間的骨縫。成年後可逐漸骨化（成為骨質接合）。切面可見顱骨的三層：外板、內板（緻密骨）夾著<b>板障</b>（海綿骨）。"}, "牙齒": {"t": "牙齒", "en": "Tooth　〔不動關節〕", "p": "牙根像釘子一樣嵌入顎骨的齒槽。"}, "齒槽（顎骨，後半）": {"t": "齒槽（顎骨，後半）", "en": "Alveolar socket　〔不動關節〕", "p": "上、下顎骨中容納牙根的凹窩（此處只畫後半以露出牙根）。"}, "牙周韌帶": {"t": "牙周韌帶", "en": "Periodontal ligament　〔不動關節〕", "p": "連接牙根與齒槽骨壁的緻密結締組織，使牙齒牢固嵌合＝<b>釘嵌</b>（gomphosis）。"}, "胸骨柄": {"t": "胸骨柄", "en": "Manubrium　〔不動關節〕", "p": "胸骨最上部。"}, "第一肋軟骨（透明軟骨）": {"t": "第一肋軟骨（透明軟骨）", "en": "First costal cartilage　〔不動關節〕", "p": "以<b>透明軟骨</b>把第一肋骨直接連到胸骨柄＝<b>軟骨接合</b>（synchondrosis），不能活動。生長中的<b>骺板</b>也屬此類。"}, "第一肋骨": {"t": "第一肋骨", "en": "First rib　〔不動關節〕", "p": "（見下方說明）"}, "癒合的骨": {"t": "癒合的骨", "en": "Fused bones (synostosis)　〔不動關節〕", "p": "原本分開的骨（或骨縫）<b>完全骨化癒合</b>成一塊＝<b>骨質接合</b>（synostosis）。例：成人的許多頭部骨縫、骨骺與骨幹（骺線）。"}, "脛骨（遠端）": {"t": "脛骨（遠端）", "en": "Tibia　〔微動關節〕", "p": "小腿內側的骨；下端內側突出為內踝。"}, "腓骨（遠端）": {"t": "腓骨（遠端）", "en": "Fibula　〔微動關節〕", "p": "小腿外側的細骨；下端為外踝。"}, "骨間韌帶": {"t": "骨間韌帶", "en": "Interosseous ligament　〔微動關節〕", "p": "連接脛骨與腓骨的緻密結締組織纖維；只允許極小的運動＝<b>韌帶聯合</b>（syndesmosis）。"}, "恥骨": {"t": "恥骨", "en": "Pubic bones　〔微動關節〕", "p": "左右髖骨的前下部。"}, "纖維軟骨盤": {"t": "纖維軟骨盤", "en": "Fibrocartilaginous disc　〔微動關節〕", "p": "左右恥骨之間的<b>纖維軟骨</b>盤＝<b>聯合</b>（symphysis），允許些微運動（分娩時稍可分開）。椎間盤也屬此類。"}};
+  const S = K.stage('st-fix', { radius: 60, yaw: 0.15, pitch: 0.2, autoRotate: 0 });
+  // 縫合
+  { const c = [-38, 16, 0], zz = []; for (let i = 0; i <= 12; i++) zz.push(V.add(c, [(i % 2 ? 1.6 : -1.6), -10 + i * 1.7, 0])); K.sheet(S, V.add(c, [-14, -10, -1]), [12, 0, 0], [0, 20, 0], 4, 6, BONE, { id: '縫合（顱骨）' }); K.sheet(S, V.add(c, [2, -10, -1]), [12, 0, 0], [0, 20, 0], 4, 6, '#d6d3d1', { id: '縫合（顱骨）' }); zz.slice(0, -1).forEach((p, i) => S.tube(p, zz[i + 1], 0.5, '#fde68a', { id: '縫合（顱骨）' })); lab(S, V.add(c, [0, 12, 0]), '縫合（不動）', '縫合（顱骨）', '#e2e8f0', 0, -10); }
+  // 釘嵌
+  { const c = [-6, 14, 0]; K.ellipsoid(S, V.add(c, [0, 6, 0]), [4, 4.4, 4], '#f8fafc', 10, 6, { id: '牙齒' }); [-1.6, 1.6].forEach(x => K.sweep(S, [V.add(c, [x, 3, 0]), V.add(c, [x * 0.5, -8, 0])], t => 1.6 - t, '#f1f5f9', 4, 8, { id: '牙齒' })); K.ellipsoid(S, V.add(c, [0, -3, 0]), [7, 8, 5], '#d6d3d1', 12, 6, { id: '齒槽（顎骨，後半）', al: 0.5 }, { u0: 0.5, u1: 1 }); [-3.4, 3.4].forEach(x => S.tube(V.add(c, [x, 2, 0]), V.add(c, [x * 0.6, -8, 0]), 0.5, '#f472b6', { id: '牙周韌帶' })); lab(S, V.add(c, [0, 11, 0]), '釘嵌', '牙周韌帶', '#e2e8f0', 0, -10); }
+  // 軟骨接合
+  { const c = [22, 14, 0]; K.box(S, c, [6, 12, 4], BONE, { id: '胸骨柄' }); K.sweep(S, [V.add(c, [3, 2, 0]), V.add(c, [9, 1, 0])], 1.6, CART, 4, 8, { id: '第一肋軟骨（透明軟骨）' }); K.sweep(S, [V.add(c, [9, 1, 0]), V.add(c, [16, 4, -2]), V.add(c, [20, 10, -6])], 1.4, BONE, 10, 8, { id: '第一肋骨' }); lab(S, V.add(c, [6, 6, 0]), '軟骨接合', '第一肋軟骨（透明軟骨）', '#e2e8f0', 0, -14); }
+  // 骨質接合
+  { const c = [46, 14, 0]; K.ellipsoid(S, c, [4, 9, 4], BONE, 10, 8, { id: '癒合的骨' }); S.tube(V.add(c, [-3.6, 0, 0]), V.add(c, [3.6, 0, 0]), 0.3, '#a8a29e', { id: '癒合的骨' }); lab(S, V.add(c, [0, 10, 0]), '骨質接合', '癒合的骨', '#e2e8f0', 0, -10); }
+  // 韌帶聯合
+  { const c = [-26, -18, 0]; S.tube(V.add(c, [-4, 12, 0]), V.add(c, [-4, -8, 0]), 3, BONE, { id: '脛骨（遠端）' }); S.tube(V.add(c, [5, 12, 0]), V.add(c, [5, -8, 0]), 1.6, '#d6d3d1', { id: '腓骨（遠端）' }); for (let i = 0; i < 7; i++) S.tube(V.add(c, [-1, 10 - i * 2.6, 0]), V.add(c, [3.4, 9 - i * 2.6, 0]), 0.35, '#f472b6', { id: '骨間韌帶' }); lab(S, V.add(c, [0, 14, 0]), '韌帶聯合（微動）', '骨間韌帶', '#e2e8f0', 0, -10); }
+  // 聯合
+  { const c = [16, -18, 0]; [-1, 1].forEach(s => K.sweep(S, [V.add(c, [s * 3, 8, 0]), V.add(c, [s * 12, 4, -3]), V.add(c, [s * 18, -4, -8])], 3, BONE, 10, 10, { id: '恥骨' })); K.box(S, V.add(c, [0, 6, 0]), [3.4, 8, 5], '#a3e635', { id: '纖維軟骨盤' }); lab(S, V.add(c, [0, 12, 0]), '聯合（微動）', '纖維軟骨盤', '#e2e8f0', 0, -10); }
+  K.info(S, 'info-fix', INFO, { picker: 'pk-fix', on: id => { $('fix-cap').textContent = '👉 ' + id; } });
+})();
+
+/* ========== 快閃卡 / 測驗 ========== */
+UI.flashcards($('fc'), [
+  { f: '長骨的區域', b: '骨骺（兩端，海綿骨 + 紅骨髓）、骨幹端（生長期有骺板）、骨幹（緻密骨管 + 骨髓腔）。' },
+  { f: '骨外膜兩層', b: '外纖維層（血管、神經）與內生骨層（成骨細胞 → 增粗、修復）。' },
+  { f: '骨元（哈氏系統）的構造', b: '哈氏管（血管、神經）為中心，周圍同心骨板；骨陷窩中的骨細胞以骨小管相連。' },
+  { f: '哈氏管 vs 福克曼管', b: '哈氏管沿骨長軸；福克曼（穿通）管橫向連接骨外膜、哈氏管與骨髓腔。' },
+  { f: '海綿骨的特點', b: '骨小樑網狀、不含骨元，間隙有紅骨髓；表面有骨內膜。' },
+  { f: '膜內骨化 vs 軟骨內骨化', b: '膜內：直接在纖維膜造骨（顱頂、下頜骨、鎖骨）；軟骨內：先有透明軟骨模型（長骨）。' },
+  { f: '骺板的分區', b: '靜止區 → 增生區（柱狀分裂）→ 肥大區 → 鈣化區（細胞死亡）→ 骨化（成骨細胞造新骨）。' },
+  { f: '縱向 vs 周邊生長', b: '縱向（加長）：骺板軟骨內骨化；周邊（增粗）：骨外膜成骨細胞造骨，同時蝕骨細胞擴大骨髓腔。' },
+  { f: '膝關節的半月板', b: 'C 形纖維軟骨，加深關節窩、分散壓力。' },
+  { f: '滑液關節的共同構造', b: '關節軟骨、關節腔（滑液）、滑膜、纖維關節囊、韌帶（常有滑囊）。' },
+  { f: '六種可動關節', b: '屈戌（肘）、車軸（寰樞）、滑動（腕骨間）、橢圓（掌指）、鞍狀（拇指腕掌）、杵臼（髖、肩）。' },
+  { f: '單軸、雙軸、多軸關節', b: '單軸：屈戌、車軸；雙軸：橢圓、鞍狀；多軸：杵臼。' },
+  { f: '不動關節三型', b: '縫合（顱骨）、釘嵌（牙齒）、軟骨接合（第一肋、骺板）；骨質接合為完全癒合。' },
+  { f: '微動關節兩型', b: '韌帶聯合（脛腓遠端）、聯合（恥骨聯合、椎間盤）。' }
+], 'bone');
+UI.quiz($('qz'), [
+  { q: '負責骨幹增粗的是？', o: ['骺板', '骨外膜生骨層的成骨細胞', '骨內膜的蝕骨細胞', '關節軟骨'], a: 1, e: '蝕骨細胞則擴大骨髓腔。' },
+  { q: '骨元中央沿骨長軸的管道是？', o: ['福克曼管', '哈氏管', '骨小管', '骨髓腔'], a: 1, e: '哈氏管內有血管與神經。' },
+  { q: '海綿骨的骨細胞養分來自？', o: ['哈氏管', '鄰近骨髓的血管擴散', '關節滑液', '骨外膜纖維層'], a: 1, e: '海綿骨沒有骨元。' },
+  { q: '鎖骨主要以何種方式骨化？', o: ['軟骨內骨化', '膜內骨化', '骨質接合', '周邊生長'], a: 1, e: '顱頂、下頜骨、鎖骨為膜內骨化。' },
+  { q: '骺板中軟骨細胞進行有絲分裂的是？', o: ['靜止區', '增生區', '肥大區', '鈣化區'], a: 1, e: '細胞疊成柱狀。' },
+  { q: '成人骺板骨化後留下？', o: ['骺線', '骨領', '軟骨膜', '骨小樑'], a: 0, e: '屬骨質接合。' },
+  { q: '膝關節中的半月板是？', o: ['透明軟骨', '纖維軟骨', '彈性軟骨', '緻密骨'], a: 1, e: 'C 形纖維軟骨。' },
+  { q: '拇指腕掌關節屬於？', o: ['屈戌關節', '鞍狀關節', '杵臼關節', '車軸關節'], a: 1, e: '使拇指能對掌。' },
+  { q: '活動度最大的關節是？', o: ['屈戌關節', '橢圓關節', '杵臼關節', '滑動關節'], a: 2, e: '可沿多軸運動。' },
+  { q: '恥骨聯合屬於？', o: ['縫合', '釘嵌', '聯合（微動）', '韌帶聯合'], a: 2, e: '纖維軟骨盤，分娩時稍可分開。' }
+]);
+</script>
+</body>
+</html>

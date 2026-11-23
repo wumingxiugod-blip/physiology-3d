@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch5 細胞呼吸與代謝 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .heat td.v{text-align:center;font-weight:900}
+  .heat td.v[data-l="3"]{background:rgba(251,146,60,.45)}.heat td.v[data-l="2"]{background:rgba(251,146,60,.28)}.heat td.v[data-l="1"]{background:rgba(251,146,60,.12)}.heat td.v[data-l="0"]{color:#475569}
+  .atpt td:last-child,.atpt th:last-child{text-align:right;font-variant-numeric:tabular-nums}
+  .atpt tr.tot td{font-size:18px;font-weight:900;color:#fbbf24}
+  canvas.anim{width:100%;height:var(--ph,230px);display:block;border-radius:14px;background:#060b17;border:1px solid var(--line)}
+</style>
+</head>
+<body style="--acc:#fb923c;--acc2:#facc15">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 5 · Cell Respiration and Metabolism</div>
+  <h1 class="title3d">細胞呼吸與代謝</h1>
+  <p class="sub">看葡萄糖的 6 個碳在糖解作用中被切成 2 個丙酮酸、3D 粒線體構造、電子傳遞鏈把 H⁺ 打進膜間腔並推動旋轉的 ATP 合成酶（可試氰化物、缺氧、棕色脂肪解偶聯）、克氏循環、ATP 收支、Cori 循環與脂肪 β-氧化。</p>
+  <div class="chips"><a class="chip" href="#over">總覽</a><a class="chip" href="#gly">糖解 3D</a><a class="chip" href="#mito">粒線體</a><a class="chip" href="#krebs">克氏循環</a><a class="chip" href="#etc">電子傳遞鏈</a><a class="chip" href="#bal">ATP 收支</a><a class="chip" href="#cori">肝醣與 Cori</a><a class="chip" href="#fat">脂質與蛋白質</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="over" data-nav="總覽">
+  <h2><span class="num">01</span>細胞呼吸總覽</h2>
+  <p class="lead">切換有氧／無氧，看丙酮酸的去向與 ATP 產量。</p>
+  <div class="seg" id="ovmode"><button class="btn sm" data-v="aer" type="button">有氧呼吸（有 O₂）</button><button class="btn sm" data-v="ana" type="button">無氧（乳酸途徑）</button></div>
+  <div class="chain mt" id="ov-chain"><div class="nd">葡萄糖<small>6C · 細胞質</small></div><span class="ar">→</span><div class="nd">糖解作用<small>淨 2 ATP + 2 NADH</small></div><span class="ar">→</span><div class="nd">2 丙酮酸<small>3C</small></div><span class="ar">→</span><div class="nd" data-a>乙醯 CoA<small>粒線體 · −CO₂ +NADH</small></div><span class="ar">→</span><div class="nd" data-a>克氏循環<small>NADH、FADH₂、ATP</small></div><span class="ar">→</span><div class="nd" data-a>電子傳遞鏈<small>O₂ = 最終電子接受者</small></div><span class="ar">→</span><div class="nd" data-n>2 乳酸<small>再生 NAD⁺</small></div></div>
+  <div class="grid3 mt"><div class="card glow"><small class="muted">每分子葡萄糖產生</small><div class="big" id="ov-atp">30–32 ATP</div><small class="muted" id="ov-sub"></small></div>
+    <div class="card tilt"><h3>無氧代謝（乳酸途徑）</h3><ul class="small"><li>丙酮酸接受 NADH 的 2 個 H → <b>乳酸</b>，同時<b>再生 NAD⁺</b>讓糖解繼續</li><li>骨骼肌運動時產生乳酸</li><li>心肌只在<b>缺血</b>時短暫進行 → 乳酸堆積與<b>心絞痛</b></li></ul></div>
+    <div class="card tilt"><h3>有氧呼吸</h3><ul class="small"><li>丙酮酸進入粒線體 → 乙醯 CoA → 克氏循環</li><li>NADH、FADH₂ 把電子交給電子傳遞鏈 → <b>氧化磷酸化</b></li><li>C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O</li></ul></div></div>
+</section>
+
+<section class="sec" id="gly" data-nav="糖解 3D">
+  <h2><span class="num">02</span>糖解作用 Glycolysis（3D 碳骨架）</h2>
+  <p class="lead">灰色球＝碳、橘色＝磷酸根。前段「投資」2 個 ATP，後段「回收」4 個 ATP 與 2 個 NADH → <b>淨得 2 ATP</b>。最後兩步比較無氧與有氧時丙酮酸的命運。</p>
+  <div class="grid2">
+    <div class="stage" id="st-gly"><canvas aria-label="3D 糖解作用"></canvas><div class="hud">碳原子與磷酸示意</div><div class="hud2" id="gl-cap"></div></div>
+    <div class="card"><div class="kv"><div><small>消耗 ATP</small><b id="gl-u" style="color:#fb7185">0</b></div><div><small>產生 ATP</small><b id="gl-m" style="color:#fbbf24">0</b></div><div><small>NADH</small><b id="gl-n" style="color:#34d399">0</b></div><div><small>淨 ATP</small><b id="gl-net">0</b></div></div><div id="gl-steps" class="mt"></div></div>
+  </div>
+  <div class="note"><b>為何要先磷酸化？</b>葡萄糖變成葡萄糖-6-磷酸後帶負電，無法再穿出細胞膜 → 被「困」在細胞內。</div>
+</section>
+
+<section class="sec" id="mito" data-nav="粒線體">
+  <h2><span class="num">03</span>粒線體構造</h2>
+  <div class="grid2">
+    <div class="stage short" id="st-mito"><canvas aria-label="3D 粒線體"></canvas><div class="hud">剖面：外膜、內膜（嵴）、基質</div><div class="hud2" id="mi-cap">點選結構</div></div>
+    <div class="card info"><div id="info-mito"><div class="tt">點選粒線體的部位</div><p class="empty">克氏循環在<b>基質</b>；電子傳遞鏈在<b>嵴（內膜）</b>；H⁺ 被打進<b>膜間腔</b>。</p></div><div class="picker" id="pk-mito"></div></div>
+  </div>
+</section>
+
+<section class="sec" id="krebs" data-nav="克氏循環">
+  <h2><span class="num">04</span>克氏循環（檸檬酸循環）</h2>
+  <p class="lead">乙醯 CoA（2C）把乙酸交給草醯乙酸（4C）→ 檸檬酸（6C），一圈後再生草醯乙酸。每圈：<b>2 CO₂、3 NADH、1 FADH₂、1 ATP（GTP）</b>；一個葡萄糖轉兩圈。</p>
+  <div class="grid2">
+    <div class="stage" id="st-krebs"><canvas aria-label="3D 克氏循環"></canvas><div class="hud">球的大小＝碳數</div><div class="hud2" id="kr-cap"></div></div>
+    <div class="card"><div class="kv"><div><small>CO₂</small><b id="kr-co2">0</b></div><div><small>NADH</small><b id="kr-nadh" style="color:#34d399">0</b></div><div><small>FADH₂</small><b id="kr-fad" style="color:#c084fc">0</b></div><div><small>ATP（GTP）</small><b id="kr-atp" style="color:#fbbf24">0</b></div></div><div id="kr-steps" class="mt"></div></div>
+  </div>
+</section>
+
+<section class="sec" id="etc" data-nav="電子傳遞鏈">
+  <h2><span class="num">05</span>電子傳遞鏈與氧化磷酸化（化學滲透）</h2>
+  <p class="lead">黃色＝電子、紅色＝H⁺。電子在複合體間傳遞（一連串氧化還原）提供能量，<b>複合體 I、III、IV</b> 把 H⁺ 從基質打到膜間腔（4、4、2 個）。H⁺ 只能經 <b>ATP 合成酶</b>流回 → 轉動「渦輪」→ ADP + Pi → ATP。</p>
+  <div class="grid2">
+    <div class="stage" id="st-etc"><canvas aria-label="3D 電子傳遞鏈"></canvas><div class="hud">上：膜間腔　中：內膜　下：基質</div><div class="hud2" id="etc-cap"></div>
+      <div class="sbar"><div class="seg" id="etmode"><button class="btn sm" data-v="norm" type="button">正常</button><button class="btn sm" data-v="cn" type="button">☠ 氰化物</button><button class="btn sm" data-v="hyp" type="button">缺氧</button><button class="btn sm" data-v="ucp" type="button">🔥 UCP1 解偶聯</button></div></div></div>
+    <div class="card"><div class="kv"><div><small>膜間腔 H⁺</small><b id="et-i" style="color:#f87171">0</b></div><div><small>基質 H⁺</small><b id="et-m">0</b></div><div><small>已產生 ATP</small><b id="et-a" style="color:#fbbf24">0</b></div><div><small>產熱</small><b id="et-h" style="color:#fb923c">0</b></div></div>
+      <div class="meter" title="H⁺ 梯度"><i id="et-g" style="width:50%"></i></div><p class="small muted">H⁺ 梯度</p>
+      <div class="info mt" id="etc-info"></div></div>
+  </div>
+</section>
+
+<section class="sec" id="bal" data-nav="ATP 收支">
+  <h2><span class="num">06</span>ATP 收支表（每分子葡萄糖）</h2>
+  <div class="grid2">
+    <div class="card"><div class="btns"><div class="seg" id="bt1"><button class="btn sm" data-v="act" type="button">實際產量</button><button class="btn sm" data-v="theo" type="button">理論產量</button></div><div class="seg" id="bt2"><button class="btn sm" data-v="fad" type="button">細胞質 NADH → FADH₂（常見）</button><button class="btn sm" data-v="nadh" type="button">仍為 NADH</button></div></div>
+      <div class="tbwrap"><table class="tb atpt" id="atp-tb"></table></div></div>
+    <div class="card"><div id="atp-bars"></div><ul class="small"><li><b>受質層次磷酸化</b>：糖解 2 + 克氏 2 = 4 ATP</li><li><b>氧化磷酸化</b>：每對電子 NADH 泵 10 個 H⁺、FADH₂ 泵 6 個；每 4 個 H⁺ 產生 1 個送到細胞質的 ATP（3 個推動合成酶 + 1 個用於運出）→ NADH 2.5、FADH₂ 1.5</li><li>理論值（在粒線體內）36–38；實際送到細胞質 <b>30–32</b></li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="cori" data-nav="肝醣與 Cori">
+  <h2><span class="num">07</span>肝醣、葡萄糖與 Cori 循環</h2>
+  <div class="grid2">
+    <div class="card" style="padding:12px"><canvas class="anim" id="cori-cv" style="--ph:300px"></canvas><div class="btns"><button class="btn sm on" id="co-ex" type="button">運動中</button><button class="btn sm" id="co-rest" type="button">運動後</button></div></div>
+    <div class="card"><h3>名詞</h3><ul class="small"><li><b>肝醣生成 glycogenesis</b>：葡萄糖 → 肝醣</li><li><b>肝醣分解 glycogenolysis</b>：肝醣 → 葡萄糖-6-磷酸</li><li><b>糖質新生 gluconeogenesis</b>：由非碳水化合物（乳酸、胺基酸、甘油）合成葡萄糖</li><li><b>脂肪生成 lipogenesis</b>、<b>脂肪分解 lipolysis</b>、<b>酮體生成 ketogenesis</b>（肝臟）</li></ul>
+      <div class="note"><b>只有肝臟能把肝醣變成血糖</b>：肝臟有<b>葡萄糖-6-磷酸酶</b>，可移除磷酸釋出游離葡萄糖；骨骼肌沒有，肌肝醣只供自己使用。</div>
+      <p class="small"><b>Cori 循環</b>：運動時肌肉的乳酸經血液到肝臟，經糖質新生變回葡萄糖，再送回肌肉使用或補充肌肝醣。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="fat" data-nav="脂質與蛋白質">
+  <h2><span class="num">08</span>脂質與蛋白質的代謝</h2>
+  <div class="grid2">
+    <div class="card"><h3>β-氧化：16 碳脂肪酸</h3><canvas class="anim" id="beta-cv" style="--ph:170px"></canvas>
+      <div class="btns"><button class="btn sm" id="b-step" type="button">切下 2 個碳 ▶</button><button class="btn sm" id="b-all" type="button">全部</button><button class="btn sm" id="b-rs" type="button">重設</button></div>
+      <div class="kv"><div><small>乙醯 CoA</small><b id="b-ac">0</b></div><div><small>NADH + FADH₂</small><b id="b-nf">0</b></div><div><small>累計 ATP</small><b id="b-atp" style="color:#fbbf24">0</b></div></div>
+      <p class="small muted">每次切下產生 1 NADH（2.5）+ 1 FADH₂（1.5）= 4 ATP，共 7 次 = 28；8 個乙醯 CoA 各在克氏循環產生 10 ATP = 80 → 合計 <b>108 ATP</b>（未扣起始的 1 個 ATP）。</p></div>
+    <div class="card"><h3>脂質</h3><ul class="small"><li><b>脂肪分解</b>：三酸甘油酯 → 甘油 + 脂肪酸；甘油 → 磷酸甘油醛進入糖解</li><li>葡萄糖過多時：乙醯 CoA 串成脂肪酸 → <b>脂肪生成</b></li><li><b>酮體</b>：肝臟 ATP 足夠時，2 個乙醯 CoA → 乙醯乙酸、β-羥基丁酸（+ 丙酮）；禁食、嚴格節食時增加 → 酮症</li><li><b>棕色脂肪</b>：交感神經 NE → 脂肪分解 → 活化 <b>UCP1</b>，讓 H⁺ 不經 ATP 合成酶流回 → 能量變成<b>熱</b>（新生兒產熱）</li></ul>
+      <h3 class="mt">胺基酸</h3><ul class="small"><li>8 種（兒童 9 種）<b>必需胺基酸</b>須由飲食攝取</li><li><b>轉胺作用</b>：胺基轉給酮酸（丙酮酸或克氏循環酸）形成新的胺基酸；需維生素 B₆</li><li><b>氧化脫胺</b>：麩胺酸去除胺基 → 酮酸；胺基在肝臟形成<b>尿素</b></li></ul></div>
+  </div>
+  <h3 class="mt2">各器官偏好的能量來源（表 5.4）</h3>
+  <div class="tbwrap"><table class="tb heat"><tr><th>器官</th><th>葡萄糖</th><th>脂肪酸</th><th>酮體</th><th>乳酸</th></tr>
+    <tr><td>腦</td><td class="v" data-l="3">+++</td><td class="v" data-l="0">−</td><td class="v" data-l="1">+</td><td class="v" data-l="0">−</td></tr>
+    <tr><td>骨骼肌（休息）</td><td class="v" data-l="1">+</td><td class="v" data-l="3">+++</td><td class="v" data-l="1">+</td><td class="v" data-l="0">−</td></tr>
+    <tr><td>肝臟</td><td class="v" data-l="1">+</td><td class="v" data-l="3">+++</td><td class="v" data-l="2">++</td><td class="v" data-l="1">+</td></tr>
+    <tr><td>心臟</td><td class="v" data-l="1">+</td><td class="v" data-l="2">++</td><td class="v" data-l="1">+</td><td class="v" data-l="1">+</td></tr></table></div>
+  <p class="small muted">腦幾乎完全依賴血糖；其他器官使用脂肪酸、酮體、乳酸，把葡萄糖「省」給腦。嚴重飢餓時腦也能利用部分酮體。</p>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">09</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">10</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 5 章整理，僅供個人複習。分子與結構為示意。 · <a href="index.html">回總覽</a> · <a href="ch04.html">← 第 4 章 酵素與能量</a> · <a href="ch06.html">第 6 章 細胞膜運輸 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+
+/* ================= 01 總覽 ================= */
+K.seg('#ovmode', m => {
+  const aer = m === 'aer';
+  UI.$$('#ov-chain .nd').forEach((n, i) => { n.classList.toggle('on', aer ? !n.hasAttribute('data-n') : !n.hasAttribute('data-a')); n.classList.toggle('off', aer ? n.hasAttribute('data-n') : n.hasAttribute('data-a')); });
+  $('ov-atp').textContent = aer ? '30–32 ATP' : '2 ATP';
+  $('ov-sub').textContent = aer ? '理論 36–38；實際送到細胞質 30–32' : '只有糖解的淨 2 ATP；NAD⁺ 由乳酸生成再生';
+}, 'aer');
+
+/* ================= 02 糖解 3D ================= */
+(function () {
+  const S = K.stage('st-gly', { radius: 34, yaw: 0.2, pitch: 0.3, autoRotate: 0.06 });
+  const C = [0, 1, 2, 3, 4, 5].map(i => S.sphere([0, 0, 0], 3.3, '#9ca3af', { id: 'c' }));
+  const CB = [];
+  [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0]].forEach(([a, b]) => CB.push(S.tube(C[a].p, C[b].p, 1.1, '#cbd5e1', { id: 'c' })));
+  const P = [0, 1, 2, 3].map(() => { const o = S.sphere([0, 0, 0], 3, '#f59e0b', { id: 'p' }); return o; });
+  const PB = P.map(() => S.tube([0, 0, 0], [0, 0, 0], 0.9, '#fbbf24', { id: 'p' }));
+  const tok = [], tl = [];
+  for (let i = 0; i < 4; i++) { tok.push(S.sphere([0, 0, 0], 2.6, '#fde047', { id: 'tok', glow: 0.7, hidden: true })); tl.push(K.lab(S, tok[i].p, '', 'tok', '#fde68a', 0, -16, { hidden: true, size: 11 })); }
+  const hexP = (c, r, k, n) => V.add(c, [Math.cos((k / n) * 6.2832 + 0.5) * r, Math.sin((k / n) * 6.2832 + 0.5) * r, 0]);
+  const L = [-14, 0, 0], R = [14, 0, 0];
+  const chain = (c, dir, k) => V.add(c, [dir * (k - 1) * 6, (k % 2 ? 2 : -2), 0]);
+  // 每個狀態：碳位置、碳顏色、磷酸[附著碳 idx 或 null]、環鍵顯示
+  const ring = [0, 1, 2, 3, 4, 5].map(k => hexP([0, 0, 0], 8, k, 6));
+  const split = k => (k < 3 ? chain(L, -1, k) : chain(R, 1, k - 3));
+  const STATES = [
+    { c: ring, ph: [null, null, null, null], ring: 1, col: '#9ca3af', cap: '葡萄糖 C₆H₁₂O₆（6 個碳）' },
+    { c: ring, ph: [5, null, null, null], ring: 1, col: '#9ca3af', cap: '① 葡萄糖 + ATP → 葡萄糖-6-磷酸 + ADP', tk: [['ATP', 'in', '#fde047']] },
+    { c: ring.map((p, k) => k === 0 ? V.add(p, [4, 4, 0]) : p), ph: [5, null, null, null], ring: 1, col: '#9ca3af', cap: '② 異構化 → 果糖-6-磷酸' },
+    { c: ring.map((p, k) => k === 0 ? V.add(p, [4, 4, 0]) : p), ph: [5, 0, null, null], ring: 1, col: '#9ca3af', cap: '③ + ATP → 果糖-1,6-雙磷酸（共投資 2 ATP）', tk: [['ATP', 'in', '#fde047']] },
+    { c: [0, 1, 2, 3, 4, 5].map(split), ph: [5, 0, null, null], ring: 0, col: '#9ca3af', cap: '④ 切成兩個 3 碳分子（磷酸甘油醛 G3P）' },
+    { c: [0, 1, 2, 3, 4, 5].map(split), ph: [5, 0, 2, 3], ring: 0, col: '#9ca3af', cap: '⑤ 每個 G3P 被氧化：NAD⁺ → NADH，並加上 Pi → 1,3-雙磷酸甘油酸', tk: [['NADH', 'out', '#34d399'], ['NADH', 'out', '#34d399']] },
+    { c: [0, 1, 2, 3, 4, 5].map(split), ph: [5, 0, null, null], ring: 0, col: '#9ca3af', cap: '⑥ 磷酸轉給 ADP → 2 ATP（受質層次磷酸化）', tk: [['ATP', 'out', '#fbbf24'], ['ATP', 'out', '#fbbf24']] },
+    { c: [0, 1, 2, 3, 4, 5].map(split), ph: [4, 1, null, null], ring: 0, col: '#9ca3af', cap: '⑦⑧ 異構化、脫水 → 磷酸烯醇丙酮酸（PEP）' },
+    { c: [0, 1, 2, 3, 4, 5].map(split), ph: [null, null, null, null], ring: 0, col: '#fb923c', cap: '⑨ 再產生 2 ATP → 2 個丙酮酸（3C）', tk: [['ATP', 'out', '#fbbf24'], ['ATP', 'out', '#fbbf24']] },
+    { c: [0, 1, 2, 3, 4, 5].map(split), ph: [null, null, null, null], ring: 0, col: '#c084fc', cap: '無氧：丙酮酸 + NADH → 乳酸 + NAD⁺（NAD⁺ 再生，糖解可繼續）', tk: [['NADH', 'in', '#34d399'], ['NADH', 'in', '#34d399']] },
+    { c: [0, 1, 2, 3, 4, 5].map(k => (k === 2 || k === 5) ? V.add(split(k), [0, 20, 6]) : V.add(split(k), [0, -6, 0])), ph: [null, null, null, null], ring: 0, col: '#38bdf8', cap: '有氧：丙酮酸進入粒線體 → 乙醯 CoA（2C）+ CO₂ + NADH', tk: [['CO₂', 'out', '#94a3b8'], ['CO₂', 'out', '#94a3b8']] }
+  ];
+  const CNT = [[0, 0, 0], [1, 0, 0], [1, 0, 0], [2, 0, 0], [2, 0, 0], [2, 0, 2], [2, 2, 2], [2, 2, 2], [2, 4, 2], [2, 4, 0], [2, 4, 2]];
+  let cur = 0, tw = 1, from = STATES[0].c, tks = [];
+  const pAt = (st, i, cpos) => { const k = st.ph[i]; if (k == null) return null; const c = cpos[k], d = V.norm(V.sub(c, st.ring ? [0, 0, 0] : (k < 3 ? L : R))); return V.add(c, V.add(V.mul(d.every(x => !x) ? [0, 1, 0] : d, 6), [0, i % 2 ? 4 : -4, 0])); };
+  function go(i) {
+    from = C.map(c => c.p.slice()); cur = i; tw = 0;
+    const st = STATES[i];
+    tks = (st.tk || []).map((t, k) => ({ t, k, age: 0 }));
+    tok.forEach((o, k) => { o.hidden = !tks[k]; tl[k].hidden = !tks[k]; if (tks[k]) { o.c = tks[k].t[2]; tl[k].text = tks[k].t[0]; } });
+    const n = CNT[i]; $('gl-u').textContent = n[0]; $('gl-m').textContent = n[1]; $('gl-n').textContent = n[2]; $('gl-net').textContent = (n[1] - n[0] >= 0 ? '+' : '') + (n[1] - n[0]);
+    $('gl-cap').textContent = st.cap;
+  }
+  S.tick(dt => {
+    if (tw < 1) tw = Math.min(1, tw + dt / 1.2);
+    const e = sm(0, 1, tw), st = STATES[cur];
+    C.forEach((c, k) => { mv(c.p, V.lerp(from[k], st.c[k], e)); c.c = st.col; });
+    CB.forEach((b, k) => { b.hidden = !st.ring && (k === 2 || k === 5); });
+    const cpos = C.map(c => c.p);
+    P.forEach((p, i) => { const q = pAt(st, i, cpos); p.hidden = PB[i].hidden = !q; if (q) { mv(p.p, q); PB[i].a = cpos[st.ph[i]]; PB[i].b = p.p; } });
+    tks.forEach(tk => {
+      tk.age += dt; const o = tok[tk.k], a = Math.min(1, tk.age / 1.6);
+      const anchor = tk.k % 2 ? R : L, far = V.add(anchor, [tk.k % 2 ? 26 : -26, tk.t[1] === 'in' ? 24 : -20, 10]), near = V.add(anchor, [0, 6, 0]);
+      mv(o.p, tk.t[1] === 'in' ? V.lerp(far, near, sm(0, 1, a)) : V.lerp(near, far, sm(0, 1, a)));
+      o.al = tk.t[1] === 'in' ? 1 - sm(0.8, 1, a) : 1; tl[tk.k].p = o.p;
+      if (tk.t[1] === 'in' && a >= 1) { o.hidden = true; tl[tk.k].hidden = true; }
+    });
+  });
+  UI.stepper($('gl-steps'), STATES.map((s, i) => ({ t: s.cap.split('：')[0].split(' → ')[0].replace(/[①-⑨]/g, m => m), d: '' })).map((x, i) => ({ t: ['葡萄糖', '己糖激酶：磷酸化', '異構化', '再磷酸化', '裂解', '氧化 + NADH', '2 ATP', 'PEP', '2 ATP → 丙酮酸', '無氧 → 乳酸', '有氧 → 乙醯 CoA'][i], d: '' })), go, { dur: 3600 });
+  S.onPick = o => { if (!o) return; const t = { c: '碳原子', p: '磷酸根（Pi）', tok: 'ATP / NADH / CO₂' }[o.id]; if (t) $('gl-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 03 粒線體 ================= */
+(function () {
+  const S = K.stage('st-mito', { radius: 48, yaw: 0.35, pitch: 0.4, autoRotate: 0.05 });
+  const CUT = { u0: 0.02, u1: 0.52 };
+  K.ellipsoid(S, [0, 0, 0], [42, 19, 19], '#fb923c', 30, 14, { id: 'outer', al: 0.35, st: '#fed7aa', sa: 0.3 }, CUT);
+  K.ellipsoid(S, [0, 0, 0], [39, 16.5, 16.5], '#f97316', 28, 12, { id: 'inner', al: 0.55 }, CUT);
+  for (let i = 0; i < 9; i++) {
+    const x = -32 + i * 8, h = 13 - Math.abs(x) * 0.12;
+    K.surf(S, (u, v) => { const th = (0.02 + u * 0.5) * 6.2832, r = h * (0.25 + 0.75 * v); return [x + Math.sin(v * 3.1) * 1.6, Math.cos(th) * r * (i % 2 ? 1 : 0.85), Math.sin(th) * r]; }, 10, 4, '#fdba74', { id: 'cristae', al: 0.85 });
+  }
+  for (let i = 0; i < 70; i++) { const p = [(Math.random() - 0.5) * 70, (Math.random() - 0.5) * 22, Math.random() * 14]; if ((p[0] / 37) ** 2 + (p[1] / 14) ** 2 + (p[2] / 14) ** 2 > 1) continue; S.dot(p, 0.9, '#fef3c7', { id: 'matrix', al: 0.6 }); }
+  const dna = K.circle([-18, -4, 6], 4, [0.3, 1, 0.2], 24); dna.forEach((p, i) => S.tube(p, dna[(i + 1) % 24], 0.6, '#a78bfa', { id: 'mtdna' }));
+  [[10, 3, 8], [22, -6, 5]].forEach(p => S.sphere(p, 1.4, '#93c5fd', { id: 'ribo' }));
+  K.lab(S, [0, 19, 4], '外膜', 'outer', '#fed7aa', -30, -24); K.lab(S, [8, 14, 6], '內膜', 'inner', '#fdba74', 40, -26); K.lab(S, [-8, 6, 6], '嵴 cristae', 'cristae', '#fde68a', -30, 30);
+  K.lab(S, [24, 0, 10], '基質 matrix', 'matrix', '#fef3c7', 40, 24); K.lab(S, [-18, -4, 6], '粒線體 DNA', 'mtdna', '#c4b5fd', -40, 30); K.lab(S, [-38, 0, 2], '膜間腔', 'ims', '#fca5a5', -40, 0);
+  S.sphere([-40.5, 0, 2], 1.6, '#fca5a5', { id: 'ims' });
+  K.info(S, 'info-mito', {
+    outer: ['外膜 Outer membrane', ['輪廓平滑，通透性較高']],
+    inner: ['內膜 Inner membrane', ['向內摺成嵴，面積大', '<b>不讓 H⁺ 自由通過</b>（只能經 ATP 合成酶）', '含電子傳遞鏈與 ATP 合成酶']],
+    cristae: ['嵴 Cristae', ['內膜的皺摺', '<b>電子傳遞鏈</b>的分子嵌在這裡']],
+    matrix: ['基質 Matrix', ['<b>克氏循環</b>與 β-氧化的酵素', '丙酮酸 → 乙醯 CoA 在此進行']],
+    ims: ['膜間腔 Intermembrane space', ['內外膜之間；電子傳遞鏈把 H⁺ 打到這裡 → 濃度高']],
+    mtdna: ['粒線體 DNA', ['環狀、小型雙股 DNA', '編碼呼吸複合體約 90 個蛋白中的 13 個'], '粒線體多由母親遺傳。'],
+    ribo: ['粒線體核糖體', ['轉譯粒線體 DNA 編碼的蛋白質']]
+  }, { picker: 'pk-mito', on: id => { $('mi-cap').textContent = '👉 ' + id; } });
+})();
+
+/* ================= 04 克氏循環 ================= */
+(function () {
+  const S = K.stage('st-krebs', { radius: 52, yaw: 0, pitch: 0.75, autoRotate: 0.04 });
+  const N = [['草醯乙酸', 4], ['檸檬酸', 6], ['異檸檬酸', 6], ['α-酮戊二酸', 5], ['琥珀醯 CoA', 4], ['琥珀酸', 4], ['延胡索酸', 4], ['蘋果酸', 4]];
+  const R = 30, pos = N.map((_, i) => [Math.cos(-i * 0.785 + 1.57) * R, 0, Math.sin(-i * 0.785 + 1.57) * R]);
+  const nodes = N.map(([n, c], i) => S.sphere(pos[i], 2.2 + c * 0.75, i === 0 ? '#38bdf8' : '#fb923c', { id: 'k' + i }));
+  pos.forEach((p, i) => { const q = pos[(i + 1) % 8]; S.path([p, V.add(V.mul(V.lerp(p, q, 0.5), 1.08), [0, 0, 0]), q], 0.9, '#64748b', { id: 'arc' }, 4); });
+  const labs = N.map(([n, c], i) => K.lab(S, pos[i], n + ' ' + c + 'C', 'k' + i, '#fde68a', V.mul(V.norm(pos[i]), 1)[0] * 46, V.mul(V.norm(pos[i]), 1)[2] * -20, { size: 12 }));
+  const acetyl = S.sphere([0, 0, 0], 3.4, '#34d399', { id: 'acoa' }); const lA = K.lab(S, acetyl.p, '乙醯 CoA（2C）', 'acoa', '#86efac', 0, -18);
+  const OUT = { 3: [['CO₂', '#94a3b8'], ['NADH', '#34d399']], 4: [['CO₂', '#94a3b8'], ['NADH', '#34d399']], 5: [['ATP', '#fbbf24']], 6: [['FADH₂', '#c084fc']], 0: [['NADH', '#34d399']] };
+  const pool = []; for (let i = 0; i < 4; i++) { const o = S.sphere([0, 0, 0], 2.4, '#fff', { id: 'out', hidden: true, glow: 0.6 }); pool.push({ o, l: K.lab(S, o.p, '', 'out', '#e2e8f0', 0, -14, { hidden: true, size: 11 }), age: 9 }); }
+  const marker = S.sphere([0, 0, 0], 3, '#fef9c3', { glow: 1.4, gc: '#fde047', nopick: true });
+  let tot = { co2: 0, nadh: 0, fad: 0, atp: 0 }, step = -1, tw = 1, prevI = 0;
+  const STEPS = [
+    { t: '乙醯 CoA + 草醯乙酸 → 檸檬酸', d: '2C + 4C = 6C；CoA 離開可再利用', i: 1, from: 0 },
+    { t: '檸檬酸 → 異檸檬酸', d: '異構化', i: 2 },
+    { t: '→ α-酮戊二酸', d: '放出 <b>CO₂</b>，產生 <b>NADH</b>（6C → 5C）', i: 3 },
+    { t: '→ 琥珀醯 CoA', d: '放出 <b>CO₂</b>，產生 <b>NADH</b>（5C → 4C）', i: 4 },
+    { t: '→ 琥珀酸', d: '產生 <b>GTP → ATP</b>（受質層次磷酸化）', i: 5 },
+    { t: '→ 延胡索酸', d: '產生 <b>FADH₂</b>', i: 6 },
+    { t: '→ 蘋果酸', d: '加水', i: 7 },
+    { t: '→ 草醯乙酸', d: '產生 <b>NADH</b>；草醯乙酸再生，可接下一個乙醯 CoA', i: 0 }
+  ];
+  function go(k) {
+    step = k; tw = 0; const s = STEPS[k];
+    prevI = k === 0 ? 0 : STEPS[k - 1].i;
+    if (k === 0) tot = { co2: 0, nadh: 0, fad: 0, atp: 0 };
+    const outs = OUT[s.i] && k > 0 || (k === 7) ? OUT[s.i] : (k === 0 ? null : OUT[s.i]);
+    (outs || []).forEach((o, j) => { const p = pool[j]; p.age = 0; p.o.hidden = false; p.o.c = o[1]; p.l.hidden = false; p.l.text = o[0]; p.l.c = o[1]; p.base = pos[s.i]; p.dir = V.add(V.norm(pos[s.i]), [0, 0.8 + j * 0.5, 0]);
+      if (o[0] === 'CO₂') tot.co2++; else if (o[0] === 'NADH') tot.nadh++; else if (o[0] === 'FADH₂') tot.fad++; else tot.atp++; });
+    $('kr-co2').textContent = tot.co2; $('kr-nadh').textContent = tot.nadh; $('kr-fad').textContent = tot.fad; $('kr-atp').textContent = tot.atp;
+    $('kr-cap').innerHTML = s.t + '：' + s.d;
+    nodes.forEach((n, i) => { n.hl = i === s.i; });
+  }
+  S.tick(dt => {
+    if (tw < 1) tw = Math.min(1, tw + dt / 1.2);
+    const s = STEPS[Math.max(0, step)], e = sm(0, 1, tw);
+    const a = -prevI * 0.785 + 1.57, b = -(s.i === 0 ? 8 : s.i) * 0.785 + 1.57;
+    const ang = K.lerp(a, b, e); mv(marker.p, [Math.cos(ang) * R, 4, Math.sin(ang) * R]);
+    if (step === 0) { mv(acetyl.p, V.lerp([0, 0, 0], pos[1], e)); acetyl.al = 1 - sm(0.7, 1, tw); } else { mv(acetyl.p, [0, 0, 0]); acetyl.al = 1; }
+    lA.p = acetyl.p;
+    pool.forEach(p => { if (p.age > 2.2) { p.o.hidden = true; p.l.hidden = true; return; } p.age += dt; mv(p.o.p, V.add(p.base, V.mul(p.dir, 6 + p.age * 12))); p.o.al = 1 - sm(1.6, 2.2, p.age); p.l.p = p.o.p; });
+  });
+  UI.stepper($('kr-steps'), STEPS, go, { dur: 3000 });
+
+  S.onPick = o => { if (!o) return; const m = /^k(\d)$/.exec(o.id); if (m) $('kr-cap').textContent = '👉 ' + N[+m[1]][0] + '（' + N[+m[1]][1] + ' 碳）'; else if (o.id === 'acoa') $('kr-cap').textContent = '👉 乙醯 CoA：來自丙酮酸、脂肪酸 β-氧化或胺基酸'; };
+})();
+
+/* ================= 05 電子傳遞鏈 ================= */
+(function () {
+  const S = K.stage('st-etc', { radius: 70, yaw: 0.05, pitch: 0.22, autoRotate: 0 });
+  K.sheet(S, [-74, 6, -22], [148, 0, 0], [0, 0, 44], 18, 4, '#f59e0b', { id: 'mem', al: 0.5 });
+  K.sheet(S, [-74, -6, -22], [148, 0, 0], [0, 0, 44], 18, 4, '#f59e0b', { id: 'mem', al: 0.5 });
+  K.sheet(S, [-74, -6, -22], [148, 0, 0], [0, 12, 0], 18, 1, '#b45309', { id: 'mem', al: 0.75 });
+  const cx = { I: -54, II: -34, III: -8, IV: 18, ATP: 52, UCP: 36 };
+  K.ellipsoid(S, [cx.I, 2, 0], [9, 12, 9], '#60a5fa', 16, 9, { id: 'c1', al: 0.85 }); K.ellipsoid(S, [cx.I + 5, -14, 0], [6, 8, 6], '#60a5fa', 12, 7, { id: 'c1', al: 0.85 });
+  K.ellipsoid(S, [cx.II, -8, 0], [6, 6, 6], '#a78bfa', 12, 7, { id: 'c2', al: 0.85 });
+  K.ellipsoid(S, [cx.III, 1, 0], [8, 12, 8], '#34d399', 16, 9, { id: 'c3', al: 0.85 });
+  K.ellipsoid(S, [cx.IV, 1, 0], [8, 12, 8], '#fb7185', 16, 9, { id: 'c4', al: 0.85 });
+  const ring = []; for (let k = 0; k < 10; k++) { const a = [0, -6, 0], b = [0, 6, 0]; ring.push({ t: S.tube(a, b, 1.6, '#38bdf8', { id: 'atps' }), a, b, ph: k * 0.628 }); }
+  const stalk = S.tube([cx.ATP, -6, 0], [cx.ATP, -18, 0], 1.6, '#0ea5e9', { id: 'atps' });
+  const head = []; for (let k = 0; k < 6; k++) head.push(S.sphere([cx.ATP + Math.cos(k * 1.047) * 6, -22, Math.sin(k * 1.047) * 6], 4, k % 2 ? '#38bdf8' : '#0284c7', { id: 'atps' }));
+  S.tube([cx.ATP + 9, 6, 0], [cx.ATP + 9, -20, 0], 1.1, '#7dd3fc', { id: 'atps' });
+  const ucp = []; for (let k = 0; k < 6; k++) ucp.push(S.tube([cx.UCP + Math.cos(k * 1.047) * 3, -6, Math.sin(k * 1.047) * 3], [cx.UCP + Math.cos(k * 1.047) * 3, 6, Math.sin(k * 1.047) * 3], 1.2, '#fb923c', { id: 'ucp', hidden: true }));
+  const Q = S.sphere([0, 0, 0], 2.6, '#fde047', { id: 'q' }), cyc = S.sphere([0, 0, 0], 3, '#f87171', { id: 'cytc' });
+  const o2 = [S.sphere([cx.IV + 3, -24, 0], 2.6, '#ef4444', { id: 'o2' }), S.sphere([cx.IV + 7, -24, 0], 2.6, '#ef4444', { id: 'o2' })];
+  K.lab(S, [cx.I, 14, 0], 'I', 'c1', '#93c5fd', 0, -14, { size: 13 }); K.lab(S, [cx.II, -2, 0], 'II', 'c2', '#c4b5fd', 0, -22, { size: 13 }); K.lab(S, [cx.III, 14, 0], 'III', 'c3', '#86efac', 0, -14, { size: 13 }); K.lab(S, [cx.IV, 14, 0], 'IV', 'c4', '#fda4af', 0, -14, { size: 13 });
+  K.lab(S, [cx.ATP, -22, 0], 'ATP 合成酶', 'atps', '#7dd3fc', 30, 24); K.lab(S, [cx.I + 5, -24, 0], 'NADH → NAD⁺', 'c1', '#86efac', -20, 18); K.lab(S, [cx.II, -16, 0], 'FADH₂ → FAD', 'c2', '#d8b4fe', 0, 22);
+  K.lab(S, [cx.IV + 5, -24, 0], '½O₂ + 2H⁺ → H₂O', 'o2', '#fca5a5', 30, 22); K.lab(S, [-66, 30, 0], '膜間腔', 'ims', '#fca5a5', 0, 0); K.lab(S, [-66, -32, 0], '基質', 'mat', '#fde68a', 0, 0);
+  const lQ = K.lab(S, Q.p, 'CoQ', 'q', '#fde047', 0, 16, { size: 11 }), lC = K.lab(S, cyc.p, 'cyt c', 'cytc', '#fca5a5', 0, -16, { size: 11 }), lU = K.lab(S, [cx.UCP, 8, 0], 'UCP1', 'ucp', '#fdba74', 0, -14, { hidden: true });
+  const xIV = K.lab(S, [cx.IV, 0, -12], '✖ 阻斷', 'c4', '#fb7185', 0, 0, { hidden: true, size: 14 });
+  const PN = new Mini3D.Path([[cx.I + 5, -24, 0], [cx.I + 4, -12, 0], [cx.I, 0, 0], [-40, 0, 0], [-22, 0, 0], [cx.III, 0, 0], [cx.III + 6, 10, 0], [5, 12, 0], [cx.IV - 4, 10, 0], [cx.IV, 0, 0], [cx.IV + 3, -14, 0], [cx.IV + 5, -22, 0]], 6);
+  const PF = new Mini3D.Path([[cx.II, -18, 0], [cx.II, -8, 0], [cx.II + 4, 0, 0], [-20, 0, 0], [cx.III, 0, 0], [cx.III + 6, 10, 0], [5, 12, 0], [cx.IV - 4, 10, 0], [cx.IV, 0, 0], [cx.IV + 3, -14, 0], [cx.IV + 5, -22, 0]], 6);
+  const pumpsN = [[0.2, 4, cx.I], [0.47, 4, cx.III], [0.8, 2, cx.IV]], pumpsF = [[0.4, 4, cx.III], [0.78, 2, cx.IV]];
+  const E = []; for (let i = 0; i < 10; i++) E.push({ o: S.sphere([0, 0, 0], 2, '#fde047', { glow: 1.1, gc: '#facc15', id: 'e', hidden: true }), on: false });
+  const rnd = Math.random;
+  const inIMS = () => [-70 + rnd() * 140, 12 + rnd() * 26, -18 + rnd() * 36], inMat = () => [-70 + rnd() * 140, -14 - rnd() * 26, -18 + rnd() * 36];
+  const H = []; for (let i = 0; i < 96; i++) { const ims = i < 40; H.push({ o: S.sphere(ims ? inIMS() : inMat(), 1.5, '#f87171', { id: 'h' }), st: ims ? 'i' : 'm', v: [rnd() - 0.5, rnd() - 0.5, rnd() - 0.5], path: null, t: 0, dur: 1 }); }
+  const ATPs = []; for (let i = 0; i < 8; i++) ATPs.push({ o: S.sphere([0, 0, 0], 2.4, '#fbbf24', { glow: 0.8, id: 'atpm', hidden: true }), age: 9 });
+  const heat = []; for (let i = 0; i < 14; i++) heat.push({ o: S.sphere([0, 0, 0], 1.8, '#fb923c', { glow: 1.2, gc: '#f97316', id: 'heat', hidden: true }), age: 9, d: [0, 0, 0] });
+  let mode = 'norm', spawnN = 0, spawnF = 0, synAcc = 0, ucpAcc = 0, synCount = 0, atpN = 0, heatN = 0, rot = 0, flux = 0;
+  function send(h, pts, dur, st) { h.path = new Mini3D.Path(pts, 4); h.t = 0; h.dur = dur; h.next = st; h.st = 'move'; }
+  function pump(n, x) { const c = H.filter(h => h.st === 'm').sort((a, b) => Math.abs(a.o.p[0] - x) - Math.abs(b.o.p[0] - x)).slice(0, n); c.forEach(h => send(h, [h.o.p.slice(), [x + (rnd() - 0.5) * 6, -14, (rnd() - 0.5) * 6], [x, 0, 0], [x + (rnd() - 0.5) * 6, 14, (rnd() - 0.5) * 6], inIMS()], 1.6, 'i')); }
+  function emit(arr, p, dir) { const a = arr.find(x => x.age > 2); if (!a) return; a.age = 0; a.base = p.slice(); a.d = dir; a.o.hidden = false; }
+  S.tick(dt => {
+    const blocked = mode === 'cn' || mode === 'hyp';
+    const nI = H.filter(h => h.st === 'i').length, nM = H.filter(h => h.st === 'm').length;
+    // 電子
+    spawnN += dt; spawnF += dt;
+    const active = E.filter(e => e.on);
+    const stuck = active.filter(e => e.stuck).length;
+    if (spawnN > 1.3 && stuck < 3) { spawnN = 0; const e = E.find(x => !x.on); if (e) Object.assign(e, { on: true, P: PN, u: 0, pumps: pumpsN.map(p => p.slice()), stuck: false }); }
+    if (spawnF > 3.1 && stuck < 3) { spawnF = 0; const e = E.find(x => !x.on); if (e) Object.assign(e, { on: true, P: PF, u: 0, pumps: pumpsF.map(p => p.slice()), stuck: false }); }
+    E.forEach(e => {
+      e.o.hidden = !e.on; if (!e.on) return;
+      const lim = blocked ? 0.76 - E.indexOf(e) * 0.0 : 1;
+      const sp = mode === 'ucp' ? 0.32 : 0.22;
+      if (e.u < lim) e.u = Math.min(lim, e.u + dt * sp); else if (blocked) e.stuck = true;
+      e.pumps.forEach(p => { if (!p.done && e.u >= p[0]) { p.done = true; pump(p[1], p[2]); } });
+      if (e.u >= 1) { e.on = false; o2.forEach(o => { o.glow = 1.2; }); }
+      mv(e.o.p, e.P.at(e.u));
+    });
+    o2.forEach(o => { o.glow = Math.max(0, (o.glow || 0) - dt * 2); o.hidden = mode === 'hyp'; });
+    if (!blocked) E.forEach(e => { e.stuck = false; });
+    const ut = performance.now() / 1000;
+    mv(Q.p, [K.lerp(-44, -18, (Math.sin(ut * 1.6) + 1) / 2), 0, 4]); mv(cyc.p, [K.lerp(cx.III + 4, cx.IV - 4, (Math.sin(ut * 1.9 + 1) + 1) / 2), 11, 3]);
+    if (blocked) { mv(Q.p, [-22, 0, 4]); mv(cyc.p, [cx.IV - 6, 11, 3]); }
+    lQ.p = Q.p; lC.p = cyc.p;
+    // ATP 合成酶
+    const drive = Math.max(0, nI - nM * 0.55);
+    synAcc += dt * 0.09 * drive * (mode === 'ucp' ? 0.35 : 1);
+    if (synAcc >= 1) { synAcc = 0; const h = H.filter(x => x.st === 'i').sort((a, b) => Math.abs(a.o.p[0] - cx.ATP) - Math.abs(b.o.p[0] - cx.ATP))[0]; if (h) { send(h, [h.o.p.slice(), [cx.ATP + 4, 12, 0], [cx.ATP + 3, 0, 0], [cx.ATP, -12, 0], inMat()], 1.4, 'mS'); flux += 1; } }
+    if (mode === 'ucp') { ucpAcc += dt * 0.16 * drive; if (ucpAcc >= 1) { ucpAcc = 0; const h = H.filter(x => x.st === 'i').sort((a, b) => Math.abs(a.o.p[0] - cx.UCP) - Math.abs(b.o.p[0] - cx.UCP))[0]; if (h) send(h, [h.o.p.slice(), [cx.UCP, 12, 0], [cx.UCP, 0, 0], [cx.UCP, -12, 0], inMat()], 1.1, 'mU'); } }
+    flux *= Math.pow(0.4, dt); rot += dt * (0.6 + flux * 1.6);
+    ring.forEach(r => { const a = r.ph + rot; const p = [cx.ATP + Math.cos(a) * 6, 0, Math.sin(a) * 6]; mv(r.a, V.add(p, [0, -6, 0])); mv(r.b, V.add(p, [0, 6, 0])); });
+    head.forEach((s, k) => { const a = k * 1.047 + rot * 0.15; mv(s.p, [cx.ATP + Math.cos(a) * 6, -22, Math.sin(a) * 6]); });
+    // H⁺ 移動
+    H.forEach(h => {
+      if (h.st === 'move') {
+        h.t += dt / h.dur; mv(h.o.p, h.path.at(Math.min(1, h.t)));
+        if (h.t >= 1) {
+          if (h.next === 'mS') { h.st = 'm'; synCount++; if (synCount % 4 === 0) { atpN++; emit(ATPs, [cx.ATP, -26, 0], V.norm([rnd() - 0.5, -1, rnd() - 0.5])); } }
+          else if (h.next === 'mU') { h.st = 'm'; heatN++; emit(heat, [cx.UCP, -10, 0], V.norm([rnd() - 0.5, -0.6, rnd() - 0.5])); }
+          else h.st = h.next;
+        }
+        return;
+      }
+      const box = h.st === 'i' ? [12, 38] : [-40, -14];
+      h.v = V.add(h.v, [(rnd() - 0.5) * dt * 4, (rnd() - 0.5) * dt * 4, (rnd() - 0.5) * dt * 4]); h.v = V.mul(h.v, 0.98);
+      const p = V.add(h.o.p, V.mul(h.v, dt * 10));
+      if (p[0] < -70 || p[0] > 70) h.v[0] *= -1; if (p[1] < box[0] || p[1] > box[1]) h.v[1] *= -1; if (p[2] < -18 || p[2] > 18) h.v[2] *= -1;
+      p[0] = K.clamp(p[0], -70, 70); p[1] = K.clamp(p[1], box[0], box[1]); p[2] = K.clamp(p[2], -18, 18); mv(h.o.p, p);
+    });
+    [ATPs, heat].forEach(arr => arr.forEach(a => { if (a.age > 2) { a.o.hidden = true; return; } a.age += dt; mv(a.o.p, V.add(a.base, V.mul(a.d, a.age * 14))); a.o.al = 1 - sm(1.4, 2, a.age); }));
+    $('et-i').textContent = nI; $('et-m').textContent = nM; $('et-a').textContent = atpN; $('et-h').textContent = heatN;
+    $('et-g').style.width = Math.max(0, Math.min(100, (nI / (nI + nM)) * 100)).toFixed(0) + '%';
+  });
+  const INFO = {
+    norm: ['正常：氧化磷酸化', ['NADH 在<b>複合體 I</b> 交出電子（共泵 4 + 4 + 2 = 10 個 H⁺）', 'FADH₂ 由<b>複合體 II</b> 進入，跳過第一個泵（只泵 6 個）', '電子經 CoQ → III → 細胞色素 c → IV → <b>O₂</b>（最終電子接受者）：O₂ + 4e⁻ + 4H⁺ → 2H₂O', 'H⁺ 只能經 <b>ATP 合成酶</b>流回基質 → 旋轉 → ADP + Pi → ATP']],
+    cn: ['氰化物中毒', ['氰化物結合<b>細胞色素 c 氧化酶（複合體 IV）</b>，電子無法交給 O₂', '電子在鏈上「塞車」，所有複合體維持還原態 → 停止泵 H⁺', 'H⁺ 梯度耗盡 → ATP 合成停止 → 細胞迅速死亡']],
+    hyp: ['缺氧', ['沒有 O₂ 當最終電子接受者 → 最後一個細胞色素無法被氧化', '電子傳遞停止、氧化磷酸化停止', '細胞只能靠<b>乳酸途徑</b>（無氧代謝）取得少量 ATP']],
+    ucp: ['棕色脂肪：UCP1 解偶聯', ['交感神經 NE → 脂肪分解 → 長鏈脂肪酸活化 <b>UCP1</b>', 'H⁺ 經 UCP1 流回基質，<b>不經過 ATP 合成酶</b> → 梯度的能量變成<b>熱</b>', 'ATP 降低 → 對電子傳遞的抑制減少 → 脂肪酸氧化更快、產熱更多（新生兒產熱）']]
+  };
+  const CAP = { norm: '電子流動 → 泵 H⁺ → ATP 合成酶旋轉產生 ATP', cn: '☠ 氰化物阻斷複合體 IV：電子塞住，梯度逐漸消失', hyp: '缺氧：沒有最終電子接受者，傳遞鏈停擺', ucp: '🔥 UCP1 讓 H⁺ 漏回基質 → 產熱而非 ATP' };
+  K.seg('#etmode', m => {
+    mode = m; ucp.forEach(u => { u.hidden = m !== 'ucp'; }); lU.hidden = m !== 'ucp'; xIV.hidden = m !== 'cn';
+    const d = INFO[m]; $('etc-info').innerHTML = '<div class="tt">' + d[0] + '</div><ul class="small">' + d[1].map(x => '<li>' + x + '</li>').join('') + '</ul>';
+    $('etc-cap').textContent = CAP[m];
+    if (m === 'norm') { E.forEach(e => { e.on = false; }); }
+  }, 'norm');
+  S.onPick = o => { if (!o) return; const t = { c1: '複合體 I（NADH–CoQ 還原酶）：泵 4 H⁺', c2: '複合體 II：接受 FADH₂ 的電子，不泵 H⁺', c3: '複合體 III（細胞色素 c 還原酶）：泵 4 H⁺', c4: '複合體 IV（細胞色素 c 氧化酶）：泵 2 H⁺，把電子交給 O₂', atps: 'ATP 合成酶：像旋轉渦輪，H⁺ 流過帶動 ADP + Pi → ATP', q: '輔酶 Q（泛醌）：在膜內傳遞電子', cytc: '細胞色素 c：在膜間腔側傳遞電子', h: 'H⁺（質子）', e: '電子', o2: 'O₂：最終電子接受者', mem: '粒線體內膜：不讓 H⁺ 自由通過', ucp: 'UCP1 解偶聯蛋白', atpm: 'ATP' }[o.id]; if (t) $('etc-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 06 ATP 收支 ================= */
+(function () {
+  let mode = 'act', sh = 'fad';
+  function draw() {
+    const act = mode === 'act', nadh = act ? 2.5 : 3, fad = act ? 1.5 : 2, gly = sh === 'fad' ? 2 * fad : 2 * nadh;
+    const rows = [['糖解：受質層次', '2 ATP（淨）', 2], ['糖解：2 NADH（細胞質）', sh === 'fad' ? '經穿梭成 FADH₂ × 2 × ' + fad : '仍為 NADH × 2 × ' + nadh, gly], ['丙酮酸 → 乙醯 CoA：2 NADH', '2 × ' + nadh, 2 * nadh], ['克氏循環：受質層次', '1 × 2 圈', 2], ['克氏循環：6 NADH', '6 × ' + nadh, 6 * nadh], ['克氏循環：2 FADH₂', '2 × ' + fad, 2 * fad]];
+    const tot = rows.reduce((a, r) => a + r[2], 0);
+    $('atp-tb').innerHTML = '<tr><th>來源</th><th>計算</th><th>ATP</th></tr>' + rows.map(r => '<tr><td>' + r[0] + '</td><td class="small muted">' + r[1] + '</td><td>' + r[2] + '</td></tr>').join('') + '<tr class="tot"><td>合計</td><td></td><td>' + tot + '</td></tr>';
+    const box = $('atp-bars'); box.innerHTML = '';
+    UI.bars(box, [{ label: '糖解', v: 2 + gly, c: '#38bdf8' }, { label: '乙醯 CoA', v: 2 * nadh, c: '#34d399' }, { label: '克氏（直接）', v: 2, c: '#fbbf24' }, { label: '克氏 NADH', v: 6 * nadh, c: '#22c55e' }, { label: '克氏 FADH₂', v: 2 * fad, c: '#c084fc' }], { max: 18 });
+    UI.$$('.b3-bar', box).forEach(b => { b.style.height = b.dataset.h + '%'; });
+  }
+  K.seg('#bt1', v => { mode = v; draw(); }, 'act');
+  K.seg('#bt2', v => { sh = v; draw(); }, 'fad');
+})();
+
+/* ================= 07 Cori 循環 ================= */
+(function () {
+  const cv = $('cori-cv'); let ex = true;
+  const dots = []; for (let i = 0; i < 26; i++) dots.push({ u: i / 26, k: i % 2 });
+  $('co-ex').onclick = () => { ex = true; $('co-ex').classList.add('on'); $('co-rest').classList.remove('on'); };
+  $('co-rest').onclick = () => { ex = false; $('co-rest').classList.add('on'); $('co-ex').classList.remove('on'); };
+  K.loop(dt => {
+    const [c, w, h] = K.fit(cv); c.clearRect(0, 0, w, h); c.font = '13px ' + Mini3D.FONT; c.textAlign = 'center';
+    const box = (x, y, bw, bh, col, t, sub) => { c.fillStyle = col + '33'; c.strokeStyle = col; c.lineWidth = 2; c.beginPath(); c.roundRect ? c.roundRect(x, y, bw, bh, 16) : c.rect(x, y, bw, bh); c.fill(); c.stroke(); c.fillStyle = '#fff'; c.font = '700 15px ' + Mini3D.FONT; c.fillText(t, x + bw / 2, y + 26); c.font = '12px ' + Mini3D.FONT; c.fillStyle = '#cbd5e1'; sub.forEach((s, i) => c.fillText(s, x + bw / 2, y + 50 + i * 18)); };
+    const mw = w * 0.3, mh = h * 0.62, my = h * 0.19;
+    box(w * 0.04, my, mw, mh, '#fb7185', '骨骼肌', ex ? ['肝醣 → 葡萄糖-6-P', '→ 丙酮酸 → 乳酸', '（無氧，產 ATP）'] : ['葡萄糖 → 肝醣', '（補充肌肝醣）']);
+    box(w * 0.66, my, mw, mh, '#fbbf24', '肝臟', ['乳酸 → 丙酮酸', '→ 葡萄糖（糖質新生）', '葡萄糖-6-磷酸酶']);
+    const x1 = w * 0.04 + mw, x2 = w * 0.66, yT = h * 0.3, yB = h * 0.7;
+    c.strokeStyle = '#475569'; c.lineWidth = 10; c.lineCap = 'round';
+    c.beginPath(); c.moveTo(x1 + 6, yT); c.lineTo(x2 - 6, yT); c.stroke(); c.beginPath(); c.moveTo(x2 - 6, yB); c.lineTo(x1 + 6, yB); c.stroke();
+    c.fillStyle = '#c084fc'; c.fillText('乳酸（血液）→', (x1 + x2) / 2, yT - 14); c.fillStyle = '#38bdf8'; c.fillText('← 葡萄糖（血液）', (x1 + x2) / 2, yB + 24);
+    dots.forEach(d => {
+      d.u = (d.u + dt * (ex ? 0.22 : 0.12)) % 1;
+      if (d.k === 0) { if (!ex && d.u > 0.5) return; c.fillStyle = '#c084fc'; c.beginPath(); c.arc(K.lerp(x1 + 6, x2 - 6, d.u), yT, 4, 0, 6.28); c.fill(); }
+      else { c.fillStyle = '#38bdf8'; c.beginPath(); c.arc(K.lerp(x2 - 6, x1 + 6, d.u), yB, 4, 0, 6.28); c.fill(); }
+    });
+  }, cv);
+})();
+
+/* ================= 08 β-氧化 ================= */
+(function () {
+  const cv = $('beta-cv'); let n = 0, cut = [], all = false, tmr = 0;
+  function upd() { $('b-ac').textContent = n === 7 ? 8 : n; $('b-nf').textContent = n + ' + ' + n; $('b-atp').textContent = n * 4 + (n === 7 ? 80 : n * 10); }
+  $('b-step').onclick = () => { if (n < 7) { n++; cut.push({ age: 0 }); upd(); } };
+  $('b-all').onclick = () => { clearInterval(tmr); tmr = setInterval(() => { if (n >= 7) { clearInterval(tmr); return; } n++; cut.push({ age: 0 }); upd(); }, 650); };
+  $('b-rs').onclick = () => { clearInterval(tmr); n = 0; cut = []; upd(); };
+  upd();
+  K.loop(dt => {
+    const [c, w, h] = K.fit(cv); c.clearRect(0, 0, w, h);
+    const left = 20 + 0, sp = Math.min(30, (w - 60) / 17), y = h * 0.42;
+    const remain = 16 - n * 2;
+    c.lineWidth = 3; c.strokeStyle = '#cbd5e1';
+    for (let i = 0; i < remain; i++) { const x = w - 30 - (remain - 1 - i) * sp, yy = y + (i % 2 ? 7 : -7); if (i) { const xp = w - 30 - (remain - i) * sp, yp = y + ((i - 1) % 2 ? 7 : -7); c.beginPath(); c.moveTo(xp, yp); c.lineTo(x, yy); c.stroke(); } }
+    for (let i = 0; i < remain; i++) { const x = w - 30 - (remain - 1 - i) * sp, yy = y + (i % 2 ? 7 : -7); c.fillStyle = '#9ca3af'; c.beginPath(); c.arc(x, yy, 7, 0, 6.28); c.fill(); }
+    if (remain) { c.fillStyle = '#ef4444'; c.beginPath(); c.arc(w - 30 - (remain - 1) * sp - sp * 0.8, y, 6, 0, 6.28); c.fill(); c.fillStyle = '#cbd5e1'; c.font = '11px ' + Mini3D.FONT; c.textAlign = 'center'; c.fillText('–COOH（接 CoA）', w - 30 - (remain - 1) * sp - sp * 0.8, y - 18); }
+    cut.forEach((k, i) => { k.age += dt; const x = 30 + (i % 8) * 46, yy = h - 34; c.fillStyle = '#34d399'; c.beginPath(); c.arc(x, yy, 9, 0, 6.28); c.fill(); c.beginPath(); c.arc(x + 16, yy, 9, 0, 6.28); c.fill(); c.fillStyle = '#e2e8f0'; c.font = '10px ' + Mini3D.FONT; c.textAlign = 'center'; c.fillText('乙醯CoA', x + 8, yy - 15); });
+    if (n === 7) { const x = 30 + 7 * 46, yy = h - 34; c.fillStyle = '#86efac'; c.beginPath(); c.arc(x, yy, 9, 0, 6.28); c.fill(); c.beginPath(); c.arc(x + 16, yy, 9, 0, 6.28); c.fill(); c.fillStyle = '#e2e8f0'; c.fillText('最後 2C', x + 8, yy - 15); }
+  }, cv);
+})();
+
+/* ================= 快閃卡 / 測驗 ================= */
+UI.flashcards($('fc'), [
+  { f: '糖解作用的反應式與淨產物', b: '葡萄糖 + 2 NAD + 2 ADP + 2 Pi → 2 丙酮酸 + 2 NADH + <b>2 ATP（淨）</b>；消耗 2、產生 4。' },
+  { f: '乳酸途徑的意義', b: '丙酮酸接受 NADH 的氫 → 乳酸，並<b>再生 NAD⁺</b>，讓糖解在無氧下持續進行。' },
+  { f: '克氏循環每圈產物', b: '2 CO₂、3 NADH、1 FADH₂、1 ATP（GTP）；起點：乙醯 CoA（2C）+ 草醯乙酸（4C）→ 檸檬酸（6C）。' },
+  { f: '丙酮酸 → 乙醯 CoA 時移除了什麼？', b: '移除 <b>CO₂</b> 與 2 個氫（→ 1 NADH）。' },
+  { f: '電子傳遞鏈的位置與最終電子接受者', b: '粒線體<b>內膜（嵴）</b>；最終電子接受者是 <b>O₂</b>，與 4e⁻ + 4H⁺ 生成 2H₂O。' },
+  { f: '哪些複合體泵 H⁺？各幾個？', b: '<b>I：4、III：4、IV：2</b>（每對電子）；複合體 II 不泵。' },
+  { f: '化學滲透理論', b: '電子傳遞把 H⁺ 打到膜間腔形成梯度；H⁺ 經 <b>ATP 合成酶</b>流回基質時驅動 ADP + Pi → ATP。' },
+  { f: '為什麼 NADH 產 2.5、FADH₂ 產 1.5 ATP？', b: 'NADH 泵 10 個 H⁺、FADH₂ 跳過第一泵只泵 6 個；每 4 個 H⁺ 換 1 個送到細胞質的 ATP。' },
+  { f: '每分子葡萄糖的 ATP', b: '實際 <b>30–32</b>（理論 36–38）；其中 2 來自糖解、2 來自克氏循環的受質層次磷酸化。' },
+  { f: '氰化物如何致死？', b: '結合<b>細胞色素 c 氧化酶</b>（複合體 IV），電子無法交給 O₂ → 氧化磷酸化停止。' },
+  { f: '為何只有肝臟能釋出葡萄糖到血液？', b: '肝臟有<b>葡萄糖-6-磷酸酶</b>，骨骼肌沒有。' },
+  { f: 'Cori 循環', b: '肌肉乳酸 → 血液 → 肝臟糖質新生成葡萄糖 → 送回肌肉。' },
+  { f: '16 碳脂肪酸 β-氧化產生多少 ATP？', b: '8 乙醯 CoA × 10 = 80，加上 7 次 × (NADH 2.5 + FADH₂ 1.5) = 28 → <b>108</b>。' },
+  { f: '酮體有哪些？何時增加？', b: '乙醯乙酸、β-羥基丁酸、丙酮；肝臟由脂肪酸生成，禁食、節食、脂肪分解增加時上升。' },
+  { f: '棕色脂肪如何產熱？', b: 'NE → 脂肪分解 → 脂肪酸活化 <b>UCP1</b> → H⁺ 不經 ATP 合成酶流回 → 能量變熱（解偶聯）。' },
+  { f: '轉胺作用 vs 氧化脫胺', b: '轉胺：胺基轉給酮酸形成新胺基酸（需 B₆）；氧化脫胺：胺基移除 → 尿素，留下酮酸可供能量。' },
+  { f: '腦的主要能量來源？', b: '<b>血糖</b>（幾乎完全依賴）；嚴重飢餓時可用部分酮體。' }
+], 'ch05');
+UI.quiz($('qz'), [
+  { q: '糖解作用發生在哪裡？', o: ['粒線體基質', '粒線體內膜', '細胞質', '細胞核'], a: 2, e: '糖解在細胞質；克氏循環在基質；電子傳遞鏈在內膜。' },
+  { q: '糖解作用的淨 ATP 是？', o: ['1', '2', '4', '36'], a: 1, e: '消耗 2、產生 4，淨 2。' },
+  { q: '無氧時丙酮酸轉成乳酸的主要目的？', o: ['產生更多 ATP', '再生 NAD⁺', '產生 CO₂', '合成肝醣'], a: 1, e: '再生 NAD⁺ 讓糖解持續。' },
+  { q: '克氏循環中產生 FADH₂ 的步驟是？', o: ['檸檬酸 → 異檸檬酸', '琥珀酸 → 延胡索酸', '蘋果酸 → 草醯乙酸', '琥珀醯 CoA → 琥珀酸'], a: 1, e: '琥珀酸脫氫產生 FADH₂。' },
+  { q: '電子傳遞鏈的最終電子接受者是？', o: ['NAD⁺', 'FAD', 'O₂', '細胞色素 c'], a: 2, e: 'O₂ 接受電子與 H⁺ 形成水。' },
+  { q: '下列哪個複合體不泵 H⁺？', o: ['I', 'II', 'III', 'IV'], a: 1, e: '複合體 II（與輔酶 Q）傳遞電子但不泵。' },
+  { q: '使 H⁺ 不經 ATP 合成酶流回、能量轉為熱的是？', o: ['氰化物', 'UCP1', '細胞色素 c', '乳酸脫氫酶'], a: 1, e: '棕色脂肪的解偶聯蛋白 UCP1。' },
+  { q: '一分子葡萄糖有氧呼吸實際約產生多少 ATP？', o: ['2', '4', '30–32', '108'], a: 2, e: '理論 36–38，實際送到細胞質 30–32。' },
+  { q: '骨骼肌無法把肝醣分解成血糖，因為缺少？', o: ['肝醣磷解酶', '葡萄糖-6-磷酸酶', '己糖激酶', '乳酸脫氫酶'], a: 1, e: '肝臟才有葡萄糖-6-磷酸酶。' },
+  { q: 'Cori 循環中肝臟把乳酸轉成葡萄糖的過程稱為？', o: ['肝醣生成', '肝醣分解', '糖質新生', '脂肪生成'], a: 2, e: '由非碳水化合物合成葡萄糖 = 糖質新生。' },
+  { q: '轉胺作用所需的輔酶來自？', o: ['維生素 B₁', '維生素 B₆', '維生素 C', '菸鹼酸'], a: 1, e: '轉胺酶需 B₆（pyridoxine）。' }
+]);
+</script>
+</body>
+</html>

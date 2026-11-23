@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch15 免疫系統 · 生理 3D</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>canvas.anim{width:100%;height:var(--ph,230px);display:block;border-radius:14px;background:#060b17;border:1px solid var(--line)}</style>
+</head>
+<body style="--acc:#34d399;--acc2:#f472b6">
+<canvas id="bgfx"></canvas>
+<header class="hero">
+  <a class="back" href="index.html">← 回總覽</a>
+  <div class="kicker">Chapter 15 · The Immune System</div>
+  <h1 class="title3d">免疫系統</h1>
+  <p class="sub">3D 局部發炎（組織胺、血管擴張、嗜中性球滾動–黏附–穿出–吞噬）、3D 抗體結構（IgG、IgM 五聚體、IgA 二聚體、IgE 與肥大細胞過敏）、補體膜攻擊複合體、抗原呈現與細胞毒性 T 細胞殺手、株選擇學說與初次/二次免疫反應。</p>
+  <div class="chips"><a class="chip" href="#def">防禦機制</a><a class="chip" href="#infl">發炎 3D</a><a class="chip" href="#ab">抗體 3D</a><a class="chip" href="#comp">補體</a><a class="chip" href="#tc">T 細胞</a><a class="chip" href="#act">主動被動免疫</a><a class="chip" href="#dis">免疫疾病</a><a class="chip" href="#cards">快閃卡</a><a class="chip" href="#quiz">測驗</a></div>
+</header>
+<nav class="topnav" id="topnav"></nav>
+<main>
+
+<section class="sec" id="def" data-nav="防禦機制">
+  <h2><span class="num">01</span>先天（非專一）與後天（專一）免疫</h2>
+  <div class="grid2 even">
+    <div class="card"><h3>先天免疫 Innate</h3><ul class="small"><li><b>屏障</b>：皮膚、黏膜、胃酸、溶菌酶</li><li><b>吞噬細胞</b>：嗜中性球、單核球→巨噬細胞（單核吞噬系統）、器官固定的吞噬細胞</li><li><b>自然殺手（NK）細胞</b>：殺病毒感染細胞、腫瘤細胞</li><li><b>干擾素</b>：被病毒感染的細胞分泌 → 保護其他細胞（α、β、γ）</li><li><b>補體</b>、<b>發燒</b>（下視丘視前區）</li><li>以<b>類鐸受體 TLR</b> 等辨識病原體相關分子模式（<b>PAMPs</b>，如細菌 LPS）</li></ul></div>
+    <div class="card"><h3>後天免疫 Adaptive</h3><ul class="small"><li>針對<b>抗原</b>：大型、複雜、外來分子；一個分子可有多個<b>抗原決定位（epitope）</b></li><li><b>B 淋巴球</b> → 漿細胞分泌抗體 → <b>體液免疫</b></li><li><b>T 淋巴球</b> → <b>細胞媒介免疫</b>（細胞毒性、輔助、調節 T）</li><li>初級淋巴器官：<b>骨髓、胸腺</b>；次級：約 450 個淋巴結、脾、扁桃腺、培氏斑</li><li>有<b>記憶</b>：二次反應更快更強</li></ul></div>
+  </div>
+  <div class="tbwrap mt"><table class="tb"><tr><th></th><th>B 淋巴球</th><th>T 淋巴球</th></tr>
+    <tr><td>成熟處</td><td>骨髓</td><td>胸腺</td></tr><tr><td>免疫型態</td><td>體液（抗體）</td><td>細胞媒介</td></tr><tr><td>表面抗原受體</td><td>表面抗體（IgM、IgD）</td><td>T 細胞受體（與免疫球蛋白相關）</td></tr>
+    <tr><td>被抗原轉化為</td><td>漿細胞（+ 記憶 B）</td><td>細胞毒性、輔助、調節 T（+ 記憶 T）</td></tr><tr><td>主要對抗</td><td>細菌、病毒的胞外期、毒素</td><td>病毒感染細胞、真菌、部分細菌、腫瘤、移植排斥</td></tr></table></div>
+</section>
+
+<section class="sec" id="infl" data-nav="發炎 3D">
+  <h2><span class="num">02</span>局部發炎（3D）</h2>
+  <p class="lead">上方是微血管、下方是組織。逐步看：細菌入侵 → 肥大細胞釋放<b>組織胺</b>（血管擴張、通透性↑ → 紅、腫）→ 嗜中性球<b>滾動、黏附、穿出血管（血球滲出）</b>→ <b>趨化</b>到細菌 → 吞噬。</p>
+  <div class="grid2">
+    <div class="stage" id="st-infl"><canvas aria-label="3D 局部發炎"></canvas><div class="hud">紅＝紅血球　白＝嗜中性球　綠＝細菌</div><div class="hud2" id="if-cap"></div></div>
+    <div class="card"><div id="if-steps"></div></div>
+  </div>
+</section>
+
+<section class="sec" id="ab" data-nav="抗體 3D">
+  <h2><span class="num">03</span>抗體（免疫球蛋白）的結構</h2>
+  <p class="lead">IgG 由 <b>2 條重鏈 + 2 條輕鏈</b>以雙硫鍵相連成 Y 形。兩臂末端的<b>變異區</b>結合特定抗原（Fab）；尾部<b>恆定區</b>（Fc）決定類別與功能。</p>
+  <div class="grid2">
+    <div class="stage" id="st-ab"><canvas aria-label="3D 抗體"></canvas><div class="hud" id="ab-hud"></div><div class="hud2" id="ab-cap"></div>
+      <div class="sbar"><div class="seg" id="abmode"><button class="btn sm" data-v="g" type="button">IgG</button><button class="btn sm" data-v="m" type="button">IgM 五聚體</button><button class="btn sm" data-v="a" type="button">IgA 二聚體</button><button class="btn sm" data-v="e" type="button">IgE 過敏</button></div></div></div>
+    <div class="card info"><div id="info-ab"><div class="tt">點選抗體部位</div></div><div class="picker" id="pk-ab"></div></div>
+  </div>
+  <div class="tbwrap mt"><table class="tb"><tr><th>類別</th><th>功能</th></tr>
+    <tr><td><b>IgG</b></td><td>循環中最主要的抗體；免疫接種後增加；<b>二次反應</b>分泌；可通過胎盤</td></tr>
+    <tr><td><b>IgA</b></td><td>外分泌液（唾液、母乳、黏膜）中的主要抗體</td></tr>
+    <tr><td><b>IgE</b></td><td>立即型過敏的症狀（結合肥大細胞）</td></tr>
+    <tr><td><b>IgM</b></td><td>接觸抗原前作為淋巴球表面的抗原受體；<b>初次反應</b>分泌</td></tr>
+    <tr><td><b>IgD</b></td><td>淋巴球表面的抗原受體；其他功能未明</td></tr></table></div>
+</section>
+
+<section class="sec" id="comp" data-nav="補體">
+  <h2><span class="num">04</span>補體系統與膜攻擊複合體</h2>
+  <p class="lead">補體蛋白 C1–C9 在血漿中呈非活性。<b>古典路徑</b>由 IgG/IgM 結合抗原啟動（較快），<b>替代路徑</b>由細菌表面多醣啟動。三階段：<b>辨識（C1）→ 活化（C4、C2、C3）→ 攻擊（C5–C9）</b>。</p>
+  <div class="grid2">
+    <div class="stage" id="st-mac"><canvas aria-label="3D 補體膜攻擊複合體"></canvas><div class="hud">細菌的細胞膜（剖面）</div><div class="hud2" id="mac-cap"></div></div>
+    <div class="card"><div id="mac-steps"></div><p class="small muted mt">補體連結先天與後天免疫：C3a、C5a → 趨化與肥大細胞釋放組織胺；C3b → <b>調理作用</b>（吞噬細胞有 C3b 與抗體 Fc 的受體）。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="tc" data-nav="T 細胞">
+  <h2><span class="num">05</span>抗原呈現與 T 淋巴球</h2>
+  <p class="lead">T 細胞受體必須同時辨認<b>外來抗原 + MHC（組織相容性抗原）</b>。輔助 T（CD4）辨認 <b>MHC II</b>（抗原呈現細胞）；細胞毒性 T（CD8）辨認 <b>MHC I</b>（所有有核細胞）。</p>
+  <div class="grid2">
+    <div class="stage" id="st-tc"><canvas aria-label="3D 抗原呈現"></canvas><div class="hud">樹突細胞 → 輔助 T → 細胞毒性 T → 被感染細胞</div><div class="hud2" id="tc-cap"></div></div>
+    <div class="card"><div id="tc-steps"></div></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card tilt"><h3>細胞毒性 T</h3><p class="small">需與目標細胞<b>緊密接觸</b>；釋放<b>穿孔素</b>（打洞）與<b>顆粒酶</b> → 凋亡。負責移植排斥、對抗病毒與真菌感染。</p></div>
+    <div class="card tilt"><h3>輔助 T</h3><p class="small">分泌細胞激素（如 <b>IL-2</b>）刺激細胞毒性 T 與 B 細胞增殖。Th1 促細胞媒介免疫；Th2 促體液免疫。HIV 攻擊 CD4 細胞 → AIDS。</p></div>
+    <div class="card tilt"><h3>調節 T</h3><p class="small">（舊稱抑制 T）抑制免疫反應，防止過度反應造成疾病（自體免疫）。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="act" data-nav="主動被動免疫">
+  <h2><span class="num">06</span>主動免疫、株選擇與被動免疫</h2>
+  <div class="grid2">
+    <div class="card"><h3>初次 vs 二次反應</h3><canvas class="plot" id="resp-plot" style="--ph:240px"></canvas>
+      <p class="small">初次反應：數天後才出現，以 <b>IgM</b> 為主、量少 → 可能生病；二次反應：快速、大量 <b>IgG</b> → 抵抗病原。疫苗用減毒或死的病原（或其毒素）引發主動免疫。</p></div>
+    <div class="card"><h3>株選擇學說（點擊加入抗原）</h3><canvas class="anim" id="clone-cv" style="--ph:240px"></canvas>
+      <div class="btns"><button class="btn sm" id="cl-add" type="button">💉 加入抗原</button><button class="btn sm" id="cl-rs" type="button">重設</button></div>
+      <p class="small">每個 B 細胞只帶一種抗原受體；抗原「選擇」相符的細胞 → 分裂成<b>株</b>：漿細胞（分泌抗體）+ <b>記憶細胞</b>（二次反應的基礎）。</p></div>
+  </div>
+  <div class="grid2 even mt">
+    <div class="tbwrap"><table class="tb"><tr><th></th><th>主動免疫</th><th>被動免疫</th></tr>
+      <tr><td>注射/接受</td><td>抗原（疫苗）</td><td>抗體（抗血清）</td></tr><tr><td>抗體來源</td><td>自己產生</td><td>另一個人或動物；母親經胎盤（IgG）、母乳（IgA）</td></tr>
+      <tr><td>產生抵抗所需時間</td><td>5–14 天</td><td>立即</td></tr><tr><td>持續時間</td><td>長（可達數年）</td><td>短（數週內）</td></tr></table></div>
+    <div class="card"><h3>免疫耐受與單株抗體</h3><ul class="small"><li><b>株刪除</b>：胚胎期胸腺中破壞針對自體抗原的 T 細胞</li><li><b>株無能（clonal anergy）</b>：抑制自體反應淋巴球（多用於 B 細胞）</li><li>耐受失效 → <b>自體免疫疾病</b></li><li><b>單株抗體</b>：B 細胞與骨髓瘤細胞融合成<b>融合瘤</b> → 大量製造單一專一性的抗體（驗孕、診斷、治療）</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="dis" data-nav="免疫疾病">
+  <h2><span class="num">07</span>腫瘤免疫與免疫疾病</h2>
+  <div class="grid3">
+    <div class="card tilt"><h3>腫瘤免疫</h3><ul class="small"><li><b>免疫監視</b>：主要由細胞毒性 T 與 <b>NK 細胞</b></li><li>癌細胞去分化，可能表現胎兒抗原</li><li>NK 非專一；T 細胞針對特定抗原</li><li>壓力會削弱免疫監視</li></ul></div>
+    <div class="card tilt"><h3>自體免疫與免疫複合體</h3><ul class="small"><li>自體抗體或自體反應 T 細胞攻擊自體抗原</li><li>例：第 1 型糖尿病、類風濕性關節炎、葛瑞夫茲病、重症肌無力、多發性硬化、紅斑性狼瘡</li><li><b>免疫複合體疾病</b>：游離抗原與抗體結合 → 發炎（如腎絲球腎炎）</li></ul></div>
+    <div class="card"><h3>過敏</h3><div class="tbwrap"><table class="tb" style="min-width:0"><tr><th></th><th>立即型</th><th>延遲型</th></tr><tr><td>發生</td><td>數分鐘</td><td>1–3 天</td></tr><tr><td>細胞</td><td>B 細胞（<b>IgE</b>）</td><td>T 細胞</td></tr><tr><td>例</td><td>花粉熱、氣喘</td><td>接觸性皮膚炎（毒漆藤）</td></tr><tr><td>治療</td><td>抗組織胺、腎上腺素性藥物</td><td>皮質類固醇</td></tr></table></div></div>
+  </div>
+</section>
+
+<section class="sec" id="cards" data-nav="快閃卡"><h2><span class="num">08</span>快閃卡</h2><div id="fc"></div></section>
+<section class="sec" id="quiz" data-nav="測驗"><h2><span class="num">09</span>自我測驗</h2><div id="qz"></div></section>
+</main>
+<footer>依 Fox《Human Physiology》16e 第 15 章整理，僅供個人複習。3D 模型為示意。 · <a href="index.html">回總覽</a> · <a href="ch14.html">← 第 14 章 心輸出量與血壓</a> · <a href="ch16.html">第 16 章 呼吸 →</a></footer>
+
+<script src="assets/engine.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/kit.js"></script>
+<script>
+'use strict';
+const { V } = Mini3D;
+UI.boot();
+const $ = K.$, sm = K.sm;
+const mv = (p, q) => { p[0] = q[0]; p[1] = q[1]; p[2] = q[2]; };
+
+/* ================= 02 發炎 ================= */
+(function () {
+  const S = K.stage('st-infl', { radius: 56, yaw: 0.35, pitch: 0.25, autoRotate: 0 });
+  const capR = { r: 7 };
+  const vF = K.sweep(S, [[-60, 22, 0], [0, 22, 0], [60, 22, 0]], 7, '#ef4444', 24, 14, { id: 'cap', al: 0.22 });
+  const vM = K.mover(vF, [0, 22, 0]);
+  K.sheet(S, [-60, -2, -24], [120, 0, 0], [0, 0, 48], 12, 5, '#7c2d12', { id: 'tissue', al: 0.25 });
+  const rbc = []; for (let i = 0; i < 16; i++) rbc.push({ o: S.disc([0, 0, 0], 2.6, '#dc2626', { id: 'rbc', tilt: 1 }), u: i / 16, z: (i % 3 - 1) * 2.5, y: (i % 2 ? 1.5 : -1.5) });
+  const neut = []; for (let i = 0; i < 4; i++) { const o = S.sphere([0, 0, 0], 3.2, '#f1f5f9', { id: 'neut' }); const nu = [0, 1, 2].map(k => S.sphere([0, 0, 0], 1.1, '#7c3aed', { id: 'neut' })); neut.push({ o, nu, x0: -55 + i * 9, k: i }); }
+  const bact = []; for (let i = 0; i < 6; i++) bact.push({ m: K.mover(K.ellipsoid(S, [0, 0, 0], [2.6, 1.3, 1.3], '#22c55e', 8, 5, { id: 'bact' })), p: [20 + (i % 3) * 6, -18 - (i >> 1) * 3, (i % 2 ? 6 : -6)] });
+  const mast = S.sphere([-4, -12, 6], 5, '#a78bfa', { id: 'mast' });
+  const gran = []; for (let i = 0; i < 12; i++) gran.push({ o: S.sphere([0, 0, 0], 0.9, '#f472b6', { id: 'hist' }), d: V.norm([Math.random() - 0.5, Math.random() * 0.8 + 0.2, Math.random() - 0.5]) });
+  const plasma = []; for (let i = 0; i < 14; i++) plasma.push({ o: S.sphere([0, 0, 0], 0.9, '#7dd3fc', { id: 'plasma' }), x: -30 + i * 4.5, z: (i % 3 - 1) * 4 });
+  const mono = { o: S.sphere([0, 0, 0], 4, '#cbd5e1', { id: 'mono' }), n: S.sphere([0, 0, 0], 2, '#6d28d9', { id: 'mono' }) };
+  K.lab(S, [-50, 30, 0], '微血管', 'cap', '#fca5a5', 0, -14); K.lab(S, [-50, -4, -20], '組織', 'tissue', '#fdba74', 0, 16); K.lab(S, mast.p, '肥大細胞', 'mast', '#c4b5fd', -40, 16);
+  const lB = K.lab(S, [26, -20, 0], '細菌', 'bact', '#86efac', 30, 16), lN = K.lab(S, neut[0].o.p, '嗜中性球', 'neut', '#f1f5f9', 0, -16), lM = K.lab(S, mono.o.p, '單核球 → 巨噬細胞', 'mono', '#e2e8f0', 0, -18, { hidden: true });
+  let step = 0, tw = 0, T = 0;
+  const STEPS = [
+    { t: '① 細菌入侵組織', d: '病原體穿過屏障；組織中的巨噬細胞與肥大細胞以 TLR 辨識 PAMPs' },
+    { t: '② 肥大細胞釋放組織胺', d: '<b>血管擴張</b>、<b>微血管通透性↑</b> → 紅、熱、腫（水腫）；補體被活化' },
+    { t: '③ 嗜中性球滾動、黏附', d: '趨化激素使嗜中性球沿血管內皮<b>滾動</b>，再<b>黏附</b>' },
+    { t: '④ 血球滲出 + 趨化', d: '嗜中性球擠過內皮細胞間隙<b>穿出血管</b>，沿趨化因子梯度移向細菌' },
+    { t: '⑤ 吞噬', d: '抗體與補體（C3b）包覆細菌 → <b>調理作用</b>增強吞噬；酵素與抗菌胜肽殺菌' },
+    { t: '⑥ 單核球 → 巨噬細胞', d: '稍後單核球穿出成為巨噬細胞，清除殘骸；死亡的嗜中性球、細菌與組織液成為<b>膿</b>' }
+  ];
+  S.tick(dt => {
+    T += dt; tw = Math.min(1, tw + dt / 2.4); const e = sm(0, 1, tw);
+    const dil = step >= 1 ? 1 + 0.22 * (step === 1 ? e : 1) : 1; vM.set([0, 22, 0], [1, dil, dil]);
+    rbc.forEach(r => { r.u = (r.u + dt * (step >= 1 ? 0.07 : 0.12)) % 1; mv(r.o.p, [-58 + r.u * 116, 22 + r.y * dil, r.z * dil]); r.o.ang = T * 2 + r.u * 10; });
+    gran.forEach((g, i) => { g.o.hidden = step < 1; const k = step === 1 ? e : 1; mv(g.o.p, V.add(mast.p, V.mul(g.d, 5 + k * (10 + i)))); g.o.al = step > 2 ? 0.4 : 1; });
+    plasma.forEach((p, i) => { p.o.hidden = step < 1; const k = step === 1 ? e : 1; mv(p.o.p, [p.x, 22 - 7 * dil - k * (6 + (i % 4) * 3), p.z]); });
+    neut.forEach((n, i) => {
+      let p;
+      const wall = [n.x0, 22 - 5.5 * dil, 0];
+      if (step < 2) p = [((n.x0 + 60 + T * 22 + i * 30) % 120) - 60, 22 + (i % 2 ? 2 : -2), (i % 3 - 1) * 2];
+      else if (step === 2) p = V.lerp([n.x0 - 20, 22, 0], [n.x0 + (i * 4), 22 - 5.5 * dil, 0], e);
+      else if (step === 3) { const a = [n.x0 + i * 4, 22 - 5.5 * dil, 0], b = [n.x0 + i * 4, 12, 0], c = [bact[i].p[0] - 4, bact[i].p[1] + 3, bact[i].p[2]]; p = e < 0.35 ? V.lerp(a, b, e / 0.35) : V.lerp(b, c, (e - 0.35) / 0.65); }
+      else p = [bact[i].p[0] - 1, bact[i].p[1] + 1, bact[i].p[2]];
+      mv(n.o.p, p); n.nu.forEach((u, k) => mv(u.p, V.add(p, [(k - 1) * 1.4, Math.sin(k) * 0.6, 0]))); n.o.r = step === 3 && e > 0.2 && e < 0.4 ? 2.4 : 3.2;
+    });
+    bact.forEach((b, i) => { const eaten = step >= 4 && i < 4; b.m.hide(eaten && (step > 4 || e > 0.6)); b.m.set(V.add(b.p, [Math.sin(T * 2 + i) * 0.6, 0, 0]), eaten ? 1 - 0.6 * e : 1); });
+    mono.o.hidden = mono.n.hidden = step < 5; lM.hidden = step < 5; if (step >= 5) { const p = V.lerp([10, 22, 0], [28, -10, 0], e); mv(mono.o.p, p); mv(mono.n.p, V.add(p, [1, 0.5, 0])); mono.o.r = 4 + 2 * e; lM.p = mono.o.p; }
+    lN.p = neut[0].o.p;
+  });
+  UI.stepper($('if-steps'), STEPS, i => { step = i; tw = 0; $('if-cap').innerHTML = STEPS[i].t + '：' + STEPS[i].d; }, { dur: 4500 });
+  S.onPick = o => { if (!o) return; const t = { cap: '微血管', tissue: '組織', rbc: '紅血球', neut: '嗜中性球：最先到達的吞噬細胞（多葉核）', bact: '細菌', mast: '肥大細胞：含組織胺、肝素顆粒', hist: '組織胺', plasma: '滲出的血漿 → 水腫', mono: '單核球／巨噬細胞' }[o.id]; if (t) $('if-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 03 抗體 ================= */
+const COL = { HC: '#60a5fa', HV: '#f472b6', LC: '#a3e635', LV: '#facc15' };
+function antibody(S, center, o, scale, x, fcOnly) {
+  o = o || {}; scale = scale || 1; const out = [];
+  const T = p => V.add(center, V.mul(K.rot(p, o), scale));
+  const dom = (p, col, id) => { const m = K.ellipsoid(S, T(p), [2.5 * scale, 3.2 * scale, 2.5 * scale], col, 8, 5, Object.assign({ id }, x), { rz: (o.rz || 0) + (p[3] || 0), ry: o.ry }); out.push(...m); return m; };
+  [-1, 1].forEach(s => { dom([s * 2.6, -6.5, 0, 0], COL.HC, 'fc'); dom([s * 2.6, -13.5, 0, 0], COL.HC, 'fc'); });
+  if (!fcOnly) [-1, 1].forEach(s => {
+    const d = V.norm([s * 0.75, 1, 0]), n = [d[1] * s, -d[0] * s, 0], a = Math.atan2(d[0], d[1]) * -1;
+    dom([...V.add(V.mul(d, 6), V.mul(n, -1.2)), a], COL.HC, 'hc'); dom([...V.add(V.mul(d, 13), V.mul(n, -1.2)), a], COL.HV, 'vh');
+    dom([...V.add(V.mul(d, 6), V.mul(n, 4)), a], COL.LC, 'lc'); dom([...V.add(V.mul(d, 13), V.mul(n, 4)), a], COL.LV, 'vl');
+    out.push(S.tube(T(V.add(V.mul(d, 6), V.mul(n, 1.2))), T(V.add(V.mul(d, 6), V.mul(n, 2))), 0.6 * scale, '#fde047', Object.assign({ id: 'ss' }, x)));
+    out.tip = out.tip || []; out.tip.push(T(V.add(V.mul(d, 17.5), V.mul(n, 1.4))));
+  });
+  out.push(S.tube(T([-1.2, -1.5, 0]), T([1.2, -1.5, 0]), 0.6 * scale, '#fde047', Object.assign({ id: 'ss' }, x)), S.tube(T([-1.2, -3, 0]), T([1.2, -3, 0]), 0.6 * scale, '#fde047', Object.assign({ id: 'ss' }, x)));
+  out.push(S.tube(T([-2, -2, 0]), T([-2.6, 2, 0]), 1.0 * scale, COL.HC, Object.assign({ id: 'hinge' }, x)), S.tube(T([2, -2, 0]), T([2.6, 2, 0]), 1.0 * scale, COL.HC, Object.assign({ id: 'hinge' }, x)));
+  return out;
+}
+(function () {
+  const S = K.stage('st-ab', { radius: 38, yaw: 0.2, pitch: 0.1, autoRotate: 0.08 });
+  const G = { gs: 'g' }, M = { gs: 'm' }, A = { gs: 'a' }, E = { gs: 'e' };
+  const igg = antibody(S, [0, 2, 0], {}, 1.05, G);
+  const ag = igg.tip.map(p => ({ m: K.mover(K.ellipsoid(S, [0, 0, 0], [3, 3, 3], '#ef4444', 10, 6, Object.assign({ id: 'ag' }, G))), p }));
+  const c1 = []; for (let i = 0; i < 6; i++) c1.push(S.sphere([0, 0, 0], 1.2, '#22d3ee', Object.assign({ id: 'c1' }, G)));
+  K.lab(S, [-12, 18, 0], 'Fab（抗原結合片段）', 'vh', '#f9a8d4', -40, -10, G); K.lab(S, [0, -14, 0], 'Fc（恆定片段）', 'fc', '#93c5fd', 40, 10, G); K.lab(S, [0, 0, 0], '鉸鏈區', 'hinge', '#bfdbfe', -40, 0, G);
+  K.lab(S, [-12, 13, 0], '變異區', 'vl', '#fde047', -40, 10, G); K.lab(S, [5, 8, 0], '重鏈', 'hc', '#93c5fd', 30, -10, G); K.lab(S, [11, 6, 0], '輕鏈', 'lc', '#bef264', 40, 10, G); K.lab(S, [0, -1.5, 0], '雙硫鍵', 'ss', '#fde047', 40, -18, G);
+  const lAg = K.lab(S, igg.tip[0], '抗原', 'ag', '#fca5a5', -20, -16, G);
+  for (let i = 0; i < 5; i++) { const a = i * 1.2566; antibody(S, V.mul([Math.cos(a), Math.sin(a), 0], 17), { rz: a - Math.PI / 2 }, 0.62, M); }
+  S.sphere([0, 0, 0], 2.4, '#e2e8f0', Object.assign({ id: 'j' }, M)); K.lab(S, [0, 0, 0], 'J 鏈', 'j', '#e2e8f0', 0, 24, M);
+  antibody(S, [0, 13, 0], {}, 0.75, A); antibody(S, [0, -13, 0], { rz: Math.PI }, 0.75, A); S.sphere([0, 0, 0], 2, '#e2e8f0', Object.assign({ id: 'j' }, A));
+  K.sweep(S, [[-6, -3, 3], [0, 0, 4], [6, 3, 3]], 1.2, '#fb923c', 10, 6, Object.assign({ id: 'sc' }, A)); K.lab(S, [6, 3, 3], '分泌片', 'sc', '#fdba74', 30, -10, A); K.lab(S, [0, 0, 0], 'J 鏈', 'j', '#e2e8f0', -30, 10, A);
+  const mastF = K.mover(K.ellipsoid(S, [0, 0, 0], [26, 14, 18], '#a78bfa', 22, 10, Object.assign({ id: 'mast', al: 0.35 }, E), { v0: 0.5, v1: 1 }));
+  mastF.set([0, -14, 0], 1);
+  const ige = [[-12, 0], [-4, 0], [4, 0], [12, 0]].map(([x], i) => antibody(S, [x, 2 + 0, i % 2 ? 4 : -4], { rz: 0 }, 0.42, E));
+  const pol = K.mover(K.ellipsoid(S, [0, 0, 0], [3.4, 3.4, 3.4], '#fde047', 10, 6, Object.assign({ id: 'allergen' }, E)));
+  const gr = []; for (let i = 0; i < 16; i++) gr.push({ o: S.sphere([0, 0, 0], 1.1, '#f472b6', Object.assign({ id: 'hist' }, E)), base: [(Math.random() - 0.5) * 34, -18 + Math.random() * 6, (Math.random() - 0.5) * 20] });
+  K.lab(S, [20, -6, 0], '肥大細胞', 'mast', '#c4b5fd', 30, 10, E); const lP = K.lab(S, [0, 14, 0], '過敏原', 'allergen', '#fde68a', 0, -16, E); K.lab(S, [-12, 2, -4], 'IgE（Fc 接在受體上）', 'fc', '#93c5fd', -40, -16, E);
+  let mode = 'g', T = 0;
+  S.tick(dt => {
+    T = (T + dt / 6) % 1;
+    if (mode === 'g') { ag.forEach((a, i) => { const far = V.add(a.p, [i ? 14 : -14, 12, 6]); a.m.set(V.lerp(far, V.add(a.p, [0, 2, 0]), sm(0, 0.35, T)), 1); }); lAg.p = V.lerp(V.add(ag[0].p, [-14, 12, 6]), ag[0].p, sm(0, 0.35, T)); c1.forEach((c, i) => { const a = i * 1.047; c.hidden = T < 0.45; mv(c.p, V.lerp([Math.cos(a) * 12, -32, Math.sin(a) * 12], [Math.cos(a) * 3.5, -19.5, Math.sin(a) * 3.5], sm(0.45, 0.7, T))); }); $('ab-cap').textContent = T < 0.4 ? '抗原結合到兩臂的變異區' : T < 0.75 ? '抗原–抗體複合體使 Fc 能結合補體 C1（古典路徑）' : '也促進吞噬（吞噬細胞有 Fc 受體）'; }
+    if (mode === 'e') { const k = sm(0.1, 0.45, T); pol.set(V.lerp([0, 30, 0], [-8, 8.5, 0], k), 1); lP.p = V.lerp([0, 30, 0], [-8, 8.5, 0], k); gr.forEach((g, i) => { const out = sm(0.5, 0.9, T); mv(g.o.p, V.add(g.base, [g.base[0] * out * 0.6, out * (14 + (i % 4) * 4), g.base[2] * out * 0.3])); g.o.al = 1 - sm(0.85, 1, T); }); $('ab-cap').textContent = T < 0.45 ? '過敏原接近結合在肥大細胞上的 IgE' : T < 0.55 ? '過敏原橋接相鄰的兩個 IgE → 觸發' : '肥大細胞去顆粒：釋放組織胺、白三烯素、前列腺素 → 過敏症狀'; }
+  });
+  const HUD = { g: 'IgG：單體，Y 形', m: 'IgM：五聚體（10 個抗原結合位）+ J 鏈', a: 'IgA：二聚體 + J 鏈 + 分泌片（存在黏膜分泌物）', e: 'IgE：立即型過敏' };
+  K.seg('#abmode', m => { mode = m; T = 0; S.each(o => { if (o.gs) o.hidden = o.gs !== m; }); $('ab-hud').textContent = HUD[m]; if (m === 'm' || m === 'a') $('ab-cap').textContent = m === 'm' ? '初次反應最先分泌；凝集能力強' : '唾液、淚液、母乳、腸道黏膜中的主要抗體'; }, 'g');
+  K.info(S, 'info-ab', {
+    vh: ['重鏈變異區 V_H', ['與輕鏈變異區共同形成<b>抗原結合位</b>', '胺基酸序列因抗體而異 → 專一性']], vl: ['輕鏈變異區 V_L', ['抗原結合位的一部分']],
+    hc: ['重鏈恆定區 C_H1', ['Fab 的一部分']], lc: ['輕鏈恆定區 C_L', ['輕鏈有 κ、λ 兩型']], fc: ['Fc（重鏈恆定區）', ['5 類抗體（G、A、M、D、E）的差異在重鏈恆定區', '結合補體 C1、吞噬細胞的 Fc 受體、肥大細胞（IgE）']],
+    hinge: ['鉸鏈區', ['使兩臂可以彎曲，結合不同距離的抗原']], ss: ['雙硫鍵', ['連接兩條重鏈，以及重鏈與輕鏈']], ag: ['抗原', ['抗原決定位與變異區互補結合']], c1: ['補體 C1', ['結合抗原–抗體複合體的 Fc → 啟動古典路徑']],
+    j: ['J 鏈', ['連接 IgM、IgA 的多聚體']], sc: ['分泌片', ['IgA 穿過上皮時加上，保護它不被分解']], mast: ['肥大細胞', ['皮膚、支氣管、腸道黏膜特別多；含組織胺、肝素']], allergen: ['過敏原', ['如花粉；橋接 IgE 觸發去顆粒']], hist: ['組織胺等介質', ['血管擴張、通透性↑、支氣管收縮、癢']]
+  }, { picker: 'pk-ab', hl: false });
+})();
+
+/* ================= 04 補體 MAC ================= */
+(function () {
+  const S = K.stage('st-mac', { radius: 46, yaw: 0.4, pitch: 0.42, autoRotate: 0 });
+  const memF = K.sheet(S, [-40, 0, -26], [80, 0, 0], [0, 0, 52], 22, 14, '#22c55e', { id: 'mem', al: 0.75 }, (u, v) => [0, -Math.pow(Math.hypot(u - 0.5, v - 0.5), 2) * 14, 0]);
+  const agP = [[-14, 0, -6], [14, 0, 8], [-4, 0, 12], [8, 0, -10]];
+  agP.forEach(p => S.sphere(V.add(p, [0, 1, 0]), 2, '#ef4444', { id: 'ag' }));
+  const abs = agP.map(p => { const o = antibody(S, [0, 0, 0], {}, 0.35, { id: 'ab' }); return { o, p }; });
+  const abPos = abs.map((a, i) => { const pts = []; a.o.forEach(f => { if (f.pts) f.pts.forEach(q => pts.push([q, q.slice()])); else if (f.t === 't') { pts.push([f.a, f.a.slice()], [f.b, f.b.slice()]); } }); return pts; });
+  const c1 = []; for (let i = 0; i < 6; i++) c1.push(S.sphere([0, 0, 0], 1, '#22d3ee', { id: 'c1' }));
+  const c3b = []; for (let i = 0; i < 20; i++) { const a = Math.random() * 6.28, r = 8 + Math.random() * 22; c3b.push(S.sphere([Math.cos(a) * r, 0, Math.sin(a) * r], 1.2, '#facc15', { id: 'c3b', hidden: true, base: [Math.cos(a) * r, 1, Math.sin(a) * r] })); }
+  const c3a = []; for (let i = 0; i < 8; i++) c3a.push({ o: S.sphere([0, 0, 0], 1, '#f9a8d4', { id: 'c3a', hidden: true }), d: V.norm([Math.random() - 0.5, 1, Math.random() - 0.5]) });
+  const ring = []; for (let i = 0; i < 14; i++) { const a = i / 14 * 6.2832; ring.push({ t: S.tube([0, 0, 0], [0, 0, 0], 1.1, i < 2 ? '#fb923c' : '#a855f7', { id: 'mac' }), a }); }
+  const flow = []; for (let i = 0; i < 18; i++) flow.push({ o: S.sphere([0, 0, 0], 0.9, '#7dd3fc', { id: 'water', hidden: true }), u: i / 18, a: i * 1.3 });
+  K.lab(S, [-34, 0, -20], '細菌細胞膜', 'mem', '#86efac', -20, 16); K.lab(S, V.add(agP[0], [0, 10, 0]), '抗體（IgG/IgM）', 'ab', '#93c5fd', -40, -16);
+  const lC1 = K.lab(S, [0, 0, 0], 'C1', 'c1', '#67e8f9', 20, -14, { hidden: true }), lMac = K.lab(S, [0, 6, 0], '膜攻擊複合體 C5b–C9', 'mac', '#d8b4fe', 40, -24, { hidden: true }), lC3b = K.lab(S, [20, 1, 10], 'C3b（調理）', 'c3b', '#fde047', 30, 16, { hidden: true }), lC3a = K.lab(S, [0, 18, 0], 'C3a（趨化、組織胺）', 'c3a', '#f9a8d4', -30, -10, { hidden: true });
+  const MP = [0, 0, 0];
+  let step = 0, tw = 0;
+  const STEPS = [
+    { t: '① 抗體結合抗原', d: 'IgG 或 IgM 與細菌表面抗原結合' },
+    { t: '② 辨識：C1', d: 'C1 結合抗原–抗體複合體的 Fc 而被活化' },
+    { t: '③ 活化：C4 → C2 → C3', d: 'C3 被切成 <b>C3a</b>（釋出：趨化、刺激肥大細胞）與 <b>C3b</b>（附著細菌：調理作用）' },
+    { t: '④ 攻擊：C5–C9', d: 'C5b、C6、C7、C8 插入膜，多個 <b>C9</b> 聚合成環 → <b>膜攻擊複合體</b>（補體固定）' },
+    { t: '⑤ 細胞溶解', d: '孔洞讓水與離子湧入 → 細胞腫脹破裂' }
+  ];
+  S.tick(dt => {
+    tw = Math.min(1, tw + dt / 2.2); const e = sm(0, 1, tw);
+    abs.forEach((a, i) => { const target = V.add(a.p, [0, 7.5, 0]), from = V.add(target, [0, 20, 0]), c = step === 0 ? V.lerp(from, target, e) : target; abPos[i].forEach(([q, b]) => mv(q, V.add(b, c))); });
+    c1.forEach((c, i) => { const a = i * 1.047, tgt = V.add(agP[0], [Math.cos(a) * 1.6, 14, Math.sin(a) * 1.6]); c.hidden = step < 1; mv(c.p, step === 1 ? V.lerp(V.add(tgt, [0, 14, 0]), tgt, e) : tgt); });
+    lC1.hidden = step < 1; lC1.p = c1[0].p;
+    c3b.forEach((c, i) => { c.hidden = step < 2 || (step === 2 && e < i / 20); mv(c.p, step === 2 ? V.lerp(V.add(c.base, [0, 10, 0]), c.base, Math.min(1, e * 1.5)) : c.base); });
+    c3a.forEach((c, i) => { c.o.hidden = step !== 2; mv(c.o.p, V.add(agP[0], V.mul(c.d, 12 + e * 20))); c.o.al = 1 - e * 0.7; });
+    lC3b.hidden = step < 2; lC3a.hidden = step !== 2;
+    ring.forEach((r, i) => { const show = step >= 3 && (step > 3 || e > i / 14); r.t.hidden = !show; const rad = step >= 3 ? 4 + (step === 4 ? e * 0.6 : 0) : 4; mv(r.t.a, [Math.cos(r.a) * rad, -5, Math.sin(r.a) * rad]); mv(r.t.b, [Math.cos(r.a) * rad, 6, Math.sin(r.a) * rad]); r.t.a = r.t.a; });
+    lMac.hidden = step < 3;
+    flow.forEach(f => { f.o.hidden = step < 4; f.u = (f.u + dt * 0.5) % 1; mv(f.o.p, [Math.cos(f.a) * 2, 16 - f.u * 30, Math.sin(f.a) * 2]); });
+    memF.forEach(f => { f.c = step === 4 && e > 0.6 ? '#4d7c0f' : '#22c55e'; });
+  });
+  ring.forEach(r => { r.t.a = [0, 0, 0]; r.t.b = [0, 0, 0]; });
+  UI.stepper($('mac-steps'), STEPS, i => { step = i; tw = 0; $('mac-cap').innerHTML = STEPS[i].t + '：' + STEPS[i].d; }, { dur: 4200 });
+  S.onPick = o => { if (!o) return; const t = { mem: '細菌細胞膜', ab: '抗體', ag: '細菌表面抗原', c1: 'C1：辨識', c3b: 'C3b：調理作用', c3a: 'C3a：趨化、刺激組織胺釋放', mac: '膜攻擊複合體：C9 聚合成孔洞', water: '水與離子湧入' }[o.id]; if (t) $('mac-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 05 T 細胞 ================= */
+(function () {
+  const S = K.stage('st-tc', { radius: 66, yaw: 0.2, pitch: 0.22, autoRotate: 0 });
+  const dc = K.ellipsoid(S, [-46, 0, 0], [12, 10, 10], '#f59e0b', 16, 9, { id: 'apc', al: 0.8 }, { noise: (th, ph) => 1 + 0.25 * Math.max(0, Math.sin(th * 5) * Math.sin(ph * 4)) });
+  const th = K.mover(K.ellipsoid(S, [0, 0, 0], [8, 8, 8], '#38bdf8', 14, 8, { id: 'th' })); const thC = [-18, 0, 0];
+  const tc = K.mover(K.ellipsoid(S, [0, 0, 0], [8, 8, 8], '#a78bfa', 14, 8, { id: 'tcyt' }));
+  const inf = K.mover(K.ellipsoid(S, [0, 0, 0], [12, 11, 11], '#fb7185', 16, 9, { id: 'inf', al: 0.85 })); const infC = [44, 0, 0];
+  const virus = []; for (let i = 0; i < 8; i++) virus.push(S.sphere(V.add(infC, [(Math.random() - 0.5) * 12, (Math.random() - 0.5) * 12, (Math.random() - 0.5) * 12]), 1.3, '#22c55e', { id: 'virus' }));
+  const mhc2 = [S.tube([-35, -2, 0], [-33, -2, 0], 1, '#f97316', { id: 'mhc2' }), S.tube([-35, 2, 0], [-33, 2, 0], 1, '#f97316', { id: 'mhc2' })]; const pep2 = S.sphere([-33, 0, 0], 1.3, '#ef4444', { id: 'ag' });
+  const mhc1 = [S.tube([33, -2, 0], [31, -2, 0], 1, '#22d3ee', { id: 'mhc1' }), S.tube([33, 2, 0], [31, 2, 0], 1, '#22d3ee', { id: 'mhc1' })]; const pep1 = S.sphere([31, 0, 0], 1.3, '#22c55e', { id: 'ag' });
+  const il2 = []; for (let i = 0; i < 14; i++) il2.push({ o: S.sphere([0, 0, 0], 1, '#fde047', { id: 'il2', hidden: true }), d: V.norm([Math.random() - 0.3, Math.random() - 0.5, Math.random() - 0.5]) });
+  const clones = []; for (let i = 0; i < 5; i++) clones.push(K.mover(K.ellipsoid(S, [0, 0, 0], [5, 5, 5], '#a78bfa', 10, 6, { id: 'tcyt', al: 0.7 })));
+  const perf = []; for (let i = 0; i < 6; i++) { const a = i * 1.047; perf.push(S.tube([0, 0, 0], [0, 0, 0], 0.6, '#f472b6', { id: 'perf', hidden: true, a })); }
+  const gz = []; for (let i = 0; i < 8; i++) gz.push(S.sphere([0, 0, 0], 0.9, '#fbbf24', { id: 'gz', hidden: true }));
+  const frag = []; for (let i = 0; i < 10; i++) frag.push({ m: K.mover(K.ellipsoid(S, [0, 0, 0], [3, 3, 3], '#fb7185', 8, 5, { id: 'inf' })), d: V.norm([Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5]) });
+  frag.forEach(f => f.m.hide(true));
+  K.lab(S, [-46, 11, 0], '樹突細胞（APC）', 'apc', '#fdba74', 0, -16); const lTh = K.lab(S, thC, '輔助 T（CD4）', 'th', '#7dd3fc', 0, -22), lTc = K.lab(S, [0, 0, 0], '細胞毒性 T（CD8）', 'tcyt', '#c4b5fd', 0, -22), lInf = K.lab(S, infC, '病毒感染細胞', 'inf', '#fda4af', 20, -24);
+  K.lab(S, [-34, 3, 0], 'MHC II + 抗原', 'mhc2', '#fdba74', -10, 26); K.lab(S, [32, 3, 0], 'MHC I + 病毒抗原', 'mhc1', '#67e8f9', 10, 26); const lIL = K.lab(S, [-10, 8, 0], 'IL-2', 'il2', '#fde047', 10, -14, { hidden: true });
+  let step = 0, tw = 0;
+  const STEPS = [
+    { t: '① 抗原呈現', d: '樹突細胞／巨噬細胞吞入並<b>部分消化</b>外來蛋白，把片段與 <b>MHC II</b> 一起放到細胞表面' },
+    { t: '② 輔助 T 細胞活化', d: 'T 細胞受體 + <b>CD4</b> 辨認 MHC II–抗原 → 輔助 T 活化，分泌 <b>IL-2</b>' },
+    { t: '③ IL-2 刺激增殖', d: 'IL-2 刺激對此抗原專一的細胞毒性 T（與 B 細胞）增殖' },
+    { t: '④ 辨認被感染細胞', d: '被感染細胞以 <b>MHC I</b> 呈現病毒抗原；細胞毒性 T 以 TCR + <b>CD8</b> 辨認並緊密接觸' },
+    { t: '⑤ 殺死目標細胞', d: '釋放<b>穿孔素</b>在膜上打洞、<b>顆粒酶</b>進入 → 目標細胞<b>凋亡</b>（不需抗體）' }
+  ];
+  const tcHome = [6, -16, 0];
+  S.tick(dt => {
+    tw = Math.min(1, tw + dt / 2.4); const e = sm(0, 1, tw);
+    const thP = step === 0 ? [-10, 14, 0] : step === 1 ? V.lerp([-10, 14, 0], thC, e) : thC; th.set(thP, 1); lTh.p = thP;
+    il2.forEach((p, i) => { p.o.hidden = !(step === 1 && e > 0.6) && step !== 2; mv(p.o.p, V.add(thC, V.mul(p.d, 8 + (step === 2 ? e * 18 : 4)))); });
+    lIL.hidden = !(step >= 1 && step <= 2);
+    clones.forEach((c, i) => { c.hide(step < 2 || step > 3); const a = i * 1.2566; c.set(V.add(tcHome, [Math.cos(a) * 9 * (step === 2 ? e : 1), -6 + Math.sin(a) * 3, Math.sin(a) * 9 * (step === 2 ? e : 1)]), 1); });
+    const tcP = step < 3 ? tcHome : step === 3 ? V.lerp(tcHome, [22, 0, 0], e) : [22, 0, 0]; tc.set(tcP, 1); lTc.p = tcP;
+    const dying = step === 4 && e > 0.6;
+    inf.hide(dying); virus.forEach(v => { v.hidden = dying; });
+    frag.forEach(f => { f.m.hide(!dying); f.m.set(V.add(infC, V.mul(f.d, 6 + (e - 0.6) * 30)), 0.8); });
+    perf.forEach(p => { p.hidden = step !== 4 || dying; const c = [32, 0, 0]; p.a = V.add(c, [0, Math.cos(p.a0 || (p.a0 = Math.random() * 6)) * 3, Math.sin(p.a0) * 3]); p.b = V.add(p.a, [3, 0, 0]); });
+    gz.forEach((g, i) => { g.hidden = step !== 4 || dying; mv(g.o ? g.o.p : g.p, V.lerp([26, (i % 3 - 1) * 2, (i % 2 ? 2 : -2)], V.add(infC, [-6, (i % 3 - 1) * 4, (i % 2 ? 3 : -3)]), Math.min(1, e * 1.6))); });
+  });
+  UI.stepper($('tc-steps'), STEPS, i => { step = i; tw = 0; $('tc-cap').innerHTML = STEPS[i].t + '：' + STEPS[i].d; }, { dur: 4600 });
+  S.onPick = o => { if (!o) return; const t = { apc: '抗原呈現細胞（樹突細胞、巨噬細胞）', th: '輔助 T 細胞（CD4）', tcyt: '細胞毒性 T 細胞（CD8）', inf: '被病毒感染的細胞', virus: '病毒', mhc2: 'MHC II：只在抗原呈現細胞上', mhc1: 'MHC I：所有有核細胞', ag: '抗原片段', il2: '介白素-2', perf: '穿孔素', gz: '顆粒酶' }[o.id]; if (t) $('tc-cap').textContent = '👉 ' + t; };
+})();
+
+/* ================= 06 免疫反應曲線 / 株選擇 ================= */
+(function () {
+  const ab = (t, t0, lag, peak, w) => { const x = t - t0 - lag; return x <= 0 ? 0 : peak * (x / w) * Math.exp(1 - x / w); };
+  function draw() { K.plot($('resp-plot'), { x: [0, 60], y: [0, 105], xt: [0, 10, 20, 30, 40, 50, 60], yt: [0, 50, 100], xl: '天數', yl: '抗體濃度（相對）', series: [{ f: t => ab(t, 0, 4, 12, 4) + ab(t, 30, 1, 10, 3), c: '#f472b6', w: 2.4, label: 'IgM' }, { f: t => ab(t, 0, 6, 8, 7) + ab(t, 30, 2, 90, 6), c: '#60a5fa', w: 2.8, label: 'IgG' }], vl: [{ x: 0, c: '#fbbf24', t: '第一次接觸' }, { x: 30, c: '#fbbf24', t: '第二次接觸' }] }); }
+  draw(); addEventListener('resize', draw);
+  const cv = $('clone-cv'); const COLS = ['#f87171', '#fbbf24', '#34d399', '#60a5fa', '#a78bfa', '#f472b6'];
+  let cells = [], ag = [];
+  function reset() { cells = Array.from({ length: 18 }, (_, i) => ({ x: Math.random(), y: Math.random() * 0.8 + 0.1, c: i % 6, kind: 'b', r: 7, vx: 0, vy: 0 })); ag = []; }
+  reset();
+  $('cl-rs').onclick = reset;
+  $('cl-add').onclick = () => { for (let i = 0; i < 6; i++) ag.push({ x: Math.random() * 0.2, y: Math.random(), c: 2 }); };
+  K.loop(dt => {
+    const [c, w, h] = K.fit(cv); c.clearRect(0, 0, w, h);
+    ag.forEach(a => { a.x += dt * 0.12; const tgt = cells.find(k => k.c === a.c && k.kind === 'b' && Math.hypot((k.x - a.x) * w, (k.y - a.y) * h) < 14); if (tgt) { a.dead = true; tgt.kind = 'act'; tgt.t = 0; } });
+    ag = ag.filter(a => !a.dead && a.x < 1.05);
+    const born = [];
+    cells.forEach(k => { if (k.kind === 'act') { k.t += dt; if (k.t > 1.2 && cells.length + born.length < 60) { k.t = 0; born.push({ x: k.x + (Math.random() - 0.5) * 0.08, y: k.y + (Math.random() - 0.5) * 0.15, c: k.c, kind: Math.random() < 0.65 ? 'plasma' : 'mem', r: 6 }); } } k.x += (Math.random() - 0.5) * dt * 0.03; k.y += (Math.random() - 0.5) * dt * 0.03; k.x = K.clamp(k.x, 0.03, 0.97); k.y = K.clamp(k.y, 0.06, 0.94); });
+    cells.push(...born);
+    cells.forEach(k => { const x = k.x * w, y = k.y * h; c.fillStyle = k.kind === 'plasma' ? '#1e293b' : k.kind === 'mem' ? '#0f172a' : '#1e293b'; c.strokeStyle = COLS[k.c]; c.lineWidth = k.kind === 'act' ? 3 : 1.6; c.beginPath(); c.arc(x, y, k.r, 0, 6.28); c.fill(); c.stroke();
+      if (k.kind === 'plasma') { c.fillStyle = COLS[k.c]; for (let j = 0; j < 3; j++) c.fillRect(x + 8 + j * 4, y - 6 + j * 4, 2, 2); } if (k.kind === 'mem') { c.fillStyle = COLS[k.c]; c.font = '9px ' + Mini3D.FONT; c.fillText('M', x - 3, y + 3); } });
+    ag.forEach(a => { c.fillStyle = COLS[a.c]; c.beginPath(); c.moveTo(a.x * w, a.y * h - 5); c.lineTo(a.x * w + 5, a.y * h + 4); c.lineTo(a.x * w - 5, a.y * h + 4); c.fill(); });
+    c.fillStyle = '#94a3b8'; c.font = '11px ' + Mini3D.FONT; c.fillText('○ B 細胞（框色＝受體種類）　▲ 抗原　M＝記憶細胞　點點＝漿細胞分泌抗體', 8, h - 8);
+  }, cv);
+})();
+
+/* ================= 快閃卡 / 測驗 ================= */
+UI.flashcards($('fc'), [
+  { f: '先天免疫的主要成分', b: '屏障、吞噬細胞、NK 細胞、干擾素、補體、發燒；以 TLR 辨識 PAMPs。' },
+  { f: '干擾素的作用', b: '被病毒感染的細胞分泌，保護鄰近細胞抵抗病毒；γ 干擾素活化巨噬細胞等。' },
+  { f: '局部發炎的順序', b: '細菌入侵 → 肥大細胞組織胺（血管擴張、通透性↑）→ 嗜中性球滾動、黏附、血球滲出、趨化 → 吞噬 → 單核球/巨噬細胞。' },
+  { f: '抗體的基本結構', b: '2 重鏈 + 2 輕鏈（雙硫鍵）；Fab 變異區結合抗原，Fc 恆定區決定類別與功能。' },
+  { f: '五種免疫球蛋白', b: 'IgG（循環主要、二次反應）、IgA（分泌物）、IgM（初次反應、表面受體）、IgD（表面受體）、IgE（過敏）。' },
+  { f: '補體的三階段', b: '辨識 C1 → 活化 C4、C2、C3 → 攻擊 C5–C9（膜攻擊複合體）。' },
+  { f: 'C3a 與 C3b', b: 'C3a：趨化、刺激肥大細胞釋放組織胺；C3b：附著細菌 → 調理作用。' },
+  { f: 'MHC I vs MHC II', b: 'MHC I：所有有核細胞，呈現給 CD8 細胞毒性 T；MHC II：抗原呈現細胞，呈現給 CD4 輔助 T。' },
+  { f: '輔助 T 細胞的作用', b: '被 APC 活化後分泌 IL-2，刺激細胞毒性 T 與 B 細胞增殖。' },
+  { f: '細胞毒性 T 如何殺細胞？', b: '緊密接觸，釋放穿孔素與顆粒酶 → 目標細胞凋亡。' },
+  { f: '初次 vs 二次免疫反應', b: '初次：慢、IgM 為主；二次：快、大量 IgG（記憶細胞）。' },
+  { f: '株選擇學說', b: '抗原選擇帶有相符受體的淋巴球 → 增殖成株（漿細胞 + 記憶細胞）。' },
+  { f: '主動 vs 被動免疫', b: '主動：注射抗原，自己產生抗體，5–14 天、持久；被動：接受抗體，立即、短暫。' },
+  { f: '免疫耐受的機制', b: '胸腺中株刪除自體反應 T 細胞；株無能抑制自體反應 B 細胞。' },
+  { f: '單株抗體如何製造？', b: 'B 細胞 + 骨髓瘤細胞融合成融合瘤，產生單一專一性抗體。' },
+  { f: '立即型 vs 延遲型過敏', b: '立即：IgE、數分鐘、花粉熱氣喘、抗組織胺；延遲：T 細胞、1–3 天、接觸性皮膚炎、類固醇。' },
+  { f: '腫瘤的免疫監視', b: '主要靠細胞毒性 T 與 NK 細胞；壓力削弱監視。' }
+], 'ch15');
+UI.quiz($('qz'), [
+  { q: '下列何者屬於後天（專一）免疫？', o: ['干擾素', 'NK 細胞', '漿細胞分泌抗體', '發燒'], a: 2, e: '抗體由 B 細胞轉化的漿細胞產生，具專一性。' },
+  { q: '使發炎部位紅腫的主要介質是？', o: ['肝素', '組織胺', '穿孔素', 'IL-2'], a: 1, e: '肥大細胞釋放組織胺 → 血管擴張、通透性增加。' },
+  { q: '抗體的抗原結合位位於？', o: ['Fc 恆定區', '鉸鏈區', '重鏈與輕鏈的變異區', 'J 鏈'], a: 2, e: 'Fab 末端的變異區。' },
+  { q: '母乳與唾液中主要的抗體是？', o: ['IgG', 'IgA', 'IgM', 'IgE'], a: 1, e: 'IgA 為外分泌液主要抗體。' },
+  { q: '初次免疫反應最先分泌的抗體是？', o: ['IgG', 'IgA', 'IgM', 'IgE'], a: 2, e: '二次反應以 IgG 為主。' },
+  { q: '補體 C3b 的主要作用是？', o: ['形成膜孔', '調理作用', '趨化', '活化 T 細胞'], a: 1, e: 'C3b 附著細菌使吞噬更容易。' },
+  { q: '細胞毒性 T 細胞辨認的是？', o: ['游離抗原', '抗原 + MHC I', '抗原 + MHC II', '抗體 Fc'], a: 1, e: 'CD8 細胞毒性 T 辨認 MHC I–抗原。' },
+  { q: '輔助 T 細胞活化後分泌何者刺激其他淋巴球增殖？', o: ['組織胺', '穿孔素', '介白素-2', '補體'], a: 2, e: 'IL-2。' },
+  { q: '注射抗蛇毒血清屬於？', o: ['主動免疫', '被動免疫', '自體免疫', '免疫耐受'], a: 1, e: '直接給予抗體 → 被動免疫。' },
+  { q: '花粉熱屬於哪種過敏？', o: ['立即型，IgE', '延遲型，T 細胞', '免疫複合體', '自體免疫'], a: 0, e: '立即型，抗組織胺治療。' },
+  { q: '對腫瘤免疫監視最重要的是？', o: ['嗜中性球與補體', '細胞毒性 T 與 NK 細胞', 'IgA', '肥大細胞'], a: 1, e: '細胞毒性 T（專一）與 NK（非專一）。' }
+]);
+</script>
+</body>
+</html>
