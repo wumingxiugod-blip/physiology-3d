@@ -11,6 +11,12 @@
   .lv .trk i{display:block;height:100%;border-radius:9px;transition:width .3s}
   .lv b{text-align:right;font-variant-numeric:tabular-nums}
   .gland{width:100%;height:120px}
+  @media (max-width:640px){
+    .lv{grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;margin:11px 0}
+    .lv>:first-child{order:1}
+    .lv>b{order:2}
+    .lv>.trk{grid-column:1/-1;order:3}
+  }
 </style>
 </head>
 <body style="--acc:#a78bfa;--acc2:#fbbf24">

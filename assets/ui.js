@@ -134,7 +134,7 @@
       ring.appendChild(c); return c;
     });
     function layout() {
-      W = Math.min(opt.w || 220, el.clientWidth * 0.62);
+      W = Math.min(opt.w || 220, Math.max(176, el.clientWidth - 108));
       R = Math.round(W / 2 / Math.tan(Math.PI / n) + (opt.gap || 30));
       nodes.forEach((c, i) => { c.style.width = W + 'px'; c.style.marginLeft = -W / 2 + 'px'; c.style.transform = 'rotateY(' + i * step + 'deg) translateZ(' + R + 'px)'; });
       nodes.forEach(c => { c.style.marginTop = -c.offsetHeight / 2 + 'px'; });

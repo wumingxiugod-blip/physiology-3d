@@ -15,7 +15,8 @@
   .vt{width:150px;height:13px;border-radius:5px;position:relative;cursor:pointer;transition:.25s;box-shadow:6px 4px 0 rgba(0,0,0,.45)}
   .vt::after{content:attr(data-l);position:absolute;left:160px;top:-2px;font-size:11px;color:var(--mut);white-space:nowrap}
   .vt:hover,.vt.on{transform:translateZ(16px) translateX(6px)}
-  @media (max-width:420px){.spine-col{margin-right:96px}.vt{width:116px}.vt::after{left:124px;font-size:10px}}
+  @media (max-width:640px){.spine-col{margin-right:104px;transform:rotateY(-16deg) rotateX(6deg)}.vt{width:128px}.vt::after{left:136px;font-size:10.5px}}
+  @media (max-width:420px){.spine-col{margin-right:94px}.vt{width:108px}.vt::after{left:116px;font-size:10px}}
   .day .sky{background:linear-gradient(180deg,#0ea5e9,#38bdf8)} .night .sky{background:linear-gradient(180deg,#0b1026,#1e1b4b)}
   .sky{height:70px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-size:34px;transition:background .6s}
   .meter{height:14px;border-radius:99px;background:var(--panel2);overflow:hidden}

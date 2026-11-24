@@ -26,6 +26,13 @@
   .tl .ev::before{content:"";position:absolute;top:-19px;left:22px;width:14px;height:14px;border-radius:50%;background:var(--acc);box-shadow:0 0 12px var(--acc)}
   .tl .y{font-size:22px;font-weight:900;color:var(--acc)}
   .big2{font-size:clamp(30px,5vw,46px);font-weight:900;line-height:1;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  @media (max-width:640px){
+    .zone{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+    .tl-wrap{padding:18px 4px 28px}
+    .tl{transform:none;gap:14px}
+    .tl .ev:nth-child(even){transform:none}
+    .tl .ev:hover{transform:translateY(-4px)}
+  }
 </style>
 </head>
 <body style="--acc:#34d399;--acc2:#22d3ee">

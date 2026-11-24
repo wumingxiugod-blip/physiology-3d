@@ -13,6 +13,12 @@
   .gauge .v{text-align:right;font-weight:800;font-size:13px}
   .drugs{display:flex;flex-wrap:wrap;gap:6px}
   .drugs .btn small{opacity:.75;font-weight:600;margin-left:4px}
+  @media (max-width:640px){
+    .gauge{grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;margin:11px 0}
+    .gauge>:first-child{order:1}
+    .gauge>.v{order:2}
+    .gauge>.trk{grid-column:1/-1;order:3}
+  }
 </style>
 </head>
 <body style="--acc:#f87171;--acc2:#4ade80">
